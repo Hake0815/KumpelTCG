@@ -1,6 +1,13 @@
 using System.Collections.Generic;
 
-public class Deck
+public interface IDeck
+{
+    public void SetUp(List<Card> cards);
+    public Card Draw();
+    public int GetCardCount();
+}
+
+public class Deck : IDeck
 {
     private List<Card> Cards { get; set; }
 
