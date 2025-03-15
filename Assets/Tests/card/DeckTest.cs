@@ -7,8 +7,8 @@ using UnityEngine.TestTools;
 
 public class DeckTest
 {
-    private readonly Card firstCard = new CardDummy(CardDatabase.cardDataList[0]);
-    private readonly Card secondCard = new CardDummy(CardDatabase.cardDataList[1]);
+    private readonly ICard firstCard = new CardDummy(CardDatabase.cardDataList[0]);
+    private readonly ICard secondCard = new CardDummy(CardDatabase.cardDataList[1]);
 
     [Test]
     public void CardCountSHouldBeTwo()
@@ -44,6 +44,6 @@ public class DeckTest
     private void SetUpDeck(out Deck deck)
     {
         deck = new Deck();
-        deck.SetUp(new List<Card> { firstCard, secondCard });
+        deck.SetUp(new List<ICard> { firstCard, secondCard });
     }
 }

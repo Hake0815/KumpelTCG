@@ -1,22 +1,26 @@
 using UnityEngine;
 
-public abstract class Card
+public interface ICard
 {
-    public CardData CardData { get; private set; }
+    public CardData CardData { get; set; }
 
     public string Name
     {
         get => CardData.Name;
     }
+}
 
-    protected Card(CardData cardData)
+public class CardDummy : ICard
+{
+    public CardData CardData { get; set; }
+
+    public CardDummy(CardData cardData)
     {
         CardData = cardData;
     }
-}
 
-public class CardDummy : Card
-{
-    public CardDummy(CardData cardData)
-        : base(cardData) { }
+    public static ICard Of(CardData cardData)
+    {
+        return new CardDummy(cardData);
+    }
 }

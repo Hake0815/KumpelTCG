@@ -2,21 +2,21 @@ using System.Collections.Generic;
 
 public interface IDeck
 {
-    public void SetUp(List<Card> cards);
-    public Card Draw();
+    public void SetUp(List<ICard> cards);
+    public ICard Draw();
     public int GetCardCount();
 }
 
 public class Deck : IDeck
 {
-    private List<Card> Cards { get; set; }
+    private List<ICard> Cards { get; set; }
 
-    public void SetUp(List<Card> cards)
+    public void SetUp(List<ICard> cards)
     {
         Cards = cards;
     }
 
-    public Card Draw()
+    public ICard Draw()
     {
         if (Cards?.Count > 0)
         {
