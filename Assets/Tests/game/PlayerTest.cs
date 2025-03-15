@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 
@@ -6,7 +5,7 @@ public class PlayerTest
 {
     private readonly Mock<IDeck> deck = new();
 
-    private readonly Card card = CardTestFactory.Create();
+    private readonly ICard card = CardTestFactory.Create();
 
     private Player Player;
 
