@@ -7,6 +7,7 @@ public interface IPlayer
     public IDeck Deck { get; }
     public List<ICard> Hand { get; }
     public bool IsActive { get; set; }
+    public string Name { get; set; }
     public void Draw();
     public event EventHandler<List<ICard>> CardDrawn;
 }
@@ -16,6 +17,7 @@ public class Player : IPlayer
     public IDeck Deck { get; }
     public List<ICard> Hand { get; } = new();
     public bool IsActive { get; set; } = false;
+    public string Name { get; set; }
 
     public event EventHandler<List<ICard>> CardDrawn;
 
@@ -36,7 +38,7 @@ public class Player : IPlayer
 
     protected virtual void OnCardDrawn(List<ICard> drawnCards)
     {
-        Debug.Log("Card Drawn, throw Event");
+        Debug.Log("Card Drawn, this is " + Name);
         CardDrawn?.Invoke(this, drawnCards);
     }
 }

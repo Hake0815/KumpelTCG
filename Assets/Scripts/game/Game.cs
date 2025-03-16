@@ -8,8 +8,8 @@ public class Game
 
     public Game()
     {
-        Player1 = new Player(new Deck());
-        Player2 = new Player(new Deck());
+        Player1 = new Player(new Deck()) { Name = "Player 1" };
+        Player2 = new Player(new Deck()) { Name = "Player 2" };
     }
 
     public Game(IPlayer player1, IPlayer player2)
