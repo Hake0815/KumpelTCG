@@ -101,5 +101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handView: {fileID: 2478470199483361296, guid: ca33962eda25d8452912de711d9d3d66, type: 3}
-  deckView: {fileID: 6986392116590523220, guid: a1e06f20efed10a2b9654bf4406d44cd, type: 3}
-  cardPrefab: {fileID: 2073881776785339609, guid: 3dbb31110b71354dcb4ec2e7e57d4d42, type: 3}
+  deckView: {fileID: 1364710685699798418, guid: cabb342fcdaf40af49b388822e28e42c, type: 3}
+  cardViewCreator: {fileID: 5336658143097781949, guid: 57e3006a74db0135d9e1042ffa81d3c4, type: 3}
+  endTurnButton: {fileID: 0}
