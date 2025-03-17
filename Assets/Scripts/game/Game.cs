@@ -1,5 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
+using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.game.action;
+using NUnit.Framework.Constraints;
 
 namespace gamecore.game
 {
@@ -29,27 +33,33 @@ namespace gamecore.game
 
         public void StartGame()
         {
-            StartTurn(Player1);
+            ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(EndTurn);
+            DrawCardSystem.INSTANCE.Enable();
+            Player1.IsActive = true;
+            ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
         }
 
-        public void EndTurn()
+        public EndTurnGA EndTurn(EndTurnGA endTurnGA)
         {
             if (Player1.IsActive)
             {
                 Player1.IsActive = false;
-                StartTurn(Player2);
+                Player2.IsActive = true;
+                endTurnGA.NextPlayer = Player2;
             }
             else
             {
                 Player2.IsActive = false;
-                StartTurn(Player1);
+                Player1.IsActive = true;
+                endTurnGA.NextPlayer = Player1;
             }
+            return endTurnGA;
         }
 
-        private void StartTurn(IPlayer player)
+        public void EndGame()
         {
-            player.IsActive = true;
-            player.Draw();
+            ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
+            DrawCardSystem.INSTANCE.Disable();
         }
     }
 }
