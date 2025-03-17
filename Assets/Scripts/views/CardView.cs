@@ -1,6 +1,10 @@
+using gamecore.card;
 using UnityEngine;
 
-public class CardView : MonoBehaviour
+namespace gameview
 {
-    public ICard Card { get; set; }
+    public class CardView : MonoBehaviour
+    {
+        public ICard Card { get; set; }
+    }
 }

@@ -1,12 +1,14 @@
 using System.Collections.Generic;
-using UnityEngine;
 
-public class CardDatabase
+namespace gamecore.card
 {
-    public static List<CardData> cardDataList = new()
+    public class CardDatabase
     {
-        new CardDataDummy("first Card"),
-        new CardDataDummy("second Card"),
-        new CardDataDummy("third Card"),
-    };
+        public static List<CardData> cardDataList = new()
+        {
+            new CardDataDummy("first Card"),
+            new CardDataDummy("second Card"),
+            new CardDataDummy("third Card"),
+        };
+    }
 }
