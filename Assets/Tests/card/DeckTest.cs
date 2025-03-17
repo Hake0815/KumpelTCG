@@ -5,45 +5,48 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class DeckTest
+namespace gamecore.card
 {
-    private readonly ICard firstCard = new CardDummy(CardDatabase.cardDataList[0]);
-    private readonly ICard secondCard = new CardDummy(CardDatabase.cardDataList[1]);
-
-    [Test]
-    public void CardCountSHouldBeTwo()
+    public class DeckTest
     {
-        SetUpDeck(out Deck deck);
+        private readonly ICard firstCard = new CardDummy(CardDatabase.cardDataList[0]);
+        private readonly ICard secondCard = new CardDummy(CardDatabase.cardDataList[1]);
 
-        var cardCount = deck.GetCardCount();
+        [Test]
+        public void CardCountSHouldBeTwo()
+        {
+            SetUpDeck(out Deck deck);
 
-        Assert.AreEqual(cardCount, 2);
-    }
+            var cardCount = deck.GetCardCount();
 
-    [Test]
-    public void DrawShouldYieldCard()
-    {
-        SetUpDeck(out Deck deck);
+            Assert.AreEqual(cardCount, 2);
+        }
 
-        var drawnCard = deck.Draw();
+        [Test]
+        public void DrawShouldYieldCard()
+        {
+            SetUpDeck(out Deck deck);
 
-        Assert.AreEqual(drawnCard, firstCard);
-    }
+            var drawnCard = deck.Draw();
 
-    [Test]
-    public void DrawShouldReduceCardCount()
-    {
-        SetUpDeck(out Deck deck);
-        deck.Draw();
+            Assert.AreEqual(drawnCard, firstCard);
+        }
 
-        var cardCount = deck.GetCardCount();
+        [Test]
+        public void DrawShouldReduceCardCount()
+        {
+            SetUpDeck(out Deck deck);
+            deck.Draw();
 
-        Assert.AreEqual(cardCount, 1);
-    }
+            var cardCount = deck.GetCardCount();
 
-    private void SetUpDeck(out Deck deck)
-    {
-        deck = new Deck();
-        deck.SetUp(new List<ICard> { firstCard, secondCard });
+            Assert.AreEqual(cardCount, 1);
+        }
+
+        private void SetUpDeck(out Deck deck)
+        {
+            deck = new Deck();
+            deck.SetUp(new List<ICard> { firstCard, secondCard });
+        }
     }
 }

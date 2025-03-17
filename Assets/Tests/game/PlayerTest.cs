@@ -1,34 +1,38 @@
+using gamecore.card;
 using Moq;
 using NUnit.Framework;
 
-public class PlayerTest
+namespace gamecore.game
 {
-    private readonly Mock<IDeck> deck = new();
-
-    private readonly ICard card = CardTestFactory.Create();
-
-    private Player Player;
-
-    [SetUp]
-    public void SetUp()
+    public class PlayerTest
     {
-        Player = new Player(deck.Object);
-        deck.Setup(d => d.Draw()).Returns(card);
-    }
+        private readonly Mock<IDeck> deck = new();
 
-    [Test]
-    public void ShouldDrawFromDeck()
-    {
-        Player.Draw();
+        private readonly ICard card = CardTestFactory.Create();
 
-        deck.Verify(d => d.Draw());
-    }
+        private Player Player;
 
-    [Test]
-    public void ShouldDrawCardIntoHand()
-    {
-        Player.Draw();
+        [SetUp]
+        public void SetUp()
+        {
+            Player = new Player(deck.Object);
+            deck.Setup(d => d.Draw()).Returns(card);
+        }
 
-        Assert.Contains(card, Player.Hand);
+        [Test]
+        public void ShouldDrawFromDeck()
+        {
+            Player.Draw();
+
+            deck.Verify(d => d.Draw());
+        }
+
+        [Test]
+        public void ShouldDrawCardIntoHand()
+        {
+            Player.Draw();
+
+            Assert.Contains(card, Player.Hand);
+        }
     }
 }

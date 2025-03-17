@@ -1,9 +1,12 @@
-public class CardTestFactory
+namespace gamecore.card
 {
-    public static CardData CARD_DATA = CardDataTestFactory.Create();
-
-    public static ICard Create()
+    public class CardTestFactory
     {
-        return new CardDummy(CARD_DATA);
+        public static CardData CARD_DATA = CardDataTestFactory.Create();
+
+        public static ICard Create()
+        {
+            return new CardDummy(CARD_DATA);
+        }
     }
 }
