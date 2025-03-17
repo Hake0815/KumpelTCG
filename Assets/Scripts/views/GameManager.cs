@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
+using gamecore.game.action;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -113,7 +115,10 @@ namespace gameview
 
         public void EndTurn()
         {
-            game.EndTurn();
+            if (ActionSystem.INSTANCE.IsPerforming)
+                return;
+            var endTurn = new EndTurnGA();
+            ActionSystem.INSTANCE.Perform(endTurn);
         }
     }
 }

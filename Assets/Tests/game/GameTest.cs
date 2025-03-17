@@ -1,3 +1,4 @@
+using gamecore.game.action;
 using Moq;
 using NUnit.Framework;
 
@@ -31,10 +32,10 @@ namespace gamecore.game
         {
             player1.SetupGet(p => p.IsActive).Returns(true);
 
-            game.EndTurn();
+            var endTurnGA = game.EndTurn(new EndTurnGA());
 
             player2.VerifySet(p => p.IsActive = true);
-            player2.Verify(p => p.Draw());
+            Assert.AreSame(endTurnGA.NextPlayer, player2.Object);
         }
 
         [Test]
@@ -42,7 +43,7 @@ namespace gamecore.game
         {
             player1.SetupGet(p => p.IsActive).Returns(true);
 
-            game.EndTurn();
+            game.EndTurn(new EndTurnGA());
 
             player1.VerifySet(p => p.IsActive = false);
         }
