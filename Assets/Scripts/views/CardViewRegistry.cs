@@ -1,38 +1,41 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using gamecore.card;
 
-public class CardViewRegistry
+namespace gameview
 {
-    private static readonly Lazy<CardViewRegistry> lazy = new(() => new CardViewRegistry());
-    public static CardViewRegistry INSTANCE => lazy.Value;
-
-    private CardViewRegistry() { }
-
-    private readonly Dictionary<ICard, CardView> regsitry = new();
-
-    public void Register(CardView cardView)
+    public class CardViewRegistry
     {
-        regsitry[cardView.Card] = cardView;
-    }
+        private static readonly Lazy<CardViewRegistry> lazy = new(() => new CardViewRegistry());
+        public static CardViewRegistry INSTANCE => lazy.Value;
 
-    public void Unregister(ICard card)
-    {
-        regsitry.Remove(card);
-    }
+        private CardViewRegistry() { }
 
-    public CardView Get(ICard card)
-    {
-        return regsitry[card];
-    }
+        private readonly Dictionary<ICard, CardView> regsitry = new();
 
-    public List<CardView> GetAll(ICollection<ICard> cards)
-    {
-        List<CardView> cardViews = new();
-        foreach (var card in cards)
+        public void Register(CardView cardView)
         {
-            cardViews.Add(regsitry[card]);
+            regsitry[cardView.Card] = cardView;
         }
-        return cardViews;
+
+        public void Unregister(ICard card)
+        {
+            regsitry.Remove(card);
+        }
+
+        public CardView Get(ICard card)
+        {
+            return regsitry[card];
+        }
+
+        public List<CardView> GetAll(ICollection<ICard> cards)
+        {
+            List<CardView> cardViews = new();
+            foreach (var card in cards)
+            {
+                cardViews.Add(regsitry[card]);
+            }
+            return cardViews;
+        }
     }
 }

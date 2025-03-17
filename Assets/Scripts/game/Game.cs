@@ -1,51 +1,55 @@
 using System.Collections.Generic;
+using gamecore.card;
 
-public class Game
+namespace gamecore.game
 {
-    public IPlayer Player1 { get; private set; }
-
-    public IPlayer Player2 { get; private set; }
-
-    public Game()
+    public class Game
     {
-        Player1 = new Player(new Deck()) { Name = "Player 1" };
-        Player2 = new Player(new Deck()) { Name = "Player 2" };
-    }
+        public IPlayer Player1 { get; private set; }
 
-    public Game(IPlayer player1, IPlayer player2)
-    {
-        Player1 = player1;
-        Player2 = player2;
-    }
+        public IPlayer Player2 { get; private set; }
 
-    public void SetUp(List<ICard> cardsPlayer1, List<ICard> cardsPlayer2)
-    {
-        Player1.Deck.SetUp(cardsPlayer1);
-        Player2.Deck.SetUp(cardsPlayer2);
-    }
-
-    public void StartGame()
-    {
-        StartTurn(Player1);
-    }
-
-    public void EndTurn()
-    {
-        if (Player1.IsActive)
+        public Game()
         {
-            Player1.IsActive = false;
-            StartTurn(Player2);
+            Player1 = new Player(new Deck()) { Name = "Player 1" };
+            Player2 = new Player(new Deck()) { Name = "Player 2" };
         }
-        else
+
+        public Game(IPlayer player1, IPlayer player2)
         {
-            Player2.IsActive = false;
+            Player1 = player1;
+            Player2 = player2;
+        }
+
+        public void SetUp(List<ICard> cardsPlayer1, List<ICard> cardsPlayer2)
+        {
+            Player1.Deck.SetUp(cardsPlayer1);
+            Player2.Deck.SetUp(cardsPlayer2);
+        }
+
+        public void StartGame()
+        {
             StartTurn(Player1);
         }
-    }
 
-    private void StartTurn(IPlayer player)
-    {
-        player.IsActive = true;
-        player.Draw();
+        public void EndTurn()
+        {
+            if (Player1.IsActive)
+            {
+                Player1.IsActive = false;
+                StartTurn(Player2);
+            }
+            else
+            {
+                Player2.IsActive = false;
+                StartTurn(Player1);
+            }
+        }
+
+        private void StartTurn(IPlayer player)
+        {
+            player.IsActive = true;
+            player.Draw();
+        }
     }
 }

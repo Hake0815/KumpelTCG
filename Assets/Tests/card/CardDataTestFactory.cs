@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class CardDataTestFactory
+namespace gamecore.card
 {
-    public const string NAME = "TestName";
-
-    public static CardData Create()
+    public class CardDataTestFactory
     {
-        return new CardDataDummy(NAME);
+        public const string NAME = "TestName";
+
+        public static CardData Create()
+        {
+            return new CardDataDummy(NAME);
+        }
     }
 }
