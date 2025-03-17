@@ -1,15 +1,18 @@
-public abstract class CardData
+namespace gamecore.card
 {
-    public string Name { get; private set; }
-
-    protected CardData(string name)
+    public abstract class CardData
     {
-        Name = name;
-    }
-}
+        public string Name { get; private set; }
 
-public class CardDataDummy : CardData
-{
-    public CardDataDummy(string name)
-        : base(name) { }
+        protected CardData(string name)
+        {
+            Name = name;
+        }
+    }
+
+    public class CardDataDummy : CardData
+    {
+        public CardDataDummy(string name)
+            : base(name) { }
+    }
 }

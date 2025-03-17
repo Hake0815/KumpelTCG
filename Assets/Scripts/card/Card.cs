@@ -1,26 +1,27 @@
-using UnityEngine;
-
-public interface ICard
+namespace gamecore.card
 {
-    public CardData CardData { get; set; }
-
-    public string Name
+    public interface ICard
     {
-        get => CardData.Name;
-    }
-}
+        public CardData CardData { get; set; }
 
-public class CardDummy : ICard
-{
-    public CardData CardData { get; set; }
-
-    public CardDummy(CardData cardData)
-    {
-        CardData = cardData;
+        public string Name
+        {
+            get => CardData.Name;
+        }
     }
 
-    public static ICard Of(CardData cardData)
+    public class CardDummy : ICard
     {
-        return new CardDummy(cardData);
+        public CardData CardData { get; set; }
+
+        public CardDummy(CardData cardData)
+        {
+            CardData = cardData;
+        }
+
+        public static ICard Of(CardData cardData)
+        {
+            return new CardDummy(cardData);
+        }
     }
 }

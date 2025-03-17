@@ -1,35 +1,37 @@
-using System;
-using System.Collections.Generic;
+using gamecore.card;
 using UnityEngine;
 
-public class CardViewCreator : MonoBehaviour
+namespace gameview
 {
-    public static CardViewCreator INSTANCE { get; private set; }
-
-    protected virtual void Awake()
+    public class CardViewCreator : MonoBehaviour
     {
-        if (INSTANCE != null)
+        public static CardViewCreator INSTANCE { get; private set; }
+
+        protected virtual void Awake()
         {
-            Destroy(gameObject);
-            return;
+            if (INSTANCE != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            INSTANCE = this;
         }
-        INSTANCE = this;
-    }
 
-    protected virtual void OicationQuit()
-    {
-        INSTANCE = null;
-        Destroy(gameObject);
-    }
+        protected virtual void OicationQuit()
+        {
+            INSTANCE = null;
+            Destroy(gameObject);
+        }
 
-    [SerializeField]
-    private CardView cardPrefab;
+        [SerializeField]
+        private CardView cardPrefab;
 
-    public CardView CreateAt(ICard card, Vector3 position, Quaternion rotation)
-    {
-        var newCardView = Instantiate(cardPrefab, position, rotation);
-        newCardView.Card = card;
-        CardViewRegistry.INSTANCE.Register(newCardView);
-        return newCardView;
+        public CardView CreateAt(ICard card, Vector3 position, Quaternion rotation)
+        {
+            var newCardView = Instantiate(cardPrefab, position, rotation);
+            newCardView.Card = card;
+            CardViewRegistry.INSTANCE.Register(newCardView);
+            return newCardView;
+        }
     }
 }
