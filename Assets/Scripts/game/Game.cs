@@ -7,7 +7,7 @@ using NUnit.Framework.Constraints;
 
 namespace gamecore.game
 {
-    public class Game
+    public class Game : IActionPerformer<EndTurnGA>
     {
         public IPlayer Player1 { get; private set; }
 
@@ -33,10 +33,15 @@ namespace gamecore.game
 
         public void StartGame()
         {
-            ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(EndTurn);
+            ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
             DrawCardSystem.INSTANCE.Enable();
             Player1.IsActive = true;
             ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
+        }
+
+        public EndTurnGA Perform(EndTurnGA action)
+        {
+            return EndTurn(action);
         }
 
         public EndTurnGA EndTurn(EndTurnGA endTurnGA)

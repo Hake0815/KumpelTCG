@@ -3,7 +3,7 @@ using gamecore.actionsystem;
 
 namespace gamecore.game.action
 {
-    public class DrawCardSystem
+    public class DrawCardSystem : IActionPerformer<DrawCardGA>, IActionSubscriber<EndTurnGA>
     {
         private static readonly Lazy<DrawCardSystem> lazy = new(() => new DrawCardSystem());
         public static DrawCardSystem INSTANCE => lazy.Value;
@@ -12,30 +12,24 @@ namespace gamecore.game.action
 
         public void Enable()
         {
-            ActionSystem.INSTANCE.AttachPerformer<DrawCardGA>(DrawCardPerformer);
-            ActionSystem.INSTANCE.SubscribeReaction<EndTurnGA>(
-                DrawForTurnReaction,
-                ReactionTiming.POST
-            );
+            ActionSystem.INSTANCE.AttachPerformer<DrawCardGA>(INSTANCE);
+            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
         public void Disable()
         {
             ActionSystem.INSTANCE.DetachPerformer<DrawCardGA>();
-            ActionSystem.INSTANCE.UnsubscribeReaction<EndTurnGA>(
-                DrawForTurnReaction,
-                ReactionTiming.POST
-            );
+            ActionSystem.INSTANCE.UnsubscribeFromGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
-        private EndTurnGA DrawForTurnReaction(EndTurnGA endTurnGA)
+        public EndTurnGA React(EndTurnGA endTurnGA)
         {
             var drawCardGA = new DrawCardGA(1, endTurnGA.NextPlayer);
             ActionSystem.INSTANCE.AddReaction(drawCardGA);
             return endTurnGA;
         }
 
-        private DrawCardGA DrawCardPerformer(DrawCardGA drawCardGA)
+        public DrawCardGA Perform(DrawCardGA drawCardGA)
         {
             if (drawCardGA.Amount != 1)
                 throw new NotImplementedException("Can only draw one card for now!");
