@@ -22,11 +22,17 @@ namespace gameview
 
         public void Register(IPlayer player)
         {
-            player.CardDrawn += HandleCardDrawn;
+            player.CardsAddedToHand += HandleCardsAdded;
+            player.CardsRemovedFromHand += HandleCardsRemoved;
             this.player = player;
         }
 
-        public void HandleCardDrawn(object player, List<ICard> drawnCards)
+        private void HandleCardsRemoved()
+        {
+            UpdateCardPosition();
+        }
+
+        public void HandleCardsAdded(object player, List<ICard> drawnCards)
         {
             foreach (var card in drawnCards)
             {

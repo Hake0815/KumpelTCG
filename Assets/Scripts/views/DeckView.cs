@@ -16,7 +16,7 @@ namespace gameview
             Deck = player.Deck;
             Text = GetComponentInChildren<TMP_Text>();
             Text.text = Deck.GetCardCount().ToString();
-            player.CardDrawn += UpdateText;
+            player.CardsAddedToHand += UpdateText;
         }
 
         public void UpdateText(object player, List<ICard> drawnCards)

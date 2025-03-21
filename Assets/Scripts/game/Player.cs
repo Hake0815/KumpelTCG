@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using gamecore.actionsystem;
 using gamecore.card;
-using gamecore.game.action;
-using UnityEngine;
 
 namespace gamecore.game
 {
@@ -11,20 +8,25 @@ namespace gamecore.game
     {
         public IDeck Deck { get; }
         public List<ICard> Hand { get; }
+        public List<ICard> DiscardPile { get; }
         public bool IsActive { get; set; }
         public string Name { get; set; }
         public void Draw();
-        public event EventHandler<List<ICard>> CardDrawn;
+        public void RemoveCardFromHand(ICard card);
+        public event EventHandler<List<ICard>> CardsAddedToHand;
+        public event Action CardsRemovedFromHand;
     }
 
     public class Player : IPlayer
     {
         public IDeck Deck { get; }
         public List<ICard> Hand { get; } = new();
+        public List<ICard> DiscardPile { get; } = new();
         public bool IsActive { get; set; } = false;
         public string Name { get; set; }
 
-        public event EventHandler<List<ICard>> CardDrawn;
+        public event EventHandler<List<ICard>> CardsAddedToHand;
+        public event Action CardsRemovedFromHand;
 
         public Player(IDeck deck)
         {
@@ -37,13 +39,19 @@ namespace gamecore.game
             if (drawnCard != null)
             {
                 Hand.Add(drawnCard);
-                OnCardDrawn(new List<ICard> { drawnCard });
+                OnCardsAddedToHand(new List<ICard> { drawnCard });
             }
         }
 
-        protected virtual void OnCardDrawn(List<ICard> drawnCards)
+        protected virtual void OnCardsAddedToHand(List<ICard> drawnCards)
         {
-            CardDrawn?.Invoke(this, drawnCards);
+            CardsAddedToHand?.Invoke(this, drawnCards);
+        }
+
+        public void RemoveCardFromHand(ICard card)
+        {
+            Hand.Remove(card);
+            CardsRemovedFromHand?.Invoke();
         }
     }
 }
