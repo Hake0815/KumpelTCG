@@ -8,7 +8,7 @@ namespace gamecore.game
     {
         private readonly Mock<IDeck> deck = new();
 
-        private readonly ICard card = CardTestFactory.Create();
+        private readonly ICard card = Mock.Of<ICard>();
 
         private Player Player;
 

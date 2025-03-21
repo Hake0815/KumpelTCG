@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using gamecore.game;
+using Moq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -9,8 +11,8 @@ namespace gamecore.card
 {
     public class DeckTest
     {
-        private readonly ICard firstCard = new CardDummy(CardDatabase.cardDataList[0]);
-        private readonly ICard secondCard = new CardDummy(CardDatabase.cardDataList[1]);
+        private readonly ICard firstCard = Mock.Of<ICard>();
+        private readonly ICard secondCard = Mock.Of<ICard>();
 
         [Test]
         public void CardCountSHouldBeTwo()

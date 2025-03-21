@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using gamecore.card;
+using gamecore.game;
 using UnityEngine;
 
 namespace gameview
@@ -17,7 +19,7 @@ namespace gameview
             INSTANCE = this;
         }
 
-        protected virtual void OicationQuit()
+        protected virtual void OnApplicationQuit()
         {
             INSTANCE = null;
             Destroy(gameObject);
@@ -26,10 +28,12 @@ namespace gameview
         [SerializeField]
         private CardView cardPrefab;
 
+        public Dictionary<IPlayer, DiscardPileView> DiscardPileViews { get; } = new();
+
         public CardView CreateAt(ICard card, Vector3 position, Quaternion rotation)
         {
             var newCardView = Instantiate(cardPrefab, position, rotation);
-            newCardView.Card = card;
+            newCardView.SetUp(DiscardPileViews[card.Owner].transform, card);
             CardViewRegistry.INSTANCE.Register(newCardView);
             return newCardView;
         }

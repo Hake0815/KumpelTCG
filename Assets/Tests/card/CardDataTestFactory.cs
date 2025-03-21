@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using gamecore.effect;
 using UnityEngine;
 
 namespace gamecore.card
@@ -8,7 +10,7 @@ namespace gamecore.card
 
         public static CardData Create()
         {
-            return new CardDataDummy(NAME);
+            return new CardDataDummy(NAME, new List<IEffect>());
         }
     }
 }
