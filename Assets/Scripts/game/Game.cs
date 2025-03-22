@@ -34,7 +34,7 @@ namespace gamecore.game
         public void StartGame()
         {
             ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
-            DrawCardSystem.INSTANCE.Enable();
+            CardSystem.INSTANCE.Enable();
             Player1.IsActive = true;
             ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
         }
@@ -64,7 +64,7 @@ namespace gamecore.game
         public void EndGame()
         {
             ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
-            DrawCardSystem.INSTANCE.Disable();
+            CardSystem.INSTANCE.Disable();
         }
     }
 }

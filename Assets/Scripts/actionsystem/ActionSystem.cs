@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+
 namespace gamecore.actionsystem
 {
     public class ActionSystem
@@ -131,11 +133,27 @@ namespace gamecore.actionsystem
 
         private GameAction PerformAction(GameAction action)
         {
+            if (action == null)
+            {
+                Debug.LogError("Attempted to perform null action");
+                return null;
+            }
+
             var type = action.GetType();
+            Debug.Log($"Attempting to perform action of type: {type.Name}");
+
             if (performers.ContainsKey(type))
             {
-                return performers[type].Perform(action);
+                var performer = performers[type];
+                if (performer == null)
+                {
+                    Debug.LogError($"No performer found for action type: {type.Name}");
+                    return action;
+                }
+                Debug.Log($"Found performer for {type.Name}, executing...");
+                return performer.Perform(action);
             }
+            Debug.LogWarning($"No performer registered for action type: {type.Name}");
             return action;
         }
 

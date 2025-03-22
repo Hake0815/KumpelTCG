@@ -12,7 +12,8 @@ namespace gameview
     {
         private Transform deckPosition;
         private SplineContainer splineContainer;
-        private IPlayer player;
+        private IHand hand;
+        private Vector3 zOffset = new(0, 0, -0.00001f);
 
         public void SetUp(DeckView deck)
         {
@@ -22,11 +23,34 @@ namespace gameview
 
         public void Register(IPlayer player)
         {
-            player.CardDrawn += HandleCardDrawn;
-            this.player = player;
+            hand = player.Hand;
+            OnEnable();
         }
 
-        public void HandleCardDrawn(object player, List<ICard> drawnCards)
+        private void OnEnable()
+        {
+            if (hand != null)
+            {
+                hand.CardsAdded += HandleCardsAdded;
+                hand.CardsRemoved += HandleCardsRemoved;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (hand != null)
+            {
+                hand.CardsAdded -= HandleCardsAdded;
+                hand.CardsRemoved -= HandleCardsRemoved;
+            }
+        }
+
+        private void HandleCardsRemoved()
+        {
+            UpdateCardPosition();
+        }
+
+        public void HandleCardsAdded(object player, List<ICard> drawnCards)
         {
             foreach (var card in drawnCards)
             {
@@ -35,13 +59,13 @@ namespace gameview
                     deckPosition.position,
                     deckPosition.rotation
                 );
-                UpdateCardPosition();
             }
+            UpdateCardPosition();
         }
 
         private void UpdateCardPosition()
         {
-            var handCards = CardViewRegistry.INSTANCE.GetAll(player.Hand);
+            var handCards = CardViewRegistry.INSTANCE.GetAll(hand.Cards);
             if (handCards.Count == 0)
                 return;
             var spacing = Math.Min(1f / handCards.Count, 0.05f);
@@ -56,7 +80,7 @@ namespace gameview
                 var rotation =
                     transform.rotation // spline.EvaluatePosition(p) seems to disregard the rotation of the spline container
                     * Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
-                handCards[i].transform.DOMove(splinePosition, 0.25f);
+                handCards[i].transform.DOMove(splinePosition + i * zOffset, 0.25f);
                 handCards[i].transform.DOLocalRotateQuaternion(rotation, 0.25f);
             }
         }

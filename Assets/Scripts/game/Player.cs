@@ -1,49 +1,39 @@
 using System;
 using System.Collections.Generic;
-using gamecore.actionsystem;
 using gamecore.card;
-using gamecore.game.action;
-using UnityEngine;
 
 namespace gamecore.game
 {
     public interface IPlayer
     {
         public IDeck Deck { get; }
-        public List<ICard> Hand { get; }
+        public IHand Hand { get; }
+        public IDiscardPile DiscardPile { get; }
         public bool IsActive { get; set; }
         public string Name { get; set; }
-        public void Draw();
-        public event EventHandler<List<ICard>> CardDrawn;
+        public void Draw(int amount);
     }
 
     public class Player : IPlayer
     {
         public IDeck Deck { get; }
-        public List<ICard> Hand { get; } = new();
+        public IHand Hand { get; } = new Hand();
+        public IDiscardPile DiscardPile { get; } = new DiscardPile();
         public bool IsActive { get; set; } = false;
         public string Name { get; set; }
-
-        public event EventHandler<List<ICard>> CardDrawn;
 
         public Player(IDeck deck)
         {
             Deck = deck;
         }
 
-        public void Draw()
+        public void Draw(int amount)
         {
-            var drawnCard = Deck.Draw();
-            if (drawnCard != null)
+            var drawnCards = Deck.Draw(amount);
+            if (drawnCards != null)
             {
-                Hand.Add(drawnCard);
-                OnCardDrawn(new List<ICard> { drawnCard });
+                Hand.AddCards(drawnCards);
             }
-        }
-
-        protected virtual void OnCardDrawn(List<ICard> drawnCards)
-        {
-            CardDrawn?.Invoke(this, drawnCards);
         }
     }
 }
