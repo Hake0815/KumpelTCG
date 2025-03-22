@@ -198,7 +198,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -100
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.624911, g: 0.62653434, b: 0.8773585, a: 1}
   m_FlipX: 0
@@ -222,9 +222,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a289c541463aa10b22e421377ad7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handView: {fileID: 2478470199483361296, guid: ca33962eda25d8452912de711d9d3d66, type: 3}
-  deckView: {fileID: 1364710685699798418, guid: cabb342fcdaf40af49b388822e28e42c, type: 3}
-  cardViewCreator: {fileID: 5336658143097781949, guid: 57e3006a74db0135d9e1042ffa81d3c4, type: 3}
+  _handView: {fileID: 2478470199483361296, guid: ca33962eda25d8452912de711d9d3d66, type: 3}
+  _deckView: {fileID: 5344711873865699398, guid: 0d302d2f4a49a80209b4ee20dbe9d64c, type: 3}
+  _playArea: {fileID: 885759354042649084, guid: c0bd040d8ea29e3ef96bafcc42999139, type: 3}
+  _cardViewCreator: {fileID: 5336658143097781949, guid: 57e3006a74db0135d9e1042ffa81d3c4, type: 3}
+  _discardPileView: {fileID: 2218501094241085345, guid: c1c8061b241f5a932ab6d9eda4b3ac0a, type: 3}
   endTurnButton: {fileID: 0}
 --- !u!1 &3427014774801563546
 GameObject:

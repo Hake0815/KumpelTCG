@@ -13,12 +13,15 @@ namespace gameview
         private Transform deckPosition;
         private SplineContainer splineContainer;
         private IHand hand;
-        private Vector3 zOffset = new(0, 0, -0.00001f);
+
+        private void Awake()
+        {
+            splineContainer = GetComponent<SplineContainer>();
+        }
 
         public void SetUp(DeckView deck)
         {
             deckPosition = deck.transform;
-            splineContainer = GetComponent<SplineContainer>();
         }
 
         public void Register(IPlayer player)
@@ -73,6 +76,7 @@ namespace gameview
             var spline = splineContainer.Spline;
             for (int i = 0; i < handCards.Count; i++)
             {
+                handCards[i].GetComponent<Canvas>().sortingOrder = i;
                 var p = firstCardPosition + i * spacing;
                 var splinePosition = transform.rotation * spline.EvaluatePosition(p);
                 var forward = spline.EvaluateTangent(p);
@@ -80,7 +84,7 @@ namespace gameview
                 var rotation =
                     transform.rotation // spline.EvaluatePosition(p) seems to disregard the rotation of the spline container
                     * Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
-                handCards[i].transform.DOMove(splinePosition + i * zOffset, 0.25f);
+                handCards[i].transform.DOMove(splinePosition, 0.25f);
                 handCards[i].transform.DOLocalRotateQuaternion(rotation, 0.25f);
             }
         }

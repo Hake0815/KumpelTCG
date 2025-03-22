@@ -9,9 +9,9 @@ namespace gameview
 {
     public class CardView : MonoBehaviour
     {
-        private Collider2D col;
-        private Vector3 positionBeforeDrag;
-        private Transform discardPilePosition;
+        private protected Collider2D col;
+        private protected Vector3 positionBeforeDrag;
+        private protected Transform discardPilePosition;
         public ICard Card { get; private set; }
 
         public void SetUp(Transform discardPilePosition, ICard card)
@@ -70,16 +70,6 @@ namespace gameview
 
         private void OnMouseUp()
         {
-            col.enabled = false;
-            var hitCollider = Physics2D.OverlapPoint(transform.position);
-            col.enabled = true;
-            if (hitCollider != null && hitCollider.TryGetComponent(out ICardDropArea cardDropArea))
-            {
-                if (cardDropArea.OnCardDropped(this))
-                {
-                    return;
-                }
-            }
             transform.position = positionBeforeDrag;
         }
     }
