@@ -5,10 +5,11 @@ namespace gamecore.card
 {
     public class CardDatabase
     {
-        public static List<CardData> cardDataList = new()
+        public static List<ICardData> cardDataList = new()
         {
-            new CardDataDummy(
-                "first draw 2 Card",
+            new TrainerCardData(
+                "Bill",
+                "bill",
                 new List<IEffect> { new DrawCardsEffect(2), new DiscardCardEffect() },
                 new List<IPlayCondition> { new HasCardsInDeck() }
             ),
