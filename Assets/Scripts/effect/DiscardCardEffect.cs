@@ -10,7 +10,6 @@ namespace gamecore.effect
     {
         public void Perform(ICard card)
         {
-            Debug.Log("Discarding card: " + card.Name);
             ActionSystem.INSTANCE.Perform(new DiscardCardsFromHandGA(new List<ICard> { card }));
         }
     }

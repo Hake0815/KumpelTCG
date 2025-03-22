@@ -2,6 +2,6 @@ namespace gameview
 {
     public interface ICardDropArea
     {
-        void OnCardDropped(CardView cardView);
+        bool OnCardDropped(CardView cardView);
     }
 }

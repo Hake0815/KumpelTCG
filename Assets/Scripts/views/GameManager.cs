@@ -43,10 +43,13 @@ namespace gameview
             game.StartGame();
         }
 
-
         private void SetUpPlayerViews(IPlayer player, Quaternion rotation)
         {
-            var discardPileView = Instantiate(_discardPileView, rotation * _discardPileView.transform.position, rotation);
+            var discardPileView = Instantiate(
+                _discardPileView,
+                rotation * _discardPileView.transform.position,
+                rotation
+            );
             CardViewCreator.INSTANCE.DiscardPileViews.Add(player, discardPileView);
             var handView = Instantiate(_handView, _handView.transform.position, rotation); // Position is at 0,0,0
             var deckView = Instantiate(
@@ -54,10 +57,16 @@ namespace gameview
                 rotation * _deckView.transform.position,
                 rotation
             );
-            Instantiate(_playArea, rotation * _playArea.transform.position, rotation);
+            var playArea = Instantiate(
+                _playArea,
+                rotation * _playArea.transform.position,
+                rotation
+            );
+            playArea.SetUp(player);
             handView.SetUp(deckView);
             deckView.SetUp(player);
             handView.Register(player);
+            discardPileView.SetUp(player.DiscardPile);
         }
 
         private void SetUpGame()
