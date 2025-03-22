@@ -46,7 +46,7 @@ namespace gamecore.card
             CardDiscarded?.Invoke();
         }
 
-        public void PerformEffects()
+        public void PerformEffects() // During effect performing the card still is in the player's hand, might be a problem later
         {
             foreach (var effect in Effects)
             {
@@ -63,16 +63,13 @@ namespace gamecore.card
         public bool IsPlayable()
         {
             if (!Owner.IsActive)
-            {
-                return false;
-            }
-            foreach (var condition in Conditions)
-            {
-                if (!condition.IsMet(this))
+                foreach (var condition in Conditions)
                 {
-                    return false;
+                    if (!condition.IsMet(this))
+                    {
+                        return false;
+                    }
                 }
-            }
             return true;
         }
     }
