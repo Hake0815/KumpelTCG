@@ -24,7 +24,7 @@ namespace gamecore.game
             game.StartGame();
 
             player1.VerifySet(p => p.IsActive = true);
-            player1.Verify(p => p.Draw());
+            player1.Verify(p => p.Draw(1));
         }
 
         [Test]

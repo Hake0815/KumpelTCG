@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using UnityEngine;
@@ -17,13 +19,35 @@ namespace gameview
             this.discardPilePosition = discardPilePosition;
             col = GetComponent<Collider2D>();
             Card = card;
-            Card.CardDiscarded += Discard;
+            OnEnable();
+        }
+
+        private void OnEnable()
+        {
+            if (Card != null)
+                Card.CardDiscarded += Discard;
+        }
+
+        private void OnDisable()
+        {
+            if (Card != null)
+                Card.CardDiscarded -= Discard;
         }
 
         private void Discard()
         {
-            transform.DOMove(discardPilePosition.position, 0.25f);
-            transform.DORotateQuaternion(discardPilePosition.rotation, 0.25f);
+            CardViewRegistry.INSTANCE.Unregister(Card);
+            MoveToDiscardPile();
+        }
+
+        private void MoveToDiscardPile()
+        {
+            DOTween
+                .Sequence()
+                .Append(transform.DOMove(discardPilePosition.position, 0.25f))
+                .Join(transform.DORotateQuaternion(discardPilePosition.rotation, 0.25f))
+                .OnComplete(() => Destroy(gameObject))
+                .WaitForCompletion();
         }
 
         private void OnMouseDown()
@@ -51,12 +75,12 @@ namespace gameview
             col.enabled = true;
             if (hitCollider != null && hitCollider.TryGetComponent(out ICardDropArea cardDropArea))
             {
-                cardDropArea.OnCardDropped(this);
+                if (cardDropArea.OnCardDropped(this))
+                {
+                    return;
+                }
             }
-            else
-            {
-                transform.position = positionBeforeDrag;
-            }
+            transform.position = positionBeforeDrag;
         }
     }
 }

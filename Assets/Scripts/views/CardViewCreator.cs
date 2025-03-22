@@ -37,5 +37,10 @@ namespace gameview
             CardViewRegistry.INSTANCE.Register(newCardView);
             return newCardView;
         }
+
+        public Sprite GetSprite(ICard card)
+        {
+            return cardPrefab.GetComponent<SpriteRenderer>().sprite;
+        }
     }
 }

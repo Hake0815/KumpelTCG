@@ -40,21 +40,16 @@ namespace gamecore.game.action
 
         public DrawCardGA Perform(DrawCardGA drawCardGA)
         {
-            for (int i = 0; i < drawCardGA.Amount; i++)
-            {
-                drawCardGA.Player.Draw();
-            }
+            drawCardGA.Player.Draw(drawCardGA.Amount);
             return drawCardGA;
         }
 
         public DiscardCardsFromHandGA Perform(DiscardCardsFromHandGA action)
         {
-            Debug.Log("Discarding cards from hand: " + action.Cards.Count);
             foreach (var card in action.Cards)
             {
-                Debug.Log("Discarding card: " + card.Name);
                 card.Discard();
-                card.Owner.RemoveCardFromHand(card);
+                card.Owner.Hand.RemoveCards(new() { card });
             }
             return action;
         }
