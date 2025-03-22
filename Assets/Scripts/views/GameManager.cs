@@ -14,102 +14,104 @@ namespace gameview
         private Game game;
 
         [SerializeField]
-        private HandView handView;
+        private HandView _handView;
 
         [SerializeField]
-        private DeckView deckView;
+        private DeckView _deckView;
 
         [SerializeField]
-        private CardViewCreator cardViewCreator;
+        private PlayArea _playArea;
+
+        [SerializeField]
+        private CardViewCreator _cardViewCreator;
+
+        [SerializeField]
+        private DiscardPileView _discardPileView;
 
         public Button endTurnButton;
-
-        private HandView handViewPlayer1;
-        private DeckView deckViewPlayer1;
-        private HandView handViewPlayer2;
-        private DeckView deckViewPlayer2;
 
         void Start()
         {
             endTurnButton = GetComponentInChildren<Button>();
             endTurnButton.onClick.AddListener(EndTurn);
-            Instantiate(cardViewCreator);
+            Instantiate(_cardViewCreator);
 
             SetUpGame();
-            SetUpPlayer1Views();
-            SetUpPlayer2Views();
+            SetUpPlayerViews(game.Player1, new Quaternion(0f, 0f, 0f, 1f));
+            SetUpPlayerViews(game.Player2, new Quaternion(0f, 0f, 1f, 0f));
 
             game.StartGame();
         }
 
-        private void SetUpPlayer2Views()
+        private void SetUpPlayerViews(IPlayer player, Quaternion rotation)
         {
-            var rotation = new Quaternion(0f, 0f, 1f, 0f); // Rotation by 180 degrees around z axis
-            handViewPlayer2 = Instantiate(handView, handView.transform.position, rotation);
-            deckViewPlayer2 = Instantiate(
-                deckView,
-                rotation * deckView.transform.position,
+            var discardPileView = Instantiate(
+                _discardPileView,
+                rotation * _discardPileView.transform.position,
                 rotation
             );
-            handViewPlayer2.SetUp(deckViewPlayer2);
-            deckViewPlayer2.SetUp(game.Player2);
-            deckViewPlayer2.Text.transform.rotation =
-                rotation * deckViewPlayer2.Text.transform.rotation;
-            handViewPlayer2.Register(game.Player2);
-        }
-
-        private void SetUpPlayer1Views()
-        {
-            handViewPlayer1 = Instantiate(handView);
-            deckViewPlayer1 = Instantiate(deckView);
-            handViewPlayer1.SetUp(deckViewPlayer1);
-            deckViewPlayer1.SetUp(game.Player1);
-            handViewPlayer1.Register(game.Player1);
+            CardViewCreator.INSTANCE.DiscardPileViews.Add(player, discardPileView);
+            var handView = Instantiate(_handView, _handView.transform.position, rotation); // Position is at 0,0,0
+            var deckView = Instantiate(
+                _deckView,
+                rotation * _deckView.transform.position,
+                rotation
+            );
+            var playArea = Instantiate(
+                _playArea,
+                rotation * _playArea.transform.position,
+                rotation
+            );
+            playArea.SetUp(player);
+            handView.SetUp(deckView);
+            deckView.SetUp(player);
+            handView.Register(player);
+            discardPileView.SetUp(player.DiscardPile);
         }
 
         private void SetUpGame()
         {
             game = new();
-            List<ICard> cardsPlayer1 = CreateCardList();
-            List<ICard> cardsPlayer2 = CreateCardList();
+            List<ICard> cardsPlayer1 = CreateCardList(game.Player1);
+            List<ICard> cardsPlayer2 = CreateCardList(game.Player2);
             game.SetUp(cardsPlayer1, cardsPlayer2);
         }
 
-        private List<ICard> CreateCardList()
+        private List<ICard> CreateCardList(IPlayer player)
         {
             return new()
             {
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
-                CardDummy.Of(CardDatabase.cardDataList[0]),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
+                CardDummy.Of(CardDatabase.cardDataList[0], player),
             };
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using gamecore.effect;
 
 namespace gamecore.card
 {
@@ -6,9 +7,11 @@ namespace gamecore.card
     {
         public static List<CardData> cardDataList = new()
         {
-            new CardDataDummy("first Card"),
-            new CardDataDummy("second Card"),
-            new CardDataDummy("third Card"),
+            new CardDataDummy(
+                "first draw 2 Card",
+                new List<IEffect> { new DrawCardsEffect(2), new DiscardCardEffect() },
+                new List<IPlayCondition> { new HasCardsInDeck() }
+            ),
         };
     }
 }
