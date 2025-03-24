@@ -21,5 +21,6 @@ namespace gamecore.card
         public bool IsPlayable();
         public void Discard();
         public bool IsTrainerCard();
+        public bool IsPokemonCard();
     }
 }

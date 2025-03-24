@@ -16,9 +16,16 @@ namespace gameview
             { "bill", Resources.Load<Sprite>("Images/Cards/bill") },
         };
 
+        private readonly Sprite defaultSprite = Resources.Load<Sprite>("Images/Cards/default");
+
         public Sprite GetSprite(string id)
         {
-            return sprites[id];
+            if (sprites.TryGetValue(id, out var sprite))
+            {
+                return sprite;
+            }
+            Debug.LogError($"Sprite with id '{id}' not found in SpriteRegistry");
+            return defaultSprite;
         }
     }
 }

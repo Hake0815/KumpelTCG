@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace gameview
 {
@@ -13,6 +14,7 @@ namespace gameview
         private protected Vector3 positionBeforeDrag;
         private protected Transform discardPilePosition;
         public ICard Card { get; private set; }
+        public Image Image { get; set; }
 
         public void SetUp(Transform discardPilePosition, ICard card)
         {
@@ -20,6 +22,11 @@ namespace gameview
             col = GetComponent<Collider2D>();
             Card = card;
             OnEnable();
+        }
+
+        public void Awake()
+        {
+            Image = GetComponentInChildren<Image>();
         }
 
         private void OnEnable()
@@ -70,6 +77,16 @@ namespace gameview
 
         private void OnMouseUp()
         {
+            col.enabled = false;
+            var hitCollider = Physics2D.OverlapPoint(transform.position);
+            col.enabled = true;
+            if (hitCollider != null && hitCollider.TryGetComponent(out ICardDropArea cardDropArea))
+            {
+                if (cardDropArea.OnCardDropped(this))
+                {
+                    return;
+                }
+            }
             transform.position = positionBeforeDrag;
         }
     }
