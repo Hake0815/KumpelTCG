@@ -78,5 +78,10 @@ namespace gamecore.card
         {
             return true;
         }
+
+        public bool IsPokemonCard()
+        {
+            return false;
+        }
     }
 }

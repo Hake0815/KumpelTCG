@@ -28,24 +28,12 @@ namespace gameview
         [SerializeField]
         private CardView cardPrefab;
 
-        [SerializeField]
-        private TrainerCardView trainerCardPrefab;
-
         public Dictionary<IPlayer, DiscardPileView> DiscardPileViews { get; } = new();
 
         public CardView CreateAt(ICard card, Vector3 position, Quaternion rotation)
         {
-            CardView newCardView;
-            if (card is ITrainerCard)
-            {
-                var trainerCardView = Instantiate(trainerCardPrefab, position, rotation);
-                trainerCardView.Image.sprite = SpriteRegistry.INSTANCE.GetSprite(card.Id);
-                newCardView = trainerCardView;
-            }
-            else
-            {
-                newCardView = Instantiate(trainerCardPrefab, position, rotation);
-            }
+            var newCardView = Instantiate(cardPrefab, position, rotation);
+            newCardView.Image.sprite = SpriteRegistry.INSTANCE.GetSprite(card.Id);
             newCardView.SetUp(DiscardPileViews[card.Owner].transform, card);
             CardViewRegistry.INSTANCE.Register(newCardView);
             return newCardView;
