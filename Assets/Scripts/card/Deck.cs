@@ -27,7 +27,7 @@ namespace gamecore.card
 
         public List<ICard> Draw(int amount)
         {
-            var drawnCards = Cards.Take(amount).ToList();
+            var drawnCards = Cards.GetRange(0, Math.Min(amount, Cards.Count));
             Cards.RemoveRange(0, drawnCards.Count);
             OnCardCountChanged();
             return drawnCards;
