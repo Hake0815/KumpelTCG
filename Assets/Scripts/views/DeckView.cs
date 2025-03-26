@@ -40,7 +40,8 @@ namespace gameview
 
         private void OnDisable()
         {
-            Deck.CardCountChanged -= UpdateView;
+            if (Deck != null)
+                Deck.CardCountChanged -= UpdateView;
         }
 
         public void UpdateView()
