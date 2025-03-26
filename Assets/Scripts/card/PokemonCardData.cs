@@ -45,6 +45,7 @@ namespace gamecore.card
             Resistance = resistance;
             RetreatCost = retreatCost;
             MaxHP = maxHP;
+            Attacks = attacks;
         }
     }
 
@@ -61,7 +62,7 @@ namespace gamecore.card
         Grass,
         Fire,
         Water,
-        Lightnig,
+        Lightning,
         Fighting,
         Psychic,
         Colorless,
