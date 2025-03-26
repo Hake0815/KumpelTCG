@@ -4,15 +4,17 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace gameview
 {
     public class CardView : MonoBehaviour
     {
-        private Collider2D col;
-        private Vector3 positionBeforeDrag;
-        private Transform discardPilePosition;
+        private protected Collider2D col;
+        private protected Vector3 positionBeforeDrag;
+        private protected Transform discardPilePosition;
         public ICard Card { get; private set; }
+        public Image Image { get; set; }
 
         public void SetUp(Transform discardPilePosition, ICard card)
         {
@@ -20,6 +22,11 @@ namespace gameview
             col = GetComponent<Collider2D>();
             Card = card;
             OnEnable();
+        }
+
+        public void Awake()
+        {
+            Image = GetComponentInChildren<Image>();
         }
 
         private void OnEnable()

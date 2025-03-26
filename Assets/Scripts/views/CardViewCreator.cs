@@ -33,14 +33,10 @@ namespace gameview
         public CardView CreateAt(ICard card, Vector3 position, Quaternion rotation)
         {
             var newCardView = Instantiate(cardPrefab, position, rotation);
+            newCardView.Image.sprite = SpriteRegistry.INSTANCE.GetSprite(card.Id);
             newCardView.SetUp(DiscardPileViews[card.Owner].transform, card);
             CardViewRegistry.INSTANCE.Register(newCardView);
             return newCardView;
-        }
-
-        public Sprite GetSprite(ICard card)
-        {
-            return cardPrefab.GetComponent<SpriteRenderer>().sprite;
         }
     }
 }
