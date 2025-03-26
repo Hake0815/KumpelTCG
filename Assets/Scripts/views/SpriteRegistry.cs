@@ -14,6 +14,7 @@ namespace gameview
         private readonly Dictionary<string, Sprite> sprites = new()
         {
             { "bill", Resources.Load<Sprite>("Images/Cards/bill") },
+            { "TWM128", Resources.Load<Sprite>("Images/Cards/TWM_128_R_EN_LG") },
         };
 
         private readonly Sprite defaultSprite = Resources.Load<Sprite>("Images/Cards/default");

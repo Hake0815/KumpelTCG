@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace gamecore.card
 {
     public interface IPokemonCardData : ICardData
@@ -8,6 +10,7 @@ namespace gamecore.card
         public PokemonType Resistance { get; }
         public int RetreatCost { get; }
         public int MaxHP { get; }
+        public List<IAttack> Attacks { get; }
     }
 
     public class PokemonCardData : IPokemonCardData
@@ -20,26 +23,50 @@ namespace gamecore.card
         public PokemonType Resistance { get; }
         public int RetreatCost { get; }
         public int MaxHP { get; }
+        public List<IAttack> Attacks { get; }
+
+        public PokemonCardData(
+            string id,
+            string name,
+            Stage stage,
+            PokemonType type,
+            PokemonType weakness,
+            PokemonType resistance,
+            int retreatCost,
+            int maxHP,
+            List<IAttack> attacks
+        )
+        {
+            Id = id;
+            Name = name;
+            Stage = stage;
+            Type = type;
+            Weakness = weakness;
+            Resistance = resistance;
+            RetreatCost = retreatCost;
+            MaxHP = maxHP;
+        }
     }
 
     public enum Stage
     {
-        BASIC,
-        STAGE1,
-        STAGE2,
+        Basic,
+        Stage1,
+        Stage2,
     }
 
     public enum PokemonType
     {
-        GRASS,
-        FIRE,
-        WATER,
-        LIGHTNIG,
-        FIGHTING,
-        PSYCHIC,
-        COLORLESS,
-        DARRKNESS,
-        METAL,
-        DRAGON,
+        None,
+        Grass,
+        Fire,
+        Water,
+        Lightnig,
+        Fighting,
+        Psychic,
+        Colorless,
+        Darrkness,
+        Metal,
+        Dragon,
     }
 }
