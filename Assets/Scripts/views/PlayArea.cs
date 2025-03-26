@@ -1,3 +1,4 @@
+using gamecore.card;
 using gamecore.game;
 using UnityEngine;
 
@@ -14,11 +15,12 @@ namespace gameview
 
         public bool OnCardDropped(CardView cardView)
         {
-            if (player == cardView.Card.Owner && cardView.Card.IsPlayable())
+            var card = cardView.Card;
+            if (card.IsTrainerCard() && card.Owner == player && card.IsPlayable())
             {
-                cardView.transform.position = transform.position - new Vector3(0f, 0f, 0.01f);
+                cardView.transform.position = transform.position;
                 cardView.transform.rotation = transform.rotation;
-                cardView.Card.PerformEffects();
+                card.Play();
                 return true;
             }
             return false;
