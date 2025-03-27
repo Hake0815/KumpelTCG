@@ -25,16 +25,24 @@ namespace gamecore.game
             Player2 = player2;
         }
 
-        public void SetUp(List<ICard> cardsPlayer1, List<ICard> cardsPlayer2)
+        public void Initialize(List<ICard> cardsPlayer1, List<ICard> cardsPlayer2)
         {
+            ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
+            CardSystem.INSTANCE.Enable();
             Player1.Deck.SetUp(cardsPlayer1);
             Player2.Deck.SetUp(cardsPlayer2);
+            Player1.Deck.Shuffle();
+            Player2.Deck.Shuffle();
+        }
+
+        public void PerformSetup()
+        {
+            ActionSystem.INSTANCE.Perform(new DrawCardGA(7, Player1));
+            ActionSystem.INSTANCE.Perform(new DrawCardGA(7, Player2));
         }
 
         public void StartGame()
         {
-            ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
-            CardSystem.INSTANCE.Enable();
             Player1.IsActive = true;
             ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
         }
