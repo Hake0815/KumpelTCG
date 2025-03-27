@@ -36,10 +36,11 @@ namespace gameview
             endTurnButton.onClick.AddListener(EndTurn);
             Instantiate(_cardViewCreator);
 
-            SetUpGame();
+            InitializeGame();
             SetUpPlayerViews(game.Player1, new Quaternion(0f, 0f, 0f, 1f));
             SetUpPlayerViews(game.Player2, new Quaternion(0f, 0f, 1f, 0f));
 
+            game.PerformSetup();
             game.StartGame();
         }
 
@@ -69,12 +70,12 @@ namespace gameview
             discardPileView.SetUp(player.DiscardPile);
         }
 
-        private void SetUpGame()
+        private void InitializeGame()
         {
             game = new();
             List<ICard> cardsPlayer1 = CreateCardList(game.Player1);
             List<ICard> cardsPlayer2 = CreateCardList(game.Player2);
-            game.SetUp(cardsPlayer1, cardsPlayer2);
+            game.Initialize(cardsPlayer1, cardsPlayer2);
         }
 
         private List<ICard> CreateCardList(IPlayer player)
