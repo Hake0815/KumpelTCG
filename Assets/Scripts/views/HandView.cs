@@ -53,7 +53,12 @@ namespace gameview
             UpdateCardPosition();
         }
 
-        public void HandleCardsAdded(object player, List<ICard> drawnCards)
+        public void CreateHandCards()
+        {
+            HandleCardsAdded(this, hand.Cards);
+        }
+
+        private void HandleCardsAdded(object player, List<ICard> drawnCards)
         {
             foreach (var card in drawnCards)
             {

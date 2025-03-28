@@ -28,6 +28,8 @@ namespace gameview
         [SerializeField]
         private DiscardPileView _discardPileView;
 
+        private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
+
         public Button endTurnButton;
 
         void Start()
@@ -37,11 +39,21 @@ namespace gameview
             Instantiate(_cardViewCreator);
 
             InitializeGame();
+            game.PerformSetup();
+
             SetUpPlayerViews(game.Player1, new Quaternion(0f, 0f, 0f, 1f));
             SetUpPlayerViews(game.Player2, new Quaternion(0f, 0f, 1f, 0f));
+            ShowGameState();
 
-            game.PerformSetup();
             game.StartGame();
+        }
+
+        private void InitializeGame()
+        {
+            game = new();
+            List<ICard> cardsPlayer1 = CreateCardList(game.Player1);
+            List<ICard> cardsPlayer2 = CreateCardList(game.Player2);
+            game.Initialize(cardsPlayer1, cardsPlayer2);
         }
 
         private void SetUpPlayerViews(IPlayer player, Quaternion rotation)
@@ -68,52 +80,23 @@ namespace gameview
             deckView.SetUp(player);
             handView.Register(player);
             discardPileView.SetUp(player.DiscardPile);
-        }
-
-        private void InitializeGame()
-        {
-            game = new();
-            List<ICard> cardsPlayer1 = CreateCardList(game.Player1);
-            List<ICard> cardsPlayer2 = CreateCardList(game.Player2);
-            game.Initialize(cardsPlayer1, cardsPlayer2);
+            _playerHandViews.Add(player, handView);
         }
 
         private List<ICard> CreateCardList(IPlayer player)
         {
-            return new()
+            var cards = new List<ICard>();
+            cards.AddRange(CardFactory.CreateCard("bill", player, 59));
+            cards.AddRange(CardFactory.CreateCard("TWM128", player, 1));
+            return cards;
+        }
+
+        private void ShowGameState()
+        {
+            foreach (var player in _playerHandViews)
             {
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-            };
+                player.Value.CreateHandCards();
+            }
         }
 
         public void EndTurn()

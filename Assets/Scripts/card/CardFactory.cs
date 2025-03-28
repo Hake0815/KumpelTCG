@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using gamecore.game;
 using UnityEngine;
 
@@ -26,6 +28,11 @@ namespace gamecore.card
                 $"Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"
             );
             return null;
+        }
+
+        public static List<ICard> CreateCard(string id, IPlayer owner, int count)
+        {
+            return Enumerable.Range(0, count).Select(i => CreateCard(id, owner)).ToList();
         }
     }
 }
