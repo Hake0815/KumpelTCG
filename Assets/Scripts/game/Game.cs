@@ -31,14 +31,11 @@ namespace gamecore.game
             CardSystem.INSTANCE.Enable();
             Player1.Deck.SetUp(cardsPlayer1);
             Player2.Deck.SetUp(cardsPlayer2);
-            Player1.Deck.Shuffle();
-            Player2.Deck.Shuffle();
         }
 
         public void PerformSetup()
         {
-            ActionSystem.INSTANCE.Perform(new DrawCardGA(7, Player1));
-            ActionSystem.INSTANCE.Perform(new DrawCardGA(7, Player2));
+            new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2).Setup();
         }
 
         public void StartGame()
