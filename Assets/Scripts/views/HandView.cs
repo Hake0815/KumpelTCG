@@ -8,15 +8,15 @@ using UnityEngine.Splines;
 
 namespace gameview
 {
-    public class HandView : MonoBehaviour
+    public class HandView : MonoBehaviour, ISplineCardHolder
     {
         private Transform deckPosition;
-        private SplineContainer splineContainer;
+        public SplineContainer SplineContainer { get; private set; }
         private IHand hand;
 
         private void Awake()
         {
-            splineContainer = GetComponent<SplineContainer>();
+            SplineContainer = GetComponent<SplineContainer>();
         }
 
         public void SetUp(DeckView deck)
@@ -50,7 +50,10 @@ namespace gameview
 
         private void HandleCardsRemoved()
         {
-            UpdateCardPosition();
+            ((ISplineCardHolder)this).UpdateCardPosition(
+                CardViewRegistry.INSTANCE.GetAll(hand.Cards),
+                transform.rotation
+            );
         }
 
         public void CreateHandCards()
@@ -68,30 +71,10 @@ namespace gameview
                     deckPosition.rotation
                 );
             }
-            UpdateCardPosition();
-        }
-
-        private void UpdateCardPosition()
-        {
-            var handCards = CardViewRegistry.INSTANCE.GetAll(hand.Cards);
-            if (handCards.Count == 0)
-                return;
-            var spacing = Math.Min(1f / handCards.Count, 0.05f);
-            var firstCardPosition = -(handCards.Count - 1) * spacing / 2 + 0.5f;
-            var spline = splineContainer.Spline;
-            for (int i = 0; i < handCards.Count; i++)
-            {
-                handCards[i].GetComponent<Canvas>().sortingOrder = i;
-                var p = firstCardPosition + i * spacing;
-                var splinePosition = transform.rotation * spline.EvaluatePosition(p);
-                var forward = spline.EvaluateTangent(p);
-                var up = spline.EvaluateUpVector(p);
-                var rotation =
-                    transform.rotation // spline.EvaluatePosition(p) seems to disregard the rotation of the spline container
-                    * Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
-                handCards[i].transform.DOMove(splinePosition, 0.25f);
-                handCards[i].transform.DOLocalRotateQuaternion(rotation, 0.25f);
-            }
+            ((ISplineCardHolder)this).UpdateCardPosition(
+                CardViewRegistry.INSTANCE.GetAll(hand.Cards),
+                transform.rotation
+            );
         }
     }
 }

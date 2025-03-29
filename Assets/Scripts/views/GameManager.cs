@@ -28,6 +28,9 @@ namespace gameview
         [SerializeField]
         private DiscardPileView _discardPileView;
 
+        [SerializeField]
+        private MulliganView _mulliganViewPrefab;
+
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
 
         public Button endTurnButton;
@@ -44,6 +47,8 @@ namespace gameview
             SetUpPlayerViews(game.Player1, new Quaternion(0f, 0f, 0f, 1f));
             SetUpPlayerViews(game.Player2, new Quaternion(0f, 0f, 1f, 0f));
             ShowGameState();
+            ShowMulligan(game.Player1);
+            // ShowMulligan(game.Player2);
 
             game.StartGame();
         }
@@ -81,6 +86,12 @@ namespace gameview
             handView.Register(player);
             discardPileView.SetUp(player.DiscardPile);
             _playerHandViews.Add(player, handView);
+        }
+
+        private void ShowMulligan(IPlayer player)
+        {
+            var mulliganView = Instantiate(_mulliganViewPrefab);
+            mulliganView.SetUp(player, game.GameSetupBuilder.GetMulligansForPlayer(player));
         }
 
         private List<ICard> CreateCardList(IPlayer player)

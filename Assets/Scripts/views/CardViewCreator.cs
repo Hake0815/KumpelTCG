@@ -38,5 +38,13 @@ namespace gameview
             CardViewRegistry.INSTANCE.Register(newCardView);
             return newCardView;
         }
+
+        public CardView CreateIn(ICard card, Transform parent)
+        {
+            var newCardView = Instantiate(cardPrefab, parent);
+            newCardView.Image.sprite = SpriteRegistry.INSTANCE.GetSprite(card.Id);
+            newCardView.SetUp(DiscardPileViews[card.Owner].transform, card);
+            return newCardView;
+        }
     }
 }
