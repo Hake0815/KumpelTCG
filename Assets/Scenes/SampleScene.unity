@@ -431,9 +431,17 @@ PrefabInstance:
       propertyPath: _discardPileView
       value: 
       objectReference: {fileID: 1687710093591685239, guid: f6f962eafdbf34bac89b19d79df31659, type: 3}
+    - target: {fileID: 726967895271978137, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: _mulliganViewPrefab
+      value: 
+      objectReference: {fileID: 3852400392982224435, guid: 2bd3c8427cdea8256a935790d752cbcf, type: 3}
     - target: {fileID: 2569138588933751772, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
       propertyPath: m_Name
       value: Board
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126849208781030520, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7070908728931524737, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
       propertyPath: m_LocalPosition.x

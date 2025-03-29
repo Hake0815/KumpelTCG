@@ -10,8 +10,8 @@ namespace gamecore.game
     public class Game : IActionPerformer<EndTurnGA>
     {
         public IPlayer Player1 { get; private set; }
-
         public IPlayer Player2 { get; private set; }
+        public GameSetupBuilder GameSetupBuilder { get; private set; }
 
         public Game()
         {
@@ -35,7 +35,8 @@ namespace gamecore.game
 
         public void PerformSetup()
         {
-            new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2).Setup();
+            GameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
+            GameSetupBuilder.Setup();
         }
 
         public void StartGame()

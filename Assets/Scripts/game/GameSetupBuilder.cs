@@ -27,6 +27,13 @@ namespace gamecore
             return this;
         }
 
+        public List<List<ICard>> GetMulligansForPlayer(IPlayer player)
+        {
+            return mulligans.TryGetValue(player, out var playerMulligans)
+                ? playerMulligans
+                : new List<List<ICard>>();
+        }
+
         public void Setup()
         {
             mulligans.Add(Player1, new List<List<ICard>>());
@@ -43,7 +50,7 @@ namespace gamecore
             while (!DrawStartHand(player))
             {
                 count++;
-                mulligans[player].Add(player.Hand.Cards);
+                mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.GetCardCount()));
                 player.Deck.AddCards(player.Hand.Cards);
                 player.Hand.Clear();
             }
