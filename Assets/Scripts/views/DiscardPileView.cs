@@ -43,7 +43,6 @@ namespace gameview
 
         private void UpdateView()
         {
-            Debug.Log("Updating discard pile view");
             var topCard = _discardPile.GetLastCard();
             if (topCard != null)
             {
