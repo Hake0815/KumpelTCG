@@ -52,7 +52,6 @@ namespace gamecore.card
             {
                 if (!condition.IsMet(this))
                 {
-                    Debug.Log("Card is not playable");
                     return false;
                 }
             }
@@ -61,7 +60,6 @@ namespace gamecore.card
 
         private void PerformEffects() // During effect performing the card still is in the player's hand, might be a problem later
         {
-            Debug.Log("Performing effects");
             foreach (var effect in Effects)
             {
                 effect.Perform(this);
