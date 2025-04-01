@@ -3,6 +3,7 @@ using gamecore.card;
 using gamecore.game;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace gameview
@@ -10,19 +11,22 @@ namespace gameview
     public class MulliganView : MonoBehaviour
     {
         [SerializeField]
-        private TMP_Text currentMulliganText;
+        private TMP_Text _currentMulliganText;
 
         [SerializeField]
-        private GameObject mulliganPanel;
+        private GameObject _mulliganPanel;
 
         [SerializeField]
-        private Transform cardContainer;
+        private Transform _cardContainer;
 
         [SerializeField]
-        private Button previousButton;
+        private Button _previousButton;
 
         [SerializeField]
-        private Button nextButton;
+        private Button _nextButton;
+
+        [SerializeField]
+        private Button _doneButton;
 
         private IPlayer player;
         private List<List<ICard>> mulligans;
@@ -33,9 +37,9 @@ namespace gameview
             this.player = player;
             this.mulligans = mulligans;
 
-            previousButton.onClick.AddListener(ShowPreviousMulligan);
-            nextButton.onClick.AddListener(ShowNextMulligan);
-
+            _previousButton.onClick.AddListener(ShowPreviousMulligan);
+            _nextButton.onClick.AddListener(ShowNextMulligan);
+            _doneButton.onClick.AddListener(Done);
             UpdateView();
         }
 
@@ -61,18 +65,18 @@ namespace gameview
         {
             if (mulligans == null || mulligans.Count == 0)
             {
-                mulliganPanel.SetActive(false);
+                _mulliganPanel.SetActive(false);
                 return;
             }
 
-            mulliganPanel.SetActive(true);
-            currentMulliganText.text =
+            _mulliganPanel.SetActive(true);
+            _currentMulliganText.text =
                 $"Mulligan {currentMulliganIndex + 1}/{mulligans.Count} of {player.Name}";
 
-            previousButton.interactable = currentMulliganIndex > 0;
-            nextButton.interactable = currentMulliganIndex < mulligans.Count - 1;
+            _previousButton.interactable = currentMulliganIndex > 0;
+            _nextButton.interactable = currentMulliganIndex < mulligans.Count - 1;
 
-            foreach (Transform child in cardContainer)
+            foreach (Transform child in _cardContainer)
             {
                 Destroy(child.gameObject);
             }
@@ -84,8 +88,7 @@ namespace gameview
             for (int i = 0; i < currentMulligan.Count; i++)
             {
                 var card = currentMulligan[i];
-                Debug.Log($"Creating card {card.Name}");
-                var cardView = CardViewCreator.INSTANCE.CreateIn(card, cardContainer);
+                var cardView = CardViewCreator.INSTANCE.CreateIn(card, _cardContainer);
                 cardView.transform.localScale = new Vector3(150f, 150f, 150f);
 
                 var rectTransform = cardView.GetComponent<RectTransform>();
@@ -100,10 +103,19 @@ namespace gameview
 
         private void OnDestroy()
         {
-            if (previousButton != null)
-                previousButton.onClick.RemoveListener(ShowPreviousMulligan);
-            if (nextButton != null)
-                nextButton.onClick.RemoveListener(ShowNextMulligan);
+            _previousButton.onClick.RemoveListener(ShowPreviousMulligan);
+            _nextButton.onClick.RemoveListener(ShowNextMulligan);
+            _doneButton.onClick.RemoveListener(Done);
+        }
+
+        public void AddDoneListener(UnityAction action)
+        {
+            _doneButton.onClick.AddListener(action);
+        }
+
+        private void Done()
+        {
+            Destroy(gameObject);
         }
     }
 }
