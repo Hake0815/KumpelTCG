@@ -10,8 +10,8 @@ namespace gamecore.game
     public class Game : IActionPerformer<EndTurnGA>
     {
         public IPlayer Player1 { get; private set; }
-
         public IPlayer Player2 { get; private set; }
+        public GameSetupBuilder GameSetupBuilder { get; private set; }
 
         public Game()
         {
@@ -31,14 +31,12 @@ namespace gamecore.game
             CardSystem.INSTANCE.Enable();
             Player1.Deck.SetUp(cardsPlayer1);
             Player2.Deck.SetUp(cardsPlayer2);
-            Player1.Deck.Shuffle();
-            Player2.Deck.Shuffle();
         }
 
         public void PerformSetup()
         {
-            ActionSystem.INSTANCE.Perform(new DrawCardGA(7, Player1));
-            ActionSystem.INSTANCE.Perform(new DrawCardGA(7, Player2));
+            GameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
+            GameSetupBuilder.Setup();
         }
 
         public void StartGame()

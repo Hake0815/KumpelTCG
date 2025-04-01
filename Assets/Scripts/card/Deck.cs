@@ -10,13 +10,14 @@ namespace gamecore.card
         public List<ICard> Draw(int amount);
         public void Shuffle();
         public int GetCardCount();
+        public void AddCards(List<ICard> cards);
         public event Action CardCountChanged;
     }
 
     public class Deck : IDeck
     {
         private List<ICard> Cards { get; set; }
-        private static Random rng = new();
+        private static readonly Random rng = new();
 
         public event Action CardCountChanged;
 
@@ -47,6 +48,12 @@ namespace gamecore.card
         public int GetCardCount()
         {
             return Cards.Count;
+        }
+
+        public void AddCards(List<ICard> cards)
+        {
+            Cards.AddRange(cards);
+            OnCardCountChanged();
         }
 
         protected virtual void OnCardCountChanged()

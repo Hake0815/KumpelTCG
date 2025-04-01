@@ -28,20 +28,44 @@ namespace gameview
         [SerializeField]
         private DiscardPileView _discardPileView;
 
+        [SerializeField]
+        private MulliganView _mulliganViewPrefab;
+
+        private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
+
         public Button endTurnButton;
+        public GameManagerState GameManagerState { get; private set; }
 
         void Start()
         {
             endTurnButton = GetComponentInChildren<Button>();
+            endTurnButton.gameObject.SetActive(false);
             endTurnButton.onClick.AddListener(EndTurn);
             Instantiate(_cardViewCreator);
 
             InitializeGame();
+            game.PerformSetup();
+
             SetUpPlayerViews(game.Player1, new Quaternion(0f, 0f, 0f, 1f));
             SetUpPlayerViews(game.Player2, new Quaternion(0f, 0f, 1f, 0f));
+            GameManagerState = new MulliganStatePlayer1(this);
+            GameManagerState.OnEnter();
+        }
 
-            game.PerformSetup();
-            game.StartGame();
+        private void InitializeGame()
+        {
+            game = new();
+            List<ICard> cardsPlayer1 = CreateCardList(game.Player1);
+            List<ICard> cardsPlayer2 = CreateCardList(game.Player2);
+            game.Initialize(cardsPlayer1, cardsPlayer2);
+        }
+
+        private List<ICard> CreateCardList(IPlayer player)
+        {
+            var cards = new List<ICard>();
+            cards.AddRange(CardFactory.CreateCard("bill", player, 59));
+            cards.AddRange(CardFactory.CreateCard("TWM128", player, 1));
+            return cards;
         }
 
         private void SetUpPlayerViews(IPlayer player, Quaternion rotation)
@@ -68,52 +92,52 @@ namespace gameview
             deckView.SetUp(player);
             handView.Register(player);
             discardPileView.SetUp(player.DiscardPile);
+            _playerHandViews.Add(player, handView);
         }
 
-        private void InitializeGame()
+        public void ShowMulliganPlayer1()
         {
-            game = new();
-            List<ICard> cardsPlayer1 = CreateCardList(game.Player1);
-            List<ICard> cardsPlayer2 = CreateCardList(game.Player2);
-            game.Initialize(cardsPlayer1, cardsPlayer2);
+            ShowMulligan(game.Player1);
         }
 
-        private List<ICard> CreateCardList(IPlayer player)
+        public void ShowMulliganPlayer2()
         {
-            return new()
+            ShowMulligan(game.Player2);
+        }
+
+        private void ShowMulligan(IPlayer player)
+        {
+            var mulligans = game.GameSetupBuilder.GetMulligansForPlayer(player);
+            if (mulligans.Count == 0)
             {
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-                CardFactory.CreateCard("TWM128", player),
-                CardFactory.CreateCard("bill", player),
-            };
+                GameManagerState = GameManagerState.AdvanceSuccessfully();
+                return;
+            }
+            var mulliganView = Instantiate(_mulliganViewPrefab);
+            mulliganView.SetUp(player, mulligans);
+            mulliganView.AddDoneListener(() =>
+            {
+                GameManagerState = GameManagerState.AdvanceSuccessfully();
+                GameManagerState.OnEnter();
+            });
+        }
+
+        public void ShowGameState()
+        {
+            foreach (var player in _playerHandViews)
+            {
+                player.Value.CreateHandCards();
+            }
+            GameManagerState = GameManagerState.AdvanceSuccessfully();
+            GameManagerState.OnEnter();
+        }
+
+        public void StartGame()
+        {
+            game.StartGame();
+            endTurnButton.gameObject.SetActive(true);
+            GameManagerState = GameManagerState.AdvanceSuccessfully();
+            GameManagerState.OnEnter();
         }
 
         public void EndTurn()
