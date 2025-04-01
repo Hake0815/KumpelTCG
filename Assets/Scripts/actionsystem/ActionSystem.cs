@@ -56,10 +56,11 @@ namespace gamecore.actionsystem
             if (subs.ContainsKey(type))
             {
                 // Find and remove the wrapper that contains this subscriber
-                var wrapperToBeRemoved = subs[type].Find(sub =>
-                    sub is ActionSubscriberWrapper<T> wrapper &&
-                    wrapper._wrappedSubscriber == subscriber
-                );
+                var wrapperToBeRemoved = subs[type]
+                    .Find(sub =>
+                        sub is ActionSubscriberWrapper<T> wrapper
+                        && wrapper._wrappedSubscriber == subscriber
+                    );
 
                 if (wrapperToBeRemoved != null)
                 {
@@ -140,7 +141,6 @@ namespace gamecore.actionsystem
             }
 
             var type = action.GetType();
-            Debug.Log($"Attempting to perform action of type: {type.Name}");
 
             if (performers.ContainsKey(type))
             {
@@ -150,7 +150,6 @@ namespace gamecore.actionsystem
                     Debug.LogError($"No performer found for action type: {type.Name}");
                     return action;
                 }
-                Debug.Log($"Found performer for {type.Name}, executing...");
                 return performer.Perform(action);
             }
             Debug.LogWarning($"No performer registered for action type: {type.Name}");
@@ -162,7 +161,8 @@ namespace gamecore.actionsystem
             reactions?.Add(gameAction);
         }
 
-        private class ActionPerformerWrapper<T> : IActionPerformer<GameAction> where T : GameAction
+        private class ActionPerformerWrapper<T> : IActionPerformer<GameAction>
+            where T : GameAction
         {
             private readonly IActionPerformer<T> _wrappedPerformer;
 
@@ -181,7 +181,8 @@ namespace gamecore.actionsystem
             }
         }
 
-        private class ActionSubscriberWrapper<T> : IActionSubscriber<GameAction> where T : GameAction
+        private class ActionSubscriberWrapper<T> : IActionSubscriber<GameAction>
+            where T : GameAction
         {
             internal readonly IActionSubscriber<T> _wrappedSubscriber;
 
