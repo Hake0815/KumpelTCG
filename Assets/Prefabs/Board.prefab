@@ -225,9 +225,11 @@ MonoBehaviour:
   _handView: {fileID: 2478470199483361296, guid: ca33962eda25d8452912de711d9d3d66, type: 3}
   _deckView: {fileID: 5344711873865699398, guid: 0d302d2f4a49a80209b4ee20dbe9d64c, type: 3}
   _playArea: {fileID: 885759354042649084, guid: c0bd040d8ea29e3ef96bafcc42999139, type: 3}
+  _activeSpot: {fileID: 4589633420691444452, guid: c51a3dd4b2f8ecac28fbdc9995c0bb3a, type: 3}
   _cardViewCreator: {fileID: 5336658143097781949, guid: 57e3006a74db0135d9e1042ffa81d3c4, type: 3}
-  _discardPileView: {fileID: 2218501094241085345, guid: c1c8061b241f5a932ab6d9eda4b3ac0a, type: 3}
-  endTurnButton: {fileID: 0}
+  _discardPileView: {fileID: 1687710093591685239, guid: f6f962eafdbf34bac89b19d79df31659, type: 3}
+  _mulliganViewPrefab: {fileID: 3852400392982224435, guid: 2bd3c8427cdea8256a935790d752cbcf, type: 3}
+  endTurnButton: {fileID: 3790401241133142911}
 --- !u!1 &3427014774801563546
 GameObject:
   m_ObjectHideFlags: 0

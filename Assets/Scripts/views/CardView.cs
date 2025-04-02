@@ -59,13 +59,16 @@ namespace gameview
 
         private void OnMouseDown()
         {
+            if (!Card.IsPlayable())
+                return;
             positionBeforeDrag = transform.position;
             transform.position = GetMousePosition();
         }
 
         private void OnMouseDrag()
         {
-            transform.position = GetMousePosition();
+            if (Card.IsPlayable())
+                transform.position = GetMousePosition();
         }
 
         private Vector3 GetMousePosition()
@@ -77,6 +80,8 @@ namespace gameview
 
         private void OnMouseUp()
         {
+            if (!Card.IsPlayable())
+                return;
             col.enabled = false;
             var hitCollider = Physics2D.OverlapPoint(transform.position);
             col.enabled = true;
