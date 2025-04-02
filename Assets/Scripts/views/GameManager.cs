@@ -48,8 +48,7 @@ namespace gameview
 
             SetUpPlayerViews(game.Player1, new Quaternion(0f, 0f, 0f, 1f));
             SetUpPlayerViews(game.Player2, new Quaternion(0f, 0f, 1f, 0f));
-            GameManagerState = new MulliganStatePlayer1(this);
-            GameManagerState.OnEnter();
+            GameManagerState = GameManagerStateFactory.CreateMulliganStatePlayer1(this);
         }
 
         private void InitializeGame()
@@ -63,8 +62,8 @@ namespace gameview
         private List<ICard> CreateCardList(IPlayer player)
         {
             var cards = new List<ICard>();
-            cards.AddRange(CardFactory.CreateCard("bill", player, 59));
-            cards.AddRange(CardFactory.CreateCard("TWM128", player, 1));
+            cards.AddRange(CardFactory.CreateCard("bill", player, 56));
+            cards.AddRange(CardFactory.CreateCard("TWM128", player, 4));
             return cards;
         }
 
@@ -95,31 +94,39 @@ namespace gameview
             _playerHandViews.Add(player, handView);
         }
 
-        public void ShowMulliganPlayer1()
+        /*
+         * Returns true if the mulligan was shown, false if the player has no mulligans
+         */
+        public bool ShowMulliganPlayer1()
         {
-            ShowMulligan(game.Player1);
+            return ShowMulligan(game.Player1);
         }
 
-        public void ShowMulliganPlayer2()
+        /*
+         * Returns true if the mulligan was shown, false if the player has no mulligans
+         */
+        public bool ShowMulliganPlayer2()
         {
-            ShowMulligan(game.Player2);
+            return ShowMulligan(game.Player2);
         }
 
-        private void ShowMulligan(IPlayer player)
+        /*
+         * Returns true if the mulligan was shown, false if the player has no mulligans
+         */
+        private bool ShowMulligan(IPlayer player)
         {
             var mulligans = game.GameSetupBuilder.GetMulligansForPlayer(player);
             if (mulligans.Count == 0)
             {
-                GameManagerState = GameManagerState.AdvanceSuccessfully();
-                return;
+                return false;
             }
             var mulliganView = Instantiate(_mulliganViewPrefab);
             mulliganView.SetUp(player, mulligans);
             mulliganView.AddDoneListener(() =>
             {
                 GameManagerState = GameManagerState.AdvanceSuccessfully();
-                GameManagerState.OnEnter();
             });
+            return true;
         }
 
         public void ShowGameState()
@@ -128,16 +135,12 @@ namespace gameview
             {
                 player.Value.CreateHandCards();
             }
-            GameManagerState = GameManagerState.AdvanceSuccessfully();
-            GameManagerState.OnEnter();
         }
 
         public void StartGame()
         {
             game.StartGame();
             endTurnButton.gameObject.SetActive(true);
-            GameManagerState = GameManagerState.AdvanceSuccessfully();
-            GameManagerState.OnEnter();
         }
 
         public void EndTurn()
