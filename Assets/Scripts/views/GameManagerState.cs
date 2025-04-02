@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace gameview
 {
@@ -60,13 +61,37 @@ namespace gameview
 
         public override GameManagerState AdvanceSuccessfully()
         {
-            return GameManagerStateFactory.CreateStartGameState(_gameManager);
+            return GameManagerStateFactory.CreateWaitForActivePokemonState(_gameManager);
         }
 
         internal override GameManagerState OnEnter()
         {
             _gameManager.ShowGameState();
             return AdvanceSuccessfully();
+        }
+    }
+
+    public class WaitForActivePokemonState : GameManagerState
+    {
+        private int _activePokemonCount = 0;
+
+        internal WaitForActivePokemonState(GameManager gameManager)
+            : base(gameManager) { }
+
+        public override GameManagerState AdvanceSuccessfully()
+        {
+            _activePokemonCount++;
+            Debug.Log($"WaitForActivePokemonState: _activePokemonCount = {_activePokemonCount}");
+            if (_activePokemonCount < 2)
+                return this;
+            return GameManagerStateFactory.CreateStartGameState(_gameManager);
+        }
+
+        internal override GameManagerState OnEnter()
+        {
+            Debug.Log("Enter WaitForActivePokemonState called");
+            _gameManager.WaitForActivePokemon();
+            return this;
         }
     }
 
@@ -118,6 +143,12 @@ namespace gameview
         public static GameManagerState CreateShowGameState(GameManager gameManager)
         {
             return EnterState(new ShowGameState(gameManager));
+        }
+
+        public static GameManagerState CreateWaitForActivePokemonState(GameManager gameManager)
+        {
+            Debug.Log("Enter WaitForActivePokemonState");
+            return EnterState(new WaitForActivePokemonState(gameManager));
         }
 
         public static GameManagerState CreateStartGameState(GameManager gameManager)

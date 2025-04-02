@@ -1,12 +1,15 @@
-using gamecore.card;
+using System;
 using gamecore.game;
 using UnityEngine;
 
 namespace gameview
 {
-    public class PlayArea : MonoBehaviour, ICardDropArea
+    public class ActiveSpot : MonoBehaviour, ICardDropArea
     {
         private IPlayer _player;
+        private bool _isEmpty = true;
+
+        public event Action CardPlayed;
 
         public void SetUp(IPlayer player)
         {
@@ -16,11 +19,14 @@ namespace gameview
         public bool OnCardDropped(CardView cardView)
         {
             var card = cardView.Card;
-            if (card.IsTrainerCard() && card.Owner == _player && card.IsPlayable())
+            if (card.IsPokemonCard() && card.Owner == _player && _isEmpty)
             {
                 cardView.transform.position = transform.position;
                 cardView.transform.rotation = transform.rotation;
                 card.Play();
+                _isEmpty = false;
+                Debug.Log($"ActiveSpot: CardPlayed");
+                CardPlayed?.Invoke();
                 return true;
             }
             return false;

@@ -9,6 +9,7 @@ namespace gamecore.card
         public int GetCardCount();
         public void AddCards(List<ICard> cards);
         public void RemoveCards(List<ICard> cards);
+        public void RemoveCard(ICard card);
         public void Clear();
         public event EventHandler<List<ICard>> CardsAdded;
         public event Action CardsRemoved;
@@ -35,6 +36,12 @@ namespace gamecore.card
         {
             Cards.RemoveAll(cards.Contains);
             OnCardsRemoved(cards);
+        }
+
+        public void RemoveCard(ICard card)
+        {
+            Cards.Remove(card);
+            OnCardsRemoved(new() { card });
         }
 
         protected virtual void OnCardsAddedToHand(List<ICard> cards)
