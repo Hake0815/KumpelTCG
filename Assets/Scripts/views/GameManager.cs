@@ -23,6 +23,9 @@ namespace gameview
         private PlayArea _playArea;
 
         [SerializeField]
+        private ActiveSpot _activeSpot;
+
+        [SerializeField]
         private CardViewCreator _cardViewCreator;
 
         [SerializeField]
@@ -32,6 +35,7 @@ namespace gameview
         private MulliganView _mulliganViewPrefab;
 
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
+        private readonly Dictionary<IPlayer, ActiveSpot> _playerActiveSpots = new();
 
         public Button endTurnButton;
         public GameManagerState GameManagerState { get; private set; }
@@ -74,24 +78,31 @@ namespace gameview
                 rotation * _discardPileView.transform.position,
                 rotation
             );
+            discardPileView.SetUp(player.DiscardPile);
             CardViewCreator.INSTANCE.DiscardPileViews.Add(player, discardPileView);
-            var handView = Instantiate(_handView, _handView.transform.position, rotation); // Position is at 0,0,0
             var deckView = Instantiate(
                 _deckView,
                 rotation * _deckView.transform.position,
                 rotation
             );
+            deckView.SetUp(player);
+            var handView = Instantiate(_handView, _handView.transform.position, rotation); // Position is at 0,0,0
+            handView.Register(player);
+            handView.SetUp(deckView);
+            _playerHandViews.Add(player, handView);
             var playArea = Instantiate(
                 _playArea,
                 rotation * _playArea.transform.position,
                 rotation
             );
             playArea.SetUp(player);
-            handView.SetUp(deckView);
-            deckView.SetUp(player);
-            handView.Register(player);
-            discardPileView.SetUp(player.DiscardPile);
-            _playerHandViews.Add(player, handView);
+            var activeSpot = Instantiate(
+                _activeSpot,
+                rotation * _activeSpot.transform.position,
+                rotation
+            );
+            activeSpot.SetUp(player);
+            _playerActiveSpots.Add(player, activeSpot);
         }
 
         /*
@@ -134,6 +145,16 @@ namespace gameview
             foreach (var player in _playerHandViews)
             {
                 player.Value.CreateHandCards();
+            }
+        }
+
+        public void WaitForActivePokemon()
+        {
+            foreach (var player in _playerActiveSpots)
+            {
+                Debug.Log($"Register on click listener for {player.Key.Name}: {player.Value}");
+                player.Value.CardPlayed += () =>
+                    GameManagerState = GameManagerState.AdvanceSuccessfully();
             }
         }
 
