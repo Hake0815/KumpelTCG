@@ -14,7 +14,7 @@ namespace gameview
         {
             if (cardViews.Count == 0)
                 return;
-            var spacing = Math.Min(1.5f / cardViews.Count, 0.05f);
+            var spacing = Math.Min(1f / cardViews.Count, 0.05f);
             var firstCardPosition = -(cardViews.Count - 1) * spacing / 2 + 0.5f;
             var spline = SplineContainer.Spline;
             for (int i = 0; i < cardViews.Count; i++)

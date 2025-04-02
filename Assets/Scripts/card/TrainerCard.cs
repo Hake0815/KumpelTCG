@@ -40,13 +40,12 @@ namespace gamecore.card
 
         public void Play()
         {
-            if (IsPlayable())
-                PerformEffects();
+            PerformEffects();
         }
 
         public bool IsPlayable()
         {
-            if (!Owner.IsActive)
+            if (!(Owner.IsActive && Owner.Hand.Cards.Contains(this)))
                 return false;
             foreach (var condition in Conditions)
             {
@@ -58,7 +57,7 @@ namespace gamecore.card
             return true;
         }
 
-        private void PerformEffects() // During effect performing the card still is in the player's hand, might be a problem later
+        private void PerformEffects() // During effect performing the card is still in the player's hand, might be a problem later
         {
             foreach (var effect in Effects)
             {
