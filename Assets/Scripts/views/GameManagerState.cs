@@ -6,82 +6,90 @@ namespace gameview
     {
         private protected GameManager _gameManager;
 
-        protected GameManagerState(GameManager gameManager)
+        private protected GameManagerState(GameManager gameManager)
         {
             _gameManager = gameManager;
         }
 
         public abstract GameManagerState AdvanceSuccessfully();
-        public abstract void OnEnter();
+        internal abstract GameManagerState OnEnter();
     }
 
     public class MulliganStatePlayer1 : GameManagerState
     {
-        public MulliganStatePlayer1(GameManager gameManager)
+        internal MulliganStatePlayer1(GameManager gameManager)
             : base(gameManager) { }
 
         public override GameManagerState AdvanceSuccessfully()
         {
-            return new MulliganStatePlayer2(_gameManager);
+            return GameManagerStateFactory.CreateMulliganStatePlayer2(_gameManager);
         }
 
-        public override void OnEnter()
+        internal override GameManagerState OnEnter()
         {
-            _gameManager.ShowMulliganPlayer1();
+            if (_gameManager.ShowMulliganPlayer1())
+                return this;
+            else
+                return AdvanceSuccessfully();
         }
     }
 
     public class MulliganStatePlayer2 : GameManagerState
     {
-        public MulliganStatePlayer2(GameManager gameManager)
+        internal MulliganStatePlayer2(GameManager gameManager)
             : base(gameManager) { }
 
         public override GameManagerState AdvanceSuccessfully()
         {
-            return new ShowGameState(_gameManager);
+            return GameManagerStateFactory.CreateShowGameState(_gameManager);
         }
 
-        public override void OnEnter()
+        internal override GameManagerState OnEnter()
         {
-            _gameManager.ShowMulliganPlayer2();
+            if (_gameManager.ShowMulliganPlayer2())
+                return this;
+            else
+                return AdvanceSuccessfully();
         }
     }
 
     public class ShowGameState : GameManagerState
     {
-        public ShowGameState(GameManager gameManager)
+        internal ShowGameState(GameManager gameManager)
             : base(gameManager) { }
 
         public override GameManagerState AdvanceSuccessfully()
         {
-            return new StartGameState(_gameManager);
+            return GameManagerStateFactory.CreateStartGameState(_gameManager);
         }
 
-        public override void OnEnter()
+        internal override GameManagerState OnEnter()
         {
             _gameManager.ShowGameState();
+            return AdvanceSuccessfully();
         }
     }
 
     public class StartGameState : GameManagerState
     {
-        public StartGameState(GameManager gameManager)
+        internal StartGameState(GameManager gameManager)
             : base(gameManager) { }
 
         public override GameManagerState AdvanceSuccessfully()
         {
-            return new IdleState(_gameManager);
+            return GameManagerStateFactory.CreateIdleState(_gameManager);
         }
 
-        public override void OnEnter()
+        internal override GameManagerState OnEnter()
         {
             _gameManager.StartGame();
+            return AdvanceSuccessfully();
         }
     }
 
     public class IdleState : GameManagerState
     {
-        public IdleState(GameManager gameManager)
+        internal IdleState(GameManager gameManager)
             : base(gameManager) { }
 
         public override GameManagerState AdvanceSuccessfully()
@@ -89,40 +97,42 @@ namespace gameview
             return this;
         }
 
-        public override void OnEnter() { }
+        internal override GameManagerState OnEnter()
+        {
+            return this;
+        }
     }
 
-    // public class GameManagerStateFactory
-    // {
-    //     public static GameManagerState CreateMulliganStatePlayer1(GameManager gameManager)
-    //     {
-    //         return SetState(new MulliganStatePlayer1(gameManager));
-    //     }
+    public class GameManagerStateFactory
+    {
+        public static GameManagerState CreateMulliganStatePlayer1(GameManager gameManager)
+        {
+            return EnterState(new MulliganStatePlayer1(gameManager));
+        }
 
-    //     public static GameManagerState CreateMulliganStatePlayer2(GameManager gameManager)
-    //     {
-    //         return SetState(new MulliganStatePlayer2(gameManager));
-    //     }
+        public static GameManagerState CreateMulliganStatePlayer2(GameManager gameManager)
+        {
+            return EnterState(new MulliganStatePlayer2(gameManager));
+        }
 
-    //     public static GameManagerState CreateShowGameState(GameManager gameManager)
-    //     {
-    //         return SetState(new ShowGameState(gameManager));
-    //     }
+        public static GameManagerState CreateShowGameState(GameManager gameManager)
+        {
+            return EnterState(new ShowGameState(gameManager));
+        }
 
-    //     public static GameManagerState CreateStartGameState(GameManager gameManager)
-    //     {
-    //         return SetState(new StartGameState(gameManager));
-    //     }
+        public static GameManagerState CreateStartGameState(GameManager gameManager)
+        {
+            return EnterState(new StartGameState(gameManager));
+        }
 
-    //     public static GameManagerState CreateIdleState(GameManager gameManager)
-    //     {
-    //         return SetState(new IdleState(gameManager));
-    //     }
+        public static GameManagerState CreateIdleState(GameManager gameManager)
+        {
+            return EnterState(new IdleState(gameManager));
+        }
 
-    //     private static GameManagerState SetState(GameManagerState state)
-    //     {
-    //         state.OnEnter();
-    //         return state;
-    //     }
-    // }
+        private static GameManagerState EnterState(GameManagerState state)
+        {
+            return state.OnEnter();
+        }
+    }
 }
