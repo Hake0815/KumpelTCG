@@ -33,13 +33,13 @@ namespace gamecore.card
 
         public bool IsPlayable()
         {
-            if (Owner.ActivePokemon == null)
-            {
-                return Stage == Stage.Basic;
-            }
-            if (!(Owner.IsActive && Owner.Hand.Cards.Contains(this)))
+            if (!Owner.Hand.Cards.Contains(this))
                 return false;
-            return Stage == Stage.Basic;
+
+            if (Owner.ActivePokemon == null)
+                return Stage == Stage.Basic;
+
+            return Owner.IsActive && Stage == Stage.Basic;
         }
 
         public bool IsPokemonCard()
