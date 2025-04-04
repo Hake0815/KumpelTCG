@@ -1,6 +1,6 @@
 namespace gamecore.actionsystem
 {
-    public interface IActionPerformer<T>
+    internal interface IActionPerformer<T>
         where T : GameAction
     {
         T Perform(T action);

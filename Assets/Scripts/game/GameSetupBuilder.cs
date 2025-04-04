@@ -8,33 +8,33 @@ using UnityEngine;
 
 namespace gamecore
 {
-    public class GameSetupBuilder
+    internal class GameSetupBuilder
     {
-        public IPlayer Player1 { get; private set; }
-        public IPlayer Player2 { get; private set; }
+        internal IPlayerLogic Player1 { get; private set; }
+        internal IPlayerLogic Player2 { get; private set; }
 
-        private Dictionary<IPlayer, List<List<ICard>>> mulligans = new();
+        internal Dictionary<IPlayer, List<List<ICard>>> mulligans = new();
 
-        public GameSetupBuilder WithPlayer1(IPlayer player)
+        internal GameSetupBuilder WithPlayer1(IPlayerLogic player)
         {
             Player1 = player;
             return this;
         }
 
-        public GameSetupBuilder WithPlayer2(IPlayer player)
+        internal GameSetupBuilder WithPlayer2(IPlayerLogic player)
         {
             Player2 = player;
             return this;
         }
 
-        public List<List<ICard>> GetMulligansForPlayer(IPlayer player)
+        internal List<List<ICard>> GetMulligansForPlayer(IPlayerLogic player)
         {
             return mulligans.TryGetValue(player, out var playerMulligans)
                 ? playerMulligans
                 : new List<List<ICard>>();
         }
 
-        public void Setup()
+        internal void Setup()
         {
             mulligans.Add(Player1, new List<List<ICard>>());
             mulligans.Add(Player2, new List<List<ICard>>());
@@ -44,7 +44,7 @@ namespace gamecore
             Debug.Log($"Player 2 had {numberMulligansPlayer2} mulligans.");
         }
 
-        private int DrawUntilBasicPokemon(IPlayer player)
+        private int DrawUntilBasicPokemon(IPlayerLogic player)
         {
             int count = 0;
             while (!DrawStartHand(player))
@@ -57,14 +57,14 @@ namespace gamecore
             return count;
         }
 
-        private bool DrawStartHand(IPlayer player)
+        private bool DrawStartHand(IPlayerLogic player)
         {
             player.Deck.Shuffle();
             ActionSystem.INSTANCE.Perform(new DrawCardGA(7, player));
             return HasBasicPokemon(player);
         }
 
-        private bool HasBasicPokemon(IPlayer player)
+        private bool HasBasicPokemon(IPlayerLogic player)
         {
             return player.Hand.Cards.Any(card =>
                 card is IPokemonCard pokemonCard && pokemonCard.Stage == Stage.Basic

@@ -13,7 +13,7 @@ namespace gamecore.card
         public List<IAttack> Attacks { get; }
     }
 
-    public class PokemonCardData : IPokemonCardData
+    internal class PokemonCardData : IPokemonCardData
     {
         public string Id { get; }
         public string Name { get; }

@@ -7,15 +7,19 @@ namespace gamecore.card
     {
         public List<ICard> Cards { get; }
         public int GetCardCount();
-        public void AddCards(List<ICard> cards);
-        public void RemoveCards(List<ICard> cards);
-        public void RemoveCard(ICard card);
-        public void Clear();
         public event EventHandler<List<ICard>> CardsAdded;
         public event Action CardsRemoved;
     }
 
-    public class Hand : IHand
+    internal interface IHandLogic : IHand
+    {
+        internal void AddCards(List<ICard> cards);
+        internal void RemoveCards(List<ICard> cards);
+        internal void RemoveCard(ICard card);
+        internal void Clear();
+    }
+
+    public class Hand : IHandLogic
     {
         public List<ICard> Cards { get; } = new();
         public event EventHandler<List<ICard>> CardsAdded;
@@ -26,19 +30,19 @@ namespace gamecore.card
             return Cards.Count;
         }
 
-        public void AddCards(List<ICard> cards)
+        void IHandLogic.AddCards(List<ICard> cards)
         {
             Cards.AddRange(cards);
             OnCardsAddedToHand(cards);
         }
 
-        public void RemoveCards(List<ICard> cards)
+        void IHandLogic.RemoveCards(List<ICard> cards)
         {
             Cards.RemoveAll(cards.Contains);
             OnCardsRemoved(cards);
         }
 
-        public void RemoveCard(ICard card)
+        void IHandLogic.RemoveCard(ICard card)
         {
             Cards.Remove(card);
             OnCardsRemoved(new() { card });
@@ -54,7 +58,7 @@ namespace gamecore.card
             CardsRemoved?.Invoke();
         }
 
-        public void Clear()
+        void IHandLogic.Clear()
         {
             Cards.Clear();
             OnCardsRemoved(Cards);

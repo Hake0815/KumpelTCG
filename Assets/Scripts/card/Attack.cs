@@ -9,7 +9,7 @@ namespace gamecore.card
         public List<PokemonType> Cost { get; }
     }
 
-    public class Attack : IAttack
+    internal class Attack : IAttack
     {
         public string Name { get; }
         public int Damage { get; }

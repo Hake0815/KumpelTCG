@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using gamecore.effect;
 using gamecore.game;
-using UnityEngine;
 
 namespace gamecore.card
 {
@@ -12,40 +11,39 @@ namespace gamecore.card
         public List<IPlayCondition> Conditions { get; }
     }
 
-    public class TrainerCard : ITrainerCard
+    internal class TrainerCard : ITrainerCard, ICardLogic
     {
+        private IPlayerLogic _owner;
         public ICardData CardData { get; }
         public ITrainerCardData TrainerCardData
         {
             get => CardData as ITrainerCardData;
         }
-        public IPlayer Owner { get; }
+        IPlayerLogic ICardLogic.Owner
+        {
+            get => _owner;
+        }
         public List<IEffect> Effects { get; }
         public List<IPlayCondition> Conditions { get; }
 
         public event Action CardDiscarded;
 
-        public TrainerCard(ITrainerCardData cardData, IPlayer owner)
+        internal TrainerCard(ITrainerCardData cardData, IPlayerLogic owner)
         {
             CardData = cardData;
-            Owner = owner;
+            _owner = owner;
             Effects = cardData.Effects;
             Conditions = cardData.Conditions;
         }
 
-        public static ITrainerCard Of(ITrainerCardData cardData, IPlayer owner)
-        {
-            return new TrainerCard(cardData, owner);
-        }
-
-        public void Play()
+        void ICardLogic.Play()
         {
             PerformEffects();
         }
 
-        public bool IsPlayable()
+        bool ICardLogic.IsPlayable()
         {
-            if (!(Owner.IsActive && Owner.Hand.Cards.Contains(this)))
+            if (!(_owner.IsActive && _owner.Hand.Cards.Contains(this)))
                 return false;
             foreach (var condition in Conditions)
             {
@@ -65,18 +63,18 @@ namespace gamecore.card
             }
         }
 
-        public void Discard()
+        void ICardLogic.Discard()
         {
-            Owner.DiscardPile.AddCards(new() { this });
+            _owner.DiscardPile.AddCards(new() { this });
             CardDiscarded?.Invoke();
         }
 
-        public bool IsTrainerCard()
+        bool ICardLogic.IsTrainerCard()
         {
             return true;
         }
 
-        public bool IsPokemonCard()
+        bool ICardLogic.IsPokemonCard()
         {
             return false;
         }

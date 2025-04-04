@@ -1,32 +1,36 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using gamecore.card;
 
-namespace gamecore.card
+namespace gamecore.game
 {
     public interface IDeck
     {
-        public void SetUp(List<ICard> cards);
-        public List<ICard> Draw(int amount);
-        public void Shuffle();
         public int GetCardCount();
-        public void AddCards(List<ICard> cards);
         public event Action CardCountChanged;
     }
 
-    public class Deck : IDeck
+    internal interface IDeckLogic : IDeck
+    {
+        internal void SetUp(List<ICard> cards);
+        internal List<ICard> Draw(int amount);
+        internal void Shuffle();
+        internal void AddCards(List<ICard> cards);
+    }
+
+    internal class Deck : IDeckLogic
     {
         private List<ICard> Cards { get; set; }
         private static readonly Random rng = new();
 
         public event Action CardCountChanged;
 
-        public void SetUp(List<ICard> cards)
+        void IDeckLogic.SetUp(List<ICard> cards)
         {
             Cards = cards;
         }
 
-        public List<ICard> Draw(int amount)
+        List<ICard> IDeckLogic.Draw(int amount)
         {
             var drawnCards = Cards.GetRange(0, Math.Min(amount, Cards.Count));
             Cards.RemoveRange(0, drawnCards.Count);
@@ -34,7 +38,7 @@ namespace gamecore.card
             return drawnCards;
         }
 
-        public void Shuffle()
+        void IDeckLogic.Shuffle()
         {
             var n = GetCardCount();
             while (n > 1)
@@ -50,7 +54,7 @@ namespace gamecore.card
             return Cards.Count;
         }
 
-        public void AddCards(List<ICard> cards)
+        void IDeckLogic.AddCards(List<ICard> cards)
         {
             Cards.AddRange(cards);
             OnCardCountChanged();

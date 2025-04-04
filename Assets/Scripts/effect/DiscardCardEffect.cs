@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace gamecore.effect
 {
-    public class DiscardCardEffect : IEffect
+    internal class DiscardCardEffect : IEffect
     {
-        public void Perform(ICard card)
+        void IEffect.Perform(ICard card)
         {
             ActionSystem.INSTANCE.Perform(new DiscardCardsFromHandGA(new List<ICard> { card }));
         }
