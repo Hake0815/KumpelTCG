@@ -1,20 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using gamecore.card;
 
-namespace gamecore.card
+namespace gamecore.game
 {
     public interface IDiscardPile
     {
         public List<ICard> Cards { get; }
         public int GetCardCount();
-        public void AddCards(List<ICard> cards);
-        public void RemoveCards(List<ICard> cards);
         public ICard GetLastCard();
         public event Action CardsChanged;
     }
 
-    public class DiscardPile : IDiscardPile
+    internal interface IDiscardPileLogic : IDiscardPile
+    {
+        internal void AddCards(List<ICard> cards);
+        internal void RemoveCards(List<ICard> cards);
+    }
+
+    public class DiscardPile : IDiscardPileLogic
     {
         public List<ICard> Cards { get; } = new();
         public event Action CardsChanged;
@@ -24,13 +29,13 @@ namespace gamecore.card
             return Cards.Count;
         }
 
-        public void AddCards(List<ICard> cards)
+        void IDiscardPileLogic.AddCards(List<ICard> cards)
         {
             Cards.AddRange(cards);
             OnCardsChanged();
         }
 
-        public void RemoveCards(List<ICard> cards)
+        void IDiscardPileLogic.RemoveCards(List<ICard> cards)
         {
             Cards.RemoveAll(cards.Contains);
             OnCardsChanged();

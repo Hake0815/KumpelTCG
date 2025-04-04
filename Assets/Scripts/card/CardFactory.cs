@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace gamecore.card
 {
-    public class CardFactory
+    internal class CardFactory
     {
-        public static ICard CreateCard(string id, IPlayer owner)
+        internal static ICard CreateCard(string id, IPlayerLogic owner)
         {
             if (!CardDatabase.cardDataDict.ContainsKey(id))
             {
@@ -30,7 +30,7 @@ namespace gamecore.card
             return null;
         }
 
-        public static List<ICard> CreateCard(string id, IPlayer owner, int count)
+        internal static List<ICard> CreateCard(string id, IPlayerLogic owner, int count)
         {
             return Enumerable.Range(0, count).Select(i => CreateCard(id, owner)).ToList();
         }

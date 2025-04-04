@@ -10,7 +10,7 @@ namespace gamecore.card
         public List<IPlayCondition> Conditions { get; }
     }
 
-    public class TrainerCardData : ITrainerCardData
+    internal class TrainerCardData : ITrainerCardData
     {
         public string Name { get; }
         public string Id { get; }

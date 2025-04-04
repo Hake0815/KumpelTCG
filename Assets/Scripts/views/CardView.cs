@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using UnityEngine;
