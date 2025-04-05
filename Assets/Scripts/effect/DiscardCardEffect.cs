@@ -8,9 +8,11 @@ namespace gamecore.effect
 {
     internal class DiscardCardEffect : IEffect
     {
-        void IEffect.Perform(ICard card)
+        void IEffect.Perform(ICardLogic card)
         {
-            ActionSystem.INSTANCE.Perform(new DiscardCardsFromHandGA(new List<ICard> { card }));
+            ActionSystem.INSTANCE.Perform(
+                new DiscardCardsFromHandGA(new List<ICardLogic> { card })
+            );
         }
     }
 }

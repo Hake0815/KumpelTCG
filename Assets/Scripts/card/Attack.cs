@@ -4,9 +4,9 @@ namespace gamecore.card
 {
     public interface IAttack
     {
-        public string Name { get; }
-        public int Damage { get; }
-        public List<PokemonType> Cost { get; }
+        string Name { get; }
+        int Damage { get; }
+        List<PokemonType> Cost { get; }
     }
 
     internal class Attack : IAttack

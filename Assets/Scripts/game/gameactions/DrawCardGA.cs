@@ -2,11 +2,11 @@ using gamecore.actionsystem;
 
 namespace gamecore.game.action
 {
-    public class DrawCardGA : GameAction
+    internal class DrawCardGA : GameAction
     {
+        public int Amount { get; }
+        public IPlayer Player { get; }
 
-        public int Amount { get; set; }
-        public IPlayer Player { get; set; }
         public DrawCardGA(int amount, IPlayer player)
         {
             Amount = amount;

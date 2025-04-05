@@ -5,14 +5,14 @@ namespace gamecore.card
 {
     public interface ICard
     {
-        public ICardData CardData { get; }
-        public event Action CardDiscarded;
+        ICardData CardData { get; }
+        event Action CardDiscarded;
 
-        public string Name
+        string Name
         {
             get => CardData.Name;
         }
-        public string Id
+        string Id
         {
             get => CardData.Id;
         }
@@ -20,11 +20,11 @@ namespace gamecore.card
 
     internal interface ICardLogic : ICard
     {
-        internal IPlayerLogic Owner { get; }
-        internal void Play();
-        internal bool IsPlayable();
-        internal void Discard();
-        internal bool IsTrainerCard();
-        internal bool IsPokemonCard();
+        IPlayerLogic Owner { get; }
+        void Play();
+        bool IsPlayable();
+        void Discard();
+        bool IsTrainerCard();
+        bool IsPokemonCard();
     }
 }

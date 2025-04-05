@@ -6,16 +6,16 @@ namespace gamecore.game
 {
     public interface IDeck
     {
-        public int GetCardCount();
-        public event Action CardCountChanged;
+        int GetCardCount();
+        event Action CardCountChanged;
     }
 
     internal interface IDeckLogic : IDeck
     {
-        internal void SetUp(List<ICard> cards);
-        internal List<ICard> Draw(int amount);
-        internal void Shuffle();
-        internal void AddCards(List<ICard> cards);
+        void SetUp(List<ICard> cards);
+        List<ICard> Draw(int amount);
+        void Shuffle();
+        void AddCards(List<ICard> cards);
     }
 
     internal class Deck : IDeckLogic
@@ -25,12 +25,12 @@ namespace gamecore.game
 
         public event Action CardCountChanged;
 
-        void IDeckLogic.SetUp(List<ICard> cards)
+        public void SetUp(List<ICard> cards)
         {
             Cards = cards;
         }
 
-        List<ICard> IDeckLogic.Draw(int amount)
+        public List<ICard> Draw(int amount)
         {
             var drawnCards = Cards.GetRange(0, Math.Min(amount, Cards.Count));
             Cards.RemoveRange(0, drawnCards.Count);
@@ -38,7 +38,7 @@ namespace gamecore.game
             return drawnCards;
         }
 
-        void IDeckLogic.Shuffle()
+        public void Shuffle()
         {
             var n = GetCardCount();
             while (n > 1)
@@ -54,7 +54,7 @@ namespace gamecore.game
             return Cards.Count;
         }
 
-        void IDeckLogic.AddCards(List<ICard> cards)
+        public void AddCards(List<ICard> cards)
         {
             Cards.AddRange(cards);
             OnCardCountChanged();

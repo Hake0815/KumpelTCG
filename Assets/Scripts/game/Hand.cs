@@ -5,18 +5,18 @@ namespace gamecore.card
 {
     public interface IHand
     {
-        public List<ICard> Cards { get; }
-        public int GetCardCount();
-        public event EventHandler<List<ICard>> CardsAdded;
-        public event Action CardsRemoved;
+        List<ICard> Cards { get; }
+        int CardCount { get; }
+        event EventHandler<List<ICard>> CardsAdded;
+        event Action CardsRemoved;
     }
 
     internal interface IHandLogic : IHand
     {
-        internal void AddCards(List<ICard> cards);
-        internal void RemoveCards(List<ICard> cards);
-        internal void RemoveCard(ICard card);
-        internal void Clear();
+        void AddCards(List<ICard> cards);
+        void RemoveCards(List<ICard> cards);
+        void RemoveCard(ICard card);
+        void Clear();
     }
 
     public class Hand : IHandLogic
@@ -25,24 +25,24 @@ namespace gamecore.card
         public event EventHandler<List<ICard>> CardsAdded;
         public event Action CardsRemoved;
 
-        public int GetCardCount()
+        public int CardCount
         {
-            return Cards.Count;
+            get => Cards.Count;
         }
 
-        void IHandLogic.AddCards(List<ICard> cards)
+        public void AddCards(List<ICard> cards)
         {
             Cards.AddRange(cards);
             OnCardsAddedToHand(cards);
         }
 
-        void IHandLogic.RemoveCards(List<ICard> cards)
+        public void RemoveCards(List<ICard> cards)
         {
             Cards.RemoveAll(cards.Contains);
             OnCardsRemoved(cards);
         }
 
-        void IHandLogic.RemoveCard(ICard card)
+        public void RemoveCard(ICard card)
         {
             Cards.Remove(card);
             OnCardsRemoved(new() { card });
@@ -58,7 +58,7 @@ namespace gamecore.card
             CardsRemoved?.Invoke();
         }
 
-        void IHandLogic.Clear()
+        public void Clear()
         {
             Cards.Clear();
             OnCardsRemoved(Cards);

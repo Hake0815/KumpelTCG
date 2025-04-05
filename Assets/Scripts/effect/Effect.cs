@@ -2,8 +2,8 @@ using gamecore.card;
 
 namespace gamecore.effect
 {
-    public interface IEffect
+    internal interface IEffect
     {
-        public void Perform(ICard card);
+        void Perform(ICardLogic card);
     }
 }

@@ -4,11 +4,11 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    public class DiscardCardsFromHandGA : GameAction
+    internal class DiscardCardsFromHandGA : GameAction
     {
-        public List<ICard> Cards { get; private set; }
+        public List<ICardLogic> Cards { get; private set; }
 
-        public DiscardCardsFromHandGA(List<ICard> cards)
+        public DiscardCardsFromHandGA(List<ICardLogic> cards)
         {
             Cards = cards;
         }

@@ -2,8 +2,8 @@ using gamecore.card;
 
 namespace gamecore.effect
 {
-    public class HasCardsInDeck : IPlayCondition
+    internal class HasCardsInDeck : IPlayCondition
     {
-        public bool IsMet(ICard card) => card.Owner.Deck.GetCardCount() > 0;
+        public bool IsMet(ICardLogic card) => card.Owner.Deck.GetCardCount() > 0;
     }
 }
