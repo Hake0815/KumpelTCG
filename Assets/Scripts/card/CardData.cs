@@ -6,7 +6,7 @@ namespace gamecore.card
 {
     public interface ICardData
     {
-        public string Name { get; }
-        public string Id { get; }
+        string Name { get; }
+        string Id { get; }
     }
 }

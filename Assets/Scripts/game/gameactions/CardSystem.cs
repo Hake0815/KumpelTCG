@@ -10,18 +10,18 @@ namespace gamecore.game.action
             IActionSubscriber<EndTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
-        internal static CardSystem INSTANCE => lazy.Value;
+        public static CardSystem INSTANCE => lazy.Value;
 
         private CardSystem() { }
 
-        internal void Enable()
+        public void Enable()
         {
             ActionSystem.INSTANCE.AttachPerformer<DrawCardGA>(INSTANCE);
             ActionSystem.INSTANCE.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
             ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
-        internal void Disable()
+        public void Disable()
         {
             ActionSystem.INSTANCE.DetachPerformer<DrawCardGA>();
             ActionSystem.INSTANCE.DetachPerformer<DiscardCardsFromHandGA>();
@@ -31,20 +31,20 @@ namespace gamecore.game.action
             );
         }
 
-        internal EndTurnGA React(EndTurnGA endTurnGA)
+        public EndTurnGA React(EndTurnGA endTurnGA)
         {
             var drawCardGA = new DrawCardGA(1, endTurnGA.NextPlayer);
             ActionSystem.INSTANCE.AddReaction(drawCardGA);
             return endTurnGA;
         }
 
-        internal DrawCardGA Perform(DrawCardGA drawCardGA)
+        public DrawCardGA Perform(DrawCardGA drawCardGA)
         {
-            drawCardGA.Player.Draw(drawCardGA.Amount);
+            ((IPlayerLogic)drawCardGA.Player).Draw(drawCardGA.Amount);
             return drawCardGA;
         }
 
-        internal DiscardCardsFromHandGA Perform(DiscardCardsFromHandGA action)
+        public DiscardCardsFromHandGA Perform(DiscardCardsFromHandGA action)
         {
             foreach (var card in action.Cards)
             {

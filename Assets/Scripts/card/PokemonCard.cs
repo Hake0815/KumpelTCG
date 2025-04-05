@@ -5,63 +5,59 @@ namespace gamecore.card
 {
     public interface IPokemonCard : ICard
     {
-        public Stage Stage { get; }
+        Stage Stage { get; }
     }
 
     internal class PokemonCard : IPokemonCard, ICardLogic
     {
-        private IPlayerLogic _owner;
         public ICardData CardData { get; }
         public IPokemonCardData PokemonCardData
         {
             get => CardData as IPokemonCardData;
         }
-        IPlayerLogic ICardLogic.Owner
-        {
-            get => _owner;
-        }
+        public IPlayerLogic Owner { get; }
         public Stage Stage => PokemonCardData.Stage;
         public event Action CardDiscarded;
 
-        internal PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
+        public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
         {
             CardData = cardData;
-            _owner = owner;
+            Owner = owner;
         }
 
-        void ICardLogic.Discard()
+        public void Discard()
         {
-            _owner.DiscardPile.AddCards(new() { this });
+            Owner.DiscardPile.AddCards(new() { this });
             CardDiscarded?.Invoke();
         }
 
-        bool ICardLogic.IsPlayable()
+        public bool IsPlayable()
         {
-            if (!_owner.Hand.Cards.Contains(this))
+            if (!Owner.Hand.Cards.Contains(this))
                 return false;
 
-            if (_owner.ActivePokemon == null)
+            if (Owner.ActivePokemon == null)
                 return Stage == Stage.Basic;
 
-            return _owner.IsActive && Stage == Stage.Basic;
+            return Owner.IsActive && Stage == Stage.Basic;
         }
 
-        bool ICardLogic.IsPokemonCard()
+        public bool IsPokemonCard()
         {
             return true;
         }
 
-        bool ICardLogic.IsTrainerCard()
+        public bool IsTrainerCard()
         {
             return false;
         }
 
-        void ICardLogic.Play()
+        public void Play()
         {
-            if (_owner.ActivePokemon == null)
+            if (Owner.ActivePokemon == null)
             {
-                _owner.ActivePokemon = this;
-                _owner.Hand.RemoveCard(this);
+                Owner.ActivePokemon = this;
+                Owner.Hand.RemoveCard(this);
             }
         }
     }

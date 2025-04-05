@@ -4,16 +4,16 @@ using gamecore.game.action;
 
 namespace gamecore.effect
 {
-    public class DrawCardsEffect : IEffect
+    internal class DrawCardsEffect : IEffect
     {
-        private int Amount { get; set; }
+        public int Amount { get; }
 
         public DrawCardsEffect(int amount)
         {
             Amount = amount;
         }
 
-        public void Perform(ICard card)
+        public void Perform(ICardLogic card)
         {
             ActionSystem.INSTANCE.Perform(new DrawCardGA(Amount, card.Owner));
         }

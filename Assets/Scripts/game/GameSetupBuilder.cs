@@ -10,31 +10,31 @@ namespace gamecore
 {
     internal class GameSetupBuilder
     {
-        internal IPlayerLogic Player1 { get; private set; }
-        internal IPlayerLogic Player2 { get; private set; }
+        public IPlayerLogic Player1 { get; private set; }
+        public IPlayerLogic Player2 { get; private set; }
 
-        internal Dictionary<IPlayer, List<List<ICard>>> mulligans = new();
+        public Dictionary<IPlayer, List<List<ICard>>> mulligans = new();
 
-        internal GameSetupBuilder WithPlayer1(IPlayerLogic player)
+        public GameSetupBuilder WithPlayer1(IPlayerLogic player)
         {
             Player1 = player;
             return this;
         }
 
-        internal GameSetupBuilder WithPlayer2(IPlayerLogic player)
+        public GameSetupBuilder WithPlayer2(IPlayerLogic player)
         {
             Player2 = player;
             return this;
         }
 
-        internal List<List<ICard>> GetMulligansForPlayer(IPlayerLogic player)
+        public List<List<ICard>> GetMulligansForPlayer(IPlayerLogic player)
         {
             return mulligans.TryGetValue(player, out var playerMulligans)
                 ? playerMulligans
                 : new List<List<ICard>>();
         }
 
-        internal void Setup()
+        public void Setup()
         {
             mulligans.Add(Player1, new List<List<ICard>>());
             mulligans.Add(Player2, new List<List<ICard>>());
@@ -50,7 +50,7 @@ namespace gamecore
             while (!DrawStartHand(player))
             {
                 count++;
-                mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.GetCardCount()));
+                mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.CardCount));
                 player.Deck.AddCards(player.Hand.Cards);
                 player.Hand.Clear();
             }

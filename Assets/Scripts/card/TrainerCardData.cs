@@ -4,10 +4,10 @@ using gamecore.effect;
 
 namespace gamecore.card
 {
-    public interface ITrainerCardData : ICardData
+    internal interface ITrainerCardData : ICardData
     {
-        public List<IEffect> Effects { get; }
-        public List<IPlayCondition> Conditions { get; }
+        List<IEffect> Effects { get; }
+        List<IPlayCondition> Conditions { get; }
     }
 
     internal class TrainerCardData : ITrainerCardData

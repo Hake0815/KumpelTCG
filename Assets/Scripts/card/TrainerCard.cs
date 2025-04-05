@@ -5,45 +5,40 @@ using gamecore.game;
 
 namespace gamecore.card
 {
-    public interface ITrainerCard : ICard
+    internal interface ITrainerCard : ICard
     {
-        public List<IEffect> Effects { get; }
-        public List<IPlayCondition> Conditions { get; }
+        List<IEffect> Effects { get; }
+        List<IPlayCondition> Conditions { get; }
     }
 
     internal class TrainerCard : ITrainerCard, ICardLogic
     {
-        private IPlayerLogic _owner;
         public ICardData CardData { get; }
         public ITrainerCardData TrainerCardData
         {
             get => CardData as ITrainerCardData;
         }
-        IPlayerLogic ICardLogic.Owner
-        {
-            get => _owner;
-        }
+        public IPlayerLogic Owner { get; }
         public List<IEffect> Effects { get; }
         public List<IPlayCondition> Conditions { get; }
-
         public event Action CardDiscarded;
 
-        internal TrainerCard(ITrainerCardData cardData, IPlayerLogic owner)
+        public TrainerCard(ITrainerCardData cardData, IPlayerLogic owner)
         {
             CardData = cardData;
-            _owner = owner;
+            Owner = owner;
             Effects = cardData.Effects;
             Conditions = cardData.Conditions;
         }
 
-        void ICardLogic.Play()
+        public void Play()
         {
             PerformEffects();
         }
 
-        bool ICardLogic.IsPlayable()
+        public bool IsPlayable()
         {
-            if (!(_owner.IsActive && _owner.Hand.Cards.Contains(this)))
+            if (!(Owner.IsActive && Owner.Hand.Cards.Contains(this)))
                 return false;
             foreach (var condition in Conditions)
             {
@@ -63,18 +58,18 @@ namespace gamecore.card
             }
         }
 
-        void ICardLogic.Discard()
+        public void Discard()
         {
-            _owner.DiscardPile.AddCards(new() { this });
+            Owner.DiscardPile.AddCards(new() { this });
             CardDiscarded?.Invoke();
         }
 
-        bool ICardLogic.IsTrainerCard()
+        public bool IsTrainerCard()
         {
             return true;
         }
 
-        bool ICardLogic.IsPokemonCard()
+        public bool IsPokemonCard()
         {
             return false;
         }

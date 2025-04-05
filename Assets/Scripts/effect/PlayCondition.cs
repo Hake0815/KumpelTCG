@@ -2,8 +2,8 @@ using gamecore.card;
 
 namespace gamecore.effect
 {
-    public interface IPlayCondition
+    internal interface IPlayCondition
     {
-        bool IsMet(ICard card);
+        bool IsMet(ICardLogic card);
     }
 }

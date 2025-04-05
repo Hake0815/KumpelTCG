@@ -4,13 +4,13 @@ namespace gamecore.card
 {
     public interface IPokemonCardData : ICardData
     {
-        public Stage Stage { get; }
-        public PokemonType Type { get; }
-        public PokemonType Weakness { get; }
-        public PokemonType Resistance { get; }
-        public int RetreatCost { get; }
-        public int MaxHP { get; }
-        public List<IAttack> Attacks { get; }
+        Stage Stage { get; }
+        PokemonType Type { get; }
+        PokemonType Weakness { get; }
+        PokemonType Resistance { get; }
+        int RetreatCost { get; }
+        int MaxHP { get; }
+        List<IAttack> Attacks { get; }
     }
 
     internal class PokemonCardData : IPokemonCardData
