@@ -7,7 +7,7 @@ namespace gamecore.card
 {
     internal class CardFactory
     {
-        public static ICard CreateCard(string id, IPlayerLogic owner)
+        public static ICardLogic CreateCard(string id, IPlayerLogic owner)
         {
             if (!CardDatabase.cardDataDict.ContainsKey(id))
             {
@@ -30,7 +30,7 @@ namespace gamecore.card
             return null;
         }
 
-        public static List<ICard> CreateCard(string id, IPlayerLogic owner, int count)
+        public static List<ICardLogic> CreateCard(string id, IPlayerLogic owner, int count)
         {
             return Enumerable.Range(0, count).Select(i => CreateCard(id, owner)).ToList();
         }

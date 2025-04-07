@@ -17,7 +17,7 @@ namespace gamecore.game
         new string Name { get; set; }
         new bool IsActive { get; set; }
         new IPokemonCard ActivePokemon { get; set; }
-        new IDeckLogic Deck { get; }
+        new IDeckLogic Deck { get; set; }
         new IHandLogic Hand { get; }
         new IDiscardPileLogic DiscardPile { get; }
         void Draw(int amount);
@@ -28,7 +28,7 @@ namespace gamecore.game
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public IPokemonCard ActivePokemon { get; set; }
-        public IDeckLogic Deck { get; }
+        public IDeckLogic Deck { get; set; }
         public IHandLogic Hand { get; } = new Hand();
         public IDiscardPileLogic DiscardPile { get; } = new DiscardPile();
 
@@ -36,11 +36,6 @@ namespace gamecore.game
         IDeck IPlayer.Deck => Deck;
         IHand IPlayer.Hand => Hand;
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
-
-        internal Player(IDeckLogic deck)
-        {
-            Deck = deck;
-        }
 
         public void Draw(int amount)
         {

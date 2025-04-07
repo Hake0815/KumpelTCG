@@ -17,6 +17,9 @@ namespace gamecore.card
         }
         public IPlayerLogic Owner { get; }
         public Stage Stage => PokemonCardData.Stage;
+
+        IPlayer ICard.Owner => Owner;
+
         public event Action CardDiscarded;
 
         public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
@@ -33,13 +36,7 @@ namespace gamecore.card
 
         public bool IsPlayable()
         {
-            if (!Owner.Hand.Cards.Contains(this))
-                return false;
-
-            if (Owner.ActivePokemon == null)
-                return Stage == Stage.Basic;
-
-            return Owner.IsActive && Stage == Stage.Basic;
+            return Owner.Hand.Cards.Contains(this) && Owner.IsActive && Stage == Stage.Basic;
         }
 
         public bool IsPokemonCard()

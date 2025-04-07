@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
 using NUnit.Framework.Constraints;
+using UnityEngine.Android;
 
 namespace gamecore.game
 {
@@ -27,33 +29,24 @@ namespace gamecore.game
         }
 
         public GameSetupBuilder GameSetupBuilder { get; private set; }
+        public IGameState GameState { get; set; }
 
-        public Game()
-        {
-            Player1 = new Player(new Deck());
-            Player1.Name = "Player1";
-            Player2 = new Player(new Deck());
-            Player2.Name = "Player2";
-        }
+        public event Action AwaitInteractionEvent;
 
         public Game(IPlayerLogic player1, IPlayerLogic player2)
         {
             Player1 = player1;
             Player2 = player2;
-        }
-
-        public void Initialize(List<ICard> cardsPlayer1, List<ICard> cardsPlayer2)
-        {
             ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
             CardSystem.INSTANCE.Enable();
-            Player1.Deck.SetUp(cardsPlayer1);
-            Player2.Deck.SetUp(cardsPlayer2);
+            GameState = new CreatedState();
         }
 
         public void PerformSetup()
         {
             GameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
             GameSetupBuilder.Setup();
+            AdvanceGameState();
         }
 
         public void StartGame()
@@ -88,6 +81,34 @@ namespace gamecore.game
         {
             ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
             CardSystem.INSTANCE.Disable();
+        }
+
+        /* Returns if both active Pokemon are set */
+        internal bool SetActivePokemon(ICardLogic basicPokemon)
+        {
+            basicPokemon.Play();
+            if (Player1.ActivePokemon != null && Player2.ActivePokemon != null)
+            {
+                AdvanceGameState();
+                return true;
+            }
+            return false;
+        }
+
+        public void AdvanceGameState()
+        {
+            GameState = GameState.AdvanceSuccesfully();
+            GameState.OnEnter(this);
+        }
+
+        internal void PlayCard(ICardLogic card)
+        {
+            card.Play();
+        }
+
+        internal void AwaitInteraction()
+        {
+            AwaitInteractionEvent?.Invoke();
         }
     }
 }

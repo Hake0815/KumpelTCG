@@ -21,6 +21,9 @@ namespace gamecore.card
         public IPlayerLogic Owner { get; }
         public List<IEffect> Effects { get; }
         public List<IPlayCondition> Conditions { get; }
+
+        IPlayer ICard.Owner => Owner;
+
         public event Action CardDiscarded;
 
         public TrainerCard(ITrainerCardData cardData, IPlayerLogic owner)
