@@ -7,6 +7,7 @@ namespace gamecore.card
     {
         ICardData CardData { get; }
         event Action CardDiscarded;
+        IPlayer Owner { get; }
 
         string Name
         {
@@ -16,15 +17,15 @@ namespace gamecore.card
         {
             get => CardData.Id;
         }
+        bool IsTrainerCard();
+        bool IsPokemonCard();
     }
 
     internal interface ICardLogic : ICard
     {
-        IPlayerLogic Owner { get; }
+        new IPlayerLogic Owner { get; }
         void Play();
         bool IsPlayable();
         void Discard();
-        bool IsTrainerCard();
-        bool IsPokemonCard();
     }
 }
