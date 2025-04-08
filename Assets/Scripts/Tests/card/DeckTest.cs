@@ -11,8 +11,8 @@ namespace gamecore.card
 {
     public class DeckTest
     {
-        private readonly ICard firstCard = Mock.Of<ICard>();
-        private readonly ICard secondCard = Mock.Of<ICard>();
+        private readonly ICardLogic firstCard = Mock.Of<ICardLogic>();
+        private readonly ICardLogic secondCard = Mock.Of<ICardLogic>();
 
         [Test]
         public void CardCountShouldBeTwo()
@@ -63,8 +63,7 @@ namespace gamecore.card
         [Test]
         public void DrawShouldReturnEmptyListIfNoCardsAreLeft()
         {
-            var deck = new Deck();
-            deck.SetUp(new());
+            var deck = new Deck(new());
 
             var drawnCards = deck.Draw(3);
 
@@ -73,8 +72,7 @@ namespace gamecore.card
 
         private void SetUpDeck(out Deck deck)
         {
-            deck = new Deck();
-            deck.SetUp(new List<ICard> { firstCard, secondCard });
+            deck = new Deck(new List<ICardLogic> { firstCard, secondCard });
         }
     }
 }

@@ -16,11 +16,10 @@ namespace gameview
         public bool OnCardDropped(CardView cardView)
         {
             var card = cardView.Card;
-            if (card.IsTrainerCard() && card.Owner == _player && card.IsPlayable())
+            if (card.IsTrainerCard() && card.Owner == _player)
             {
                 cardView.transform.position = transform.position;
                 cardView.transform.rotation = transform.rotation;
-                card.Play();
                 return true;
             }
             return false;

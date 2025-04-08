@@ -35,40 +35,45 @@ namespace gameview
         private MulliganView _mulliganViewPrefab;
 
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
-        private readonly Dictionary<IPlayer, ActiveSpot> _playerActiveSpots = new();
+        public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
         public Button endTurnButton;
-        public GameManagerState GameManagerState { get; private set; }
+
+        // public GameManagerState GameManagerState { get; private set; }
 
         void Start()
         {
             endTurnButton = GetComponentInChildren<Button>();
-            endTurnButton.gameObject.SetActive(false);
-            endTurnButton.onClick.AddListener(EndTurn);
             Instantiate(_cardViewCreator);
 
-            InitializeGame();
+            var gameRemoteService = new GameRemoteService(this);
 
-            SetUpPlayerViews(_gameController.Game.Player1, new Quaternion(0f, 0f, 0f, 1f));
-            SetUpPlayerViews(_gameController.Game.Player2, new Quaternion(0f, 0f, 1f, 0f));
-            _gameController.PerformSetup();
-            GameManagerState = GameManagerStateFactory.CreateMulliganStatePlayer1(this);
+            SetUpPlayerViews(
+                gameRemoteService.GameController.Game.Player1,
+                new Quaternion(0f, 0f, 0f, 1f)
+            );
+            SetUpPlayerViews(
+                gameRemoteService.GameController.Game.Player2,
+                new Quaternion(0f, 0f, 1f, 0f)
+            );
+            ShowGameState();
+            gameRemoteService.StartGame();
         }
 
-        private void InitializeGame()
+        private void EnablePlayerHandViews()
         {
-            _gameController = new GameBuilder()
-                .WithPlayer1Decklist(CreateDeckList())
-                .WithPlayer2Decklist(CreateDeckList())
-                .Build();
+            foreach (var handView in _playerHandViews.Values)
+            {
+                handView.gameObject.SetActive(true);
+            }
         }
 
-        private Dictionary<string, int> CreateDeckList()
+        private void DisablePlayerHandViews()
         {
-            var decklist = new Dictionary<string, int>();
-            decklist.Add("bill", 1);
-            decklist.Add("TWM128", 4);
-            return decklist;
+            foreach (var handView in _playerHandViews.Values)
+            {
+                handView.gameObject.SetActive(false);
+            }
         }
 
         private void SetUpPlayerViews(IPlayer player, Quaternion rotation)
@@ -128,31 +133,30 @@ namespace gameview
                 rotation
             );
             activeSpot.SetUp(player);
-            _playerActiveSpots.Add(player, activeSpot);
+            PlayerActiveSpots.Add(player, activeSpot);
         }
 
         /*
          * Returns true if the mulligan was shown, false if the player has no mulligans
          */
-        public bool ShowMulliganPlayer1()
-        {
-            return ShowMulligan(_gameController.Player1);
-        }
+        // public bool ShowMulliganPlayer1()
+        // {
+        //     // return ShowMulligan(_gameController.Player1);
+        // }
 
         /*
          * Returns true if the mulligan was shown, false if the player has no mulligans
          */
-        public bool ShowMulliganPlayer2()
-        {
-            return ShowMulligan(_gameController.Player2);
-        }
+        // public bool ShowMulliganPlayer2()
+        // {
+        //     return ShowMulligan(_gameController.Player2);
+        // }
 
         /*
          * Returns true if the mulligan was shown, false if the player has no mulligans
          */
-        private bool ShowMulligan(IPlayer player)
+        public bool ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
         {
-            var mulligans = _gameController.GameSetupBuilder.GetMulligansForPlayer(player);
             if (mulligans.Count == 0)
             {
                 return false;
@@ -161,7 +165,7 @@ namespace gameview
             mulliganView.SetUp(player, mulligans);
             mulliganView.AddDoneListener(() =>
             {
-                GameManagerState = GameManagerState.AdvanceSuccessfully();
+                onDone();
             });
             return true;
         }
@@ -174,28 +178,34 @@ namespace gameview
             }
         }
 
-        public void WaitForActivePokemon()
-        {
-            foreach (var player in _playerActiveSpots)
-            {
-                Debug.Log($"Register on click listener for {player.Key.Name}: {player.Value}");
-                player.Value.CardPlayed += () =>
-                    GameManagerState = GameManagerState.AdvanceSuccessfully();
-            }
-        }
+        // public void WaitForActivePokemon()
+        // {
+        //     foreach (var player in _playerActiveSpots)
+        //     {
+        //         Debug.Log($"Register on click listener for {player.Key.Name}: {player.Value}");
+        //         player.Value.CardPlayed += () =>
+        //             GameManagerState = GameManagerState.AdvanceSuccessfully();
+        //     }
+        // }
 
-        public void StartGame()
+        // public void StartGame()
+        // {
+        //     _gameController.StartGame();
+        // }
+
+        public void EnableEndTurn(Action gameControllerMethod, Action onInteract)
         {
-            _gameController.StartGame();
             endTurnButton.gameObject.SetActive(true);
+            endTurnButton.onClick.AddListener(() =>
+            {
+                onInteract();
+                gameControllerMethod();
+            });
         }
 
-        public void EndTurn()
+        public void DisableEndTurn()
         {
-            if (ActionSystem.INSTANCE.IsPerforming)
-                return;
-            var endTurn = new EndTurnGA();
-            ActionSystem.INSTANCE.Perform(endTurn);
+            endTurnButton.gameObject.SetActive(false);
         }
     }
 }

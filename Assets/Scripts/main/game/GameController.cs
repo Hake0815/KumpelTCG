@@ -11,6 +11,7 @@ namespace gamecore.game
         IGame Game { get; }
         event EventHandler<List<GameInteraction>> NotifyPlayer1;
         event EventHandler<List<GameInteraction>> NotifyPlayer2;
+
         void SetUpGame();
     }
 
@@ -75,6 +76,11 @@ namespace gamecore.game
                 return;
             var endTurn = new EndTurnGA();
             ActionSystem.INSTANCE.Perform(endTurn);
+        }
+
+        internal void Confirm()
+        {
+            _game.AdvanceGameState();
         }
     }
 }

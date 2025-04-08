@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
@@ -13,6 +14,7 @@ namespace gamecore.game
     {
         IPlayer Player1 { get; }
         IPlayer Player2 { get; }
+        Dictionary<IPlayer, List<List<ICard>>> Mulligans { get; }
     }
 
     internal class Game : IGame, IActionPerformer<EndTurnGA>
@@ -30,7 +32,23 @@ namespace gamecore.game
 
         public GameSetupBuilder GameSetupBuilder { get; private set; }
         public IGameState GameState { get; set; }
-
+        public Dictionary<IPlayer, List<List<ICard>>> Mulligans
+        {
+            get
+            {
+                var result = new Dictionary<IPlayer, List<List<ICard>>>();
+                foreach (var pair in GameSetupBuilder.Mulligans)
+                {
+                    var outerList = new List<List<ICard>>();
+                    foreach (var innerList in pair.Value)
+                    {
+                        outerList.Add(innerList.Cast<ICard>().ToList());
+                    }
+                    result[pair.Key] = outerList;
+                }
+                return result;
+            }
+        }
         public event Action AwaitInteractionEvent;
 
         public Game(IPlayerLogic player1, IPlayerLogic player2)

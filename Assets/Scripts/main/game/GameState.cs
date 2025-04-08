@@ -20,7 +20,7 @@ namespace gamecore.game
     {
         public IGameState AdvanceSuccesfully()
         {
-            return new SettingActivePokemonState();
+            return new ShowMulliganState();
         }
 
         public List<GameInteraction> GetGameInteractions(
@@ -36,6 +36,37 @@ namespace gamecore.game
         }
 
         public void OnEnter(Game game) { }
+    }
+
+    internal class ShowMulliganState : IGameState
+    {
+        private int _numberConfirmations = 0;
+
+        public IGameState AdvanceSuccesfully()
+        {
+            _numberConfirmations++;
+            if (_numberConfirmations == 2)
+                return new SettingActivePokemonState();
+
+            return this;
+        }
+
+        public List<GameInteraction> GetGameInteractions(
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            return new List<GameInteraction>()
+            {
+                new(gameController.Confirm, GameInteractionType.ConfirmMulligans),
+            };
+        }
+
+        public void OnEnter(Game game)
+        {
+            if (_numberConfirmations == 0)
+                game.AwaitInteraction();
+        }
     }
 
     internal class SettingActivePokemonState : IGameState
@@ -57,8 +88,6 @@ namespace gamecore.game
             }
             return interactions;
         }
-
-        public void OnEnter(Game game) { }
 
         private List<ICardLogic> GetBasicPokemon(IPlayerLogic player)
         {
@@ -84,6 +113,8 @@ namespace gamecore.game
                 basicPokemon
             );
         }
+
+        public void OnEnter(Game game) { }
     }
 
     internal class StartingGameState : IGameState

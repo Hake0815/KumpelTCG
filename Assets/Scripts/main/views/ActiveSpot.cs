@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using gamecore.game;
 using UnityEngine;
 
@@ -8,8 +9,6 @@ namespace gameview
     {
         private IPlayer _player;
         private bool _isEmpty = true;
-
-        public event Action CardPlayed;
 
         public void SetUp(IPlayer player)
         {
@@ -23,13 +22,18 @@ namespace gameview
             {
                 cardView.transform.position = transform.position;
                 cardView.transform.rotation = transform.rotation;
-                card.Play();
                 _isEmpty = false;
                 Debug.Log($"ActiveSpot: CardPlayed");
-                CardPlayed?.Invoke();
                 return true;
             }
             return false;
+        }
+
+        public void SetActivePokemon(CardView cardView)
+        {
+            cardView.transform.DOMove(transform.position, 0.25f);
+            cardView.transform.DORotateQuaternion(transform.rotation, 0.25f);
+            _isEmpty = false;
         }
     }
 }

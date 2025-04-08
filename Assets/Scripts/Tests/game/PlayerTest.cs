@@ -7,17 +7,17 @@ namespace gamecore.game
 {
     public class PlayerTest
     {
-        private readonly Mock<IDeck> deck = new();
+        private readonly Mock<IDeckLogic> deck = new();
 
-        private readonly ICard card = Mock.Of<ICard>();
+        private readonly ICardLogic card = Mock.Of<ICardLogic>();
 
         private Player Player;
 
         [SetUp]
         public void SetUp()
         {
-            Player = new Player(deck.Object);
-            deck.Setup(d => d.Draw(1)).Returns(new List<ICard> { card });
+            Player = new Player() { Deck = deck.Object };
+            deck.Setup(d => d.Draw(1)).Returns(new List<ICardLogic> { card });
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace gamecore.game
         {
             Player.Draw(1);
 
-            Assert.That(Player.Hand.GetCardCount(), Is.EqualTo(1));
+            Assert.That(Player.Hand.CardCount, Is.EqualTo(1));
             Assert.That(Player.Hand.Cards, Contains.Item(card));
         }
     }

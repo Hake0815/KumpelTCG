@@ -43,7 +43,7 @@ namespace gameview
 
         private void UpdateView()
         {
-            var topCard = _discardPile.LastCard();
+            var topCard = _discardPile.LastCard;
             if (topCard != null)
             {
                 _image.sprite = SpriteRegistry.INSTANCE.GetSprite(topCard.Id);
@@ -59,7 +59,7 @@ namespace gameview
 
         private void UpdateText()
         {
-            Text.text = _discardPile.CardCount().ToString();
+            Text.text = _discardPile.CardCount.ToString();
         }
     }
 }
