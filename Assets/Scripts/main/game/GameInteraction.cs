@@ -26,5 +26,6 @@ namespace gamecore.game
         SetUpGame,
         PlayCard,
         EndTurn,
+        ConfirmMulligans,
     }
 }

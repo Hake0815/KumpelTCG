@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using gamecore.game;
 using Moq;
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace gamecore.card
             var discardPile = new DiscardPile();
             discardPile.AddCards(new List<ICard> { firstCard, secondCard });
 
-            var lastCard = discardPile.GetLastCard();
+            var lastCard = discardPile.LastCard;
 
             Assert.That(lastCard, Is.EqualTo(secondCard));
         }
@@ -27,7 +28,7 @@ namespace gamecore.card
             discardPile.AddCards(new List<ICard> { firstCard });
             discardPile.AddCards(new List<ICard> { secondCard });
 
-            var lastCard = discardPile.GetLastCard();
+            var lastCard = discardPile.LastCard;
 
             Assert.That(lastCard, Is.EqualTo(secondCard));
         }
@@ -37,7 +38,7 @@ namespace gamecore.card
         {
             var discardPile = new DiscardPile();
 
-            var lastCard = discardPile.GetLastCard();
+            var lastCard = discardPile.LastCard;
 
             Assert.That(lastCard, Is.Null);
         }

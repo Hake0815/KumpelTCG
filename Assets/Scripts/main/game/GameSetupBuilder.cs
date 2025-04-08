@@ -13,7 +13,7 @@ namespace gamecore
         public IPlayerLogic Player1 { get; private set; }
         public IPlayerLogic Player2 { get; private set; }
 
-        public Dictionary<IPlayer, List<List<ICard>>> mulligans = new();
+        public Dictionary<IPlayer, List<List<ICardLogic>>> Mulligans { get; } = new();
 
         public GameSetupBuilder WithPlayer1(IPlayerLogic player)
         {
@@ -27,17 +27,17 @@ namespace gamecore
             return this;
         }
 
-        public List<List<ICard>> GetMulligansForPlayer(IPlayerLogic player)
+        public List<List<ICardLogic>> GetMulligansForPlayer(IPlayerLogic player)
         {
-            return mulligans.TryGetValue(player, out var playerMulligans)
+            return Mulligans.TryGetValue(player, out var playerMulligans)
                 ? playerMulligans
-                : new List<List<ICard>>();
+                : new List<List<ICardLogic>>();
         }
 
         public void Setup()
         {
-            mulligans.Add(Player1, new List<List<ICard>>());
-            mulligans.Add(Player2, new List<List<ICard>>());
+            Mulligans.Add(Player1, new List<List<ICardLogic>>());
+            Mulligans.Add(Player2, new List<List<ICardLogic>>());
             var numberMulligansPlayer1 = DrawUntilBasicPokemon(Player1);
             var numberMulligansPlayer2 = DrawUntilBasicPokemon(Player2);
             Debug.Log($"Player 1 had {numberMulligansPlayer1} mulligans.");
@@ -50,7 +50,7 @@ namespace gamecore
             while (!DrawStartHand(player))
             {
                 count++;
-                mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.CardCount));
+                Mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.CardCount));
                 player.Deck.AddCards(player.Hand.Cards);
                 player.Hand.Clear();
             }

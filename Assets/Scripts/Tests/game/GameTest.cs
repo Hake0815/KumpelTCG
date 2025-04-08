@@ -6,8 +6,8 @@ namespace gamecore.game
 {
     public class GameTest
     {
-        private Mock<IPlayer> player1;
-        private Mock<IPlayer> player2;
+        private Mock<IPlayerLogic> player1;
+        private Mock<IPlayerLogic> player2;
         private Game game;
 
         [SetUp]
