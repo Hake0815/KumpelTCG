@@ -92,7 +92,7 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
-*.log
+*.log9
 *.tlog
 *.vspscc
 *.vssscc
@@ -101,9 +101,6 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
-**/Plugins/**/*.meta
-**/2D Casual UI/**/*.meta
-**/TextMesh Pro/**/*.meta
 
 # Chutzpah Test files
 _Chutzpah*
