@@ -6,8 +6,8 @@ namespace gamecore.game
 {
     public class GameBuilder
     {
-        private Player _player1 = new() { Name = "Player1" };
-        private Player _player2 = new() { Name = "Player1" };
+        private readonly Player _player1 = new() { Name = "Player1" };
+        private readonly Player _player2 = new() { Name = "Player2" };
 
         public GameBuilder WithPlayer1(string playerName1)
         {

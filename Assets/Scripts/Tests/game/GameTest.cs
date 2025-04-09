@@ -31,7 +31,7 @@ namespace gamecore.game
         {
             player1.SetupGet(p => p.IsActive).Returns(true);
 
-            var endTurnGA = game.EndTurn(new EndTurnGA());
+            var endTurnGA = game.Perform(new EndTurnGA());
 
             player2.VerifySet(p => p.IsActive = true);
             Assert.AreSame(endTurnGA.NextPlayer, player2.Object);
@@ -42,7 +42,7 @@ namespace gamecore.game
         {
             player1.SetupGet(p => p.IsActive).Returns(true);
 
-            game.EndTurn(new EndTurnGA());
+            game.Perform(new EndTurnGA());
 
             player1.VerifySet(p => p.IsActive = false);
         }

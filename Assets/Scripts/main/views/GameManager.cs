@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
@@ -11,8 +12,6 @@ namespace gameview
 {
     public class GameManager : MonoBehaviour
     {
-        private IGameController _gameController;
-
         [SerializeField]
         private HandView _handView;
 
@@ -39,8 +38,6 @@ namespace gameview
 
         public Button endTurnButton;
 
-        // public GameManagerState GameManagerState { get; private set; }
-
         void Start()
         {
             endTurnButton = GetComponentInChildren<Button>();
@@ -56,11 +53,11 @@ namespace gameview
                 gameRemoteService.GameController.Game.Player2,
                 new Quaternion(0f, 0f, 1f, 0f)
             );
-            ShowGameState();
+            DisablePlayerHandViews();
             gameRemoteService.StartGame();
         }
 
-        private void EnablePlayerHandViews()
+        public void EnablePlayerHandViews()
         {
             foreach (var handView in _playerHandViews.Values)
             {
@@ -68,7 +65,7 @@ namespace gameview
             }
         }
 
-        private void DisablePlayerHandViews()
+        public void DisablePlayerHandViews()
         {
             foreach (var handView in _playerHandViews.Values)
             {
@@ -136,38 +133,25 @@ namespace gameview
             PlayerActiveSpots.Add(player, activeSpot);
         }
 
-        /*
-         * Returns true if the mulligan was shown, false if the player has no mulligans
-         */
-        // public bool ShowMulliganPlayer1()
-        // {
-        //     // return ShowMulligan(_gameController.Player1);
-        // }
-
-        /*
-         * Returns true if the mulligan was shown, false if the player has no mulligans
-         */
-        // public bool ShowMulliganPlayer2()
-        // {
-        //     return ShowMulligan(_gameController.Player2);
-        // }
-
-        /*
-         * Returns true if the mulligan was shown, false if the player has no mulligans
-         */
-        public bool ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
+        public void ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
         {
             if (mulligans.Count == 0)
             {
-                return false;
+                onDone();
+                return;
             }
+            UIQueue.INSTANCE.Queue((OnUICompleted) => CreateMulliganView(player, mulligans, onDone, OnUICompleted));
+        }
+
+        private void CreateMulliganView(IPlayer player, List<List<ICard>> mulligans, Action onDone, Action OnUICompleted)
+        {
             var mulliganView = Instantiate(_mulliganViewPrefab);
             mulliganView.SetUp(player, mulligans);
             mulliganView.AddDoneListener(() =>
             {
                 onDone();
+                OnUICompleted();
             });
-            return true;
         }
 
         public void ShowGameState()
@@ -177,21 +161,6 @@ namespace gameview
                 player.Value.CreateHandCards();
             }
         }
-
-        // public void WaitForActivePokemon()
-        // {
-        //     foreach (var player in _playerActiveSpots)
-        //     {
-        //         Debug.Log($"Register on click listener for {player.Key.Name}: {player.Value}");
-        //         player.Value.CardPlayed += () =>
-        //             GameManagerState = GameManagerState.AdvanceSuccessfully();
-        //     }
-        // }
-
-        // public void StartGame()
-        // {
-        //     _gameController.StartGame();
-        // }
 
         public void EnableEndTurn(Action gameControllerMethod, Action onInteract)
         {
@@ -205,6 +174,7 @@ namespace gameview
 
         public void DisableEndTurn()
         {
+            endTurnButton.onClick.RemoveAllListeners();
             endTurnButton.gameObject.SetActive(false);
         }
     }

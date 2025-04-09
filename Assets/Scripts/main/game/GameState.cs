@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using gamecore.card;
-using NUnit.Framework.Constraints;
+using UnityEngine;
 
 namespace gamecore.game
 {
@@ -13,7 +11,7 @@ namespace gamecore.game
             GameController gameController,
             IPlayerLogic player
         );
-        void OnEnter(Game game);
+        void OnAdvanced(Game game);
     }
 
     internal class CreatedState : IGameState
@@ -35,7 +33,7 @@ namespace gamecore.game
             return new List<GameInteraction>() { gameInteraction };
         }
 
-        public void OnEnter(Game game) { }
+        public void OnAdvanced(Game game) { }
     }
 
     internal class ShowMulliganState : IGameState
@@ -62,18 +60,23 @@ namespace gamecore.game
             };
         }
 
-        public void OnEnter(Game game)
+        public void OnAdvanced(Game game)
         {
             if (_numberConfirmations == 0)
-                game.AwaitInteraction();
+                game.AwaitGeneralInteraction();
         }
     }
 
     internal class SettingActivePokemonState : IGameState
     {
+        private int _numberOfActivePokemonSelected = 0;
         public IGameState AdvanceSuccesfully()
         {
-            return new StartingGameState();
+            _numberOfActivePokemonSelected++;
+            if (_numberOfActivePokemonSelected == 2)
+                return new StartingGameState();
+
+            return this;
         }
 
         public List<GameInteraction> GetGameInteractions(
@@ -81,6 +84,7 @@ namespace gamecore.game
             IPlayerLogic player
         )
         {
+            if (player.ActivePokemon != null) return new();
             var interactions = new List<GameInteraction>();
             foreach (var basicPokemon in GetBasicPokemon(player))
             {
@@ -114,14 +118,17 @@ namespace gamecore.game
             );
         }
 
-        public void OnEnter(Game game) { }
+        public void OnAdvanced(Game game)
+        {
+            game.AwaitInteraction();
+        }
     }
 
     internal class StartingGameState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {
-            throw new NotImplementedException();
+            return new IdlePlayerTurnState();
         }
 
         public List<GameInteraction> GetGameInteractions(
@@ -132,7 +139,7 @@ namespace gamecore.game
             return new();
         }
 
-        public void OnEnter(Game game)
+        public void OnAdvanced(Game game)
         {
             game.StartGame();
             game.AdvanceGameState();
@@ -156,14 +163,14 @@ namespace gamecore.game
 
             var playableCards = GetPlayableCardsFromHand(player);
             var interactions = new List<GameInteraction>();
-            AddPlayCardInteractions(gameController, playableCards);
+            AddPlayCardInteractions(interactions, gameController, playableCards);
             interactions.Add(
                 new GameInteraction(gameController.EndTurn, GameInteractionType.EndTurn)
             );
             return interactions;
         }
 
-        private static List<ICardLogic> GetPlayableCardsFromHand(IPlayerLogic player)
+        private List<ICardLogic> GetPlayableCardsFromHand(IPlayerLogic player)
         {
             var playableCards = new List<ICardLogic>();
             foreach (var card in player.Hand.Cards)
@@ -175,22 +182,23 @@ namespace gamecore.game
             return playableCards;
         }
 
-        private static void AddPlayCardInteractions(
+        private void AddPlayCardInteractions(
+            List<GameInteraction> interactions,
             GameController gameController,
             List<ICardLogic> playableCards
         )
         {
             foreach (var card in playableCards)
             {
-                new GameInteraction(
+                interactions.Add(new GameInteraction(
                     () => gameController.PlayCard(card),
                     GameInteractionType.PlayCard,
                     card
-                );
+                ));
             }
         }
 
-        public void OnEnter(Game game)
+        public void OnAdvanced(Game game)
         {
             game.AwaitInteraction();
         }
