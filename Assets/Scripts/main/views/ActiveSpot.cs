@@ -23,7 +23,6 @@ namespace gameview
                 cardView.transform.position = transform.position;
                 cardView.transform.rotation = transform.rotation;
                 _isEmpty = false;
-                Debug.Log($"ActiveSpot: CardPlayed");
                 return true;
             }
             return false;

@@ -6,6 +6,7 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
 using NUnit.Framework.Constraints;
+using UnityEngine;
 using UnityEngine.Android;
 
 namespace gamecore.game
@@ -50,6 +51,7 @@ namespace gamecore.game
             }
         }
         public event Action AwaitInteractionEvent;
+        public event Action AwaitGeneralInteractionEvent;
 
         public Game(IPlayerLogic player1, IPlayerLogic player2)
         {
@@ -73,13 +75,17 @@ namespace gamecore.game
             ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
         }
 
-        public EndTurnGA Perform(EndTurnGA action)
+        public void EndTurn()
         {
-            return EndTurn(action);
+            Debug.Log("End turn called.");
+            var endTurn = new EndTurnGA();
+            ActionSystem.INSTANCE.Perform(endTurn);
+            AwaitInteraction();
         }
 
-        public EndTurnGA EndTurn(EndTurnGA endTurnGA)
+        public EndTurnGA Perform(EndTurnGA endTurnGA)
         {
+            Debug.Log("Perform end turn.");
             if (Player1.IsActive)
             {
                 Player1.IsActive = false;
@@ -95,6 +101,7 @@ namespace gamecore.game
             return endTurnGA;
         }
 
+
         public void EndGame()
         {
             ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
@@ -102,31 +109,31 @@ namespace gamecore.game
         }
 
         /* Returns if both active Pokemon are set */
-        internal bool SetActivePokemon(ICardLogic basicPokemon)
+        internal void SetActivePokemon(ICardLogic basicPokemon)
         {
             basicPokemon.Play();
-            if (Player1.ActivePokemon != null && Player2.ActivePokemon != null)
-            {
-                AdvanceGameState();
-                return true;
-            }
-            return false;
+            AdvanceGameState();
         }
 
         public void AdvanceGameState()
         {
             GameState = GameState.AdvanceSuccesfully();
-            GameState.OnEnter(this);
+            GameState.OnAdvanced(this);
         }
 
         internal void PlayCard(ICardLogic card)
         {
             card.Play();
+            AwaitInteraction();
         }
 
-        internal void AwaitInteraction()
+        internal virtual void AwaitInteraction()
         {
             AwaitInteractionEvent?.Invoke();
+        }
+        internal virtual void AwaitGeneralInteraction()
+        {
+            AwaitGeneralInteractionEvent?.Invoke();
         }
     }
 }

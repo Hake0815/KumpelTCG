@@ -60,17 +60,17 @@ namespace gameview
 
         private void OnMouseDown()
         {
-            _cardViewBehaviour.OnMouseDown(transform);
+            _cardViewBehaviour?.OnMouseDown(transform);
         }
 
         private void OnMouseDrag()
         {
-            _cardViewBehaviour.OnMouseDrag(transform);
+            _cardViewBehaviour?.OnMouseDrag(transform);
         }
 
         private void OnMouseUp()
         {
-            _cardViewBehaviour.OnMouseUp(_col, transform, this);
+            _cardViewBehaviour?.OnMouseUp(_col, transform, this);
         }
 
         internal void SetPlayable(bool isPlayable, CardViewBehaviour cardViewBehaviour)

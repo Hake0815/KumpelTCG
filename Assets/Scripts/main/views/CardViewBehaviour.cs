@@ -7,7 +7,7 @@ namespace gameview
     {
         private protected readonly Action _onPlayed;
 
-        public CardViewBehaviour(Action onPlayed)
+        protected CardViewBehaviour(Action onPlayed)
         {
             _onPlayed = onPlayed;
         }

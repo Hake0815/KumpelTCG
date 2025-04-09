@@ -24,8 +24,10 @@ namespace gameview
                 .WithPlayer2Decklist(CreateDeckList())
                 .Build();
             GameController.NotifyPlayer1 += HandlePlayer1Interactions;
-            GameController.NotifyPlayer1 += HandlePlayer2Interactions;
+            GameController.NotifyPlayer2 += HandlePlayer2Interactions;
+            GameController.NotifyGeneral += HandleGeneralInteractions;
         }
+
 
         public void StartGame()
         {
@@ -34,67 +36,88 @@ namespace gameview
 
         private void HandlePlayer1Interactions(object sender, List<GameInteraction> interactions)
         {
-            HandleInteraction(interactions, GameController.Game.Player1);
+            HandleInteraction(interactions);
         }
 
         private void HandlePlayer2Interactions(object sender, List<GameInteraction> interactions)
         {
-            HandleInteraction(interactions, GameController.Game.Player2);
+            HandleInteraction(interactions);
+        }
+        private void HandleGeneralInteractions(object sender, List<GameInteraction> interactions)
+        {
+            HandleInteraction(interactions);
         }
 
-        private void HandleInteraction(List<GameInteraction> interactions, IPlayer player)
+        private void HandleInteraction(List<GameInteraction> interactions)
         {
             foreach (var interaction in interactions)
             {
                 if (interaction.Type == GameInteractionType.PlayCard)
                 {
-                    _playableCards.Add(interaction.Card);
-                    var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
-                    cardView.SetPlayable(
-                        true,
-                        new DragBehaviour(() =>
-                        {
-                            OnInteract();
-                            interaction.GameControllerMethod.Invoke();
-                        })
-                    );
+                    HandlePlayCard(interaction);
                 }
                 else if (interaction.Type == GameInteractionType.EndTurn)
                     _gameManager.EnableEndTurn(interaction.GameControllerMethod, OnInteract);
                 else if (interaction.Type == GameInteractionType.SelectActivePokemon)
-                {
-                    _playableCards.Add(interaction.Card);
-                    var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
-                    cardView.SetPlayable(
-                        true,
-                        new ClickBehaviour(() =>
-                        {
-                            OnInteract();
-                            _gameManager
-                                .PlayerActiveSpots[interaction.Card.Owner]
-                                .SetActivePokemon(cardView);
-
-                            interaction.GameControllerMethod.Invoke();
-                        })
-                    );
-                }
+                    HandleSelectActivePokemon(interaction);
                 else if (interaction.Type == GameInteractionType.SetUpGame)
                     interaction.GameControllerMethod.Invoke();
                 else if (interaction.Type == GameInteractionType.ConfirmMulligans)
                 {
-                    _gameManager.ShowGameState();
-                    _gameManager.ShowMulligan(
-                        player,
-                        GameController.Game.Mulligans[player],
-                        () =>
-                        {
-                            OnInteract();
-                            interaction.GameControllerMethod.Invoke();
-                        }
-                    );
+                    HandleConfirmMulligans(interaction);
                 }
                 else
                     throw new NotImplementedException();
+            }
+        }
+
+        private void HandlePlayCard(GameInteraction interaction)
+        {
+            _playableCards.Add(interaction.Card);
+            var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
+            cardView.SetPlayable(
+                true,
+                new DragBehaviour(() =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                })
+            );
+        }
+
+        private void HandleSelectActivePokemon(GameInteraction interaction)
+        {
+            _playableCards.Add(interaction.Card);
+            var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
+            cardView.SetPlayable(
+                true,
+                new ClickBehaviour(() =>
+                {
+                    OnInteract();
+                    _gameManager
+                        .PlayerActiveSpots[interaction.Card.Owner]
+                        .SetActivePokemon(cardView);
+
+                    interaction.GameControllerMethod.Invoke();
+                })
+            );
+        }
+
+        private void HandleConfirmMulligans(GameInteraction interaction)
+        {
+            _gameManager.EnablePlayerHandViews();
+            _gameManager.ShowGameState();
+            foreach (var player in new List<IPlayer>() { GameController.Game.Player1, GameController.Game.Player2 })
+            {
+                _gameManager.ShowMulligan(
+                    player,
+                    GameController.Game.Mulligans[player],
+                    () =>
+                    {
+                        OnInteract();
+                        interaction.GameControllerMethod.Invoke();
+                    }
+                );
             }
         }
 
@@ -115,7 +138,7 @@ namespace gameview
 
         private Dictionary<string, int> CreateDeckList()
         {
-            return new Dictionary<string, int> { { "bill", 56 }, { "TWM128", 4 } };
+            return new Dictionary<string, int> { { "bill", 50 }, { "TWM128", 10 } };
         }
     }
 }
