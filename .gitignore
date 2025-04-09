@@ -101,9 +101,6 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
-**/Plugins/**/*.meta
-**/2D Casual UI/**/*.meta
-**/TextMesh Pro/**/*.meta
 
 # Chutzpah Test files
 _Chutzpah*
