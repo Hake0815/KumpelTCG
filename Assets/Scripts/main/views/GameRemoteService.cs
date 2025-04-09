@@ -28,7 +28,6 @@ namespace gameview
             GameController.NotifyGeneral += HandleGeneralInteractions;
         }
 
-
         public void StartGame()
         {
             GameController.SetUpGame();
@@ -43,6 +42,7 @@ namespace gameview
         {
             HandleInteraction(interactions);
         }
+
         private void HandleGeneralInteractions(object sender, List<GameInteraction> interactions)
         {
             HandleInteraction(interactions);
@@ -63,9 +63,9 @@ namespace gameview
                 else if (interaction.Type == GameInteractionType.SetUpGame)
                     interaction.GameControllerMethod.Invoke();
                 else if (interaction.Type == GameInteractionType.ConfirmMulligans)
-                {
                     HandleConfirmMulligans(interaction);
-                }
+                else if (interaction.Type == GameInteractionType.SelectMulligans)
+                    HandleSelectMulligans(interaction);
                 else
                     throw new NotImplementedException();
             }
@@ -107,7 +107,13 @@ namespace gameview
         {
             _gameManager.EnablePlayerHandViews();
             _gameManager.ShowGameState();
-            foreach (var player in new List<IPlayer>() { GameController.Game.Player1, GameController.Game.Player2 })
+            foreach (
+                var player in new List<IPlayer>()
+                {
+                    GameController.Game.Player1,
+                    GameController.Game.Player2,
+                }
+            )
             {
                 _gameManager.ShowMulligan(
                     player,
@@ -119,6 +125,18 @@ namespace gameview
                     }
                 );
             }
+        }
+
+        private void HandleSelectMulligans(GameInteraction interaction)
+        {
+            _gameManager.ShowMulliganSelector(
+                interaction.PossibleTargets,
+                (selected) =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethodWithTargets.Invoke(new() { selected });
+                }
+            );
         }
 
         private void OnInteract()
@@ -138,7 +156,7 @@ namespace gameview
 
         private Dictionary<string, int> CreateDeckList()
         {
-            return new Dictionary<string, int> { { "bill", 50 }, { "TWM128", 10 } };
+            return new Dictionary<string, int> { { "bill", 57 }, { "TWM128", 3 } };
         }
     }
 }

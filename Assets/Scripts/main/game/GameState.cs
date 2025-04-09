@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
 using UnityEngine;
 
@@ -70,11 +72,12 @@ namespace gamecore.game
     internal class SettingActivePokemonState : IGameState
     {
         private int _numberOfActivePokemonSelected = 0;
+
         public IGameState AdvanceSuccesfully()
         {
             _numberOfActivePokemonSelected++;
             if (_numberOfActivePokemonSelected == 2)
-                return new StartingGameState();
+                return new SelectingMulliganCards();
 
             return this;
         }
@@ -84,7 +87,8 @@ namespace gamecore.game
             IPlayerLogic player
         )
         {
-            if (player.ActivePokemon != null) return new();
+            if (player.ActivePokemon != null)
+                return new();
             var interactions = new List<GameInteraction>();
             foreach (var basicPokemon in GetBasicPokemon(player))
             {
@@ -121,6 +125,58 @@ namespace gamecore.game
         public void OnAdvanced(Game game)
         {
             game.AwaitInteraction();
+        }
+    }
+
+    internal class SelectingMulliganCards : IGameState
+    {
+        public IGameState AdvanceSuccesfully()
+        {
+            return new StartingGameState();
+        }
+
+        public List<GameInteraction> GetGameInteractions(
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            var mulligans = gameController.Game.Mulligans;
+            var numberOfMulligansOfPlayer = mulligans[player].Count;
+            int mulliganDifference = 0;
+            foreach (var mulligan in mulligans.Values)
+            {
+                mulliganDifference = Math.Max(
+                    mulligan.Count - numberOfMulligansOfPlayer,
+                    mulliganDifference
+                );
+            }
+
+            if (mulliganDifference <= 0)
+                return new();
+
+            return new List<GameInteraction>()
+            {
+                new(
+                    gameControllerMethodWithTargets: (targets) =>
+                        gameController.SelectMulligans((int)targets[0], player),
+                    type: GameInteractionType.SelectMulligans,
+                    card: null,
+                    possibleTargets: Enumerable
+                        .Range(0, mulliganDifference + 1)
+                        .Cast<object>()
+                        .ToList(),
+                    numberOfTargets: 1
+                ),
+            };
+        }
+
+        public void OnAdvanced(Game game)
+        {
+            var mulligans = game.Mulligans.Values.ToList();
+            if (mulligans[0].Count != mulligans[1].Count)
+                game.AwaitInteraction();
+            else
+                game.AdvanceGameState();
         }
     }
 
@@ -190,11 +246,13 @@ namespace gamecore.game
         {
             foreach (var card in playableCards)
             {
-                interactions.Add(new GameInteraction(
-                    () => gameController.PlayCard(card),
-                    GameInteractionType.PlayCard,
-                    card
-                ));
+                interactions.Add(
+                    new GameInteraction(
+                        () => gameController.PlayCard(card),
+                        GameInteractionType.PlayCard,
+                        card
+                    )
+                );
             }
         }
 
