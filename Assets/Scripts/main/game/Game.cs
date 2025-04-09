@@ -101,7 +101,6 @@ namespace gamecore.game
             return endTurnGA;
         }
 
-
         public void EndGame()
         {
             ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
@@ -118,6 +117,7 @@ namespace gamecore.game
         public void AdvanceGameState()
         {
             GameState = GameState.AdvanceSuccesfully();
+            Debug.Log("Game state advanced to: " + GameState.GetType().Name);
             GameState.OnAdvanced(this);
         }
 
@@ -131,9 +131,16 @@ namespace gamecore.game
         {
             AwaitInteractionEvent?.Invoke();
         }
+
         internal virtual void AwaitGeneralInteraction()
         {
             AwaitGeneralInteractionEvent?.Invoke();
+        }
+
+        internal void DrawMulliganCards(int numberOfExtraCards, IPlayerLogic player)
+        {
+            ActionSystem.INSTANCE.Perform(new DrawCardGA(numberOfExtraCards, player));
+            AdvanceGameState();
         }
     }
 }
