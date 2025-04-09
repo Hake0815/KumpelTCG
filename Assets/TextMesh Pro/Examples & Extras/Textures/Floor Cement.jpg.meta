@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Floor Cement_0: -427269384101749361
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
