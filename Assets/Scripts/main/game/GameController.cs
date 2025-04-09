@@ -52,6 +52,11 @@ namespace gamecore.game
             _game.PlayCard(card);
         }
 
+        public void SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
+        {
+            _game.DrawMulliganCards(numberOfExtraCards, player);
+        }
+
         private void NotifyPlayers()
         {
             OnNotifyPlayer1();
