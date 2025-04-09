@@ -419,17 +419,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &770721126 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3790401241133142911, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
-  m_PrefabInstance: {fileID: 1259112917}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1259112917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -438,29 +427,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 726967895271978137, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
-      propertyPath: _activeSpot
-      value: 
-      objectReference: {fileID: 4589633420691444452, guid: c51a3dd4b2f8ecac28fbdc9995c0bb3a, type: 3}
-    - target: {fileID: 726967895271978137, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
-      propertyPath: endTurnButton
-      value: 
-      objectReference: {fileID: 770721126}
-    - target: {fileID: 726967895271978137, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
-      propertyPath: _discardPileView
-      value: 
-      objectReference: {fileID: 1687710093591685239, guid: f6f962eafdbf34bac89b19d79df31659, type: 3}
-    - target: {fileID: 726967895271978137, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
-      propertyPath: _mulliganViewPrefab
-      value: 
-      objectReference: {fileID: 3852400392982224435, guid: 2bd3c8427cdea8256a935790d752cbcf, type: 3}
     - target: {fileID: 2569138588933751772, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
       propertyPath: m_Name
       value: Board
-      objectReference: {fileID: 0}
-    - target: {fileID: 4126849208781030520, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7070908728931524737, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
       propertyPath: m_LocalPosition.x
