@@ -33,6 +33,8 @@ namespace gameview
         [SerializeField]
         private MulliganView _mulliganViewPrefab;
 
+        [SerializeField]
+        private MulliganSelectorView _mulliganSelectorViewPrefab;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
@@ -140,10 +142,17 @@ namespace gameview
                 onDone();
                 return;
             }
-            UIQueue.INSTANCE.Queue((OnUICompleted) => CreateMulliganView(player, mulligans, onDone, OnUICompleted));
+            UIQueue.INSTANCE.Queue(
+                (OnUICompleted) => CreateMulliganView(player, mulligans, onDone, OnUICompleted)
+            );
         }
 
-        private void CreateMulliganView(IPlayer player, List<List<ICard>> mulligans, Action onDone, Action OnUICompleted)
+        private void CreateMulliganView(
+            IPlayer player,
+            List<List<ICard>> mulligans,
+            Action onDone,
+            Action OnUICompleted
+        )
         {
             var mulliganView = Instantiate(_mulliganViewPrefab);
             mulliganView.SetUp(player, mulligans);
@@ -176,6 +185,12 @@ namespace gameview
         {
             endTurnButton.onClick.RemoveAllListeners();
             endTurnButton.gameObject.SetActive(false);
+        }
+
+        internal void ShowMulliganSelector(List<object> possibleTargets, Action<object> onConfirm)
+        {
+            var mulliganSelectorView = Instantiate(_mulliganSelectorViewPrefab);
+            mulliganSelectorView.SetUp(possibleTargets, onConfirm);
         }
     }
 }

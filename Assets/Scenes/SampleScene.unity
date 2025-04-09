@@ -431,6 +431,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 2827937010237041582, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: m_fontSize
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 2827937010237041582, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2827937010237041582, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 2827937010237041582, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 9ad269c99dcf42b7aedefd83dd5a7b9d, type: 2}
+    - target: {fileID: 3167680219390826782, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 3167680219390826782, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 7070908728931524737, guid: 9b1d577b1f79d8feca6a3261118f9b56, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
