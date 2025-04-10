@@ -1,5 +1,7 @@
 using System;
+using gamecore.actionsystem;
 using gamecore.game;
+using gamecore.game.action;
 
 namespace gamecore.card
 {
@@ -36,7 +38,10 @@ namespace gamecore.card
 
         public bool IsPlayable()
         {
-            return Owner.Hand.Cards.Contains(this) && Owner.IsActive && Stage == Stage.Basic;
+            return Owner.Hand.Cards.Contains(this)
+                && Owner.IsActive
+                && Stage == Stage.Basic
+                && !Owner.Bench.Full;
         }
 
         public bool IsPokemonCard()
@@ -55,6 +60,11 @@ namespace gamecore.card
             {
                 Owner.ActivePokemon = this;
                 Owner.Hand.RemoveCard(this);
+                return;
+            }
+            if (!Owner.Bench.Full)
+            {
+                ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
             }
         }
     }

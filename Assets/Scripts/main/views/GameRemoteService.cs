@@ -52,22 +52,36 @@ namespace gameview
         {
             foreach (var interaction in interactions)
             {
-                if (interaction.Type == GameInteractionType.PlayCard)
+                switch (interaction.Type)
                 {
-                    HandlePlayCard(interaction);
+                    case GameInteractionType.PlayCard:
+                        HandlePlayCard(interaction);
+                        break;
+
+                    case GameInteractionType.EndTurn:
+                        _gameManager.EnableEndTurnButton(
+                            interaction.GameControllerMethod,
+                            OnInteract
+                        );
+                        break;
+                    case GameInteractionType.SelectActivePokemon:
+                        HandleSelectActivePokemon(interaction);
+                        break;
+                    case GameInteractionType.SetUpGame:
+                        interaction.GameControllerMethod.Invoke();
+                        break;
+                    case GameInteractionType.ConfirmMulligans:
+                        HandleConfirmMulligans(interaction);
+                        break;
+                    case GameInteractionType.SelectMulligans:
+                        HandleSelectMulligans(interaction);
+                        break;
+                    case GameInteractionType.Confirm:
+                        _gameManager.EnableDoneButton(interaction.GameControllerMethod, OnInteract);
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
-                else if (interaction.Type == GameInteractionType.EndTurn)
-                    _gameManager.EnableEndTurn(interaction.GameControllerMethod, OnInteract);
-                else if (interaction.Type == GameInteractionType.SelectActivePokemon)
-                    HandleSelectActivePokemon(interaction);
-                else if (interaction.Type == GameInteractionType.SetUpGame)
-                    interaction.GameControllerMethod.Invoke();
-                else if (interaction.Type == GameInteractionType.ConfirmMulligans)
-                    HandleConfirmMulligans(interaction);
-                else if (interaction.Type == GameInteractionType.SelectMulligans)
-                    HandleSelectMulligans(interaction);
-                else
-                    throw new NotImplementedException();
             }
         }
 
@@ -98,6 +112,20 @@ namespace gameview
                         .PlayerActiveSpots[interaction.Card.Owner]
                         .SetActivePokemon(cardView);
 
+                    interaction.GameControllerMethod.Invoke();
+                })
+            );
+        }
+
+        private void HandleSelectBenchedPokemon(GameInteraction interaction)
+        {
+            _playableCards.Add(interaction.Card);
+            var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
+            cardView.SetPlayable(
+                true,
+                new DragBehaviour(() =>
+                {
+                    OnInteract();
                     interaction.GameControllerMethod.Invoke();
                 })
             );
@@ -141,7 +169,7 @@ namespace gameview
 
         private void OnInteract()
         {
-            _gameManager.DisableEndTurn();
+            _gameManager.DisableButton();
             ClearPlayableCards();
         }
 
@@ -156,7 +184,7 @@ namespace gameview
 
         private Dictionary<string, int> CreateDeckList()
         {
-            return new Dictionary<string, int> { { "bill", 57 }, { "TWM128", 3 } };
+            return new Dictionary<string, int> { { "bill", 20 }, { "TWM128", 40 } };
         }
     }
 }

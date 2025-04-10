@@ -18,8 +18,7 @@ namespace gameview
             var card = cardView.Card;
             if (card.IsTrainerCard() && card.Owner == _player)
             {
-                cardView.transform.position = transform.position;
-                cardView.transform.rotation = transform.rotation;
+                cardView.transform.SetPositionAndRotation(transform.position, transform.rotation);
                 return true;
             }
             return false;

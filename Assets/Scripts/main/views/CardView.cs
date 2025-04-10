@@ -11,9 +11,9 @@ namespace gameview
         private protected Collider2D _col;
         private protected Vector3 _positionBeforeDrag;
         private protected Transform _discardPilePosition;
-        private bool _isPlayable = false;
         public ICard Card { get; private set; }
         public Image Image { get; set; }
+        public Canvas Canvas { get; private set; }
         private CardViewBehaviour _cardViewBehaviour;
 
         public void SetUp(Transform discardPilePosition, ICard card)
@@ -28,6 +28,7 @@ namespace gameview
         public void Awake()
         {
             Image = GetComponentInChildren<Image>();
+            Canvas = GetComponent<Canvas>();
         }
 
         private void OnEnable()
@@ -60,22 +61,21 @@ namespace gameview
 
         private void OnMouseDown()
         {
-            _cardViewBehaviour?.OnMouseDown(transform);
+            _cardViewBehaviour?.OnMouseDown(this);
         }
 
         private void OnMouseDrag()
         {
-            _cardViewBehaviour?.OnMouseDrag(transform);
+            _cardViewBehaviour?.OnMouseDrag(this);
         }
 
         private void OnMouseUp()
         {
-            _cardViewBehaviour?.OnMouseUp(_col, transform, this);
+            _cardViewBehaviour?.OnMouseUp(_col, this);
         }
 
         internal void SetPlayable(bool isPlayable, CardViewBehaviour cardViewBehaviour)
         {
-            _isPlayable = isPlayable;
             if (isPlayable)
             {
                 _col.enabled = true;

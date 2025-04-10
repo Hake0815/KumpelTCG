@@ -13,7 +13,13 @@ namespace gamecore.game
         public List<object> PossibleTargets { get; } = null;
         public int NumberOfTargets { get; } = 0;
 
-        public GameInteraction(Action<List<object>> gameControllerMethodWithTargets, GameInteractionType type, ICard card, List<object> possibleTargets, int numberOfTargets)
+        public GameInteraction(
+            Action<List<object>> gameControllerMethodWithTargets,
+            GameInteractionType type,
+            ICard card,
+            List<object> possibleTargets,
+            int numberOfTargets
+        )
         {
             GameControllerMethodWithTargets = gameControllerMethodWithTargets;
             Type = type;
@@ -32,9 +38,7 @@ namespace gamecore.game
         public GameInteraction(Action gameControllerMethod, GameInteractionType type)
             : this(gameControllerMethod, type, null) { }
 
-        public GameInteraction()
-        {
-        }
+        public GameInteraction() { }
     }
 
     public enum GameInteractionType
@@ -45,5 +49,6 @@ namespace gamecore.game
         EndTurn,
         ConfirmMulligans,
         SelectMulligans,
+        Confirm,
     }
 }
