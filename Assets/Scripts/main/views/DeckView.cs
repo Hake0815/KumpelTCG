@@ -28,7 +28,7 @@ namespace gameview
         {
             Deck = player.Deck;
             _text = GetComponentInChildren<TMP_Text>();
-            _text.text = Deck.GetCardCount().ToString();
+            _text.text = Deck.CardCount.ToString();
             OnEnable();
         }
 
@@ -46,8 +46,8 @@ namespace gameview
 
         public void UpdateView()
         {
-            _text.text = Deck.GetCardCount().ToString();
-            if (Deck.GetCardCount() == 0)
+            _text.text = Deck.CardCount.ToString();
+            if (Deck.CardCount == 0)
                 _image.sprite = _emptySprite;
             else
                 _image.sprite = _sprite;
