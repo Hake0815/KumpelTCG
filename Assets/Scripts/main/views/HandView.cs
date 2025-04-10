@@ -10,7 +10,7 @@ namespace gameview
     {
         private Transform deckPosition;
         public SplineContainer SplineContainer { get; private set; }
-        private IHand hand;
+        private ICardList hand;
 
         private void Awake()
         {

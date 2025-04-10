@@ -19,7 +19,7 @@ namespace gameview
             var spline = SplineContainer.Spline;
             for (int i = 0; i < cardViews.Count; i++)
             {
-                cardViews[i].GetComponent<Canvas>().sortingOrder = i;
+                cardViews[i].Canvas.sortingOrder = i;
                 var p = firstCardPosition + i * spacing;
                 var splinePosition = parentRotation * spline.EvaluatePosition(p);
                 var forward = spline.EvaluateTangent(p);

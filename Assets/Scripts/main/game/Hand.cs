@@ -1,38 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace gamecore.card
 {
-    public interface IHand
-    {
-        List<ICard> Cards { get; }
-        int CardCount { get; }
-        event EventHandler<List<ICard>> CardsAdded;
-        event Action CardsRemoved;
-    }
-
-    internal interface IHandLogic : IHand
-    {
-        new List<ICardLogic> Cards { get; }
-        void AddCards(List<ICardLogic> cards);
-        void RemoveCards(List<ICard> cards);
-        void RemoveCard(ICard card);
-        void Clear();
-    }
+    internal interface IHandLogic : ICardListLogic { }
 
     internal class Hand : IHandLogic
     {
         public List<ICardLogic> Cards { get; } = new();
         public event EventHandler<List<ICard>> CardsAdded;
         public event Action CardsRemoved;
-
-        public int CardCount
-        {
-            get => Cards.Count;
-        }
-
-        List<ICard> IHand.Cards => Cards.Cast<ICard>().ToList();
 
         public void AddCards(List<ICardLogic> cards)
         {
@@ -64,9 +43,14 @@ namespace gamecore.card
 
         public void Clear()
         {
-            var removedCards = ((IHand)this).Cards;
+            var removedCards = ((ICardList)this).Cards;
             Cards.Clear();
             OnCardsRemoved(removedCards);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return Cards.GetEnumerator();
         }
     }
 }
