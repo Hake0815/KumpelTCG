@@ -86,7 +86,6 @@ namespace gamecore.game
             var interactions = _game.GameState.GetGameInteractions(this, null);
             if (interactions.Count > 0)
                 NotifyGeneral?.Invoke(this, interactions);
-
         }
 
         internal void EndTurn()

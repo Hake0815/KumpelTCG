@@ -90,24 +90,11 @@ namespace gamecore.game
             if (player.ActivePokemon != null)
                 return new();
             var interactions = new List<GameInteraction>();
-            foreach (var basicPokemon in GetBasicPokemon(player))
+            foreach (var basicPokemon in player.Hand.GetBasicPokemon())
             {
                 interactions.Add(CreateGameInteraction(basicPokemon, gameController));
             }
             return interactions;
-        }
-
-        private List<ICardLogic> GetBasicPokemon(IPlayerLogic player)
-        {
-            var basicPokemon = new List<ICardLogic>();
-            foreach (var card in player.Hand.Cards)
-            {
-                if (card is PokemonCard pokemonCard && pokemonCard.Stage == Stage.Basic)
-                {
-                    basicPokemon.Add(card);
-                }
-            }
-            return basicPokemon;
         }
 
         private GameInteraction CreateGameInteraction(
@@ -132,7 +119,7 @@ namespace gamecore.game
     {
         public IGameState AdvanceSuccesfully()
         {
-            return new StartingGameState();
+            return new SelectBenchPokemonState();
         }
 
         public List<GameInteraction> GetGameInteractions(
@@ -177,6 +164,45 @@ namespace gamecore.game
                 game.AwaitInteraction();
             else
                 game.AdvanceGameState();
+        }
+    }
+
+    internal class SelectBenchPokemonState : IGameState
+    {
+        public IGameState AdvanceSuccesfully()
+        {
+            return new StartingGameState();
+        }
+
+        public List<GameInteraction> GetGameInteractions(
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            var interactions = new List<GameInteraction>();
+            foreach (var basicPokemon in player.Hand.GetBasicPokemon())
+            {
+                interactions.Add(CreateGameInteraction(basicPokemon, gameController));
+            }
+            interactions.Add(new(gameController.Confirm, GameInteractionType.Confirm));
+            return interactions;
+        }
+
+        private GameInteraction CreateGameInteraction(
+            ICardLogic basicPokemon,
+            GameController gameController
+        )
+        {
+            return new GameInteraction(
+                () => gameController.PlayCard(basicPokemon),
+                GameInteractionType.PlayCard,
+                basicPokemon
+            );
+        }
+
+        public void OnAdvanced(Game game)
+        {
+            game.AwaitInteraction();
         }
     }
 

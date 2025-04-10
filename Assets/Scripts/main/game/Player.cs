@@ -6,7 +6,8 @@ namespace gamecore.game
     {
         string Name { get; }
         IDeck Deck { get; }
-        IHand Hand { get; }
+        ICardList Hand { get; }
+        IBench Bench { get; }
         IDiscardPile DiscardPile { get; }
         bool IsActive { get; }
         IPokemonCard ActivePokemon { get; }
@@ -18,8 +19,14 @@ namespace gamecore.game
         new bool IsActive { get; set; }
         new IPokemonCard ActivePokemon { get; set; }
         new IDeckLogic Deck { get; set; }
+        IDeck IPlayer.Deck => Deck;
         new IHandLogic Hand { get; }
+        ICardList IPlayer.Hand => Hand;
+        new IBenchLogic Bench { get; }
+        IBench IPlayer.Bench => Bench;
+
         new IDiscardPileLogic DiscardPile { get; }
+        IDiscardPile IPlayer.DiscardPile => DiscardPile;
         void Draw(int amount);
     }
 
@@ -30,12 +37,10 @@ namespace gamecore.game
         public IPokemonCard ActivePokemon { get; set; }
         public IDeckLogic Deck { get; set; }
         public IHandLogic Hand { get; } = new Hand();
+        public IBenchLogic Bench { get; } = new Bench();
         public IDiscardPileLogic DiscardPile { get; } = new DiscardPile();
 
-        // Explicit interface implementations for IPlayer
-        IDeck IPlayer.Deck => Deck;
-        IHand IPlayer.Hand => Hand;
-        IDiscardPile IPlayer.DiscardPile => DiscardPile;
+        // Explicit interface implementations for ICardList
 
         public void Draw(int amount)
         {

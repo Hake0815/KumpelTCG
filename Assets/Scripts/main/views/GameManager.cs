@@ -5,6 +5,7 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
 using gamecore.game.action;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,9 @@ namespace gameview
         private ActiveSpot _activeSpot;
 
         [SerializeField]
+        private BenchView _benchView;
+
+        [SerializeField]
         private CardViewCreator _cardViewCreator;
 
         [SerializeField]
@@ -38,11 +42,14 @@ namespace gameview
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
-        public Button endTurnButton;
+        private Button _button;
+        private TMP_Text _buttonText;
 
         void Start()
         {
-            endTurnButton = GetComponentInChildren<Button>();
+            _button = GetComponentInChildren<Button>();
+            _buttonText = _button.GetComponentInChildren<TMP_Text>();
+            DisableButton();
             Instantiate(_cardViewCreator);
 
             var gameRemoteService = new GameRemoteService(this);
@@ -82,6 +89,7 @@ namespace gameview
             SetUpHandView(player, rotation, deckView);
             SetUpPlayArea(player, rotation);
             SetUpActiveSpot(player, rotation);
+            SetUpBenchView(player, rotation);
         }
 
         private void SetUpDiscardPileView(IPlayer player, Quaternion rotation)
@@ -135,6 +143,16 @@ namespace gameview
             PlayerActiveSpots.Add(player, activeSpot);
         }
 
+        private void SetUpBenchView(IPlayer player, Quaternion rotation)
+        {
+            var benchView = Instantiate(
+                _benchView,
+                rotation * _benchView.transform.position,
+                rotation
+            );
+            benchView.SetUp(player);
+        }
+
         public void ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
         {
             if (mulligans.Count == 0)
@@ -171,26 +189,38 @@ namespace gameview
             }
         }
 
-        public void EnableEndTurn(Action gameControllerMethod, Action onInteract)
+        public void EnableEndTurnButton(Action gameControllerMethod, Action onInteract)
         {
-            endTurnButton.gameObject.SetActive(true);
-            endTurnButton.onClick.AddListener(() =>
+            _button.gameObject.SetActive(true);
+            _buttonText.text = "EndTurn";
+            _button.onClick.AddListener(() =>
             {
                 onInteract();
                 gameControllerMethod();
             });
         }
 
-        public void DisableEndTurn()
+        public void DisableButton()
         {
-            endTurnButton.onClick.RemoveAllListeners();
-            endTurnButton.gameObject.SetActive(false);
+            _button.onClick.RemoveAllListeners();
+            _button.gameObject.SetActive(false);
         }
 
         internal void ShowMulliganSelector(List<object> possibleTargets, Action<object> onConfirm)
         {
             var mulliganSelectorView = Instantiate(_mulliganSelectorViewPrefab);
             mulliganSelectorView.SetUp(possibleTargets, onConfirm);
+        }
+
+        internal void EnableDoneButton(Action gameControllerMethod, Action onInteract)
+        {
+            _button.gameObject.SetActive(true);
+            _buttonText.text = "Done";
+            _button.onClick.AddListener(() =>
+            {
+                onInteract();
+                gameControllerMethod();
+            });
         }
     }
 }
