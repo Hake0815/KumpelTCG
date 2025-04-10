@@ -12,9 +12,9 @@ namespace gameview
             _onPlayed = onPlayed;
         }
 
-        public abstract void OnMouseDown(Transform transform);
-        public abstract void OnMouseDrag(Transform transform);
-        public abstract void OnMouseUp(Collider2D _col, Transform transform, CardView cardView);
+        public abstract void OnMouseDown(CardView cardView);
+        public abstract void OnMouseDrag(CardView cardView);
+        public abstract void OnMouseUp(Collider2D _col, CardView cardView);
     }
 
     public class ClickBehaviour : CardViewBehaviour
@@ -22,32 +22,35 @@ namespace gameview
         public ClickBehaviour(Action onPlayed)
             : base(onPlayed) { }
 
-        public override void OnMouseDown(Transform transform)
+        public override void OnMouseDown(CardView cardView)
         {
             _onPlayed?.Invoke();
         }
 
-        public override void OnMouseDrag(Transform transform) { }
+        public override void OnMouseDrag(CardView cardView) { }
 
-        public override void OnMouseUp(Collider2D _col, Transform transform, CardView cardView) { }
+        public override void OnMouseUp(Collider2D _col, CardView cardView) { }
     }
 
     public class DragBehaviour : CardViewBehaviour
     {
-        private protected Vector3 _positionBeforeDrag;
+        private Vector3 _positionBeforeDrag;
+        private int _orderBeforeDrag;
 
         public DragBehaviour(Action onPlayed)
             : base(onPlayed) { }
 
-        public override void OnMouseDown(Transform transform)
+        public override void OnMouseDown(CardView cardView)
         {
-            _positionBeforeDrag = transform.position;
-            transform.position = GetMousePosition();
+            _positionBeforeDrag = cardView.transform.position;
+            _orderBeforeDrag = cardView.Canvas.sortingOrder;
+            cardView.transform.position = GetMousePosition();
         }
 
-        public override void OnMouseDrag(Transform transform)
+        public override void OnMouseDrag(CardView cardView)
         {
-            transform.position = GetMousePosition();
+            cardView.Canvas.sortingOrder = 99;
+            cardView.transform.position = GetMousePosition();
         }
 
         private Vector3 GetMousePosition()
@@ -57,20 +60,23 @@ namespace gameview
             return p;
         }
 
-        public override void OnMouseUp(Collider2D _col, Transform transform, CardView cardView)
+        public override void OnMouseUp(Collider2D _col, CardView cardView)
         {
             _col.enabled = false;
-            var hitCollider = Physics2D.OverlapPoint(transform.position);
+            var hitCollider = Physics2D.OverlapPoint(cardView.transform.position);
             _col.enabled = true;
-            if (hitCollider != null && hitCollider.TryGetComponent(out ICardDropArea cardDropArea))
+            if (
+                hitCollider != null
+                && hitCollider.TryGetComponent(out ICardDropArea cardDropArea)
+                && cardDropArea.OnCardDropped(cardView)
+            )
             {
-                if (cardDropArea.OnCardDropped(cardView))
-                {
-                    _onPlayed?.Invoke();
-                    return;
-                }
+                cardView.Canvas.sortingOrder = -1;
+                _onPlayed?.Invoke();
+                return;
             }
-            transform.position = _positionBeforeDrag;
+            cardView.transform.position = _positionBeforeDrag;
+            cardView.Canvas.sortingOrder = _orderBeforeDrag;
         }
     }
 }
