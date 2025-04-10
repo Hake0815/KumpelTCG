@@ -6,7 +6,7 @@ namespace gamecore.game
 {
     public interface IDeck
     {
-        int GetCardCount();
+        int CardCount { get; }
         event Action CardCountChanged;
     }
 
@@ -21,6 +21,10 @@ namespace gamecore.game
     {
         private List<ICardLogic> Cards { get; set; }
         private static readonly Random rng = new();
+        public int CardCount
+        {
+            get => Cards.Count;
+        }
 
         public event Action CardCountChanged;
 
@@ -39,18 +43,13 @@ namespace gamecore.game
 
         public void Shuffle()
         {
-            var n = GetCardCount();
+            var n = CardCount;
             while (n > 1)
             {
                 n--;
                 int k = rng.Next(n + 1);
                 (Cards[n], Cards[k]) = (Cards[k], Cards[n]);
             }
-        }
-
-        public int GetCardCount()
-        {
-            return Cards.Count;
         }
 
         public void AddCards(List<ICardLogic> cards)
