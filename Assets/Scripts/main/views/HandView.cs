@@ -33,7 +33,7 @@ namespace gameview
             if (hand != null)
             {
                 hand.CardsAdded += HandleCardsAdded;
-                hand.CardsRemoved += HandleCardsRemoved;
+                hand.CardCountChanged += HandleCardsRemoved;
             }
         }
 
@@ -42,7 +42,7 @@ namespace gameview
             if (hand != null)
             {
                 hand.CardsAdded -= HandleCardsAdded;
-                hand.CardsRemoved -= HandleCardsRemoved;
+                hand.CardCountChanged -= HandleCardsRemoved;
             }
         }
 

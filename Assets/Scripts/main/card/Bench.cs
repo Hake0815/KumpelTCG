@@ -28,7 +28,7 @@ namespace gamecore.card
         public int MaxBenchSpots { get; set; } = 5;
 
         public event EventHandler<List<ICard>> CardsAdded;
-        public event Action CardsRemoved;
+        public event Action CardCountChanged;
 
         public Bench()
         {
@@ -67,7 +67,7 @@ namespace gamecore.card
 
         protected virtual void OnCardsRemoved(List<ICard> cards)
         {
-            CardsRemoved?.Invoke();
+            CardCountChanged?.Invoke();
         }
 
         protected virtual void OnCardsAddedToBench(List<ICard> cards)

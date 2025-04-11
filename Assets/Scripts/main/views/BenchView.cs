@@ -28,7 +28,7 @@ namespace gameview
             if (_player?.Bench != null)
             {
                 _player.Bench.CardsAdded += HandleCardsAdded;
-                _player.Bench.CardsRemoved += HandleCardsRemoved;
+                _player.Bench.CardCountChanged += HandleCardsRemoved;
             }
         }
 
@@ -37,7 +37,7 @@ namespace gameview
             if (_player.Bench != null)
             {
                 _player.Bench.CardsAdded -= HandleCardsAdded;
-                _player.Bench.CardsRemoved -= HandleCardsRemoved;
+                _player.Bench.CardCountChanged -= HandleCardsRemoved;
             }
         }
 
