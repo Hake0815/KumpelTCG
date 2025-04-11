@@ -27,8 +27,7 @@ namespace gameview
         {
             if (_player?.Bench != null)
             {
-                _player.Bench.CardsAdded += HandleCardsAdded;
-                _player.Bench.CardCountChanged += HandleCardsRemoved;
+                _player.Bench.CardCountChanged += UpdateBenchedPokemonPositions;
             }
         }
 
@@ -36,8 +35,7 @@ namespace gameview
         {
             if (_player.Bench != null)
             {
-                _player.Bench.CardsAdded -= HandleCardsAdded;
-                _player.Bench.CardCountChanged -= HandleCardsRemoved;
+                _player.Bench.CardCountChanged -= UpdateBenchedPokemonPositions;
             }
         }
 
@@ -55,16 +53,6 @@ namespace gameview
             }
             Debug.Log("Not a valid Basic Pokemon.");
             return false;
-        }
-
-        private void HandleCardsRemoved()
-        {
-            UpdateBenchedPokemonPositions();
-        }
-
-        private void HandleCardsAdded(object sender, List<ICard> e)
-        {
-            UpdateBenchedPokemonPositions();
         }
 
         private void UpdateBenchedPokemonPositions()

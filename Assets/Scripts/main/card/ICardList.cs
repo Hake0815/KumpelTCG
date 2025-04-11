@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,6 @@ namespace gamecore.card
         {
             get => Cards.Count;
         }
-        event EventHandler<List<ICard>> CardsAdded;
         event Action CardCountChanged;
 
         IEnumerator<ICard> IEnumerable<ICard>.GetEnumerator()
@@ -24,10 +24,41 @@ namespace gamecore.card
     {
         new List<ICardLogic> Cards { get; }
         List<ICard> ICardList.Cards => Cards.Cast<ICard>().ToList();
-        void AddCards(List<ICardLogic> cards);
-        void RemoveCards(List<ICard> cards);
-        void RemoveCard(ICard card);
-        void Clear();
+        protected static readonly Random rng = new();
+
+        void Shuffle()
+        {
+            var n = CardCount;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (Cards[n], Cards[k]) = (Cards[k], Cards[n]);
+            }
+        }
+        void AddCards(List<ICardLogic> cards)
+        {
+            Cards.AddRange(cards);
+            OnCardCountChanged();
+        }
+
+        void RemoveCards(List<ICard> cards)
+        {
+            Cards.RemoveAll(cards.Contains);
+            OnCardCountChanged();
+        }
+
+        void RemoveCard(ICard card)
+        {
+            Cards.Remove((ICardLogic)card);
+            OnCardCountChanged();
+        }
+
+        void Clear()
+        {
+            Cards.Clear();
+            OnCardCountChanged();
+        }
         List<ICardLogic> GetBasicPokemon()
         {
             var basicPokemon = new List<ICardLogic>();
@@ -45,5 +76,12 @@ namespace gamecore.card
         {
             return Cards.GetEnumerator();
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Cards.GetEnumerator();
+        }
+
+        void OnCardCountChanged();
     }
 }

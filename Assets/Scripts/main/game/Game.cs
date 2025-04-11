@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
@@ -30,6 +31,7 @@ namespace gamecore.game
         {
             get => Player2;
         }
+        private List<IPlayerLogic> _players = new();
 
         public GameSetupBuilder GameSetupBuilder { get; private set; }
         public IGameState GameState { get; set; }
@@ -60,6 +62,8 @@ namespace gamecore.game
             ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
             CardSystem.INSTANCE.Enable();
             GameState = new CreatedState();
+            _players.Add(player1);
+            _players.Add(player2);
         }
 
         public void PerformSetup()
@@ -141,6 +145,14 @@ namespace gamecore.game
         {
             ActionSystem.INSTANCE.Perform(new DrawCardGA(numberOfExtraCards, player));
             AdvanceGameState();
+        }
+
+        internal void SetPrizeCards()
+        {
+            foreach (var player in _players)
+            {
+                player.SetPrizeCards();
+            }
         }
     }
 }

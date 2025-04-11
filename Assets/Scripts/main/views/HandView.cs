@@ -8,18 +8,12 @@ namespace gameview
 {
     public class HandView : MonoBehaviour, ISplineCardHolder
     {
-        private Transform deckPosition;
         public SplineContainer SplineContainer { get; private set; }
         private ICardList hand;
 
         private void Awake()
         {
             SplineContainer = GetComponent<SplineContainer>();
-        }
-
-        public void SetUp(DeckView deck)
-        {
-            deckPosition = deck.transform;
         }
 
         public void Register(IPlayer player)
@@ -32,8 +26,7 @@ namespace gameview
         {
             if (hand != null)
             {
-                hand.CardsAdded += HandleCardsAdded;
-                hand.CardCountChanged += HandleCardsRemoved;
+                hand.CardCountChanged += HandleCardCountChanged;
             }
         }
 
@@ -41,34 +34,12 @@ namespace gameview
         {
             if (hand != null)
             {
-                hand.CardsAdded -= HandleCardsAdded;
-                hand.CardCountChanged -= HandleCardsRemoved;
+                hand.CardCountChanged -= HandleCardCountChanged;
             }
         }
 
-        private void HandleCardsRemoved()
+        public void HandleCardCountChanged()
         {
-            ((ISplineCardHolder)this).UpdateCardPosition(
-                CardViewRegistry.INSTANCE.GetAll(hand.Cards),
-                transform.rotation
-            );
-        }
-
-        public void CreateHandCards()
-        {
-            HandleCardsAdded(this, hand.Cards);
-        }
-
-        private void HandleCardsAdded(object player, List<ICard> drawnCards)
-        {
-            foreach (var card in drawnCards)
-            {
-                CardViewCreator.INSTANCE.CreateAt(
-                    card,
-                    deckPosition.position,
-                    deckPosition.rotation
-                );
-            }
             ((ISplineCardHolder)this).UpdateCardPosition(
                 CardViewRegistry.INSTANCE.GetAll(hand.Cards),
                 transform.rotation

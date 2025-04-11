@@ -14,32 +14,36 @@ namespace gameview
     public class GameManager : MonoBehaviour
     {
         [SerializeField]
-        private HandView _handView;
+        private HandView _handViewPrefab;
 
         [SerializeField]
-        private DeckView _deckView;
+        private DeckView _deckViewPrefab;
 
         [SerializeField]
-        private PlayArea _playArea;
+        private PlayArea _playAreaPrefab;
 
         [SerializeField]
-        private ActiveSpot _activeSpot;
+        private ActiveSpot _activeSpotPrefab;
 
         [SerializeField]
-        private BenchView _benchView;
+        private BenchView _benchViewPrefab;
 
         [SerializeField]
-        private CardViewCreator _cardViewCreator;
+        private CardViewCreator _cardViewCreatorPrefab;
 
         [SerializeField]
-        private DiscardPileView _discardPileView;
+        private DiscardPileView _discardPileViewPrefab;
 
         [SerializeField]
         private MulliganView _mulliganViewPrefab;
 
         [SerializeField]
         private MulliganSelectorView _mulliganSelectorViewPrefab;
+
+        [SerializeField]
+        private PrizeView _prizeViewPrefab;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
+        private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
         private Button _button;
@@ -50,7 +54,7 @@ namespace gameview
             _button = GetComponentInChildren<Button>();
             _buttonText = _button.GetComponentInChildren<TMP_Text>();
             DisableButton();
-            Instantiate(_cardViewCreator);
+            Instantiate(_cardViewCreatorPrefab);
 
             var gameRemoteService = new GameRemoteService(this);
 
@@ -62,7 +66,7 @@ namespace gameview
                 gameRemoteService.GameController.Game.Player2,
                 new Quaternion(0f, 0f, 1f, 0f)
             );
-            DisablePlayerHandViews();
+            DisablePlayerViews();
             gameRemoteService.StartGame();
         }
 
@@ -72,61 +76,73 @@ namespace gameview
             {
                 handView.gameObject.SetActive(true);
             }
+            foreach (var deckView in _playerDeckViews.Values)
+            {
+                deckView.gameObject.SetActive(true);
+            }
         }
 
-        public void DisablePlayerHandViews()
+        public void DisablePlayerViews()
         {
             foreach (var handView in _playerHandViews.Values)
             {
                 handView.gameObject.SetActive(false);
+            }
+            foreach (var deckView in _playerDeckViews.Values)
+            {
+                deckView.gameObject.SetActive(false);
             }
         }
 
         private void SetUpPlayerViews(IPlayer player, Quaternion rotation)
         {
             SetUpDiscardPileView(player, rotation);
-            var deckView = SetUpDeckView(player, rotation);
-            SetUpHandView(player, rotation, deckView);
+            SetUpDeckView(player, rotation);
+            SetUpHandView(player, rotation);
             SetUpPlayArea(player, rotation);
             SetUpActiveSpot(player, rotation);
             SetUpBenchView(player, rotation);
+            SetUpPrizeView(player, rotation);
         }
 
         private void SetUpDiscardPileView(IPlayer player, Quaternion rotation)
         {
             var discardPileView = Instantiate(
-                _discardPileView,
-                rotation * _discardPileView.transform.position,
+                _discardPileViewPrefab,
+                rotation * _discardPileViewPrefab.transform.position,
                 rotation
             );
             discardPileView.SetUp(player.DiscardPile);
             CardViewCreator.INSTANCE.DiscardPileViews.Add(player, discardPileView);
         }
 
-        private DeckView SetUpDeckView(IPlayer player, Quaternion rotation)
+        private void SetUpDeckView(IPlayer player, Quaternion rotation)
         {
             var deckView = Instantiate(
-                _deckView,
-                rotation * _deckView.transform.position,
+                _deckViewPrefab,
+                rotation * _deckViewPrefab.transform.position,
                 rotation
             );
             deckView.SetUp(player);
-            return deckView;
+            _playerDeckViews.Add(player, deckView);
         }
 
-        private void SetUpHandView(IPlayer player, Quaternion rotation, DeckView deckView)
+        private void SetUpHandView(IPlayer player, Quaternion rotation)
         {
-            var handView = Instantiate(_handView, _handView.transform.position, rotation); // Position is at 0,0,0
+            var handView = Instantiate(
+                _handViewPrefab,
+                _handViewPrefab.transform.position,
+                rotation
+            ); // Position is at 0,0,0
             handView.Register(player);
-            handView.SetUp(deckView);
             _playerHandViews.Add(player, handView);
         }
 
         private void SetUpPlayArea(IPlayer player, Quaternion rotation)
         {
             var playArea = Instantiate(
-                _playArea,
-                rotation * _playArea.transform.position,
+                _playAreaPrefab,
+                rotation * _playAreaPrefab.transform.position,
                 rotation
             );
             playArea.SetUp(player);
@@ -135,8 +151,8 @@ namespace gameview
         private void SetUpActiveSpot(IPlayer player, Quaternion rotation)
         {
             var activeSpot = Instantiate(
-                _activeSpot,
-                rotation * _activeSpot.transform.position,
+                _activeSpotPrefab,
+                rotation * _activeSpotPrefab.transform.position,
                 rotation
             );
             activeSpot.SetUp(player);
@@ -146,11 +162,21 @@ namespace gameview
         private void SetUpBenchView(IPlayer player, Quaternion rotation)
         {
             var benchView = Instantiate(
-                _benchView,
-                rotation * _benchView.transform.position,
+                _benchViewPrefab,
+                rotation * _benchViewPrefab.transform.position,
                 rotation
             );
             benchView.SetUp(player);
+        }
+
+        private void SetUpPrizeView(IPlayer player, Quaternion rotation)
+        {
+            var prizeView = Instantiate(
+                _prizeViewPrefab,
+                rotation * _prizeViewPrefab.transform.position,
+                rotation
+            );
+            prizeView.SetUp(player);
         }
 
         public void ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
@@ -183,9 +209,11 @@ namespace gameview
 
         public void ShowGameState()
         {
-            foreach (var player in _playerHandViews)
+            foreach (var player in _playerHandViews.Keys)
             {
-                player.Value.CreateHandCards();
+                _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
+                _playerDeckViews[player].UpdateView();
+                _playerHandViews[player].HandleCardCountChanged();
             }
         }
 
