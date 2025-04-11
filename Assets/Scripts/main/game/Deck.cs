@@ -1,56 +1,60 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
+using UnityEngine;
 
 namespace gamecore.game
 {
-    public interface IDeck
+    public interface IDeck : ICardList
     {
-        int GetCardCount();
-        event Action CardCountChanged;
+        event EventHandler<List<ICard>> CardsDrawn;
+        event EventHandler<List<ICard>> CardsDrawnFaceDown;
     }
 
-    internal interface IDeckLogic : IDeck
+    internal interface IDeckLogic : IDeck, ICardListLogic
     {
+        List<ICardLogic> DrawFaceDown(int amount);
         List<ICardLogic> Draw(int amount);
-        void Shuffle();
-        void AddCards(List<ICardLogic> cards);
     }
 
     internal class Deck : IDeckLogic
     {
-        private List<ICardLogic> Cards { get; set; }
-        private static readonly Random rng = new();
+        public List<ICardLogic> Cards { get; set; }
+        public int CardCount
+        {
+            get => Cards.Count;
+        }
 
         public event Action CardCountChanged;
+        public event EventHandler<List<ICard>> CardsDrawn;
+        public event EventHandler<List<ICard>> CardsDrawnFaceDown;
 
         public Deck(List<ICardLogic> cards)
         {
             Cards = cards;
         }
 
+        public List<ICardLogic> DrawFaceDown(int amount)
+        {
+            var drawnCards = DrawCards(amount);
+            OnCardsDrawnFaceDown(drawnCards);
+            return drawnCards;
+        }
+
         public List<ICardLogic> Draw(int amount)
+        {
+            var drawnCards = DrawCards(amount);
+            OnCardsDrawn(drawnCards);
+            return drawnCards;
+        }
+
+        private List<ICardLogic> DrawCards(int amount)
         {
             var drawnCards = Cards.GetRange(0, Math.Min(amount, Cards.Count));
             Cards.RemoveRange(0, drawnCards.Count);
             OnCardCountChanged();
             return drawnCards;
-        }
-
-        public void Shuffle()
-        {
-            var n = GetCardCount();
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                (Cards[n], Cards[k]) = (Cards[k], Cards[n]);
-            }
-        }
-
-        public int GetCardCount()
-        {
-            return Cards.Count;
         }
 
         public void AddCards(List<ICardLogic> cards)
@@ -59,9 +63,20 @@ namespace gamecore.game
             OnCardCountChanged();
         }
 
-        protected virtual void OnCardCountChanged()
+        public void OnCardCountChanged()
         {
             CardCountChanged?.Invoke();
+        }
+
+        public void OnCardsDrawn(List<ICardLogic> cards)
+        {
+            CardsDrawn?.Invoke(this, cards.Cast<ICard>().ToList());
+        }
+
+        public void OnCardsDrawnFaceDown(List<ICardLogic> cards)
+        {
+            Debug.Log($"OnCardsDrawnFaceDown called on Deck of {cards[0].Owner.Name}");
+            CardsDrawnFaceDown?.Invoke(this, cards.Cast<ICard>().ToList());
         }
     }
 }

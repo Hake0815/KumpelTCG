@@ -8,26 +8,51 @@ namespace gameview
 {
     public class CardView : MonoBehaviour
     {
+        [SerializeField]
+        private Sprite _backSideSprite;
+        private Sprite _frontSideSprite;
+        private Image _image;
         private protected Collider2D _col;
         private protected Vector3 _positionBeforeDrag;
         private protected Transform _discardPilePosition;
+
         public ICard Card { get; private set; }
-        public Image Image { get; set; }
         public Canvas Canvas { get; private set; }
+        private bool _faceUp = true;
+        public bool FaceUp
+        {
+            get => _faceUp;
+            set
+            {
+                _faceUp = value;
+                SetImageSprite();
+            }
+        }
+
+        private void SetImageSprite()
+        {
+            if (FaceUp)
+                _image.sprite = _frontSideSprite;
+            else
+                _image.sprite = _backSideSprite;
+        }
+
         private CardViewBehaviour _cardViewBehaviour;
 
-        public void SetUp(Transform discardPilePosition, ICard card)
+        public void SetUp(Transform discardPilePosition, ICard card, Sprite frontSideSprite)
         {
+            _frontSideSprite = frontSideSprite;
             _discardPilePosition = discardPilePosition;
             _col = GetComponent<Collider2D>();
             _col.enabled = false;
             Card = card;
             OnEnable();
+            SetImageSprite();
         }
 
         public void Awake()
         {
-            Image = GetComponentInChildren<Image>();
+            _image = GetComponentInChildren<Image>();
             Canvas = GetComponent<Canvas>();
         }
 

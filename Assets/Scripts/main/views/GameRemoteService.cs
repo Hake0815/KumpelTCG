@@ -184,7 +184,7 @@ namespace gameview
 
         private Dictionary<string, int> CreateDeckList()
         {
-            return new Dictionary<string, int> { { "bill", 20 }, { "TWM128", 40 } };
+            return new Dictionary<string, int> { { "bill", 56 }, { "TWM128", 4 } };
         }
     }
 }

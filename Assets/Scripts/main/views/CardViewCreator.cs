@@ -30,11 +30,21 @@ namespace gameview
 
         public Dictionary<IPlayer, DiscardPileView> DiscardPileViews { get; } = new();
 
+        public CardView CreateAtFaceDown(ICard card, Vector3 position, Quaternion rotation)
+        {
+            var newCardView = CreateAt(card, position, rotation);
+            newCardView.FaceUp = false;
+            return newCardView;
+        }
+
         public CardView CreateAt(ICard card, Vector3 position, Quaternion rotation)
         {
             var newCardView = Instantiate(cardPrefab, position, rotation);
-            newCardView.Image.sprite = SpriteRegistry.INSTANCE.GetSprite(card.Id);
-            newCardView.SetUp(DiscardPileViews[card.Owner].transform, card);
+            newCardView.SetUp(
+                DiscardPileViews[card.Owner].transform,
+                card,
+                SpriteRegistry.INSTANCE.GetSprite(card.Id)
+            );
             CardViewRegistry.INSTANCE.Register(newCardView);
             return newCardView;
         }
@@ -42,8 +52,11 @@ namespace gameview
         public CardView CreateIn(ICard card, Transform parent)
         {
             var newCardView = Instantiate(cardPrefab, parent);
-            newCardView.Image.sprite = SpriteRegistry.INSTANCE.GetSprite(card.Id);
-            newCardView.SetUp(DiscardPileViews[card.Owner].transform, card);
+            newCardView.SetUp(
+                DiscardPileViews[card.Owner].transform,
+                card,
+                SpriteRegistry.INSTANCE.GetSprite(card.Id)
+            );
             return newCardView;
         }
     }

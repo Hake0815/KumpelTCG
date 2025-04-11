@@ -19,7 +19,7 @@ namespace gamecore.card
         {
             SetUpDeck(out Deck deck);
 
-            var cardCount = deck.GetCardCount();
+            var cardCount = deck.CardCount;
 
             Assert.That(cardCount, Is.EqualTo(2));
         }
@@ -41,7 +41,7 @@ namespace gamecore.card
             SetUpDeck(out Deck deck);
             deck.Draw(1);
 
-            var cardCount = deck.GetCardCount();
+            var cardCount = deck.CardCount;
 
             Assert.That(cardCount, Is.EqualTo(1));
         }
@@ -54,7 +54,7 @@ namespace gamecore.card
             var drawnCards = deck.Draw(3);
 
             Assert.That(drawnCards.Count, Is.EqualTo(2));
-            Assert.That(deck.GetCardCount(), Is.EqualTo(0));
+            Assert.That(deck.CardCount, Is.EqualTo(0));
             Assert.That(drawnCards.Count, Is.EqualTo(2));
             Assert.That(drawnCards, Contains.Item(firstCard));
             Assert.That(drawnCards, Contains.Item(secondCard));
