@@ -159,6 +159,7 @@ namespace gamecore.game
 
         public void OnAdvanced(Game game)
         {
+            game.SetPrizeCards();
             var mulligans = game.Mulligans.Values.ToList();
             if (mulligans[0].Count != mulligans[1].Count)
                 game.AwaitInteraction();
