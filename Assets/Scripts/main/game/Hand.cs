@@ -11,7 +11,7 @@ namespace gamecore.card
     {
         public List<ICardLogic> Cards { get; } = new();
         public event EventHandler<List<ICard>> CardsAdded;
-        public event Action CardsRemoved;
+        public event Action CardCountChanged;
 
         public void AddCards(List<ICardLogic> cards)
         {
@@ -38,7 +38,7 @@ namespace gamecore.card
 
         protected virtual void OnCardsRemoved(List<ICard> cards)
         {
-            CardsRemoved?.Invoke();
+            CardCountChanged?.Invoke();
         }
 
         public void Clear()
