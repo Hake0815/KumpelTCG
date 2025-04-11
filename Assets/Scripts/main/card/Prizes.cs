@@ -1,15 +1,16 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace gamecore.card
 {
-    internal interface IHandLogic : ICardListLogic { }
+    public interface IPrizes : ICardList { }
 
-    internal class Hand : IHandLogic
+    internal interface IPrizesLogic : IPrizes, ICardListLogic { }
+
+    internal class Prizes : IPrizesLogic
     {
         public List<ICardLogic> Cards { get; } = new();
+
         public event Action CardCountChanged;
 
         public void OnCardCountChanged()

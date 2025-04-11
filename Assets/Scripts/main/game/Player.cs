@@ -1,4 +1,6 @@
 using gamecore.card;
+using UnityEngine.Android;
+using UnityEngine.Rendering.VirtualTexturing;
 
 namespace gamecore.game
 {
@@ -9,6 +11,7 @@ namespace gamecore.game
         ICardList Hand { get; }
         IBench Bench { get; }
         IDiscardPile DiscardPile { get; }
+        IPrizes Prizes { get; }
         bool IsActive { get; }
         IPokemonCard ActivePokemon { get; }
     }
@@ -24,10 +27,13 @@ namespace gamecore.game
         ICardList IPlayer.Hand => Hand;
         new IBenchLogic Bench { get; }
         IBench IPlayer.Bench => Bench;
+        new IPrizesLogic Prizes { get; }
+        IPrizes IPlayer.Prizes => Prizes;
 
         new IDiscardPileLogic DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
         void Draw(int amount);
+        void SetPrizeCards();
     }
 
     internal class Player : IPlayerLogic
@@ -39,8 +45,7 @@ namespace gamecore.game
         public IHandLogic Hand { get; } = new Hand();
         public IBenchLogic Bench { get; } = new Bench();
         public IDiscardPileLogic DiscardPile { get; } = new DiscardPile();
-
-        // Explicit interface implementations for ICardList
+        public IPrizesLogic Prizes { get; } = new Prizes();
 
         public void Draw(int amount)
         {
@@ -49,6 +54,12 @@ namespace gamecore.game
             {
                 Hand.AddCards(drawnCards);
             }
+        }
+
+        public void SetPrizeCards()
+        {
+            var prizeCards = Deck.DrawFaceDown(6);
+            Prizes.AddCards(prizeCards);
         }
     }
 }

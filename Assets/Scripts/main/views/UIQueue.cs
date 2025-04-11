@@ -9,6 +9,7 @@ namespace gameview
     {
         private static readonly Lazy<UIQueue> lazy = new(() => new UIQueue());
         public static UIQueue INSTANCE => lazy.Value;
+
         private UIQueue() { }
 
         private readonly Queue<Action<Action>> _actionQueue = new();
@@ -18,7 +19,8 @@ namespace gameview
         public void Queue(Action<Action> action)
         {
             _actionQueue.Enqueue(action);
-            if (_idle) PerfromNextAction();
+            if (_idle)
+                PerfromNextAction();
         }
 
         private void PerfromNextAction()
@@ -26,9 +28,12 @@ namespace gameview
             if (_idle && _actionQueue.TryDequeue(out Action<Action> action))
             {
                 _idle = false;
-                action.Invoke(() => { _idle = true; PerfromNextAction(); });
+                action.Invoke(() =>
+                {
+                    _idle = true;
+                    PerfromNextAction();
+                });
             }
         }
-
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using gamecore.card;
 using gamecore.game;
@@ -35,13 +36,21 @@ namespace gameview
         private void OnEnable()
         {
             if (Deck != null)
+            {
                 Deck.CardCountChanged += UpdateView;
+                Deck.CardsDrawn += OnCardsDrawn;
+                Deck.CardsDrawnFaceDown += OnCardsDrawnFaceDown;
+            }
         }
 
         private void OnDisable()
         {
             if (Deck != null)
+            {
                 Deck.CardCountChanged -= UpdateView;
+                Deck.CardsDrawn -= OnCardsDrawn;
+                Deck.CardsDrawnFaceDown -= OnCardsDrawnFaceDown;
+            }
         }
 
         public void UpdateView()
@@ -51,6 +60,45 @@ namespace gameview
                 _image.sprite = _emptySprite;
             else
                 _image.sprite = _sprite;
+        }
+
+        private void OnCardsDrawn(object sender, List<ICard> drawnCards)
+        {
+            CreateDrawnCards(drawnCards);
+        }
+
+        public void CreateDrawnCards(List<ICard> drawnCards)
+        {
+            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            {
+                foreach (var card in drawnCards)
+                {
+                    CardViewCreator.INSTANCE.CreateAt(card, transform.position, transform.rotation);
+                }
+                CallbackOnDone.Invoke();
+            });
+        }
+
+        private void OnCardsDrawnFaceDown(object sender, List<ICard> drawnCards)
+        {
+            CreateDrawnCardsFaceDown(drawnCards);
+        }
+
+        public void CreateDrawnCardsFaceDown(List<ICard> drawnCards)
+        {
+            Debug.Log($"CreateDrawnCardsFaceDown called on Deck of {drawnCards[0].Owner.Name}");
+            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            {
+                foreach (var card in drawnCards)
+                {
+                    CardViewCreator.INSTANCE.CreateAtFaceDown(
+                        card,
+                        transform.position,
+                        transform.rotation
+                    );
+                }
+                CallbackOnDone.Invoke();
+            });
         }
     }
 }

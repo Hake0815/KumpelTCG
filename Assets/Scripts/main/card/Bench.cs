@@ -26,8 +26,6 @@ namespace gamecore.card
     {
         public List<ICardLogic> Cards { get; } = new();
         public int MaxBenchSpots { get; set; } = 5;
-
-        public event EventHandler<List<ICard>> CardsAdded;
         public event Action CardCountChanged;
 
         public Bench()
@@ -35,44 +33,9 @@ namespace gamecore.card
             ActionSystem.INSTANCE.AttachPerformer(this);
         }
 
-        public void Clear()
-        {
-            var removedCards = ((ICardList)this).Cards;
-            Cards.Clear();
-            OnCardsRemoved(removedCards);
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return Cards.GetEnumerator();
-        }
-
-        public void AddCards(List<ICardLogic> cards)
-        {
-            Cards.AddRange(cards);
-            OnCardsAddedToBench(cards.Cast<ICard>().ToList());
-        }
-
-        public void RemoveCards(List<ICard> cards)
-        {
-            Cards.RemoveAll(cards.Contains);
-            OnCardsRemoved(cards);
-        }
-
-        public void RemoveCard(ICard card)
-        {
-            Cards.Remove((ICardLogic)card);
-            OnCardsRemoved(new() { card });
-        }
-
-        protected virtual void OnCardsRemoved(List<ICard> cards)
+        public void OnCardCountChanged()
         {
             CardCountChanged?.Invoke();
-        }
-
-        protected virtual void OnCardsAddedToBench(List<ICard> cards)
-        {
-            CardsAdded?.Invoke(this, cards);
         }
 
         public BenchPokemonGA Perform(BenchPokemonGA action)
