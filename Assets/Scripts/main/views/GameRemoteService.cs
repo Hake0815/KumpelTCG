@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using gamecore.card;
 using gamecore.game;
+using UnityEngine;
 
 namespace gameview
 {
@@ -70,6 +71,9 @@ namespace gameview
                     case GameInteractionType.SetUpGame:
                         interaction.GameControllerMethod.Invoke();
                         break;
+                    case GameInteractionType.SetupCompleted:
+                        HandleSetupCompleted(interaction);
+                        break;
                     case GameInteractionType.ConfirmMulligans:
                         HandleConfirmMulligans(interaction);
                         break;
@@ -85,10 +89,18 @@ namespace gameview
             }
         }
 
+        private void HandleSetupCompleted(GameInteraction interaction)
+        {
+            _gameManager.EnablePlayerHandViews();
+            _gameManager.ShowGameState();
+            interaction.GameControllerMethod.Invoke();
+        }
+
         private void HandlePlayCard(GameInteraction interaction)
         {
-            _playableCards.Add(interaction.Card);
-            var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
+            var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
             cardView.SetPlayable(
                 true,
                 new DragBehaviour(() =>
@@ -101,31 +113,16 @@ namespace gameview
 
         private void HandleSelectActivePokemon(GameInteraction interaction)
         {
-            _playableCards.Add(interaction.Card);
-            var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
+            var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
             cardView.SetPlayable(
                 true,
                 new ClickBehaviour(() =>
                 {
                     OnInteract();
-                    _gameManager
-                        .PlayerActiveSpots[interaction.Card.Owner]
-                        .SetActivePokemon(cardView);
+                    _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(cardView);
 
-                    interaction.GameControllerMethod.Invoke();
-                })
-            );
-        }
-
-        private void HandleSelectBenchedPokemon(GameInteraction interaction)
-        {
-            _playableCards.Add(interaction.Card);
-            var cardView = CardViewRegistry.INSTANCE.Get(interaction.Card);
-            cardView.SetPlayable(
-                true,
-                new DragBehaviour(() =>
-                {
-                    OnInteract();
                     interaction.GameControllerMethod.Invoke();
                 })
             );
@@ -133,19 +130,19 @@ namespace gameview
 
         private void HandleConfirmMulligans(GameInteraction interaction)
         {
-            _gameManager.EnablePlayerHandViews();
-            _gameManager.ShowGameState();
-            foreach (
-                var player in new List<IPlayer>()
-                {
-                    GameController.Game.Player1,
-                    GameController.Game.Player2,
-                }
-            )
+            var mulligans = (interaction.Data[typeof(MulliganData)] as MulliganData).Mulligans;
+            Debug.Log($"Handle {mulligans.Count} mulligans.");
+            if (mulligans.Count == 0)
+            {
+                OnInteract();
+                interaction.GameControllerMethod.Invoke();
+                return;
+            }
+            foreach (var mulliganEntry in mulligans)
             {
                 _gameManager.ShowMulligan(
-                    player,
-                    GameController.Game.Mulligans[player],
+                    mulliganEntry.Key,
+                    mulliganEntry.Value,
                     () =>
                     {
                         OnInteract();
@@ -158,7 +155,7 @@ namespace gameview
         private void HandleSelectMulligans(GameInteraction interaction)
         {
             _gameManager.ShowMulliganSelector(
-                interaction.PossibleTargets,
+                (interaction.Data[typeof(TargetData)] as TargetData).PossibleTargets,
                 (selected) =>
                 {
                     OnInteract();
