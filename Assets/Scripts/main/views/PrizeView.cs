@@ -44,34 +44,40 @@ namespace gameview
 
         private void UpdateView()
         {
-            _countText.text = _prizes.CardCount.ToString();
-            var horizontalSpacing = _rectTransform.rect.width / 3f;
-            var verticalSpacing = _rectTransform.rect.height / 2f;
-            var relativeRight = _rectTransform.rotation * Vector3.right;
-            var relativeDown = _rectTransform.rotation * Vector3.down;
-            var firstPosition =
-                _rectTransform.position
-                + horizontalSpacing / 2f * relativeRight
-                + verticalSpacing / 2f * relativeDown;
-            int i = 0;
-            foreach (var prizeCard in _prizes)
-            {
-                var cardView = CardViewRegistry.INSTANCE.Get(prizeCard);
-                if (i < 3)
-                    cardView.transform.DOMove(
-                        firstPosition + i * horizontalSpacing * relativeRight,
-                        0.25f
-                    );
-                else
-                    cardView.transform.DOMove(
-                        firstPosition
-                            + (i - 3) * horizontalSpacing * relativeRight
-                            + verticalSpacing * relativeDown,
-                        0.25f
-                    );
-                cardView.transform.DOLocalRotateQuaternion(_rectTransform.rotation, 0.25f);
-                i++;
-            }
+            UIQueue.INSTANCE.Queue(
+                (OnUICompleted) =>
+                {
+                    _countText.text = _prizes.CardCount.ToString();
+                    var horizontalSpacing = _rectTransform.rect.width / 3f;
+                    var verticalSpacing = _rectTransform.rect.height / 2f;
+                    var relativeRight = _rectTransform.rotation * Vector3.right;
+                    var relativeDown = _rectTransform.rotation * Vector3.down;
+                    var firstPosition =
+                        _rectTransform.position
+                        + horizontalSpacing / 2f * relativeRight
+                        + verticalSpacing / 2f * relativeDown;
+                    int i = 0;
+                    foreach (var prizeCard in _prizes)
+                    {
+                        var cardView = CardViewRegistry.INSTANCE.Get(prizeCard);
+                        if (i < 3)
+                            cardView.transform.DOMove(
+                                firstPosition + i * horizontalSpacing * relativeRight,
+                                0.25f
+                            );
+                        else
+                            cardView.transform.DOMove(
+                                firstPosition
+                                    + (i - 3) * horizontalSpacing * relativeRight
+                                    + verticalSpacing * relativeDown,
+                                0.25f
+                            );
+                        cardView.transform.DOLocalRotateQuaternion(_rectTransform.rotation, 0.25f);
+                        i++;
+                    }
+                    OnUICompleted.Invoke();
+                }
+            );
         }
     }
 }

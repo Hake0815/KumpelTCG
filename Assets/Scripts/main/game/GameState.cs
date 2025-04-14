@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using gamecore.card;
-using UnityEngine;
 
 namespace gamecore.game
 {
@@ -20,7 +19,7 @@ namespace gamecore.game
     {
         public IGameState AdvanceSuccesfully()
         {
-            return new ShowMulliganState();
+            return new SetupCompletedState();
         }
 
         public List<GameInteraction> GetGameInteractions(
@@ -38,7 +37,28 @@ namespace gamecore.game
         public void OnAdvanced(Game game) { }
     }
 
-    internal class ShowMulliganState : IGameState
+    internal class SetupCompletedState : IGameState
+    {
+        public IGameState AdvanceSuccesfully()
+        {
+            return new ShowFirstMulliganState();
+        }
+
+        public List<GameInteraction> GetGameInteractions(
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            return new() { new(gameController.Confirm, GameInteractionType.SetupCompleted) };
+        }
+
+        public void OnAdvanced(Game game)
+        {
+            game.AwaitGeneralInteraction();
+        }
+    }
+
+    internal class ShowFirstMulliganState : IGameState
     {
         private int _numberConfirmations = 0;
 
@@ -56,9 +76,19 @@ namespace gamecore.game
             IPlayerLogic player
         )
         {
+            var mulligans = gameController.Game.Mulligans;
+            var mulliganNumberToShow = mulligans.Values.ToList().Min(m => m.Count);
+
+            var mulligansToShow = new Dictionary<IPlayer, List<List<ICard>>>();
+            foreach (var p in mulligans.Keys)
+                mulligansToShow.Add(p, mulligans[p].GetRange(0, mulliganNumberToShow));
             return new List<GameInteraction>()
             {
-                new(gameController.Confirm, GameInteractionType.ConfirmMulligans),
+                new(
+                    gameController.Confirm,
+                    GameInteractionType.ConfirmMulligans,
+                    new() { new MulliganData(mulligansToShow) }
+                ),
             };
         }
 
@@ -77,7 +107,7 @@ namespace gamecore.game
         {
             _numberOfActivePokemonSelected++;
             if (_numberOfActivePokemonSelected == 2)
-                return new SelectingMulliganCards();
+                return new ShowSecondMulliganState();
 
             return this;
         }
@@ -105,13 +135,55 @@ namespace gamecore.game
             return new GameInteraction(
                 () => gameController.SelectActivePokemon(basicPokemon),
                 GameInteractionType.SelectActivePokemon,
-                basicPokemon
+                new() { new InteractionCard(basicPokemon) }
             );
         }
 
         public void OnAdvanced(Game game)
         {
             game.AwaitInteraction();
+        }
+    }
+
+    internal class ShowSecondMulliganState : IGameState
+    {
+        public IGameState AdvanceSuccesfully()
+        {
+            return new SelectingMulliganCards();
+        }
+
+        public List<GameInteraction> GetGameInteractions(
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            var mulligans = gameController.Game.Mulligans;
+            var mulliganNumberToSkip = mulligans.Values.ToList().Min(m => m.Count);
+
+            var mulligansToShow = new Dictionary<IPlayer, List<List<ICard>>>();
+            foreach (var p in mulligans.Keys)
+                if (mulligans[p].Count > mulliganNumberToSkip)
+                    mulligansToShow.Add(
+                        p,
+                        mulligans[p]
+                            .GetRange(
+                                mulliganNumberToSkip,
+                                mulligans[p].Count - mulliganNumberToSkip
+                            )
+                    );
+            return new List<GameInteraction>()
+            {
+                new(
+                    gameController.Confirm,
+                    GameInteractionType.ConfirmMulligans,
+                    new() { new MulliganData(mulligansToShow) }
+                ),
+            };
+        }
+
+        public void OnAdvanced(Game game)
+        {
+            game.AwaitGeneralInteraction();
         }
     }
 
@@ -141,18 +213,17 @@ namespace gamecore.game
             if (mulliganDifference <= 0)
                 return new();
 
+            var targetData = new TargetData(
+                numberOfTargets: 1,
+                possibleTargets: Enumerable.Range(0, mulliganDifference + 1).Cast<object>().ToList()
+            );
             return new List<GameInteraction>()
             {
                 new(
                     gameControllerMethodWithTargets: (targets) =>
                         gameController.SelectMulligans((int)targets[0], player),
                     type: GameInteractionType.SelectMulligans,
-                    card: null,
-                    possibleTargets: Enumerable
-                        .Range(0, mulliganDifference + 1)
-                        .Cast<object>()
-                        .ToList(),
-                    numberOfTargets: 1
+                    data: new() { targetData }
                 ),
             };
         }
@@ -197,7 +268,7 @@ namespace gamecore.game
             return new GameInteraction(
                 () => gameController.PlayCard(basicPokemon),
                 GameInteractionType.PlayCard,
-                basicPokemon
+                new() { new InteractionCard(basicPokemon) }
             );
         }
 
@@ -277,7 +348,7 @@ namespace gamecore.game
                     new GameInteraction(
                         () => gameController.PlayCard(card),
                         GameInteractionType.PlayCard,
-                        card
+                        new() { new InteractionCard(card) }
                     )
                 );
             }

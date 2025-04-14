@@ -1,4 +1,5 @@
 using gamecore.card;
+using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.Rendering.VirtualTexturing;
 
@@ -58,6 +59,7 @@ namespace gamecore.game
 
         public void SetPrizeCards()
         {
+            Debug.Log($"Setting prizes for {Name}");
             var prizeCards = Deck.DrawFaceDown(6);
             Prizes.AddCards(prizeCards);
         }
