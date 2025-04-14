@@ -12,21 +12,16 @@ namespace gamecore.card
 
     internal class PokemonCard : IPokemonCard, ICardLogic
     {
-        public ICardData CardData { get; }
-        public IPokemonCardData PokemonCardData
-        {
-            get => CardData as IPokemonCardData;
-        }
+        public ICardData CardData => PokemonCardData;
+
+        public IPokemonCardData PokemonCardData { get; }
         public IPlayerLogic Owner { get; }
         public Stage Stage => PokemonCardData.Stage;
-
-        IPlayer ICard.Owner => Owner;
-
         public event Action CardDiscarded;
 
         public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
         {
-            CardData = cardData;
+            PokemonCardData = cardData;
             Owner = owner;
         }
 

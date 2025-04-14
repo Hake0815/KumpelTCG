@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace gamecore.card
 {
-    public interface IPokemonCardData : ICardData
+    internal interface IPokemonCardData : ICardData
     {
         Stage Stage { get; }
         PokemonType Type { get; }
@@ -54,20 +54,5 @@ namespace gamecore.card
         Basic,
         Stage1,
         Stage2,
-    }
-
-    public enum PokemonType
-    {
-        None,
-        Grass,
-        Fire,
-        Water,
-        Lightning,
-        Fighting,
-        Psychic,
-        Colorless,
-        Darrkness,
-        Metal,
-        Dragon,
     }
 }
