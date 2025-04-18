@@ -315,33 +315,22 @@ namespace gamecore.game
             if (!player.IsActive)
                 return new();
 
-            var playableCards = GetPlayableCardsFromHand(player);
             var interactions = new List<GameInteraction>();
-            AddPlayCardInteractions(interactions, gameController, playableCards);
+            AddPlayCardInteractions(interactions, gameController, player);
+            AddPlayCardWithTargetsInteractions(interactions, gameController, player);
             interactions.Add(
                 new GameInteraction(gameController.EndTurn, GameInteractionType.EndTurn)
             );
             return interactions;
         }
 
-        private List<ICardLogic> GetPlayableCardsFromHand(IPlayerLogic player)
-        {
-            var playableCards = new List<ICardLogic>();
-            foreach (var card in player.Hand.Cards)
-            {
-                if (card.IsPlayable())
-                    playableCards.Add(card);
-            }
-
-            return playableCards;
-        }
-
         private void AddPlayCardInteractions(
             List<GameInteraction> interactions,
             GameController gameController,
-            List<ICardLogic> playableCards
+            IPlayerLogic player
         )
         {
+            var playableCards = GetPlayableCardsFromHand(player);
             foreach (var card in playableCards)
             {
                 interactions.Add(
@@ -352,6 +341,59 @@ namespace gamecore.game
                     )
                 );
             }
+        }
+
+        private List<ICardLogic> GetPlayableCardsFromHand(IPlayerLogic player)
+        {
+            var playableCards = new List<ICardLogic>();
+            foreach (var card in player.Hand.Cards)
+            {
+                if (card.IsPlayable())
+                    playableCards.Add(card);
+            }
+            return playableCards;
+        }
+
+        private void AddPlayCardWithTargetsInteractions(
+            List<GameInteraction> interactions,
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            var playableCards = GetPlayableCardsWithTargetFromHand(player);
+            foreach (var card in playableCards)
+            {
+                var targets = card.GetTargets();
+                interactions.Add(
+                    new GameInteraction(
+                        (selectedTargets) =>
+                            gameController.PlayCardWithTargets(
+                                card,
+                                selectedTargets.AsEnumerable().Cast<ICardLogic>().ToList()
+                            ),
+                        GameInteractionType.PlayCardWithTargets,
+                        new()
+                        {
+                            new InteractionCard(card),
+                            new TargetData(
+                                card.GetTargets().Count,
+                                targets.AsEnumerable().Cast<object>().ToList()
+                            ),
+                        }
+                    )
+                );
+            }
+        }
+
+        private List<ICardLogic> GetPlayableCardsWithTargetFromHand(IPlayerLogic player)
+        {
+            var playableCards = new List<ICardLogic>();
+            foreach (var card in player.Hand.Cards)
+            {
+                if (card.IsPlayableWithTargets())
+                    playableCards.Add(card);
+            }
+            return playableCards;
         }
 
         public void OnAdvanced(Game game)

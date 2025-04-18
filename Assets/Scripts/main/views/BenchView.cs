@@ -61,7 +61,9 @@ namespace gameview
             var spacing = _rectTransform.rect.width / benchedPokemon.MaxBenchSpots;
             var orientation = _rectTransform.rotation * Vector3.right;
             var firstPosition =
-                _rectTransform.position - (_rectTransform.rect.width - spacing) / 2f * orientation;
+                _rectTransform.position
+                - (_rectTransform.rect.width - spacing) / 2f * orientation
+                + Vector3.back;
 
             int i = 0;
             foreach (var pokemon in benchedPokemon)

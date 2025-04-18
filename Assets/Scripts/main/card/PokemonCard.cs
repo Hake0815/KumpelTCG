@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using gamecore.actionsystem;
+using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
 
@@ -8,25 +10,31 @@ namespace gamecore.card
     public interface IPokemonCard : ICard
     {
         Stage Stage { get; }
+        List<IEnergyCard> AttachedEnergies { get; }
+        event Action<IEnergyCard> EnergyAttached;
     }
 
-    internal class PokemonCard : IPokemonCard, ICardLogic
+    internal interface IPokemonCardLogic : ICardLogic, IPokemonCard
     {
-        public ICardData CardData { get; }
-        public IPokemonCardData PokemonCardData
-        {
-            get => CardData as IPokemonCardData;
-        }
+        void AttachEnergy(IEnergyCard energy);
+    }
+
+    internal class PokemonCard : IPokemonCardLogic
+    {
+        public ICardData CardData => PokemonCardData;
+
+        public IPokemonCardData PokemonCardData { get; }
         public IPlayerLogic Owner { get; }
         public Stage Stage => PokemonCardData.Stage;
 
-        IPlayer ICard.Owner => Owner;
+        public List<IEnergyCard> AttachedEnergies { get; } = new();
 
         public event Action CardDiscarded;
+        public event Action<IEnergyCard> EnergyAttached;
 
         public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
         {
-            CardData = cardData;
+            PokemonCardData = cardData;
             Owner = owner;
         }
 
@@ -38,10 +46,7 @@ namespace gamecore.card
 
         public bool IsPlayable()
         {
-            return Owner.Hand.Cards.Contains(this)
-                && Owner.IsActive
-                && Stage == Stage.Basic
-                && !Owner.Bench.Full;
+            return Stage == Stage.Basic && !Owner.Bench.Full;
         }
 
         public bool IsPokemonCard()
@@ -66,6 +71,32 @@ namespace gamecore.card
             {
                 ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
             }
+        }
+
+        public void PlayWithTargets(List<ICardLogic> targets)
+        {
+            throw new IlleagalActionException("Pokemon cards cannot be played with a target.");
+        }
+
+        public bool IsPlayableWithTargets()
+        {
+            return false;
+        }
+
+        public bool IsEnergyCard()
+        {
+            return false;
+        }
+
+        public void AttachEnergy(IEnergyCard energy)
+        {
+            AttachedEnergies.Add(energy);
+            EnergyAttached?.Invoke(energy);
+        }
+
+        public List<ICardLogic> GetTargets()
+        {
+            throw new IlleagalActionException("Pokemon cards cannot be played with a target.");
         }
     }
 }
