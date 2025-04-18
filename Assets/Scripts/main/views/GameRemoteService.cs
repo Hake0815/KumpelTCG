@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
 using gamecore.game;
 using UnityEngine;
@@ -58,7 +59,9 @@ namespace gameview
                     case GameInteractionType.PlayCard:
                         HandlePlayCard(interaction);
                         break;
-
+                    case GameInteractionType.PlayCardWithTargets:
+                        HandlePlayCardWithTargets(interaction);
+                        break;
                     case GameInteractionType.EndTurn:
                         _gameManager.EnableEndTurnButton(
                             interaction.GameControllerMethod,
@@ -108,6 +111,27 @@ namespace gameview
                     OnInteract();
                     interaction.GameControllerMethod.Invoke();
                 })
+            );
+        }
+
+        private void HandlePlayCardWithTargets(GameInteraction interaction)
+        {
+            var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.SetPlayable(
+                true,
+                new DragToTargetBehaviour(
+                    (targets) =>
+                    {
+                        OnInteract();
+                        interaction.GameControllerMethodWithTargets.Invoke(targets);
+                    },
+                    (interaction.Data[typeof(TargetData)] as TargetData)
+                        .PossibleTargets.AsEnumerable()
+                        .Select(card => CardViewRegistry.INSTANCE.Get(card as ICard))
+                        .ToList()
+                )
             );
         }
 
@@ -181,7 +205,13 @@ namespace gameview
 
         private Dictionary<string, int> CreateDeckList()
         {
-            return new Dictionary<string, int> { { "bill", 56 }, { "TWM128", 4 } };
+            return new Dictionary<string, int>
+            {
+                { "bill", 20 },
+                { "TWM128", 4 },
+                { "FireNRG", 17 },
+                { "PsychicNRG", 17 },
+            };
         }
     }
 }

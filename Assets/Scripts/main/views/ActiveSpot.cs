@@ -30,7 +30,7 @@ namespace gameview
 
         public void SetActivePokemon(CardView cardView)
         {
-            cardView.transform.DOMove(transform.position, 0.25f);
+            cardView.transform.DOMove(transform.position + Vector3.back, 0.25f);
             cardView.transform.DORotateQuaternion(transform.rotation, 0.25f);
             _isEmpty = false;
         }

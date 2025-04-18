@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using gamecore.game;
 
 namespace gamecore.card
@@ -12,6 +13,7 @@ namespace gamecore.card
         string Id { get; }
         bool IsTrainerCard();
         bool IsPokemonCard();
+        bool IsEnergyCard();
     }
 
     internal interface ICardLogic : ICard
@@ -29,6 +31,9 @@ namespace gamecore.card
         IPlayer ICard.Owner => Owner;
         void Play();
         bool IsPlayable();
+        void PlayWithTargets(List<ICardLogic> targets);
+        bool IsPlayableWithTargets();
+        List<ICardLogic> GetTargets();
         void Discard();
     }
 }

@@ -44,7 +44,7 @@ namespace gamecore.card
             },
             // EnergyCard Cards
             {
-                "Fire Energy",
+                "FireNRG",
                 new EnergyCardData(
                     id: "FireNRG",
                     name: "Fire Energy",
@@ -53,7 +53,7 @@ namespace gamecore.card
                 )
             },
             {
-                "Fighting Energy",
+                "FightingNRG",
                 new EnergyCardData(
                     id: "FightingNRG",
                     name: "Fighting Energy",
@@ -62,7 +62,7 @@ namespace gamecore.card
                 )
             },
             {
-                "Lightning Energy",
+                "LightningNRG",
                 new EnergyCardData(
                     id: "LightningNRG",
                     name: "Lightning Energy",
@@ -71,7 +71,7 @@ namespace gamecore.card
                 )
             },
             {
-                "Water Energy",
+                "WaterNRG",
                 new EnergyCardData(
                     id: "WaterNRG",
                     name: "Water Energy",
@@ -80,7 +80,7 @@ namespace gamecore.card
                 )
             },
             {
-                "Darkness Energy",
+                "DarknessNRG",
                 new EnergyCardData(
                     id: "DarknessNRG",
                     name: "Darkness Energy",
@@ -89,7 +89,7 @@ namespace gamecore.card
                 )
             },
             {
-                "Metal Energy",
+                "MetalNRG",
                 new EnergyCardData(
                     id: "MetalNRG",
                     name: "Metal Energy",
@@ -98,7 +98,7 @@ namespace gamecore.card
                 )
             },
             {
-                "Grass Energy",
+                "GrassNRG",
                 new EnergyCardData(
                     id: "GrassNRG",
                     name: "Grass Energy",
@@ -107,7 +107,7 @@ namespace gamecore.card
                 )
             },
             {
-                "Psychic Energy",
+                "PsychicNRG",
                 new EnergyCardData(
                     id: "PsychicNRG",
                     name: "Psychic Energy",

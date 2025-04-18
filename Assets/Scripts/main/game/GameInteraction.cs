@@ -55,6 +55,7 @@ namespace gamecore.game
         SelectMulligans,
         Confirm,
         SetupCompleted,
+        PlayCardWithTargets,
     }
 
     public interface IGameInteractionData { }
