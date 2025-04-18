@@ -6,7 +6,6 @@ using System.Runtime.Serialization.Formatters;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
-using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -153,6 +152,12 @@ namespace gamecore.game
             {
                 player.SetPrizeCards();
             }
+        }
+
+        internal void PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
+        {
+            card.PlayWithTargets(targets);
+            AwaitInteraction();
         }
     }
 }

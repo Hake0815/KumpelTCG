@@ -114,11 +114,14 @@ namespace gamecore.actionsystem
         )
         {
             var type = action.GetType();
-            if (subs.ContainsKey(type))
+            foreach (var typedSub in subs)
             {
-                foreach (var sub in subs[type])
+                if (typedSub.Key.IsAssignableFrom(type))
                 {
-                    action = sub.React(action);
+                    foreach (var sub in typedSub.Value)
+                    {
+                        action = sub.React(action);
+                    }
                 }
             }
             return action;

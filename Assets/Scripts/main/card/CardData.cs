@@ -4,7 +4,7 @@ using gamecore.effect;
 
 namespace gamecore.card
 {
-    public interface ICardData
+    internal interface ICardData
     {
         string Name { get; }
         string Id { get; }

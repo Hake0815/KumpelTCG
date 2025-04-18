@@ -49,6 +49,11 @@ namespace gamecore.game
             _game.PlayCard(card);
         }
 
+        public void PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
+        {
+            _game.PlayCardWithTargets(card, targets);
+        }
+
         public void SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
         {
             _game.DrawMulliganCards(numberOfExtraCards, player);
