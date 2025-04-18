@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 using gamecore.effect;
 using gamecore.game;
 
@@ -41,8 +42,6 @@ namespace gamecore.card
 
         public bool IsPlayable()
         {
-            if (!(Owner.IsActive && Owner.Hand.Cards.Contains(this)))
-                return false;
             foreach (var condition in Conditions)
             {
                 if (!condition.IsMet(this))
@@ -75,6 +74,26 @@ namespace gamecore.card
         public bool IsPokemonCard()
         {
             return false;
+        }
+
+        public void PlayWithTargets(List<ICardLogic> targets)
+        {
+            throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
+        }
+
+        public bool IsPlayableWithTargets()
+        {
+            return false;
+        }
+
+        public bool IsEnergyCard()
+        {
+            return false;
+        }
+
+        public List<ICardLogic> GetTargets()
+        {
+            throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }
     }
 }

@@ -154,5 +154,11 @@ namespace gamecore.game
                 player.SetPrizeCards();
             }
         }
+
+        internal void PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
+        {
+            card.PlayWithTargets(targets);
+            AwaitInteraction();
+        }
     }
 }

@@ -43,7 +43,8 @@ namespace gameview
             newCardView.SetUp(
                 DiscardPileViews[card.Owner].transform,
                 card,
-                SpriteRegistry.INSTANCE.GetSprite(card.Id)
+                SpriteRegistry.INSTANCE.GetSprite(card.Id),
+                SpriteRegistry.INSTANCE.GetAttachedSprite(card.Id)
             );
             CardViewRegistry.INSTANCE.Register(newCardView);
             return newCardView;
@@ -55,7 +56,8 @@ namespace gameview
             newCardView.SetUp(
                 DiscardPileViews[card.Owner].transform,
                 card,
-                SpriteRegistry.INSTANCE.GetSprite(card.Id)
+                SpriteRegistry.INSTANCE.GetSprite(card.Id),
+                SpriteRegistry.INSTANCE.GetAttachedSprite(card.Id)
             );
             return newCardView;
         }
