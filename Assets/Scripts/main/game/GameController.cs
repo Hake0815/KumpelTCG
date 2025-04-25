@@ -59,6 +59,11 @@ namespace gamecore.game
             _game.DrawMulliganCards(numberOfExtraCards, player);
         }
 
+        public void PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
+        {
+            _game.PerformAttack(attack, attacker);
+        }
+
         private void NotifyPlayers()
         {
             OnNotifyPlayer1();

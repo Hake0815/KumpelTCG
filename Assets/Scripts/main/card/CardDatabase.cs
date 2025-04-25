@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using gamecore.action;
+using gamecore.actionsystem;
 using gamecore.effect;
 
 namespace gamecore.card
@@ -27,17 +29,17 @@ namespace gamecore.card
                     resistance: PokemonType.None,
                     retreatCost: 1,
                     maxHP: 70,
-                    new List<IAttack>
+                    new List<IAttackLogic>
                     {
                         new Attack(
                             "Petty Grudge",
-                            10,
-                            new List<PokemonType> { PokemonType.Psychic }
+                            new() { PokemonType.Psychic },
+                            new() { new DealDamageToDefendingPokemonEffect(10) }
                         ),
                         new Attack(
                             " Bite",
-                            40,
-                            new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic }
+                            new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
+                            new() { new DealDamageToDefendingPokemonEffect(40) }
                         ),
                     }
                 )

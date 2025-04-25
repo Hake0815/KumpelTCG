@@ -318,6 +318,8 @@ namespace gamecore.game
             var interactions = new List<GameInteraction>();
             AddPlayCardInteractions(interactions, gameController, player);
             AddPlayCardWithTargetsInteractions(interactions, gameController, player);
+            if (gameController.Game.TurnCounter > 1)
+                AddAttackInteractions(interactions, gameController, player);
             interactions.Add(
                 new GameInteraction(gameController.EndTurn, GameInteractionType.EndTurn)
             );
@@ -394,6 +396,24 @@ namespace gamecore.game
                     playableCards.Add(card);
             }
             return playableCards;
+        }
+
+        private void AddAttackInteractions(
+            List<GameInteraction> interactions,
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            foreach (var attack in player.ActivePokemon.GetUsableAttacks())
+            {
+                interactions.Add(
+                    new GameInteraction(
+                        () => gameController.PerformAttack(attack, player.ActivePokemon),
+                        GameInteractionType.PerformAttack,
+                        new() { new InteractionCard(player.ActivePokemon), new AttackData(attack) }
+                    )
+                );
+            }
         }
 
         public void OnAdvanced(Game game)
