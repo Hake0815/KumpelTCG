@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
+using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
@@ -16,6 +17,7 @@ namespace gamecore.game
         IPlayer Player1 { get; }
         IPlayer Player2 { get; }
         Dictionary<IPlayer, List<List<ICard>>> Mulligans { get; }
+        int TurnCounter { get; }
     }
 
     internal class Game : IGame, IActionPerformer<EndTurnGA>
@@ -51,6 +53,7 @@ namespace gamecore.game
                 return result;
             }
         }
+        public int TurnCounter { get; private set; } = 0;
         public event Action AwaitInteractionEvent;
         public event Action AwaitGeneralInteractionEvent;
 
@@ -60,6 +63,8 @@ namespace gamecore.game
             Player2 = player2;
             ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
             CardSystem.INSTANCE.Enable();
+            DamageSystem.INSTANCE.Enable();
+            AttackSystem.INSTANCE.Enable();
             GameState = new CreatedState();
             _players.Add(player1);
             _players.Add(player2);
@@ -74,13 +79,13 @@ namespace gamecore.game
 
         public void StartGame()
         {
+            TurnCounter++;
             Player1.IsActive = true;
             ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
         }
 
         public void EndTurn()
         {
-            Debug.Log("End turn called.");
             var endTurn = new EndTurnGA();
             ActionSystem.INSTANCE.Perform(endTurn);
             AwaitInteraction();
@@ -88,7 +93,6 @@ namespace gamecore.game
 
         public EndTurnGA Perform(EndTurnGA endTurnGA)
         {
-            Debug.Log("Perform end turn.");
             if (Player1.IsActive)
             {
                 Player1.IsActive = false;
@@ -101,6 +105,7 @@ namespace gamecore.game
                 Player1.IsActive = true;
                 endTurnGA.NextPlayer = Player1;
             }
+            TurnCounter++;
             return endTurnGA;
         }
 
@@ -108,6 +113,8 @@ namespace gamecore.game
         {
             ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
             CardSystem.INSTANCE.Disable();
+            DamageSystem.INSTANCE.Disable();
+            AttackSystem.INSTANCE.Disable();
         }
 
         /* Returns if both active Pokemon are set */
@@ -157,6 +164,12 @@ namespace gamecore.game
         internal void PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
             card.PlayWithTargets(targets);
+            AwaitInteraction();
+        }
+
+        internal void PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
+        {
+            ActionSystem.INSTANCE.Perform(new AttackGA(attack, attacker));
             AwaitInteraction();
         }
     }

@@ -17,31 +17,30 @@ namespace gamecore.game.action
 
         private CardSystem() { }
 
+        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+
         public void Enable()
         {
-            ActionSystem.INSTANCE.AttachPerformer<DrawCardGA>(INSTANCE);
-            ActionSystem.INSTANCE.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
-            ActionSystem.INSTANCE.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
-            ActionSystem.INSTANCE.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
-            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
+            _actionSystem.AttachPerformer<DrawCardGA>(INSTANCE);
+            _actionSystem.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
+            _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
+            _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
+            _actionSystem.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
         public void Disable()
         {
-            ActionSystem.INSTANCE.DetachPerformer<DrawCardGA>();
-            ActionSystem.INSTANCE.DetachPerformer<DiscardCardsFromHandGA>();
-            ActionSystem.INSTANCE.DetachPerformer<AttachEnergyFromHandGA>();
-            ActionSystem.INSTANCE.DetachPerformer<AttachEnergyFromHandForTurnGA>();
-            ActionSystem.INSTANCE.UnsubscribeFromGameAction<EndTurnGA>(
-                INSTANCE,
-                ReactionTiming.POST
-            );
+            _actionSystem.DetachPerformer<DrawCardGA>();
+            _actionSystem.DetachPerformer<DiscardCardsFromHandGA>();
+            _actionSystem.DetachPerformer<AttachEnergyFromHandGA>();
+            _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
+            _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
         public EndTurnGA React(EndTurnGA endTurnGA)
         {
             var drawCardGA = new DrawCardGA(1, endTurnGA.NextPlayer);
-            ActionSystem.INSTANCE.AddReaction(drawCardGA);
+            _actionSystem.AddReaction(drawCardGA);
             return endTurnGA;
         }
 
