@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Generic;
+using gamecore.actionsystem;
+using gamecore.common;
+using gamecore.effect;
 
 namespace gamecore.card
 {
@@ -9,17 +13,41 @@ namespace gamecore.card
         List<PokemonType> Cost { get; }
     }
 
-    internal class Attack : IAttack
+    internal interface IAttackLogic : IAttack, IClonable<IAttackLogic>
+    {
+        List<IEffect> Effects { get; }
+    }
+
+    internal class Attack : IAttackLogic
     {
         public string Name { get; }
-        public int Damage { get; }
+        public int Damage => GetDamageToActivePokemon();
         public List<PokemonType> Cost { get; }
 
-        public Attack(string name, int damage, List<PokemonType> cost)
+        private int GetDamageToActivePokemon()
+        {
+            foreach (var effect in Effects)
+            {
+                if (effect.GetType().IsAssignableFrom(typeof(DealDamageToDefendingPokemonEffect)))
+                {
+                    return (effect as DealDamageToDefendingPokemonEffect).Damage;
+                }
+            }
+            return 0;
+        }
+
+        public List<IEffect> Effects { get; }
+
+        public Attack(string name, List<PokemonType> cost, List<IEffect> effects)
         {
             Name = name;
-            Damage = damage;
             Cost = cost;
+            Effects = effects;
+        }
+
+        public IAttackLogic Clone()
+        {
+            return new Attack(Name, new(Cost), new(Effects));
         }
     }
 }

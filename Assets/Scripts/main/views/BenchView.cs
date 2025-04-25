@@ -48,10 +48,8 @@ namespace gameview
                 && pokemon.Stage == Stage.Basic
             )
             {
-                Debug.Log("Valid Basic Pokemon dropped.");
                 return true;
             }
-            Debug.Log("Not a valid Basic Pokemon.");
             return false;
         }
 

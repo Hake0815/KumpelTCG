@@ -36,6 +36,7 @@ namespace gamecore.game
 
         new IDiscardPileLogic DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
+        IPlayerLogic Opponent { get; }
         void Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
@@ -62,6 +63,7 @@ namespace gamecore.game
         public IDiscardPileLogic DiscardPile { get; } = new DiscardPile();
         public IPrizesLogic Prizes { get; } = new Prizes();
         public HashSet<string> PerformedOncePerTurnActions { get; } = new();
+        public IPlayerLogic Opponent { get; set; }
 
         public void Draw(int amount)
         {
@@ -79,7 +81,6 @@ namespace gamecore.game
 
         public void SetPrizeCards()
         {
-            Debug.Log($"Setting prizes for {Name}");
             var prizeCards = Deck.DrawFaceDown(6);
             Prizes.AddCards(prizeCards);
         }

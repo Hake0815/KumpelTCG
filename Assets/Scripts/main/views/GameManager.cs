@@ -32,6 +32,9 @@ namespace gameview
         private CardViewCreator _cardViewCreatorPrefab;
 
         [SerializeField]
+        private InputHandler _inputHandlerPrefab;
+
+        [SerializeField]
         private DiscardPileView _discardPileViewPrefab;
 
         [SerializeField]
@@ -55,6 +58,7 @@ namespace gameview
             _buttonText = _button.GetComponentInChildren<TMP_Text>();
             DisableButton();
             Instantiate(_cardViewCreatorPrefab);
+            Instantiate(_inputHandlerPrefab);
 
             var gameRemoteService = new GameRemoteService(this);
 

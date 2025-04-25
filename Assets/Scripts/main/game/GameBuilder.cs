@@ -45,6 +45,8 @@ namespace gamecore.game
 
         public IGameController Build()
         {
+            _player1.Opponent = _player2;
+            _player2.Opponent = _player1;
             var game = new Game(_player1, _player2);
             return new GameController(game);
         }

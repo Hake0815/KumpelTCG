@@ -62,6 +62,9 @@ namespace gameview
                     case GameInteractionType.PlayCardWithTargets:
                         HandlePlayCardWithTargets(interaction);
                         break;
+                    case GameInteractionType.PerformAttack:
+                        HandlePerformAttack(interaction);
+                        break;
                     case GameInteractionType.EndTurn:
                         _gameManager.EnableEndTurnButton(
                             interaction.GameControllerMethod,
@@ -135,27 +138,41 @@ namespace gameview
             );
         }
 
+        private void HandlePerformAttack(GameInteraction interaction)
+        {
+            var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.AddAttack(
+                (interaction.Data[typeof(AttackData)] as AttackData).Attack,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                }
+            );
+            var clickBehaviour = new ClickBehaviour(cardView.ShowAttacks);
+            cardView.SetPlayable(true, clickBehaviour);
+        }
+
         private void HandleSelectActivePokemon(GameInteraction interaction)
         {
             var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
-            cardView.SetPlayable(
-                true,
-                new ClickBehaviour(() =>
-                {
-                    OnInteract();
-                    _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(cardView);
+            var clickBehaviour = new ClickBehaviour(() =>
+            {
+                OnInteract();
+                _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(cardView);
 
-                    interaction.GameControllerMethod.Invoke();
-                })
-            );
+                interaction.GameControllerMethod.Invoke();
+            });
+            cardView.SetPlayable(true, clickBehaviour);
         }
 
         private void HandleConfirmMulligans(GameInteraction interaction)
         {
             var mulligans = (interaction.Data[typeof(MulliganData)] as MulliganData).Mulligans;
-            Debug.Log($"Handle {mulligans.Count} mulligans.");
             if (mulligans.Count == 0)
             {
                 OnInteract();

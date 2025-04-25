@@ -86,7 +86,6 @@ namespace gameview
 
         public void CreateDrawnCardsFaceDown(List<ICard> drawnCards)
         {
-            Debug.Log($"CreateDrawnCardsFaceDown called on Deck of {drawnCards[0].Owner.Name}");
             UIQueue.INSTANCE.Queue(CallbackOnDone =>
             {
                 foreach (var card in drawnCards)
