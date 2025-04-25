@@ -75,7 +75,6 @@ namespace gamecore.game
 
         public void OnCardsDrawnFaceDown(List<ICardLogic> cards)
         {
-            Debug.Log($"OnCardsDrawnFaceDown called on Deck of {cards[0].Owner.Name}");
             CardsDrawnFaceDown?.Invoke(this, cards.Cast<ICard>().ToList());
         }
     }

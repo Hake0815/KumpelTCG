@@ -6,13 +6,15 @@ using gamecore.game;
 
 namespace gamecore.card
 {
-    internal interface ITrainerCard : ICard
+    public interface ITrainerCard : ICard { }
+
+    internal interface ITrainerCardLogic : ITrainerCard, ICardLogic
     {
         List<IEffect> Effects { get; }
         List<IPlayCondition> Conditions { get; }
     }
 
-    internal class TrainerCard : ITrainerCard, ICardLogic
+    internal class TrainerCard : ITrainerCardLogic
     {
         public ICardData CardData { get; }
         public ITrainerCardData TrainerCardData

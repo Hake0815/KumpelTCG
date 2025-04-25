@@ -10,7 +10,7 @@ namespace gamecore.card
         PokemonType Resistance { get; }
         int RetreatCost { get; }
         int MaxHP { get; }
-        List<IAttack> Attacks { get; }
+        List<IAttackLogic> Attacks { get; }
     }
 
     internal class PokemonCardData : IPokemonCardData
@@ -23,7 +23,7 @@ namespace gamecore.card
         public PokemonType Resistance { get; }
         public int RetreatCost { get; }
         public int MaxHP { get; }
-        public List<IAttack> Attacks { get; }
+        public List<IAttackLogic> Attacks { get; }
 
         public PokemonCardData(
             string id,
@@ -34,7 +34,7 @@ namespace gamecore.card
             PokemonType resistance,
             int retreatCost,
             int maxHP,
-            List<IAttack> attacks
+            List<IAttackLogic> attacks
         )
         {
             Id = id;

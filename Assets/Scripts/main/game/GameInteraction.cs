@@ -56,6 +56,7 @@ namespace gamecore.game
         Confirm,
         SetupCompleted,
         PlayCardWithTargets,
+        PerformAttack,
     }
 
     public interface IGameInteractionData { }
@@ -89,6 +90,16 @@ namespace gamecore.game
         public InteractionCard(ICard card)
         {
             Card = card;
+        }
+    }
+
+    public record AttackData : IGameInteractionData
+    {
+        public IAttack Attack { get; }
+
+        public AttackData(IAttack card)
+        {
+            Attack = card;
         }
     }
 }

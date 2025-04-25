@@ -11,8 +11,9 @@ namespace gamecore.card
 
     internal interface IEnergyCardLogic : IEnergyCard, ICardLogic
     {
-        public new IEnergyCardData CardData { get; }
+        new IEnergyCardData CardData { get; }
         ICardData ICardLogic.CardData => CardData;
+        PokemonType ProvidedEnergyType { get; }
     }
 
     internal class EnergyCard : IEnergyCardLogic
@@ -28,6 +29,8 @@ namespace gamecore.card
         public IEnergyCardData EnergyCardData { get; }
         public IPlayerLogic Owner { get; }
         public IEnergyCardData CardData => EnergyCardData;
+
+        public PokemonType ProvidedEnergyType => EnergyCardData.Type;
 
         public event Action CardDiscarded;
 
