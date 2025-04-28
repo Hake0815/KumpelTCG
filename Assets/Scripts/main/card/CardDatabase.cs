@@ -29,7 +29,7 @@ namespace gamecore.card
                     resistance: PokemonType.None,
                     retreatCost: 1,
                     maxHP: 70,
-                    attacks: new List<IAttackLogic>
+                    new List<IAttackLogic>
                     {
                         new Attack(
                             "Petty Grudge",
@@ -41,8 +41,7 @@ namespace gamecore.card
                             new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
                             new() { new DealDamageToDefendingPokemonEffect(40) }
                         ),
-                    },
-                    numberOfPrizeCardsOnKnockout: 1
+                    }
                 )
             },
             // EnergyCard Cards

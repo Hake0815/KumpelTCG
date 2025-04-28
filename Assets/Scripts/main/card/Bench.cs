@@ -26,7 +26,6 @@ namespace gamecore.card
     {
         public List<ICardLogic> Cards { get; } = new();
         public int MaxBenchSpots { get; set; } = 5;
-
         public event Action CardCountChanged;
 
         public Bench()
@@ -43,7 +42,7 @@ namespace gamecore.card
         {
             var pokemon = action.Card;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
-            pokemon.Owner.Hand.RemoveCard((ICardLogic)pokemon);
+            pokemon.Owner.Hand.RemoveCard(pokemon);
             return action;
         }
     }

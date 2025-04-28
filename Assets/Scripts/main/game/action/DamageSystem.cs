@@ -1,17 +1,9 @@
 using System;
-using System.Collections.Generic;
 using gamecore.actionsystem;
-using gamecore.card;
-using gamecore.game;
-using gamecore.game.action;
-using UnityEngine.Animations;
 
 namespace gamecore.action
 {
-    internal class DamageSystem
-        : IActionPerformer<DealDamgeGA>,
-            IActionPerformer<KnockOutCheckGA>,
-            IActionPerformer<KnockOutGA>
+    internal class DamageSystem : IActionPerformer<DealDamgeGA>
     {
         private static readonly Lazy<DamageSystem> lazy = new(() => new DamageSystem());
         public static DamageSystem INSTANCE => lazy.Value;
@@ -23,15 +15,11 @@ namespace gamecore.action
         public void Enable()
         {
             _actionSystem.AttachPerformer<DealDamgeGA>(INSTANCE);
-            _actionSystem.AttachPerformer<KnockOutCheckGA>(INSTANCE);
-            _actionSystem.AttachPerformer<KnockOutGA>(INSTANCE);
         }
 
         public void Disable()
         {
             _actionSystem.DetachPerformer<DealDamgeGA>();
-            _actionSystem.DetachPerformer<KnockOutCheckGA>();
-            _actionSystem.DetachPerformer<KnockOutGA>();
         }
 
         public DealDamgeGA Perform(DealDamgeGA action)
@@ -40,7 +28,6 @@ namespace gamecore.action
             if (action.Target.IsActive())
                 ApplyWeaknessResistance(action);
             action.Damage += action.ModifierAfterWeaknessResistance;
-            action.Damage = Math.Max(0, action.Damage);
             action.Target.TakeDamage(action.Damage);
             return action;
         }
@@ -51,61 +38,6 @@ namespace gamecore.action
                 action.Damage *= 2;
             else if (action.Target.Resistance == action.Attacker.Type)
                 action.Damage -= 30;
-        }
-
-        public KnockOutCheckGA Perform(KnockOutCheckGA action)
-        {
-            var numberOfPrizeCardsPerPlayer = new Dictionary<IPlayerLogic, int>();
-            foreach (var player in action.Players)
-            {
-                AddPokemonIfKnockedOut(player.ActivePokemon, numberOfPrizeCardsPerPlayer);
-                foreach (var card in player.Bench.Cards)
-                {
-                    AddPokemonIfKnockedOut((IPokemonCardLogic)card, numberOfPrizeCardsPerPlayer);
-                }
-            }
-
-            if (numberOfPrizeCardsPerPlayer.Count > 0)
-            {
-                _actionSystem.AddReaction(new DrawPrizeCardsGA(numberOfPrizeCardsPerPlayer));
-            }
-
-            return action;
-        }
-
-        void AddPokemonIfKnockedOut(
-            IPokemonCardLogic pokemon,
-            Dictionary<IPlayerLogic, int> numberOfPrizeCardsPerPlayer
-        )
-        {
-            if (pokemon.IsKnockedOut())
-            {
-                _actionSystem.AddReaction(new KnockOutGA(pokemon));
-                if (!numberOfPrizeCardsPerPlayer.ContainsKey(pokemon.Owner.Opponent))
-                    numberOfPrizeCardsPerPlayer[pokemon.Owner.Opponent] = 0;
-                numberOfPrizeCardsPerPlayer[pokemon.Owner.Opponent] +=
-                    pokemon.NumberOfPrizeCardsOnKnockout;
-            }
-        }
-
-        public KnockOutGA Perform(KnockOutGA action)
-        {
-            var pokemon = action.Pokemon;
-            pokemon.Discard();
-            RemovePokemonFromPlay(pokemon);
-            foreach (var energy in pokemon.AttachedEnergyCards)
-            {
-                energy.Discard();
-            }
-            return action;
-        }
-
-        private void RemovePokemonFromPlay(IPokemonCardLogic pokemon)
-        {
-            if (pokemon.Owner.ActivePokemon == pokemon)
-                pokemon.Owner.ActivePokemon = null;
-            else
-                pokemon.Owner.Bench.RemoveCard(pokemon);
         }
     }
 }

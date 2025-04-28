@@ -348,7 +348,7 @@ namespace gamecore.game
         private List<ICardLogic> GetPlayableCardsFromHand(IPlayerLogic player)
         {
             var playableCards = new List<ICardLogic>();
-            foreach (var card in player.Hand as IEnumerable<ICardLogic>)
+            foreach (var card in player.Hand.Cards)
             {
                 if (card.IsPlayable())
                     playableCards.Add(card);
@@ -371,7 +371,7 @@ namespace gamecore.game
                         (selectedTargets) =>
                             gameController.PlayCardWithTargets(
                                 card,
-                                selectedTargets.Cast<ICardLogic>().ToList()
+                                selectedTargets.AsEnumerable().Cast<ICardLogic>().ToList()
                             ),
                         GameInteractionType.PlayCardWithTargets,
                         new()
@@ -379,7 +379,7 @@ namespace gamecore.game
                             new InteractionCard(card),
                             new TargetData(
                                 card.GetTargets().Count,
-                                targets.Cast<object>().ToList()
+                                targets.AsEnumerable().Cast<object>().ToList()
                             ),
                         }
                     )
@@ -390,7 +390,7 @@ namespace gamecore.game
         private List<ICardLogic> GetPlayableCardsWithTargetFromHand(IPlayerLogic player)
         {
             var playableCards = new List<ICardLogic>();
-            foreach (var card in player.Hand as IEnumerable<ICardLogic>)
+            foreach (var card in player.Hand.Cards)
             {
                 if (card.IsPlayableWithTargets())
                     playableCards.Add(card);
