@@ -348,7 +348,7 @@ namespace gamecore.game
         private List<ICardLogic> GetPlayableCardsFromHand(IPlayerLogic player)
         {
             var playableCards = new List<ICardLogic>();
-            foreach (var card in player.Hand as IEnumerable<ICardLogic>)
+            foreach (var card in player.Hand.Cards)
             {
                 if (card.IsPlayable())
                     playableCards.Add(card);
@@ -390,7 +390,7 @@ namespace gamecore.game
         private List<ICardLogic> GetPlayableCardsWithTargetFromHand(IPlayerLogic player)
         {
             var playableCards = new List<ICardLogic>();
-            foreach (var card in player.Hand as IEnumerable<ICardLogic>)
+            foreach (var card in player.Hand.Cards)
             {
                 if (card.IsPlayableWithTargets())
                     playableCards.Add(card);
