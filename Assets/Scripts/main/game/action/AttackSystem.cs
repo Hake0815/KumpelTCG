@@ -4,7 +4,7 @@ using gamecore.game.action;
 
 namespace gamecore.action
 {
-    internal class AttackSystem : IActionPerformer<AttackGA>, IActionPerformer<DrawPrizeCardsGA>
+    internal class AttackSystem : IActionPerformer<AttackGA>, IActionSubscriber<AttackGA>
     {
         private static readonly Lazy<AttackSystem> lazy = new(() => new AttackSystem());
         public static AttackSystem INSTANCE => lazy.Value;
@@ -16,13 +16,13 @@ namespace gamecore.action
         public void Enable()
         {
             _actionSystem.AttachPerformer<AttackGA>(INSTANCE);
-            _actionSystem.AttachPerformer<DrawPrizeCardsGA>(INSTANCE);
+            _actionSystem.SubscribeToGameAction<AttackGA>(INSTANCE, ReactionTiming.POST);
         }
 
         public void Disable()
         {
             _actionSystem.DetachPerformer<AttackGA>();
-            _actionSystem.DetachPerformer<DrawPrizeCardsGA>();
+            _actionSystem.UnsubscribeFromGameAction<AttackGA>(INSTANCE, ReactionTiming.POST);
         }
 
         public AttackGA Perform(AttackGA action)
@@ -34,13 +34,9 @@ namespace gamecore.action
             return action;
         }
 
-        public DrawPrizeCardsGA Perform(DrawPrizeCardsGA action)
+        public AttackGA React(AttackGA action)
         {
-            foreach (var playerEntry in action.NumberOfPrizeCardsPerPlayer)
-            {
-                var prizes = playerEntry.Key.Prizes.TakePrizes(playerEntry.Value);
-                playerEntry.Key.Hand.AddCards(prizes);
-            }
+            _actionSystem.AddReaction(new EndTurnGA());
             return action;
         }
     }

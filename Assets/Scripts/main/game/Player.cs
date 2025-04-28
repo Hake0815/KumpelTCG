@@ -10,7 +10,7 @@ namespace gamecore.game
     {
         string Name { get; }
         IDeck Deck { get; }
-        IHand Hand { get; }
+        ICardList Hand { get; }
         IBench Bench { get; }
         IDiscardPile DiscardPile { get; }
         IPrizes Prizes { get; }
@@ -27,7 +27,7 @@ namespace gamecore.game
         new IDeckLogic Deck { get; set; }
         IDeck IPlayer.Deck => Deck;
         new IHandLogic Hand { get; }
-        IHand IPlayer.Hand => Hand;
+        ICardList IPlayer.Hand => Hand;
         new IBenchLogic Bench { get; }
         IBench IPlayer.Bench => Bench;
         new IPrizesLogic Prizes { get; }

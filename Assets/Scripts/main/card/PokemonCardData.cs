@@ -11,7 +11,6 @@ namespace gamecore.card
         int RetreatCost { get; }
         int MaxHP { get; }
         List<IAttackLogic> Attacks { get; }
-        int NumberOfPrizeCardsOnKnockout { get; }
     }
 
     internal class PokemonCardData : IPokemonCardData
@@ -25,7 +24,6 @@ namespace gamecore.card
         public int RetreatCost { get; }
         public int MaxHP { get; }
         public List<IAttackLogic> Attacks { get; }
-        public int NumberOfPrizeCardsOnKnockout { get; }
 
         public PokemonCardData(
             string id,
@@ -36,8 +34,7 @@ namespace gamecore.card
             PokemonType resistance,
             int retreatCost,
             int maxHP,
-            List<IAttackLogic> attacks,
-            int numberOfPrizeCardsOnKnockout
+            List<IAttackLogic> attacks
         )
         {
             Id = id;
@@ -49,7 +46,6 @@ namespace gamecore.card
             RetreatCost = retreatCost;
             MaxHP = maxHP;
             Attacks = attacks;
-            NumberOfPrizeCardsOnKnockout = numberOfPrizeCardsOnKnockout;
         }
     }
 
