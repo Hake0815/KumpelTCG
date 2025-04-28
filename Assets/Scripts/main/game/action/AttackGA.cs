@@ -2,7 +2,7 @@ using System;
 using gamecore.actionsystem;
 using gamecore.card;
 
-namespace gamecore.action
+namespace gamecore.game.action
 {
     internal class AttackGA : GameAction
     {
@@ -10,6 +10,13 @@ namespace gamecore.action
         {
             Attack = attack;
             Attacker = attacker;
+            PostReactions.Add(CreateCheckKnockOutGA(attacker.Owner));
+            PostReactions.Add(new EndTurnGA());
+        }
+
+        private KnockOutCheckGA CreateCheckKnockOutGA(IPlayerLogic AttackingPlayer)
+        {
+            return new KnockOutCheckGA(new() { AttackingPlayer, AttackingPlayer.Opponent });
         }
 
         public IAttackLogic Attack { get; }
