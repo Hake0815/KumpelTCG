@@ -371,7 +371,7 @@ namespace gamecore.game
                         (selectedTargets) =>
                             gameController.PlayCardWithTargets(
                                 card,
-                                selectedTargets.AsEnumerable().Cast<ICardLogic>().ToList()
+                                selectedTargets.Cast<ICardLogic>().ToList()
                             ),
                         GameInteractionType.PlayCardWithTargets,
                         new()
@@ -379,7 +379,7 @@ namespace gamecore.game
                             new InteractionCard(card),
                             new TargetData(
                                 card.GetTargets().Count,
-                                targets.AsEnumerable().Cast<object>().ToList()
+                                targets.Cast<object>().ToList()
                             ),
                         }
                     )

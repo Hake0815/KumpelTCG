@@ -5,11 +5,11 @@ namespace gamecore.game.action
 {
     internal class BenchPokemonGA : GameAction
     {
-        public BenchPokemonGA(ICardLogic card)
+        public BenchPokemonGA(IPokemonCardLogic card)
         {
             Card = card;
         }
 
-        public ICardLogic Card { get; }
+        public IPokemonCardLogic Card { get; }
     }
 }

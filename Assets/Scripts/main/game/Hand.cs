@@ -5,11 +5,17 @@ using System.Linq;
 
 namespace gamecore.card
 {
-    internal interface IHandLogic : ICardListLogic { }
+    public interface IHand : ICardList { }
+
+    internal interface IHandLogic : IHand, ICardListLogic
+    {
+        new List<ICardLogic> Cards { get; }
+    }
 
     internal class Hand : IHandLogic
     {
         public List<ICardLogic> Cards { get; } = new();
+
         public event Action CardCountChanged;
 
         public void OnCardCountChanged()
