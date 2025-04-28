@@ -18,11 +18,6 @@ namespace gamecore.card
 
         public event Action CardCountChanged;
 
-        public IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnCardCountChanged()
         {
             CardCountChanged?.Invoke();
