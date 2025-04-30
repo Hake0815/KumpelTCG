@@ -89,6 +89,11 @@ namespace gameview
                     case GameInteractionType.Confirm:
                         _gameManager.EnableDoneButton(interaction.GameControllerMethod, OnInteract);
                         break;
+                    case GameInteractionType.GameOver:
+                        _gameManager.ShowGameOver(
+                            (interaction.Data[typeof(WinnerData)] as WinnerData).Winner
+                        );
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -224,8 +229,8 @@ namespace gameview
         {
             return new Dictionary<string, int>
             {
-                { "bill", 20 },
-                { "TWM128", 4 },
+                { "bill", 16 },
+                { "TWM128", 8 },
                 { "FireNRG", 17 },
                 { "PsychicNRG", 17 },
             };
