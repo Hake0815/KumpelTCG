@@ -57,6 +57,7 @@ namespace gamecore.game
         SetupCompleted,
         PlayCardWithTargets,
         PerformAttack,
+        GameOver,
     }
 
     public interface IGameInteractionData { }
@@ -100,6 +101,16 @@ namespace gamecore.game
         public AttackData(IAttack card)
         {
             Attack = card;
+        }
+    }
+
+    public record WinnerData : IGameInteractionData
+    {
+        public IPlayer Winner { get; }
+
+        public WinnerData(IPlayer winner)
+        {
+            Winner = winner;
         }
     }
 }
