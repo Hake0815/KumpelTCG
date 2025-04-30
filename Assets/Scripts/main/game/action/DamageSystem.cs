@@ -4,6 +4,7 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
 using gamecore.game.action;
+using gamecore.gamegame.action;
 using UnityEngine.Animations;
 
 namespace gamecore.action
@@ -68,6 +69,7 @@ namespace gamecore.action
             if (numberOfPrizeCardsPerPlayer.Count > 0)
             {
                 _actionSystem.AddReaction(new DrawPrizeCardsGA(numberOfPrizeCardsPerPlayer));
+                _actionSystem.AddReaction(new CheckWinConditionGA(action.Players));
             }
 
             return action;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using gamecore.card;
 
 namespace gamecore.game
@@ -420,5 +421,37 @@ namespace gamecore.game
         {
             game.AwaitInteraction();
         }
+    }
+
+    internal class GameOverState : IGameState
+    {
+        private readonly IPlayerLogic _winner;
+
+        public GameOverState(IPlayerLogic winner)
+        {
+            _winner = winner;
+        }
+
+        public IGameState AdvanceSuccesfully()
+        {
+            return this;
+        }
+
+        public List<GameInteraction> GetGameInteractions(
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            return new()
+            {
+                new GameInteraction(
+                    _ => { },
+                    GameInteractionType.GameOver,
+                    new() { new WinnerData(_winner) }
+                ),
+            };
+        }
+
+        public void OnAdvanced(Game game) { }
     }
 }

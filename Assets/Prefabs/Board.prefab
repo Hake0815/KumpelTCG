@@ -232,6 +232,7 @@ MonoBehaviour:
   _discardPileViewPrefab: {fileID: 1687710093591685239, guid: f6f962eafdbf34bac89b19d79df31659, type: 3}
   _mulliganViewPrefab: {fileID: 3852400392982224435, guid: 2bd3c8427cdea8256a935790d752cbcf, type: 3}
   _mulliganSelectorViewPrefab: {fileID: 8007962697418404997, guid: 4a464c4a245602147b103e7545bd7718, type: 3}
+  _endGameViewPrefab: {fileID: 6396609790705163310, guid: 29783d7a1be2b37018ef092124571ce4, type: 3}
   _prizeViewPrefab: {fileID: -1075074118211069088, guid: 114930ba31c2c92f3bb0874a741d6195, type: 3}
 --- !u!1 &3427014774801563546
 GameObject:

@@ -44,6 +44,9 @@ namespace gameview
         private MulliganSelectorView _mulliganSelectorViewPrefab;
 
         [SerializeField]
+        private EndGameView _endGameViewPrefab;
+
+        [SerializeField]
         private PrizeView _prizeViewPrefab;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
@@ -253,6 +256,12 @@ namespace gameview
                 onInteract();
                 gameControllerMethod();
             });
+        }
+
+        internal void ShowGameOver(IPlayer winner)
+        {
+            var endGameView = Instantiate(_endGameViewPrefab);
+            endGameView.ShowWinner(winner);
         }
     }
 }
