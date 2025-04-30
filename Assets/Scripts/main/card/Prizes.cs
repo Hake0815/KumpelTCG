@@ -28,8 +28,9 @@ namespace gamecore.card
 
         public List<ICardLogic> TakePrizes(int amount)
         {
-            var prizes = Cards.GetRange(0, Math.Min(amount, Cards.Count));
-            Cards.RemoveRange(0, prizes.Count);
+            var amountToTake = Math.Min(amount, Cards.Count);
+            var prizes = Cards.GetRange(Cards.Count - amountToTake, amountToTake);
+            Cards.RemoveRange(Cards.Count - amountToTake, amountToTake);
             OnCardCountChanged();
             PrizesTaken?.Invoke(prizes.Cast<ICard>().ToList());
             return prizes;

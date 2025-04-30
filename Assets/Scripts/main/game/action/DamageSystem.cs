@@ -46,7 +46,7 @@ namespace gamecore.action
             return action;
         }
 
-        private void ApplyWeaknessResistance(DealDamgeGA action)
+        private static void ApplyWeaknessResistance(DealDamgeGA action)
         {
             if (action.Target.Weakness == action.Attacker.Type)
                 action.Damage *= 2;
@@ -62,7 +62,7 @@ namespace gamecore.action
                 AddPokemonIfKnockedOut(player.ActivePokemon, numberOfPrizeCardsPerPlayer);
                 foreach (var card in player.Bench.Cards)
                 {
-                    AddPokemonIfKnockedOut((IPokemonCardLogic)card, numberOfPrizeCardsPerPlayer);
+                    AddPokemonIfKnockedOut(card as IPokemonCardLogic, numberOfPrizeCardsPerPlayer);
                 }
             }
 
@@ -70,6 +70,7 @@ namespace gamecore.action
             {
                 _actionSystem.AddReaction(new DrawPrizeCardsGA(numberOfPrizeCardsPerPlayer));
                 _actionSystem.AddReaction(new CheckWinConditionGA(action.Players));
+                _actionSystem.AddReaction(new PromoteGA(action.Players));
             }
 
             return action;
@@ -102,7 +103,7 @@ namespace gamecore.action
             return action;
         }
 
-        private void RemovePokemonFromPlay(IPokemonCardLogic pokemon)
+        private static void RemovePokemonFromPlay(IPokemonCardLogic pokemon)
         {
             if (pokemon.Owner.ActivePokemon == pokemon)
                 pokemon.Owner.ActivePokemon = null;
