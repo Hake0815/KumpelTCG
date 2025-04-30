@@ -1,5 +1,6 @@
 using System;
 using gamecore.actionsystem;
+using gamecore.card;
 using gamecore.game;
 using gamecore.game.action;
 using gamecore.gamegame.action;
@@ -10,7 +11,8 @@ namespace gamecore.action
     internal class GeneralMechnicSystem
         : IActionPerformer<AttackGA>,
             IActionPerformer<DrawPrizeCardsGA>,
-            IActionPerformer<CheckWinConditionGA>
+            IActionPerformer<CheckWinConditionGA>,
+            IActionPerformer<PromoteGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
             () => new GeneralMechnicSystem()
@@ -27,6 +29,7 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<AttackGA>(INSTANCE);
             _actionSystem.AttachPerformer<DrawPrizeCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<CheckWinConditionGA>(INSTANCE);
+            _actionSystem.AttachPerformer<PromoteGA>(INSTANCE);
             _game = game;
         }
 
@@ -35,6 +38,7 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<AttackGA>();
             _actionSystem.DetachPerformer<DrawPrizeCardsGA>();
             _actionSystem.DetachPerformer<CheckWinConditionGA>();
+            _actionSystem.DetachPerformer<PromoteGA>();
         }
 
         public AttackGA Perform(AttackGA action)
@@ -82,6 +86,21 @@ namespace gamecore.action
 
             Debug.Log($"Player {player} has {numberOfWinConditions} win conditions.");
             return numberOfWinConditions;
+        }
+
+        public PromoteGA Perform(PromoteGA action)
+        {
+            foreach (var player in action.Players)
+            {
+                if (player.ActivePokemon == null)
+                {
+                    if (player.Bench.CardCount == 1)
+                    {
+                        player.Promote(player.Bench.Cards[0] as IPokemonCardLogic);
+                    }
+                }
+            }
+            return action;
         }
     }
 }

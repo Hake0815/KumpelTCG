@@ -38,7 +38,7 @@ namespace gamecore.card
     {
         public IPokemonCardData PokemonCardData { get; }
         public ICardData CardData => PokemonCardData;
-        public List<IAttackLogic> Attacks { get; } = new();
+        public List<IAttackLogic> Attacks { get; }
         public IPlayerLogic Owner { get; }
         public Stage Stage => PokemonCardData.Stage;
 
@@ -116,7 +116,10 @@ namespace gamecore.card
             return availableEnergyTypes;
         }
 
-        private bool IsAttackUsable(IAttackLogic attack, List<PokemonType> availableEnergyTypes)
+        private static bool IsAttackUsable(
+            IAttackLogic attack,
+            List<PokemonType> availableEnergyTypes
+        )
         {
             foreach (var attackCost in attack.Cost)
             {

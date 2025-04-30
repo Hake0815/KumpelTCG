@@ -36,7 +36,7 @@ namespace gameview
             }
         }
 
-        private void RevealPrizeCard(List<ICard> list)
+        private static void RevealPrizeCard(List<ICard> list)
         {
             foreach (var card in list)
             {
