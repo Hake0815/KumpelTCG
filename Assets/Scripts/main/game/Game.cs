@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
+using System.Threading.Tasks;
 using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -64,7 +65,7 @@ namespace gamecore.game
             ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
             CardSystem.INSTANCE.Enable();
             DamageSystem.INSTANCE.Enable();
-            AttackSystem.INSTANCE.Enable();
+            GeneralMechnicSystem.INSTANCE.Enable(this);
             GameState = new CreatedState();
             _players.Add(player1);
             _players.Add(player2);
@@ -109,12 +110,14 @@ namespace gamecore.game
             return endTurnGA;
         }
 
-        public void EndGame()
+        public void EndGame(IPlayerLogic winner)
         {
             ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
             CardSystem.INSTANCE.Disable();
             DamageSystem.INSTANCE.Disable();
-            AttackSystem.INSTANCE.Disable();
+            GeneralMechnicSystem.INSTANCE.Disable();
+            GameState = new GameOverState(winner);
+            AwaitGeneralInteraction();
         }
 
         /* Returns if both active Pokemon are set */
