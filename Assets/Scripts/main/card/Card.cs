@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.game;
 
 namespace gamecore.card
@@ -29,9 +30,9 @@ namespace gamecore.card
         }
         new IPlayerLogic Owner { get; }
         IPlayer ICard.Owner => Owner;
-        void Play();
+        Task Play();
         bool IsPlayable();
-        void PlayWithTargets(List<ICardLogic> targets);
+        Task PlayWithTargets(List<ICardLogic> targets);
         bool IsPlayableWithTargets();
         List<ICardLogic> GetTargets();
         void Discard();

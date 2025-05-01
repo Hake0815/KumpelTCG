@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using gamecore.game.action;
 using Moq;
 using NUnit.Framework;
@@ -19,19 +20,19 @@ namespace gamecore.game
         }
 
         [Test]
-        public void ShouldStartTurnForPlayer1()
+        public async Task ShouldStartTurnForPlayer1()
         {
-            game.StartGame();
+            await game.StartGame();
 
             player1.VerifySet(p => p.IsActive = true);
         }
 
         [Test]
-        public void ShouldStartTurnForPlayer2()
+        public async Task ShouldStartTurnForPlayer2()
         {
             player1.SetupGet(p => p.IsActive).Returns(true);
 
-            var endTurnGA = game.Perform(new EndTurnGA());
+            var endTurnGA = await game.Perform(new EndTurnGA());
 
             player2.VerifySet(p => p.IsActive = true);
             Assert.AreSame(endTurnGA.NextPlayer, player2.Object);

@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
+
 namespace gamecore.actionsystem
 {
     public interface IActionPerformer<T>
         where T : GameAction
     {
-        T Perform(T action);
+        Task<T> Perform(T action);
     }
 }
