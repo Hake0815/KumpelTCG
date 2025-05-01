@@ -58,6 +58,7 @@ namespace gamecore.game
         PlayCardWithTargets,
         PerformAttack,
         GameOver,
+        SelectCards,
     }
 
     public interface IGameInteractionData { }

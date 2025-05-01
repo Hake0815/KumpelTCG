@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
@@ -35,7 +36,7 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<KnockOutGA>();
         }
 
-        public DealDamgeGA Perform(DealDamgeGA action)
+        public Task<DealDamgeGA> Perform(DealDamgeGA action)
         {
             action.Damage += action.ModifierBeforeWeaknessResistance;
             if (action.Target.IsActive())
@@ -43,7 +44,7 @@ namespace gamecore.action
             action.Damage += action.ModifierAfterWeaknessResistance;
             action.Damage = Math.Max(0, action.Damage);
             action.Target.TakeDamage(action.Damage);
-            return action;
+            return Task.FromResult(action);
         }
 
         private static void ApplyWeaknessResistance(DealDamgeGA action)
@@ -54,7 +55,7 @@ namespace gamecore.action
                 action.Damage -= 30;
         }
 
-        public KnockOutCheckGA Perform(KnockOutCheckGA action)
+        public Task<KnockOutCheckGA> Perform(KnockOutCheckGA action)
         {
             var numberOfPrizeCardsPerPlayer = new Dictionary<IPlayerLogic, int>();
             foreach (var player in action.Players)
@@ -73,7 +74,7 @@ namespace gamecore.action
                 _actionSystem.AddReaction(new PromoteGA(action.Players));
             }
 
-            return action;
+            return Task.FromResult(action);
         }
 
         void AddPokemonIfKnockedOut(
@@ -91,7 +92,7 @@ namespace gamecore.action
             }
         }
 
-        public KnockOutGA Perform(KnockOutGA action)
+        public Task<KnockOutGA> Perform(KnockOutGA action)
         {
             var pokemon = action.Pokemon;
             pokemon.Discard();
@@ -100,7 +101,7 @@ namespace gamecore.action
             {
                 energy.Discard();
             }
-            return action;
+            return Task.FromResult(action);
         }
 
         private static void RemovePokemonFromPlay(IPokemonCardLogic pokemon)

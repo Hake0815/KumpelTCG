@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
@@ -73,14 +74,14 @@ namespace gamecore.card
             return false;
         }
 
-        public void Play()
+        public Task Play()
         {
             throw new IlleagalActionException("Energy cards can only be played with a target");
         }
 
-        public void PlayWithTargets(List<ICardLogic> targets)
+        public async Task PlayWithTargets(List<ICardLogic> targets)
         {
-            ActionSystem.INSTANCE.Perform(
+            await ActionSystem.INSTANCE.Perform(
                 new AttachEnergyFromHandForTurnGA(this, targets[0] as IPokemonCardLogic)
             );
         }
