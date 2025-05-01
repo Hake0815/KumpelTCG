@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
@@ -14,6 +15,7 @@ namespace gamecore.card
         List<IAttack> Attacks { get; }
         List<IEnergyCard> AttachedEnergyCards { get; }
         int Damage { get; }
+        int MaxHP { get; }
         event Action<IEnergyCard> EnergyAttached;
         event Action DamageModified;
     }
@@ -23,11 +25,13 @@ namespace gamecore.card
         PokemonType Type { get; set; }
         PokemonType Weakness { get; set; }
         PokemonType Resistance { get; set; }
+        int NumberOfPrizeCardsOnKnockout { get; set; }
         void AttachEnergy(IEnergyCardLogic energy);
         new List<IEnergyCardLogic> AttachedEnergyCards { get; }
         new List<IAttackLogic> Attacks { get; }
         List<IAttackLogic> GetUsableAttacks();
         bool IsActive();
+        bool IsKnockedOut();
         void TakeDamage(int damage);
     }
 
@@ -35,19 +39,21 @@ namespace gamecore.card
     {
         public IPokemonCardData PokemonCardData { get; }
         public ICardData CardData => PokemonCardData;
-        public List<IAttackLogic> Attacks { get; } = new();
+        public List<IAttackLogic> Attacks { get; }
         public IPlayerLogic Owner { get; }
         public Stage Stage => PokemonCardData.Stage;
 
         public List<IEnergyCardLogic> AttachedEnergyCards { get; } = new();
 
         List<IEnergyCard> IPokemonCard.AttachedEnergyCards =>
-            AttachedEnergyCards.AsEnumerable().Cast<IEnergyCard>().ToList();
+            AttachedEnergyCards.Cast<IEnergyCard>().ToList();
 
-        List<IAttack> IPokemonCard.Attacks => Attacks.AsEnumerable().Cast<IAttack>().ToList();
+        List<IAttack> IPokemonCard.Attacks => Attacks.Cast<IAttack>().ToList();
         public PokemonType Type { get; set; }
         public PokemonType Weakness { get; set; }
         public PokemonType Resistance { get; set; }
+        public int MaxHP { get; private set; }
+        public int NumberOfPrizeCardsOnKnockout { get; set; }
 
         private int _damage = 0;
         public int Damage
@@ -72,6 +78,8 @@ namespace gamecore.card
             Weakness = cardData.Weakness;
             Resistance = cardData.Resistance;
             Type = cardData.Type;
+            MaxHP = cardData.MaxHP;
+            NumberOfPrizeCardsOnKnockout = cardData.NumberOfPrizeCardsOnKnockout;
         }
 
         public void Discard()
@@ -109,7 +117,10 @@ namespace gamecore.card
             return availableEnergyTypes;
         }
 
-        private bool IsAttackUsable(IAttackLogic attack, List<PokemonType> availableEnergyTypes)
+        private static bool IsAttackUsable(
+            IAttackLogic attack,
+            List<PokemonType> availableEnergyTypes
+        )
         {
             foreach (var attackCost in attack.Cost)
             {
@@ -138,7 +149,7 @@ namespace gamecore.card
             return false;
         }
 
-        public void Play()
+        public async Task Play()
         {
             if (Owner.ActivePokemon == null)
             {
@@ -149,12 +160,12 @@ namespace gamecore.card
             }
             if (!Owner.Bench.Full)
             {
-                ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
+                await ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
                 Damage = 0;
             }
         }
 
-        public void PlayWithTargets(List<ICardLogic> targets)
+        public Task PlayWithTargets(List<ICardLogic> targets)
         {
             throw new IlleagalActionException("Pokemon cards cannot be played with a target.");
         }
@@ -189,6 +200,11 @@ namespace gamecore.card
         {
             Damage += damage;
             DamageModified?.Invoke();
+        }
+
+        public bool IsKnockedOut()
+        {
+            return Damage >= MaxHP;
         }
     }
 }

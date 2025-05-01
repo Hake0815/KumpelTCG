@@ -13,7 +13,7 @@ namespace gamecore.game
 
         void SetUpGame();
     }
-
+#pragma warning disable 4014
     internal class GameController : IGameController
     {
         private readonly Game _game;
@@ -105,4 +105,5 @@ namespace gamecore.game
             _game.AdvanceGameState();
         }
     }
+#pragma warning restore 4014
 }

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
+using System.Threading.Tasks;
 using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.game.state;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -32,7 +34,7 @@ namespace gamecore.game
         {
             get => Player2;
         }
-        private List<IPlayerLogic> _players = new();
+        private readonly List<IPlayerLogic> _players = new();
 
         public GameSetupBuilder GameSetupBuilder { get; private set; }
         public IGameState GameState { get; set; }
@@ -64,34 +66,34 @@ namespace gamecore.game
             ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
             CardSystem.INSTANCE.Enable();
             DamageSystem.INSTANCE.Enable();
-            AttackSystem.INSTANCE.Enable();
+            GeneralMechnicSystem.INSTANCE.Enable(this);
             GameState = new CreatedState();
             _players.Add(player1);
             _players.Add(player2);
         }
 
-        public void PerformSetup()
+        public async Task PerformSetup()
         {
             GameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
-            GameSetupBuilder.Setup();
-            AdvanceGameState();
+            await GameSetupBuilder.Setup();
+            await AdvanceGameState();
         }
 
-        public void StartGame()
+        public async Task StartGame()
         {
             TurnCounter++;
             Player1.IsActive = true;
-            ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
+            await ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
         }
 
-        public void EndTurn()
+        public async Task EndTurn()
         {
             var endTurn = new EndTurnGA();
-            ActionSystem.INSTANCE.Perform(endTurn);
-            AwaitInteraction();
+            await ActionSystem.INSTANCE.Perform(endTurn);
+            await AdvanceGameState();
         }
 
-        public EndTurnGA Perform(EndTurnGA endTurnGA)
+        public Task<EndTurnGA> Perform(EndTurnGA endTurnGA)
         {
             if (Player1.IsActive)
             {
@@ -106,51 +108,65 @@ namespace gamecore.game
                 endTurnGA.NextPlayer = Player1;
             }
             TurnCounter++;
-            return endTurnGA;
+            return Task.FromResult(endTurnGA);
         }
 
-        public void EndGame()
+        public void EndGame(IPlayerLogic winner)
         {
             ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
             CardSystem.INSTANCE.Disable();
             DamageSystem.INSTANCE.Disable();
-            AttackSystem.INSTANCE.Disable();
+            GeneralMechnicSystem.INSTANCE.Disable();
+            GameState = new GameOverState(winner);
+            AwaitGeneralInteraction();
         }
 
         /* Returns if both active Pokemon are set */
-        internal void SetActivePokemon(ICardLogic basicPokemon)
+        internal async Task SetActivePokemon(ICardLogic basicPokemon)
         {
-            basicPokemon.Play();
-            AdvanceGameState();
+            await basicPokemon.Play();
+            await AdvanceGameState();
         }
 
-        public void AdvanceGameState()
+        public async Task AdvanceGameState()
         {
             GameState = GameState.AdvanceSuccesfully();
             Debug.Log("Game state advanced to: " + GameState.GetType().Name);
-            GameState.OnAdvanced(this);
+            await GameState.OnAdvanced(this);
         }
 
-        internal void PlayCard(ICardLogic card)
+        internal async Task PlayCard(ICardLogic card)
         {
-            card.Play();
-            AwaitInteraction();
+            await card.Play();
+            await AdvanceGameState();
         }
 
-        internal virtual void AwaitInteraction()
+        internal void AwaitInteraction()
         {
             AwaitInteractionEvent?.Invoke();
         }
 
-        internal virtual void AwaitGeneralInteraction()
+        internal void AwaitGeneralInteraction()
         {
             AwaitGeneralInteractionEvent?.Invoke();
         }
 
-        internal void DrawMulliganCards(int numberOfExtraCards, IPlayerLogic player)
+        internal async Task<List<ICardLogic>> AwaitSelection(
+            IPlayerLogic player,
+            List<ICardLogic> options,
+            int amount
+        )
         {
-            ActionSystem.INSTANCE.Perform(new DrawCardGA(numberOfExtraCards, player));
-            AdvanceGameState();
+            var tcs = new TaskCompletionSource<List<ICardLogic>>();
+            GameState = new WaitForInputState(tcs, player, options, amount);
+            AwaitInteraction();
+            return await tcs.Task;
+        }
+
+        internal async Task DrawMulliganCards(int numberOfExtraCards, IPlayerLogic player)
+        {
+            await ActionSystem.INSTANCE.Perform(new DrawCardGA(numberOfExtraCards, player));
+            await AdvanceGameState();
         }
 
         internal void SetPrizeCards()
@@ -161,16 +177,16 @@ namespace gamecore.game
             }
         }
 
-        internal void PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
+        internal async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
-            card.PlayWithTargets(targets);
-            AwaitInteraction();
+            await card.PlayWithTargets(targets);
+            await AdvanceGameState();
         }
 
-        internal void PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
+        internal async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
         {
-            ActionSystem.INSTANCE.Perform(new AttackGA(attack, attacker));
-            AwaitInteraction();
+            await ActionSystem.INSTANCE.Perform(new AttackGA(attack, attacker));
+            await AdvanceGameState();
         }
     }
 }

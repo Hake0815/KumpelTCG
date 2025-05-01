@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
@@ -31,6 +32,16 @@ namespace gameview
             if (_prizes != null)
             {
                 _prizes.CardCountChanged += UpdateView;
+                _prizes.PrizesTaken += RevealPrizeCard;
+            }
+        }
+
+        private static void RevealPrizeCard(List<ICard> list)
+        {
+            foreach (var card in list)
+            {
+                var cardView = CardViewRegistry.INSTANCE.Get(card);
+                cardView.FaceUp = true;
             }
         }
 
@@ -39,6 +50,7 @@ namespace gameview
             if (_prizes != null)
             {
                 _prizes.CardCountChanged -= UpdateView;
+                _prizes.PrizesTaken -= RevealPrizeCard;
             }
         }
 

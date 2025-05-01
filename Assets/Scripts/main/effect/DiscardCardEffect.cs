@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
@@ -8,9 +9,9 @@ namespace gamecore.effect
 {
     internal class DiscardCardEffect : IEffect
     {
-        void IEffect.Perform(ICardLogic card)
+        async Task IEffect.Perform(ICardLogic card)
         {
-            ActionSystem.INSTANCE.Perform(
+            await ActionSystem.INSTANCE.Perform(
                 new DiscardCardsFromHandGA(new List<ICardLogic> { card })
             );
         }

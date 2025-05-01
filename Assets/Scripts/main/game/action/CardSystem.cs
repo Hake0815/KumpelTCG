@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using UnityEngine;
@@ -44,35 +45,35 @@ namespace gamecore.game.action
             return endTurnGA;
         }
 
-        public DrawCardGA Perform(DrawCardGA drawCardGA)
+        public Task<DrawCardGA> Perform(DrawCardGA drawCardGA)
         {
             ((IPlayerLogic)drawCardGA.Player).Draw(drawCardGA.Amount);
-            return drawCardGA;
+            return Task.FromResult(drawCardGA);
         }
 
-        public DiscardCardsFromHandGA Perform(DiscardCardsFromHandGA action)
+        public Task<DiscardCardsFromHandGA> Perform(DiscardCardsFromHandGA action)
         {
             foreach (var card in action.Cards)
             {
                 card.Discard();
                 card.Owner.Hand.RemoveCards(new() { card });
             }
-            return action;
+            return Task.FromResult(action);
         }
 
-        public AttachEnergyFromHandGA Perform(AttachEnergyFromHandGA action)
+        public Task<AttachEnergyFromHandGA> Perform(AttachEnergyFromHandGA action)
         {
             AttachEnergyFromHand(action);
-            return action;
+            return Task.FromResult(action);
         }
 
-        public AttachEnergyFromHandForTurnGA Perform(AttachEnergyFromHandForTurnGA action)
+        public Task<AttachEnergyFromHandForTurnGA> Perform(AttachEnergyFromHandForTurnGA action)
         {
             AttachEnergyFromHand(action);
             action.EnergyCard.Owner.PerformedOncePerTurnActions.Add(
                 EnergyCard.ATTACHED_ENERGY_FOR_TURN
             );
-            return action;
+            return Task.FromResult(action);
         }
 
         private static void AttachEnergyFromHand(AttachEnergyFromHandGA action)
