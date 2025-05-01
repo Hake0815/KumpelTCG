@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using gamecore.card;
 using gamecore.game;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace gameview
         public void SetUp(IPlayer player)
         {
             _player = player;
+            _player.ActivePokemonSet += SetActivePokemon;
         }
 
         public bool OnCardDropped(CardView cardView)
@@ -26,6 +28,11 @@ namespace gameview
                 return true;
             }
             return false;
+        }
+
+        private void SetActivePokemon(IPokemonCard card)
+        {
+            SetActivePokemon(CardViewRegistry.INSTANCE.Get(card));
         }
 
         public void SetActivePokemon(CardView cardView)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using gamecore.card;
 using UnityEngine;
@@ -10,12 +11,13 @@ namespace gamecore.game
     {
         string Name { get; }
         IDeck Deck { get; }
-        ICardList Hand { get; }
+        IHand Hand { get; }
         IBench Bench { get; }
         IDiscardPile DiscardPile { get; }
         IPrizes Prizes { get; }
         bool IsActive { get; }
         IPokemonCard ActivePokemon { get; }
+        event Action<IPokemonCard> ActivePokemonSet;
     }
 
     internal interface IPlayerLogic : IPlayer
@@ -27,7 +29,7 @@ namespace gamecore.game
         new IDeckLogic Deck { get; set; }
         IDeck IPlayer.Deck => Deck;
         new IHandLogic Hand { get; }
-        ICardList IPlayer.Hand => Hand;
+        IHand IPlayer.Hand => Hand;
         new IBenchLogic Bench { get; }
         IBench IPlayer.Bench => Bench;
         new IPrizesLogic Prizes { get; }
@@ -40,6 +42,7 @@ namespace gamecore.game
         void Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
+        void Promote(IPokemonCardLogic pokemonCardLogic);
     }
 
     internal class Player : IPlayerLogic
@@ -65,6 +68,8 @@ namespace gamecore.game
         public HashSet<string> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
 
+        public event Action<IPokemonCard> ActivePokemonSet;
+
         public void Draw(int amount)
         {
             var drawnCards = Deck.Draw(amount);
@@ -72,6 +77,13 @@ namespace gamecore.game
             {
                 Hand.AddCards(drawnCards);
             }
+        }
+
+        public void Promote(IPokemonCardLogic pokemon)
+        {
+            Bench.RemoveCard(pokemon);
+            ActivePokemon = pokemon;
+            ActivePokemonSet?.Invoke(pokemon);
         }
 
         public void ResetOncePerTurnActions()

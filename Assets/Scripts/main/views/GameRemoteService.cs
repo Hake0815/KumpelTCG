@@ -10,8 +10,8 @@ namespace gameview
     public class GameRemoteService
     {
         public IGameController GameController { get; set; }
-        private GameManager _gameManager;
-        private List<ICard> _playableCards = new();
+        private readonly GameManager _gameManager;
+        private readonly List<ICard> _playableCards = new();
 
         public GameRemoteService(GameManager gameManager)
         {
@@ -89,9 +89,38 @@ namespace gameview
                     case GameInteractionType.Confirm:
                         _gameManager.EnableDoneButton(interaction.GameControllerMethod, OnInteract);
                         break;
+                    case GameInteractionType.GameOver:
+                        _gameManager.ShowGameOver(
+                            (interaction.Data[typeof(WinnerData)] as WinnerData).Winner
+                        );
+                        break;
+                    case GameInteractionType.SelectCards:
+                        HandleSelectCards(interaction);
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
+            }
+        }
+
+        private void HandleSelectCards(GameInteraction interaction)
+        {
+            var targetData = interaction.Data[typeof(TargetData)] as TargetData;
+            if (targetData.NumberOfTargets != 1)
+                throw new NotImplementedException();
+
+            foreach (var card in targetData.PossibleTargets)
+            {
+                _playableCards.Add(card as ICard);
+                var cardView = CardViewRegistry.INSTANCE.Get(card as ICard);
+                cardView.SetPlayable(
+                    true,
+                    new ClickBehaviour(() =>
+                    {
+                        OnInteract();
+                        interaction.GameControllerMethodWithTargets.Invoke(new() { card });
+                    })
+                );
             }
         }
 
@@ -220,12 +249,12 @@ namespace gameview
             _playableCards.Clear();
         }
 
-        private Dictionary<string, int> CreateDeckList()
+        private static Dictionary<string, int> CreateDeckList()
         {
             return new Dictionary<string, int>
             {
-                { "bill", 20 },
-                { "TWM128", 4 },
+                { "bill", 16 },
+                { "TWM128", 8 },
                 { "FireNRG", 17 },
                 { "PsychicNRG", 17 },
             };

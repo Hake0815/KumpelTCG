@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.game.action;
 
@@ -26,6 +27,7 @@ namespace gamecore.card
     {
         public List<ICardLogic> Cards { get; } = new();
         public int MaxBenchSpots { get; set; } = 5;
+
         public event Action CardCountChanged;
 
         public Bench()
@@ -38,12 +40,12 @@ namespace gamecore.card
             CardCountChanged?.Invoke();
         }
 
-        public BenchPokemonGA Perform(BenchPokemonGA action)
+        public Task<BenchPokemonGA> Perform(BenchPokemonGA action)
         {
             var pokemon = action.Card;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
-            pokemon.Owner.Hand.RemoveCard(pokemon);
-            return action;
+            pokemon.Owner.Hand.RemoveCard((ICardLogic)pokemon);
+            return Task.FromResult(action);
         }
     }
 }
