@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
@@ -148,7 +149,7 @@ namespace gamecore.card
             return false;
         }
 
-        public void Play()
+        public async Task Play()
         {
             if (Owner.ActivePokemon == null)
             {
@@ -159,12 +160,12 @@ namespace gamecore.card
             }
             if (!Owner.Bench.Full)
             {
-                ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
+                await ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
                 Damage = 0;
             }
         }
 
-        public void PlayWithTargets(List<ICardLogic> targets)
+        public Task PlayWithTargets(List<ICardLogic> targets)
         {
             throw new IlleagalActionException("Pokemon cards cannot be played with a target.");
         }

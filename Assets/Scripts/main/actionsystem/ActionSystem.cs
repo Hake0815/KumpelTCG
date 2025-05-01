@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace gamecore.actionsystem
@@ -76,12 +77,12 @@ namespace gamecore.actionsystem
             return timing == ReactionTiming.PRE ? preSubs : postSubs;
         }
 
-        public void Perform(GameAction action, Action OnPerformFinished = null)
+        public async Task Perform(GameAction action, Action OnPerformFinished = null)
         {
             if (IsPerforming)
                 return;
             IsPerforming = true;
-            Flow(
+            await Flow(
                 action,
                 () =>
                 {
@@ -91,24 +92,24 @@ namespace gamecore.actionsystem
             );
         }
 
-        private void Flow(GameAction action, Action OnFlowFinished = null)
+        private async Task Flow(GameAction action, Action OnFlowFinished = null)
         {
             reactions = action.PreReactions;
             action = NotifySubscribers(action, preSubs);
-            PerformReactions();
+            await PerformReactions();
 
             reactions = action.PerformReactions;
-            action = PerformAction(action);
-            PerformReactions();
+            action = await PerformAction(action);
+            await PerformReactions();
 
             reactions = action.PostReactions;
             NotifySubscribers(action, postSubs);
-            PerformReactions();
+            await PerformReactions();
 
             OnFlowFinished?.Invoke();
         }
 
-        private GameAction NotifySubscribers(
+        private static GameAction NotifySubscribers(
             GameAction action,
             Dictionary<Type, List<IActionSubscriber<GameAction>>> subs
         )
@@ -127,15 +128,15 @@ namespace gamecore.actionsystem
             return action;
         }
 
-        private void PerformReactions()
+        private async Task PerformReactions()
         {
             foreach (var reaction in reactions)
             {
-                Flow(reaction);
+                await Flow(reaction);
             }
         }
 
-        private GameAction PerformAction(GameAction action)
+        private async Task<GameAction> PerformAction(GameAction action)
         {
             if (action == null)
             {
@@ -153,7 +154,7 @@ namespace gamecore.actionsystem
                     Debug.LogError($"No performer found for action type: {type.Name}");
                     return action;
                 }
-                return performer.Perform(action);
+                return await performer.Perform(action);
             }
             Debug.LogWarning($"No performer registered for action type: {type.Name}");
             return action;
@@ -174,11 +175,11 @@ namespace gamecore.actionsystem
                 _wrappedPerformer = wrappedPerformer;
             }
 
-            public GameAction Perform(GameAction action)
+            public async Task<GameAction> Perform(GameAction action)
             {
                 if (action is T typedAction)
                 {
-                    return _wrappedPerformer.Perform(typedAction);
+                    return await _wrappedPerformer.Perform(typedAction);
                 }
                 return action;
             }
