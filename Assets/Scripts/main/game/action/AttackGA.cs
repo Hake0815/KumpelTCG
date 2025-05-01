@@ -14,9 +14,9 @@ namespace gamecore.game.action
             PostReactions.Add(new EndTurnGA());
         }
 
-        private KnockOutCheckGA CreateCheckKnockOutGA(IPlayerLogic AttackingPlayer)
+        private static KnockOutCheckGA CreateCheckKnockOutGA(IPlayerLogic AttackingPlayer)
         {
-            return new KnockOutCheckGA(new() { AttackingPlayer, AttackingPlayer.Opponent });
+            return new KnockOutCheckGA(new() { AttackingPlayer.Opponent, AttackingPlayer });
         }
 
         public IAttackLogic Attack { get; }

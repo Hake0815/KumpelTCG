@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.common;
 using gamecore.effect;
 using gamecore.game;
@@ -37,9 +38,9 @@ namespace gamecore.card
             Conditions = cardData.Conditions;
         }
 
-        public void Play()
+        public async Task Play()
         {
-            PerformEffects();
+            await PerformEffects();
         }
 
         public bool IsPlayable()
@@ -54,11 +55,11 @@ namespace gamecore.card
             return true;
         }
 
-        private void PerformEffects() // During effect performing the card is still in the player's hand, might be a problem later
+        private async Task PerformEffects() // During effect performing the card is still in the player's hand, might be a problem later
         {
             foreach (var effect in Effects)
             {
-                effect.Perform(this);
+                await effect.Perform(this);
             }
         }
 
@@ -78,7 +79,7 @@ namespace gamecore.card
             return false;
         }
 
-        public void PlayWithTargets(List<ICardLogic> targets)
+        public Task PlayWithTargets(List<ICardLogic> targets)
         {
             throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }

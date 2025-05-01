@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
@@ -34,20 +35,20 @@ namespace gamecore
                 : new List<List<ICardLogic>>();
         }
 
-        public void Setup()
+        public async Task Setup()
         {
             Mulligans.Add(Player1, new List<List<ICardLogic>>());
             Mulligans.Add(Player2, new List<List<ICardLogic>>());
             var numberMulligansPlayer1 = DrawUntilBasicPokemon(Player1);
             var numberMulligansPlayer2 = DrawUntilBasicPokemon(Player2);
-            Debug.Log($"Player 1 had {numberMulligansPlayer1} mulligans.");
-            Debug.Log($"Player 2 had {numberMulligansPlayer2} mulligans.");
+            Debug.Log($"Player 1 had {await numberMulligansPlayer1} mulligans.");
+            Debug.Log($"Player 2 had {await numberMulligansPlayer2} mulligans.");
         }
 
-        private int DrawUntilBasicPokemon(IPlayerLogic player)
+        private async Task<int> DrawUntilBasicPokemon(IPlayerLogic player)
         {
             int count = 0;
-            while (!DrawStartHand(player))
+            while (!await DrawStartHand(player))
             {
                 count++;
                 Mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.CardCount));
@@ -57,14 +58,14 @@ namespace gamecore
             return count;
         }
 
-        private bool DrawStartHand(IPlayerLogic player)
+        private static async Task<bool> DrawStartHand(IPlayerLogic player)
         {
             player.Deck.Shuffle();
-            ActionSystem.INSTANCE.Perform(new DrawCardGA(7, player));
+            await ActionSystem.INSTANCE.Perform(new DrawCardGA(7, player));
             return HasBasicPokemon(player);
         }
 
-        private bool HasBasicPokemon(IPlayerLogic player)
+        private static bool HasBasicPokemon(IPlayerLogic player)
         {
             return player.Hand.Cards.Any(card =>
                 card is IPokemonCard pokemonCard && pokemonCard.Stage == Stage.Basic
