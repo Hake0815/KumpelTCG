@@ -23,29 +23,16 @@ namespace gamecore.card
         int IBench.MaxBenchSpots => MaxBenchSpots;
     }
 
-    internal class Bench : IBenchLogic, IActionPerformer<BenchPokemonGA>
+    internal class Bench : IBenchLogic
     {
         public List<ICardLogic> Cards { get; } = new();
         public int MaxBenchSpots { get; set; } = 5;
 
         public event Action CardCountChanged;
 
-        public Bench()
-        {
-            ActionSystem.INSTANCE.AttachPerformer(this);
-        }
-
         public void OnCardCountChanged()
         {
             CardCountChanged?.Invoke();
-        }
-
-        public Task<BenchPokemonGA> Perform(BenchPokemonGA action)
-        {
-            var pokemon = action.Card;
-            pokemon.Owner.Bench.AddCards(new() { pokemon });
-            pokemon.Owner.Hand.RemoveCard((ICardLogic)pokemon);
-            return Task.FromResult(action);
         }
     }
 }

@@ -19,32 +19,28 @@ namespace gamecore.game.state
         )
         {
             var mulligans = gameController.Game.Mulligans;
-            var numberOfMulligansOfPlayer = mulligans[player].Count;
-            int mulliganDifference = 0;
-            foreach (var mulligan in mulligans.Values)
-            {
-                mulliganDifference = Math.Max(
-                    mulligan.Count - numberOfMulligansOfPlayer,
-                    mulliganDifference
-                );
-            }
+            int mulliganDifference = Math.Max(
+                mulligans[player.Opponent].Count - mulligans[player].Count,
+                0
+            );
 
             if (mulliganDifference <= 0)
                 return new();
 
-            var targetData = new TargetData(
-                numberOfTargets: 1,
-                possibleTargets: Enumerable.Range(0, mulliganDifference + 1).Cast<object>().ToList()
-            );
-            return new List<GameInteraction>()
+            var interactions = new List<GameInteraction>();
+            for (int i = 0; i < mulliganDifference + 1; i++)
             {
-                new(
-                    gameControllerMethodWithTargets: (targets) =>
-                        gameController.SelectMulligans((int)targets[0], player),
-                    type: GameInteractionType.SelectMulligans,
-                    data: new() { targetData }
-                ),
-            };
+                var mulliganCount = i;
+                interactions.Add(
+                    new(
+                        gameControllerMethod: () =>
+                            gameController.SelectMulligans(mulliganCount, player),
+                        type: GameInteractionType.SelectMulligans,
+                        data: new() { new NumberData(i) }
+                    )
+                );
+            }
+            return interactions;
         }
 
         public async Task OnAdvanced(Game game)

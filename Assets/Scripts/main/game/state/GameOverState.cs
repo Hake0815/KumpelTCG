@@ -25,7 +25,7 @@ namespace gamecore.game.state
             return new()
             {
                 new GameInteraction(
-                    _ => { },
+                    () => { },
                     GameInteractionType.GameOver,
                     new() { new WinnerData(_winner) }
                 ),
