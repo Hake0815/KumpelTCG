@@ -42,7 +42,7 @@ namespace gamecore.game
         void Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
-        void Promote(IPokemonCardLogic pokemonCardLogic);
+        void Promote(IPokemonCardLogic pokemon);
     }
 
     internal class Player : IPlayerLogic

@@ -12,8 +12,8 @@ namespace gameview
         private const float ATTACHED_SCALE = 0.2f;
 
         [SerializeField]
-        private AttackView _attackViewPrefab;
-        private AttackView _currentAttackView;
+        private ActivePokemonActionsView _activePokemonActionsViewPrefab;
+        private ActivePokemonActionsView _currentActivePokemonActionsView;
 
         [SerializeField]
         private Image _damageIcon;
@@ -53,6 +53,7 @@ namespace gameview
                 SetImageSprite();
             }
         }
+        public bool Selected { get; set; } = false;
 
         private void SetImageSprite()
         {
@@ -101,7 +102,7 @@ namespace gameview
                 Card.CardDiscarded += Discard;
                 if (Card is IPokemonCard pokemonCard)
                 {
-                    pokemonCard.EnergyAttached += AttachEnergy;
+                    pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
                     pokemonCard.DamageModified += UpdateDamage;
                 }
             }
@@ -113,7 +114,7 @@ namespace gameview
             {
                 Card.CardDiscarded -= Discard;
                 if (Card is IPokemonCard pokemonCard)
-                    pokemonCard.EnergyAttached -= AttachEnergy;
+                    pokemonCard.OnAttachedEnergyChanged -= AttachEnergy;
             }
         }
 
@@ -125,15 +126,29 @@ namespace gameview
 
         private void AttachEnergy(IEnergyCard card)
         {
-            var energyCardView = CardViewRegistry.INSTANCE.Get(card);
-            energyCardView.transform.DOScaleX(ATTACHED_SCALE, 0.25f);
-            energyCardView.transform.DOScaleY(ATTACHED_SCALE / 1.375f, 0.25f);
-            energyCardView.transform.DORotateQuaternion(transform.rotation, 0.25f);
-            energyCardView.Attached = true;
-            UpdateAttachedEnergyCards();
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    var sequence = DOTween.Sequence();
+                    if (card != null)
+                        UpdateAttachedEnergyView(card, sequence);
+                    UpdateAttachedEnergyCards(sequence);
+                    sequence.OnComplete(() => callback.Invoke());
+                }
+            );
         }
 
-        private void UpdateAttachedEnergyCards()
+        private void UpdateAttachedEnergyView(IEnergyCard card, Sequence sequence)
+        {
+            var energyCardView = CardViewRegistry.INSTANCE.Get(card);
+            sequence
+                .Join(energyCardView.transform.DOScaleX(ATTACHED_SCALE, 0.25f))
+                .Join(energyCardView.transform.DOScaleY(ATTACHED_SCALE / 1.375f, 0.25f))
+                .Join(energyCardView.transform.DORotateQuaternion(transform.rotation, 0.25f));
+            energyCardView.Attached = true;
+        }
+
+        private void UpdateAttachedEnergyCards(Sequence sequence)
         {
             var height = RectTransform.rect.height;
             var width = RectTransform.rect.width;
@@ -142,15 +157,18 @@ namespace gameview
             var firstCardPosition =
                 transform.position
                 - height * (1 - ATTACHED_SCALE / 1.375f) / 2 * verticalDirection
-                - width * (1 - ATTACHED_SCALE) / 2 * horizontalDirection;
+                - width * (1 - ATTACHED_SCALE) / 2 * horizontalDirection
+                + Vector3.back;
             int i = 0;
             foreach (var energyCard in ((IPokemonCard)Card).AttachedEnergyCards)
             {
                 var energyCardView = CardViewRegistry.INSTANCE.Get(energyCard);
                 energyCardView.RectTransform.SetParent(transform);
-                energyCardView.transform.DOMove(
-                    firstCardPosition + i * width * ATTACHED_SCALE * horizontalDirection,
-                    0.25f
+                sequence.Join(
+                    energyCardView.transform.DOMove(
+                        firstCardPosition + i * width * ATTACHED_SCALE * horizontalDirection,
+                        0.25f
+                    )
                 );
                 i++;
             }
@@ -202,38 +220,58 @@ namespace gameview
             else
             {
                 _cardViewBehaviour = null;
-                _currentAttackView?.DestroyThis();
-                _currentAttackView = null;
+                _currentActivePokemonActionsView?.DestroyThis();
+                _currentActivePokemonActionsView = null;
             }
         }
 
         public void AddAttack(IAttack attack, Action onAttackAction)
         {
-            if (_currentAttackView == null)
+            if (_currentActivePokemonActionsView == null)
             {
-                var horizontalDirection = transform.rotation * Vector3.right;
-                var distance =
-                    (
-                        _attackViewPrefab
-                            .AttackButtonPrefab.GetComponent<RectTransform>()
-                            .rect.width + RectTransform.rect.width
-                    )
-                    / 2f
-                    * 1.1f
-                    * horizontalDirection;
-                _currentAttackView = Instantiate(
-                    _attackViewPrefab,
-                    transform.position + distance,
-                    transform.rotation
-                );
-                _currentAttackView.Collider.Add(_col);
+                CreateCurrentActivePokemonActionsView();
             }
-            _currentAttackView.AddInteraction(attack, onAttackAction);
+            _currentActivePokemonActionsView.AddAttackInteraction(attack, onAttackAction);
         }
 
-        public void ShowAttacks()
+        public void AddRetreat(Action onRetreatAction)
         {
-            _currentAttackView.Canvas.enabled = true;
+            if (_currentActivePokemonActionsView == null)
+                CreateCurrentActivePokemonActionsView();
+
+            _currentActivePokemonActionsView.AddRetreatInteraction(
+                (Card as IPokemonCard).RetreatCost,
+                onRetreatAction
+            );
+        }
+
+        private void CreateCurrentActivePokemonActionsView()
+        {
+            _currentActivePokemonActionsView = Instantiate(_activePokemonActionsViewPrefab);
+            _currentActivePokemonActionsView.Collider.Add(_col);
+        }
+
+        public void ShowActivePokemonActions()
+        {
+            Vector3 distance = GetDistance();
+            _currentActivePokemonActionsView.transform.position = transform.position + distance;
+            _currentActivePokemonActionsView.transform.rotation = transform.rotation;
+            _currentActivePokemonActionsView.Canvas.enabled = true;
+        }
+
+        private Vector3 GetDistance()
+        {
+            var horizontalDirection = transform.rotation * Vector3.right;
+            var distance =
+                (
+                    _activePokemonActionsViewPrefab
+                        .AttackButtonPrefab.GetComponent<RectTransform>()
+                        .rect.width + RectTransform.rect.width
+                )
+                / 2f
+                * 1.1f
+                * horizontalDirection;
+            return distance;
         }
     }
 }

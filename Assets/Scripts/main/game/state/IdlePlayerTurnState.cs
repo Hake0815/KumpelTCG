@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using gamecore.card;
+using UnityEngine;
 
 namespace gamecore.game.state
 {
@@ -24,8 +25,8 @@ namespace gamecore.game.state
             var interactions = new List<GameInteraction>();
             AddPlayCardInteractions(interactions, gameController, player);
             AddPlayCardWithTargetsInteractions(interactions, gameController, player);
-            if (gameController.Game.TurnCounter > 1)
-                AddAttackInteractions(interactions, gameController, player);
+            AddAttackInteractions(interactions, gameController, player);
+            AddRetreatInteraction(interactions, gameController, player);
             interactions.Add(
                 new GameInteraction(gameController.EndTurn, GameInteractionType.EndTurn)
             );
@@ -83,10 +84,7 @@ namespace gamecore.game.state
                         new()
                         {
                             new InteractionCard(card),
-                            new TargetData(
-                                card.GetTargets().Count,
-                                targets.Cast<object>().ToList()
-                            ),
+                            new TargetData(card.GetTargets().Count, targets.Cast<ICard>().ToList()),
                         }
                     )
                 );
@@ -110,6 +108,8 @@ namespace gamecore.game.state
             IPlayerLogic player
         )
         {
+            if (gameController.Game.TurnCounter < 2)
+                return;
             foreach (var attack in player.ActivePokemon.GetUsableAttacks())
             {
                 interactions.Add(
@@ -120,6 +120,114 @@ namespace gamecore.game.state
                     )
                 );
             }
+        }
+
+        private static void AddRetreatInteraction(
+            List<GameInteraction> interactions,
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            if (
+                !player.ActivePokemon.CanPayRetreatCost()
+                || player.PerformedOncePerTurnActions.Contains(PokemonCard.RETREATED)
+                || player.Bench.CardCount == 0
+            )
+                return;
+
+            var pokemon = player.ActivePokemon;
+            if (IsRetreatCostUnambiguous(player.ActivePokemon))
+            {
+                AddRetreatInteractionWithUnambiguousCost(
+                    interactions,
+                    gameController,
+                    player,
+                    pokemon
+                );
+            }
+            else
+            {
+                AddRetreatInteractionWithInput(interactions, gameController, player, pokemon);
+            }
+        }
+
+        private static void AddRetreatInteractionWithInput(
+            List<GameInteraction> interactions,
+            GameController gameController,
+            IPlayerLogic player,
+            IPokemonCardLogic pokemon
+        )
+        {
+            interactions.Add(
+                new GameInteraction(
+                    (energyCardsToDiscard) =>
+                        gameController.Retreat(
+                            player.ActivePokemon,
+                            energyCardsToDiscard.Cast<IEnergyCardLogic>().ToList()
+                        ),
+                    GameInteractionType.Retreat,
+                    new()
+                    {
+                        new InteractionCard(player.ActivePokemon),
+                        new ConditionalTargetData(
+                            selection => FulfillsRetreatCost(selection, pokemon.RetreatCost),
+                            pokemon.AttachedEnergyCards.Cast<ICard>().ToList()
+                        ),
+                    }
+                )
+            );
+        }
+
+        private static void AddRetreatInteractionWithUnambiguousCost(
+            List<GameInteraction> interactions,
+            GameController gameController,
+            IPlayerLogic player,
+            IPokemonCardLogic pokemon
+        )
+        {
+            var energyCardsToDiscard = new List<IEnergyCardLogic>();
+            int payedEnergyCost = 0;
+            foreach (var energy in pokemon.AttachedEnergyCards)
+            {
+                energyCardsToDiscard.Add(energy);
+                payedEnergyCost++; // Needs to change as soon as energy cards are implemented that provide more than one energy
+                if (payedEnergyCost >= pokemon.RetreatCost)
+                    break;
+            }
+            interactions.Add(
+                new GameInteraction(
+                    () => gameController.Retreat(player.ActivePokemon, energyCardsToDiscard),
+                    GameInteractionType.Retreat,
+                    new() { new InteractionCard(player.ActivePokemon) }
+                )
+            );
+        }
+
+        private static bool FulfillsRetreatCost(List<ICard> selectedEnergyCards, int retreatCost)
+        {
+            return selectedEnergyCards.Count >= retreatCost;
+        }
+
+        private static bool IsRetreatCostUnambiguous(IPokemonCardLogic pokemon)
+        {
+            return pokemon.AttachedEnergy.Count == pokemon.RetreatCost
+                || (
+                    ContainsSameCards(pokemon.AttachedEnergyCards)
+                    && pokemon.AttachedEnergy.Count == pokemon.AttachedEnergyCards.Count
+                );
+        }
+
+        private static bool ContainsSameCards(List<IEnergyCardLogic> attachedEnergyCards)
+        {
+            if (attachedEnergyCards.Count <= 1)
+                return true;
+            var firstEnergyCardId = attachedEnergyCards[0].CardData.Id;
+            for (int i = 1; i < attachedEnergyCards.Count; i++)
+            {
+                if (attachedEnergyCards[i].CardData.Id != firstEnergyCardId)
+                    return false;
+            }
+            return true;
         }
 
         public Task OnAdvanced(Game game)

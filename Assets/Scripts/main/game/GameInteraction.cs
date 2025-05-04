@@ -7,12 +7,12 @@ namespace gamecore.game
     public record GameInteraction
     {
         public Action GameControllerMethod { get; }
-        public Action<List<object>> GameControllerMethodWithTargets { get; }
+        public Action<List<ICard>> GameControllerMethodWithTargets { get; }
         public GameInteractionType Type { get; }
         public Dictionary<Type, IGameInteractionData> Data { get; } = new();
 
         public GameInteraction(
-            Action<List<object>> gameControllerMethodWithTargets,
+            Action<List<ICard>> gameControllerMethodWithTargets,
             GameInteractionType type,
             List<IGameInteractionData> data
         )
@@ -59,6 +59,7 @@ namespace gamecore.game
         PerformAttack,
         GameOver,
         SelectCards,
+        Retreat,
     }
 
     public interface IGameInteractionData { }
@@ -73,16 +74,41 @@ namespace gamecore.game
         }
     }
 
+    public record NumberData : IGameInteractionData
+    {
+        public int Number { get; }
+
+        public NumberData(int number)
+        {
+            Number = number;
+        }
+    }
+
     public record TargetData : IGameInteractionData
     {
-        public TargetData(int numberOfTargets, List<object> possibleTargets)
+        public TargetData(int numberOfTargets, List<ICard> possibleTargets)
         {
             NumberOfTargets = numberOfTargets;
             PossibleTargets = possibleTargets;
         }
 
-        public List<object> PossibleTargets { get; }
+        public List<ICard> PossibleTargets { get; }
         public int NumberOfTargets { get; } = 0;
+    }
+
+    public record ConditionalTargetData : IGameInteractionData
+    {
+        public ConditionalTargetData(
+            Predicate<List<ICard>> conditionOnSelection,
+            List<ICard> possibleTargets
+        )
+        {
+            ConditionOnSelection = conditionOnSelection;
+            PossibleTargets = possibleTargets;
+        }
+
+        public List<ICard> PossibleTargets { get; }
+        public Predicate<List<ICard>> ConditionOnSelection { get; }
     }
 
     public record InteractionCard : IGameInteractionData
