@@ -38,8 +38,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.3500122, y: 0.125}
-  m_SizeDelta: {x: -0.6999756, y: 0.25}
+  m_AnchoredPosition: {x: -0.3000122, y: 0.09}
+  m_SizeDelta: {x: -0.5999756, y: 0.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1742950927874170681
 CanvasRenderer:
@@ -167,7 +167,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.9, y: 0.25}
+  m_Size: {x: 1.1, y: 0.2}
   m_EdgeRadius: 0
 --- !u!1 &3854870655152067172
 GameObject:
@@ -201,8 +201,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.28998783, y: 0}
-  m_SizeDelta: {x: -0.62002444, y: 0}
+  m_AnchoredPosition: {x: -0.3399878, y: 0}
+  m_SizeDelta: {x: -0.7200244, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5697622760555323742
 GameObject:
