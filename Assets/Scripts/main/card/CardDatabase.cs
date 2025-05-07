@@ -27,7 +27,7 @@ namespace gamecore.card
                     type: PokemonType.Dragon,
                     weakness: PokemonType.None,
                     resistance: PokemonType.None,
-                    retreatCost: 2,
+                    retreatCost: 1,
                     maxHP: 70,
                     attacks: new List<IAttackLogic>
                     {
@@ -37,9 +37,31 @@ namespace gamecore.card
                             new() { new DealDamageToDefendingPokemonEffect(10) }
                         ),
                         new Attack(
-                            " Bite",
+                            "Bite",
                             new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
                             new() { new DealDamageToDefendingPokemonEffect(40) }
+                        ),
+                    },
+                    numberOfPrizeCardsOnKnockout: 1
+                )
+            },
+            {
+                "TWM129",
+                new PokemonCardData(
+                    id: "TWM129",
+                    name: "Drakloak",
+                    stage: Stage.Stage1,
+                    type: PokemonType.Dragon,
+                    weakness: PokemonType.None,
+                    resistance: PokemonType.None,
+                    retreatCost: 1,
+                    maxHP: 90,
+                    attacks: new List<IAttackLogic>
+                    {
+                        new Attack(
+                            "Dragon Headbutt",
+                            new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
+                            new() { new DealDamageToDefendingPokemonEffect(70) }
                         ),
                     },
                     numberOfPrizeCardsOnKnockout: 1

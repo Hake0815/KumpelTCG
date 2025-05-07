@@ -16,6 +16,7 @@ namespace gameview
         {
             { "bill", Resources.Load<Sprite>("Images/Cards/bill") },
             { "TWM128", Resources.Load<Sprite>("Images/Cards/TWM_128_R_EN_LG") },
+            { "TWM129", Resources.Load<Sprite>("Images/Cards/TWM_129_R_EN_LG") },
             { "GrassNRG", Resources.Load<Sprite>("Images/Cards/Energy/SVE_001_R_EN_LG") },
             { "FireNRG", Resources.Load<Sprite>("Images/Cards/Energy/SVE_002_R_EN_LG") },
             { "WaterNRG", Resources.Load<Sprite>("Images/Cards/Energy/SVE_003_R_EN_LG") },
