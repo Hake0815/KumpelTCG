@@ -27,7 +27,7 @@ namespace gamecore.card
                     type: PokemonType.Dragon,
                     weakness: PokemonType.None,
                     resistance: PokemonType.None,
-                    retreatCost: 1,
+                    retreatCost: 2,
                     maxHP: 70,
                     attacks: new List<IAttackLogic>
                     {

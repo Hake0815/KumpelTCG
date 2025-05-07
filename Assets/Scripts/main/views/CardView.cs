@@ -26,6 +26,7 @@ namespace gameview
         private Sprite _frontSideSprite;
         private Sprite _attachedSprite;
         private Image _image;
+        private Material _imageMaterial;
         private protected Collider2D _col;
         private protected Vector3 _positionBeforeDrag;
         private protected Transform _discardPilePosition;
@@ -53,16 +54,41 @@ namespace gameview
                 SetImageSprite();
             }
         }
-        public bool Selected { get; set; } = false;
+
+        private bool _playable;
+        private bool _selected = false;
+        public bool Selected
+        {
+            get => _selected;
+            set
+            {
+                _selected = value;
+                if (value)
+                    TurnOnHighlight(Color.yellow);
+                else if (_playable)
+                    TurnOnHighlight(Color.green);
+                else
+                    TurnOffHighlight();
+            }
+        }
 
         private void SetImageSprite()
         {
             if (Attached && _attachedSprite != null)
+            {
                 _image.sprite = _attachedSprite;
+                _imageMaterial.SetFloat("_Thickness", .1f);
+            }
             else if (FaceUp)
+            {
                 _image.sprite = _frontSideSprite;
+                _imageMaterial.SetFloat("_Thickness", .02f);
+            }
             else
+            {
                 _image.sprite = _backSideSprite;
+                _imageMaterial.SetFloat("_Thickness", .02f);
+            }
         }
 
         private CardViewBehaviour _cardViewBehaviour;
@@ -93,6 +119,9 @@ namespace gameview
             RectTransform = GetComponent<RectTransform>();
             _image = GetComponentInChildren<Image>();
             Canvas = GetComponent<Canvas>();
+            _imageMaterial = new Material(_image.material);
+            _image.material = _imageMaterial;
+            TurnOffHighlight();
         }
 
         private void OnEnable()
@@ -131,21 +160,20 @@ namespace gameview
                 {
                     var sequence = DOTween.Sequence();
                     if (card != null)
-                        UpdateAttachedEnergyView(card, sequence);
+                        CardViewRegistry.INSTANCE.Get(card).TransformToAttachedEnergyView(sequence);
                     UpdateAttachedEnergyCards(sequence);
                     sequence.OnComplete(() => callback.Invoke());
                 }
             );
         }
 
-        private void UpdateAttachedEnergyView(IEnergyCard card, Sequence sequence)
+        public void TransformToAttachedEnergyView(Sequence sequence)
         {
-            var energyCardView = CardViewRegistry.INSTANCE.Get(card);
             sequence
-                .Join(energyCardView.transform.DOScaleX(ATTACHED_SCALE, 0.25f))
-                .Join(energyCardView.transform.DOScaleY(ATTACHED_SCALE / 1.375f, 0.25f))
-                .Join(energyCardView.transform.DORotateQuaternion(transform.rotation, 0.25f));
-            energyCardView.Attached = true;
+                .Join(transform.DOScaleX(ATTACHED_SCALE, 0.25f))
+                .Join(transform.DOScaleY(ATTACHED_SCALE / 1.375f, 0.25f))
+                .Join(transform.DORotateQuaternion(transform.rotation, 0.25f));
+            Attached = true;
         }
 
         private void UpdateAttachedEnergyCards(Sequence sequence)
@@ -213,16 +241,33 @@ namespace gameview
 
         internal void SetPlayable(bool isPlayable, CardViewBehaviour cardViewBehaviour)
         {
+            _playable = isPlayable;
             if (isPlayable)
             {
                 _cardViewBehaviour = cardViewBehaviour;
+                TurnOnHighlight(Color.green);
             }
             else
             {
                 _cardViewBehaviour = null;
                 _currentActivePokemonActionsView?.DestroyThis();
                 _currentActivePokemonActionsView = null;
+                TurnOffHighlight();
             }
+        }
+
+        private void TurnOnHighlight(Color color)
+        {
+            Debug.Log($"Turn on highlight with color {color}");
+            _imageMaterial.SetColor("_Color", color);
+            _imageMaterial.SetFloat("_Brightness", 5f);
+        }
+
+        private void TurnOffHighlight()
+        {
+            Debug.Log("Turn off highlight");
+            _imageMaterial.SetColor("_Color", Color.white);
+            _imageMaterial.SetFloat("_Brightness", 0f);
         }
 
         public void AddAttack(IAttack attack, Action onAttackAction)

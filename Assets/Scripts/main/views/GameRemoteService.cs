@@ -249,7 +249,11 @@ namespace gameview
         )
         {
             if (cardView.Selected)
+            {
+                cardView.Selected = false;
+                _selectedCards.Remove(cardView.Card);
                 return;
+            }
             cardView.Selected = true;
             _selectedCards.Add(cardView.Card);
             if (conditionOnSelection(_selectedCards))
