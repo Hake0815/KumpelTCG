@@ -344,8 +344,9 @@ namespace gameview
             {
                 { "bill", 16 },
                 { "TWM128", 8 },
-                { "FireNRG", 17 },
-                { "PsychicNRG", 17 },
+                { "TWM129", 8 },
+                { "FireNRG", 14 },
+                { "PsychicNRG", 14 },
             };
         }
     }
