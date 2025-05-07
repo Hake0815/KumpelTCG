@@ -43,7 +43,7 @@ namespace gamecore.game.state
                 new GameInteraction(
                     targets => _selectTask.SetResult(targets.Cast<ICardLogic>().ToList()),
                     GameInteractionType.SelectCards,
-                    new() { new TargetData(_amount, _options.Cast<object>().ToList()) }
+                    new() { new TargetData(_amount, _options.Cast<ICard>().ToList()) }
                 ),
             };
         }

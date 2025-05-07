@@ -14,9 +14,11 @@ namespace gamecore.card
         Stage Stage { get; }
         List<IAttack> Attacks { get; }
         List<IEnergyCard> AttachedEnergyCards { get; }
+        List<PokemonType> AttachedEnergy { get; }
         int Damage { get; }
         int MaxHP { get; }
-        event Action<IEnergyCard> EnergyAttached;
+        int RetreatCost { get; }
+        event Action<IEnergyCard> OnAttachedEnergyChanged;
         event Action DamageModified;
     }
 
@@ -33,10 +35,13 @@ namespace gamecore.card
         bool IsActive();
         bool IsKnockedOut();
         void TakeDamage(int damage);
+        bool CanPayRetreatCost();
+        void DiscardEnergy(List<IEnergyCardLogic> energyCardsToDiscard);
     }
 
     internal class PokemonCard : IPokemonCardLogic
     {
+        public static string RETREATED = "retreated";
         public IPokemonCardData PokemonCardData { get; }
         public ICardData CardData => PokemonCardData;
         public List<IAttackLogic> Attacks { get; }
@@ -53,6 +58,7 @@ namespace gamecore.card
         public PokemonType Weakness { get; set; }
         public PokemonType Resistance { get; set; }
         public int MaxHP { get; private set; }
+        public int RetreatCost { get; private set; }
         public int NumberOfPrizeCardsOnKnockout { get; set; }
 
         private int _damage = 0;
@@ -65,10 +71,22 @@ namespace gamecore.card
                 DamageModified?.Invoke();
             }
         }
+        public List<PokemonType> AttachedEnergy
+        {
+            get
+            {
+                var providedEnergy = new List<PokemonType>();
+                foreach (var energy in AttachedEnergyCards)
+                {
+                    providedEnergy.Add(energy.ProvidedEnergyType);
+                }
+                return providedEnergy;
+            }
+        }
 
         public event Action CardDiscarded;
         public event Action DamageModified;
-        public event Action<IEnergyCard> EnergyAttached;
+        public event Action<IEnergyCard> OnAttachedEnergyChanged;
 
         public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
         {
@@ -80,6 +98,7 @@ namespace gamecore.card
             Type = cardData.Type;
             MaxHP = cardData.MaxHP;
             NumberOfPrizeCardsOnKnockout = cardData.NumberOfPrizeCardsOnKnockout;
+            RetreatCost = cardData.RetreatCost;
         }
 
         public void Discard()
@@ -183,7 +202,7 @@ namespace gamecore.card
         public void AttachEnergy(IEnergyCardLogic energy)
         {
             AttachedEnergyCards.Add(energy);
-            EnergyAttached?.Invoke(energy);
+            OnAttachedEnergyChanged?.Invoke(energy);
         }
 
         public List<ICardLogic> GetTargets()
@@ -205,6 +224,21 @@ namespace gamecore.card
         public bool IsKnockedOut()
         {
             return Damage >= MaxHP;
+        }
+
+        public bool CanPayRetreatCost()
+        {
+            return AttachedEnergy.Count >= RetreatCost;
+        }
+
+        public void DiscardEnergy(List<IEnergyCardLogic> energyCardsToDiscard)
+        {
+            foreach (var energyCard in energyCardsToDiscard)
+            {
+                energyCard.Discard();
+                AttachedEnergyCards.Remove(energyCard);
+            }
+            OnAttachedEnergyChanged?.Invoke(null);
         }
     }
 }

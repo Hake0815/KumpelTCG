@@ -55,22 +55,34 @@ namespace gameview
 
         private void UpdateBenchedPokemonPositions()
         {
-            var benchedPokemon = _player.Bench;
-            var spacing = _rectTransform.rect.width / benchedPokemon.MaxBenchSpots;
-            var orientation = _rectTransform.rotation * Vector3.right;
-            var firstPosition =
-                _rectTransform.position
-                - (_rectTransform.rect.width - spacing) / 2f * orientation
-                + Vector3.back;
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    var benchedPokemon = _player.Bench;
+                    var spacing = _rectTransform.rect.width / benchedPokemon.MaxBenchSpots;
+                    var orientation = _rectTransform.rotation * Vector3.right;
+                    var firstPosition =
+                        _rectTransform.position
+                        - (_rectTransform.rect.width - spacing) / 2f * orientation
+                        + Vector3.back;
 
-            int i = 0;
-            foreach (var pokemon in benchedPokemon)
-            {
-                var pokemonView = CardViewRegistry.INSTANCE.Get(pokemon);
-                pokemonView.transform.DOMove(firstPosition + i * spacing * orientation, 0.25f);
-                pokemonView.transform.DOLocalRotateQuaternion(_rectTransform.rotation, 0.25f);
-                i++;
-            }
+                    int i = 0;
+                    foreach (var pokemon in benchedPokemon)
+                    {
+                        var pokemonView = CardViewRegistry.INSTANCE.Get(pokemon);
+                        pokemonView.transform.DOMove(
+                            firstPosition + i * spacing * orientation,
+                            0.25f
+                        );
+                        pokemonView.transform.DOLocalRotateQuaternion(
+                            _rectTransform.rotation,
+                            0.25f
+                        );
+                        i++;
+                    }
+                    callback.Invoke();
+                }
+            );
         }
     }
 }

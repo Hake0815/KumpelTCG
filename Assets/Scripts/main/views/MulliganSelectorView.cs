@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using gamecore.card;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,26 +14,29 @@ namespace gameview
 
         [SerializeField]
         private Button _confirmButton;
+        private readonly List<string> _options = new();
+        private readonly Dictionary<string, Action> _optionAction = new();
 
-        public void SetUp(List<object> possibleValues, Action<object> OnConfirm)
+        private void Awake()
         {
             _dropdown.ClearOptions();
-            List<string> options = new();
-            foreach (var value in possibleValues)
-            {
-                options.Add(value.ToString());
-            }
-            _dropdown.AddOptions(options);
-            _dropdown.value = possibleValues.Count - 1;
-            _dropdown.RefreshShownValue();
-
             _confirmButton.onClick.RemoveAllListeners();
             _confirmButton.onClick.AddListener(() =>
             {
-                object selectedValue = possibleValues[_dropdown.value];
-                OnConfirm(selectedValue);
+                var selectedValue = _options[_dropdown.value];
+                _optionAction.GetValueOrDefault(selectedValue).Invoke();
                 Destroy(gameObject);
             });
+        }
+
+        internal void AddOption(string mulliganOption, Action onConfirm)
+        {
+            _options.Add(mulliganOption);
+            _optionAction.Add(mulliganOption, onConfirm);
+
+            _dropdown.AddOptions(new List<string>() { mulliganOption });
+            _dropdown.value = _options.Count - 1;
+            _dropdown.RefreshShownValue();
         }
     }
 }

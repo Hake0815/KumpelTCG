@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -14,7 +15,8 @@ namespace gamecore.action
         : IActionPerformer<AttackGA>,
             IActionPerformer<DrawPrizeCardsGA>,
             IActionPerformer<CheckWinConditionGA>,
-            IActionPerformer<PromoteGA>
+            IActionPerformer<PromoteGA>,
+            IActionPerformer<RetreatGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
             () => new GeneralMechnicSystem()
@@ -32,6 +34,7 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<DrawPrizeCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<CheckWinConditionGA>(INSTANCE);
             _actionSystem.AttachPerformer<PromoteGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RetreatGA>(INSTANCE);
             _game = game;
         }
 
@@ -41,6 +44,7 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<DrawPrizeCardsGA>();
             _actionSystem.DetachPerformer<CheckWinConditionGA>();
             _actionSystem.DetachPerformer<PromoteGA>();
+            _actionSystem.DetachPerformer<RetreatGA>();
         }
 
         public Task<AttackGA> Perform(AttackGA action)
@@ -86,7 +90,6 @@ namespace gamecore.action
             if (player.Opponent.ActivePokemon == null && player.Opponent.Bench.CardCount == 0)
                 numberOfWinConditions++;
 
-            Debug.Log($"Player {player} has {numberOfWinConditions} win conditions.");
             return numberOfWinConditions;
         }
 
@@ -103,16 +106,24 @@ namespace gamecore.action
                     else
                     {
                         var selection = await _game.AwaitSelection(player, player.Bench.Cards, 1);
-                        PromoteSelection(selection, player);
+                        player.Promote(selection[0] as IPokemonCardLogic);
                     }
                 }
             }
             return action;
         }
 
-        private static void PromoteSelection(List<ICardLogic> pokemonToPromote, IPlayerLogic player)
+        public Task<RetreatGA> Perform(RetreatGA action)
         {
-            player.Promote(pokemonToPromote[0] as IPokemonCardLogic);
+            var pokemon = action.Pokemon;
+            _actionSystem.AddReaction(
+                new DiscardAttachedEnergyCardsGA(pokemon, action.EnergyCardsToDiscard)
+            );
+            pokemon.Owner.ActivePokemon = null;
+            _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
+            _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
+            pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
+            return Task.FromResult(action);
         }
     }
 }

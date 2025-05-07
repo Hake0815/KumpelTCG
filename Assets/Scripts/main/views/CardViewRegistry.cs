@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using UnityEngine;
 
 namespace gameview
 {
@@ -34,6 +35,17 @@ namespace gameview
             foreach (var card in cards)
             {
                 cardViews.Add(regsitry[card]);
+            }
+            return cardViews;
+        }
+
+        public List<CardView> GetAllAvailable(ICollection<ICard> cards)
+        {
+            var cardViews = new List<CardView>();
+            foreach (var card in cards)
+            {
+                if (regsitry.TryGetValue(card, out var cardView))
+                    cardViews.Add(cardView);
             }
             return cardViews;
         }

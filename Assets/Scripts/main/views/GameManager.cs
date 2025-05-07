@@ -42,6 +42,7 @@ namespace gameview
 
         [SerializeField]
         private MulliganSelectorView _mulliganSelectorViewPrefab;
+        private MulliganSelectorView _mulliganSelectorView;
 
         [SerializeField]
         private EndGameView _endGameViewPrefab;
@@ -241,10 +242,17 @@ namespace gameview
             _button.gameObject.SetActive(false);
         }
 
-        internal void ShowMulliganSelector(List<object> possibleTargets, Action<object> onConfirm)
+        internal void AddOptionToMulliganSelector(int mulliganOption, Action onConfirm)
         {
-            var mulliganSelectorView = Instantiate(_mulliganSelectorViewPrefab);
-            mulliganSelectorView.SetUp(possibleTargets, onConfirm);
+            GetMulliganSelector().AddOption(mulliganOption.ToString(), onConfirm);
+        }
+
+        private MulliganSelectorView GetMulliganSelector()
+        {
+            if (_mulliganSelectorView == null)
+                _mulliganSelectorView = Instantiate(_mulliganSelectorViewPrefab);
+
+            return _mulliganSelectorView;
         }
 
         internal void EnableDoneButton(Action gameControllerMethod, Action onInteract)

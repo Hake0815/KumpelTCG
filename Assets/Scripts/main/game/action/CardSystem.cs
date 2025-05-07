@@ -11,6 +11,9 @@ namespace gamecore.game.action
             IActionPerformer<DiscardCardsFromHandGA>,
             IActionPerformer<AttachEnergyFromHandGA>,
             IActionPerformer<AttachEnergyFromHandForTurnGA>,
+            IActionPerformer<DiscardAttachedEnergyCardsGA>,
+            IActionPerformer<BenchPokemonGA>,
+            IActionPerformer<MovePokemonToBenchGA>,
             IActionSubscriber<EndTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -26,6 +29,9 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
+            _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
+            _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -35,6 +41,9 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<DiscardCardsFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
+            _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
+            _actionSystem.DetachPerformer<BenchPokemonGA>();
+            _actionSystem.DetachPerformer<MovePokemonToBenchGA>();
             _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -81,6 +90,27 @@ namespace gamecore.game.action
             var energyCard = action.EnergyCard;
             energyCard.Owner.Hand.RemoveCard(energyCard);
             action.TargetPokemon.AttachEnergy(energyCard);
+        }
+
+        public Task<DiscardAttachedEnergyCardsGA> Perform(DiscardAttachedEnergyCardsGA action)
+        {
+            action.Pokemon.DiscardEnergy(action.EnergyCards);
+            return Task.FromResult(action);
+        }
+
+        public Task<BenchPokemonGA> Perform(BenchPokemonGA action)
+        {
+            var pokemon = action.Card;
+            pokemon.Owner.Bench.AddCards(new() { pokemon });
+            pokemon.Owner.Hand.RemoveCard(pokemon);
+            return Task.FromResult(action);
+        }
+
+        public Task<MovePokemonToBenchGA> Perform(MovePokemonToBenchGA action)
+        {
+            var pokemon = action.Pokemon;
+            pokemon.Owner.Bench.AddCards(new() { pokemon });
+            return Task.FromResult(action);
         }
     }
 }

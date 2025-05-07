@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using gamecore.card;
 using UnityEngine;
 
 namespace gameview
@@ -8,7 +9,7 @@ namespace gameview
     {
         public abstract void OnMouseDown(CardView cardView);
         public abstract void OnMouseDrag(CardView cardView);
-        public abstract void OnMouseUp(Collider2D _col, CardView cardView);
+        public abstract void OnMouseUp(Collider2D col, CardView cardView);
     }
 
     public class ClickBehaviour : CardViewBehaviour
@@ -27,7 +28,7 @@ namespace gameview
 
         public override void OnMouseDrag(CardView cardView) { }
 
-        public override void OnMouseUp(Collider2D _col, CardView cardView) { }
+        public override void OnMouseUp(Collider2D col, CardView cardView) { }
     }
 
     public class DragBehaviour : CardViewBehaviour
@@ -54,18 +55,18 @@ namespace gameview
             cardView.transform.position = GetMousePosition();
         }
 
-        private Vector3 GetMousePosition()
+        private static Vector3 GetMousePosition()
         {
             var p = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             p.z = 0f;
             return p;
         }
 
-        public override void OnMouseUp(Collider2D _col, CardView cardView)
+        public override void OnMouseUp(Collider2D col, CardView cardView)
         {
-            _col.enabled = false;
+            col.enabled = false;
             var hitCollider = Physics2D.OverlapPoint(cardView.transform.position);
-            _col.enabled = true;
+            col.enabled = true;
             if (
                 hitCollider != null
                 && hitCollider.TryGetComponent(out ICardDropArea cardDropArea)
@@ -83,10 +84,10 @@ namespace gameview
 
     public class DragToTargetBehaviour : DragBehaviour
     {
-        private Action<List<object>> _onPlayed;
-        private List<CardView> _targets;
+        private readonly Action<List<ICard>> _onPlayed;
+        private readonly List<CardView> _targets;
 
-        public DragToTargetBehaviour(Action<List<object>> onPlayed, List<CardView> targets)
+        public DragToTargetBehaviour(Action<List<ICard>> onPlayed, List<CardView> targets)
             : base(null)
         {
             _onPlayed = onPlayed;
