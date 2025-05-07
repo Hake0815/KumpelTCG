@@ -37,8 +37,14 @@ namespace gameview
 
         public void SetActivePokemon(CardView cardView)
         {
-            cardView.transform.DOMove(transform.position + Vector3.back, 0.25f);
-            cardView.transform.DORotateQuaternion(transform.rotation, 0.25f);
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    cardView.transform.DOMove(transform.position + Vector3.back, 0.25f);
+                    cardView.transform.DORotateQuaternion(transform.rotation, 0.25f);
+                    callback.Invoke();
+                }
+            );
             _isEmpty = false;
         }
     }

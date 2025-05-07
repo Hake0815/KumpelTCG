@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 61cfff52de28a05f9b8a3008687d037e, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d2961fa3c55fb4539c93caafab282c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackViewPrefab: {fileID: 241736217715297568, guid: 946ede76edaac99bf9e1c79b9ddb79f2, type: 3}
+  _activePokemonActionsViewPrefab: {fileID: -6665240836573825943, guid: 946ede76edaac99bf9e1c79b9ddb79f2, type: 3}
   _damageIcon: {fileID: 203603192966745337}
   _damageText: {fileID: 1112427015880156359}
   _backSideSprite: {fileID: 2444483277926139015, guid: 668405f19aa23a15094453dca0f65bae, type: 3}

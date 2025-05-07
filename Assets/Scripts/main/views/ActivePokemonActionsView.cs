@@ -7,10 +7,19 @@ using UnityEngine.UI;
 
 namespace gameview
 {
-    public class AttackView : MonoBehaviour
+    public class ActivePokemonActionsView : MonoBehaviour
     {
         [SerializeField]
         private Button _attackButtonPrefab;
+
+        [SerializeField]
+        private Button _retreatButton;
+
+        [SerializeField]
+        private RectTransform _energyCost;
+
+        [SerializeField]
+        private Canvas _typeIconPrefab;
         private float _buttonSpacing;
         private Vector3 _verticalDirection;
         public Button AttackButtonPrefab => _attackButtonPrefab;
@@ -47,7 +56,7 @@ namespace gameview
             Canvas.enabled = false;
         }
 
-        public void AddInteraction(IAttack attack, Action onAttackAction)
+        public void AddAttackInteraction(IAttack attack, Action onAttackAction)
         {
             Attacks.Add(attack);
             int i = Attacks.Count - 1;
@@ -65,6 +74,34 @@ namespace gameview
         public void DestroyThis()
         {
             Destroy(gameObject);
+        }
+
+        internal void AddRetreatInteraction(int cost, Action onRetreatAction)
+        {
+            _retreatButton.gameObject.SetActive(true);
+            _retreatButton.onClick.AddListener(() => onRetreatAction.Invoke());
+            Collider.Add(_retreatButton.GetComponent<Collider2D>());
+            PlaceEnergyCostIcons(cost);
+        }
+
+        private void PlaceEnergyCostIcons(int cost)
+        {
+            var transform = _energyCost.transform;
+            var spacing = _typeIconPrefab.GetComponent<RectTransform>().rect.width * 1.05f;
+            var width = cost * spacing;
+            var horizontalDirection = transform.rotation * Vector3.right;
+            var firstPosition = transform.position - (width - spacing) / 2f * horizontalDirection;
+            for (int i = 0; i < cost; i++)
+            {
+                var typeIcon = Instantiate(
+                    _typeIconPrefab,
+                    firstPosition + i * spacing * horizontalDirection,
+                    transform.rotation
+                );
+                var iconImage = typeIcon.GetComponentInChildren<Image>();
+                iconImage.sprite = SpriteRegistry.INSTANCE.GetTypeIcon(PokemonType.Colorless);
+                typeIcon.transform.SetParent(transform);
+            }
         }
     }
 }

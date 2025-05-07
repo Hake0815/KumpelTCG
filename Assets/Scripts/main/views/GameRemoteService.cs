@@ -12,6 +12,7 @@ namespace gameview
         public IGameController GameController { get; set; }
         private readonly GameManager _gameManager;
         private readonly List<ICard> _playableCards = new();
+        private readonly List<ICard> _selectedCards = new();
 
         public GameRemoteService(GameManager gameManager)
         {
@@ -65,6 +66,9 @@ namespace gameview
                     case GameInteractionType.PerformAttack:
                         HandlePerformAttack(interaction);
                         break;
+                    case GameInteractionType.Retreat:
+                        HandleRetreat(interaction);
+                        break;
                     case GameInteractionType.EndTurn:
                         _gameManager.EnableEndTurnButton(
                             interaction.GameControllerMethod,
@@ -111,8 +115,8 @@ namespace gameview
 
             foreach (var card in targetData.PossibleTargets)
             {
-                _playableCards.Add(card as ICard);
-                var cardView = CardViewRegistry.INSTANCE.Get(card as ICard);
+                _playableCards.Add(card);
+                var cardView = CardViewRegistry.INSTANCE.Get(card);
                 cardView.SetPlayable(
                     true,
                     new ClickBehaviour(() =>
@@ -161,7 +165,7 @@ namespace gameview
                     },
                     (interaction.Data[typeof(TargetData)] as TargetData)
                         .PossibleTargets.AsEnumerable()
-                        .Select(card => CardViewRegistry.INSTANCE.Get(card as ICard))
+                        .Select(card => CardViewRegistry.INSTANCE.Get(card))
                         .ToList()
                 )
             );
@@ -180,8 +184,84 @@ namespace gameview
                     interaction.GameControllerMethod.Invoke();
                 }
             );
-            var clickBehaviour = new ClickBehaviour(cardView.ShowAttacks);
+            var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
             cardView.SetPlayable(true, clickBehaviour);
+        }
+
+        private void HandleRetreat(GameInteraction interaction)
+        {
+            var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            if (interaction.Data.TryGetValue(typeof(ConditionalTargetData), out var targetData))
+            {
+                var conditionalTargetData = targetData as ConditionalTargetData;
+                cardView.AddRetreat(() =>
+                {
+                    OnInteract();
+                    SetUpSelection(
+                        conditionalTargetData.ConditionOnSelection,
+                        conditionalTargetData.PossibleTargets,
+                        interaction.GameControllerMethodWithTargets
+                    );
+                });
+            }
+            else
+            {
+                cardView.AddRetreat(() =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                });
+            }
+            var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
+            cardView.SetPlayable(true, clickBehaviour);
+        }
+
+        private void SetUpSelection(
+            Predicate<List<ICard>> conditionOnSelection,
+            List<ICard> possibleTargets,
+            Action<List<ICard>> gameControllerMethodWithTargets
+        )
+        {
+            foreach (var possibleTarget in possibleTargets)
+            {
+                _playableCards.Add(possibleTarget);
+                var cardView = CardViewRegistry.INSTANCE.Get(possibleTarget);
+                cardView.SetPlayable(
+                    true,
+                    new ClickBehaviour(
+                        () =>
+                            HandleSelectionClicked(
+                                cardView,
+                                conditionOnSelection,
+                                gameControllerMethodWithTargets
+                            )
+                    )
+                );
+            }
+        }
+
+        private void HandleSelectionClicked(
+            CardView cardView,
+            Predicate<List<ICard>> conditionOnSelection,
+            Action<List<ICard>> gameControllerMethodWithTargets
+        )
+        {
+            if (cardView.Selected)
+            {
+                cardView.Selected = false;
+                _selectedCards.Remove(cardView.Card);
+                return;
+            }
+            cardView.Selected = true;
+            _selectedCards.Add(cardView.Card);
+            if (conditionOnSelection(_selectedCards))
+            {
+                OnInteract();
+                gameControllerMethodWithTargets.Invoke(_selectedCards);
+                ClearSelectedCards();
+            }
         }
 
         private void HandleSelectActivePokemon(GameInteraction interaction)
@@ -224,12 +304,12 @@ namespace gameview
 
         private void HandleSelectMulligans(GameInteraction interaction)
         {
-            _gameManager.ShowMulliganSelector(
-                (interaction.Data[typeof(TargetData)] as TargetData).PossibleTargets,
-                (selected) =>
+            _gameManager.AddOptionToMulliganSelector(
+                (interaction.Data[typeof(NumberData)] as NumberData).Number,
+                () =>
                 {
                     OnInteract();
-                    interaction.GameControllerMethodWithTargets.Invoke(new() { selected });
+                    interaction.GameControllerMethod.Invoke();
                 }
             );
         }
@@ -247,6 +327,15 @@ namespace gameview
                 cardView.SetPlayable(false, null);
             }
             _playableCards.Clear();
+        }
+
+        private void ClearSelectedCards()
+        {
+            foreach (var cardView in CardViewRegistry.INSTANCE.GetAllAvailable(_selectedCards))
+            {
+                cardView.Selected = false;
+            }
+            _selectedCards.Clear();
         }
 
         private static Dictionary<string, int> CreateDeckList()

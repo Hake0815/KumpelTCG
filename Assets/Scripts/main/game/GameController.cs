@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using UnityEngine;
 
 namespace gamecore.game
 {
@@ -103,6 +104,14 @@ namespace gamecore.game
         internal void Confirm()
         {
             _game.AdvanceGameState();
+        }
+
+        internal void Retreat(
+            IPokemonCardLogic pokemon,
+            List<IEnergyCardLogic> energyCardsToDiscard
+        )
+        {
+            _game.Retreat(pokemon, energyCardsToDiscard);
         }
     }
 #pragma warning restore 4014

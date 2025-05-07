@@ -58,12 +58,13 @@ namespace gamecore.game
         public int TurnCounter { get; private set; } = 0;
         public event Action AwaitInteractionEvent;
         public event Action AwaitGeneralInteractionEvent;
+        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
 
         public Game(IPlayerLogic player1, IPlayerLogic player2)
         {
             Player1 = player1;
             Player2 = player2;
-            ActionSystem.INSTANCE.AttachPerformer<EndTurnGA>(this);
+            _actionSystem.AttachPerformer<EndTurnGA>(this);
             CardSystem.INSTANCE.Enable();
             DamageSystem.INSTANCE.Enable();
             GeneralMechnicSystem.INSTANCE.Enable(this);
@@ -83,13 +84,13 @@ namespace gamecore.game
         {
             TurnCounter++;
             Player1.IsActive = true;
-            await ActionSystem.INSTANCE.Perform(new DrawCardGA(1, Player1));
+            await _actionSystem.Perform(new DrawCardGA(1, Player1));
         }
 
         public async Task EndTurn()
         {
             var endTurn = new EndTurnGA();
-            await ActionSystem.INSTANCE.Perform(endTurn);
+            await _actionSystem.Perform(endTurn);
             await AdvanceGameState();
         }
 
@@ -113,7 +114,7 @@ namespace gamecore.game
 
         public void EndGame(IPlayerLogic winner)
         {
-            ActionSystem.INSTANCE.DetachPerformer<EndTurnGA>();
+            _actionSystem.DetachPerformer<EndTurnGA>();
             CardSystem.INSTANCE.Disable();
             DamageSystem.INSTANCE.Disable();
             GeneralMechnicSystem.INSTANCE.Disable();
@@ -131,7 +132,6 @@ namespace gamecore.game
         public async Task AdvanceGameState()
         {
             GameState = GameState.AdvanceSuccesfully();
-            Debug.Log("Game state advanced to: " + GameState.GetType().Name);
             await GameState.OnAdvanced(this);
         }
 
@@ -165,7 +165,7 @@ namespace gamecore.game
 
         internal async Task DrawMulliganCards(int numberOfExtraCards, IPlayerLogic player)
         {
-            await ActionSystem.INSTANCE.Perform(new DrawCardGA(numberOfExtraCards, player));
+            await _actionSystem.Perform(new DrawCardGA(numberOfExtraCards, player));
             await AdvanceGameState();
         }
 
@@ -185,7 +185,16 @@ namespace gamecore.game
 
         internal async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
         {
-            await ActionSystem.INSTANCE.Perform(new AttackGA(attack, attacker));
+            await _actionSystem.Perform(new AttackGA(attack, attacker));
+            await AdvanceGameState();
+        }
+
+        internal async Task Retreat(
+            IPokemonCardLogic pokemon,
+            List<IEnergyCardLogic> energyCardsToDiscard
+        )
+        {
+            await _actionSystem.Perform(new RetreatGA(pokemon, energyCardsToDiscard));
             await AdvanceGameState();
         }
     }
