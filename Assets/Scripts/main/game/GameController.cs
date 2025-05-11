@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.card;
 using UnityEngine;
 
@@ -12,9 +13,10 @@ namespace gamecore.game
         event EventHandler<List<GameInteraction>> NotifyPlayer2;
         event EventHandler<List<GameInteraction>> NotifyGeneral;
 
-        void SetUpGame();
+        Task SetUpGame();
     }
-#pragma warning disable 4014
+
+    // #pragma warning disable 4014
     internal class GameController : IGameController
     {
         private readonly Game _game;
@@ -35,34 +37,34 @@ namespace gamecore.game
             _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
         }
 
-        public void SetUpGame()
+        public async Task SetUpGame()
         {
-            _game.PerformSetup();
+            await _game.PerformSetup();
         }
 
-        public void SelectActivePokemon(ICardLogic basicPokemon)
+        public async Task SelectActivePokemon(ICardLogic basicPokemon)
         {
-            _game.SetActivePokemon(basicPokemon);
+            await _game.SetActivePokemon(basicPokemon);
         }
 
-        public void PlayCard(ICardLogic card)
+        public async Task PlayCard(ICardLogic card)
         {
-            _game.PlayCard(card);
+            await _game.PlayCard(card);
         }
 
-        public void PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
+        public async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
-            _game.PlayCardWithTargets(card, targets);
+            await _game.PlayCardWithTargets(card, targets);
         }
 
-        public void SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
+        public async Task SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
         {
-            _game.DrawMulliganCards(numberOfExtraCards, player);
+            await _game.DrawMulliganCards(numberOfExtraCards, player);
         }
 
-        public void PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
+        public async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
         {
-            _game.PerformAttack(attack, attacker);
+            await _game.PerformAttack(attack, attacker);
         }
 
         private void NotifyPlayers()
@@ -96,23 +98,23 @@ namespace gamecore.game
                 NotifyGeneral?.Invoke(this, interactions);
         }
 
-        internal void EndTurn()
+        internal async Task EndTurn()
         {
-            _game.EndTurn();
+            await _game.EndTurn();
         }
 
-        internal void Confirm()
+        internal async Task Confirm()
         {
-            _game.AdvanceGameState();
+            await _game.AdvanceGameState();
         }
 
-        internal void Retreat(
+        internal async Task Retreat(
             IPokemonCardLogic pokemon,
             List<IEnergyCardLogic> energyCardsToDiscard
         )
         {
-            _game.Retreat(pokemon, energyCardsToDiscard);
+            await _game.Retreat(pokemon, energyCardsToDiscard);
         }
     }
-#pragma warning restore 4014
+    // #pragma warning restore 4014
 }

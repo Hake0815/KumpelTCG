@@ -14,6 +14,7 @@ namespace gamecore.game.action
             IActionPerformer<DiscardAttachedEnergyCardsGA>,
             IActionPerformer<BenchPokemonGA>,
             IActionPerformer<MovePokemonToBenchGA>,
+            IActionPerformer<EvolveGA>,
             IActionSubscriber<EndTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -32,6 +33,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
+            _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -43,7 +45,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
             _actionSystem.DetachPerformer<BenchPokemonGA>();
-            _actionSystem.DetachPerformer<MovePokemonToBenchGA>();
+            _actionSystem.DetachPerformer<EvolveGA>();
             _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -89,7 +91,7 @@ namespace gamecore.game.action
         {
             var energyCard = action.EnergyCard;
             energyCard.Owner.Hand.RemoveCard(energyCard);
-            action.TargetPokemon.AttachEnergy(energyCard);
+            action.TargetPokemon.AttachEnergyCards(new() { energyCard });
         }
 
         public Task<DiscardAttachedEnergyCardsGA> Perform(DiscardAttachedEnergyCardsGA action)
@@ -110,6 +112,31 @@ namespace gamecore.game.action
         {
             var pokemon = action.Pokemon;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
+            return Task.FromResult(action);
+        }
+
+        public Task<EvolveGA> Perform(EvolveGA action)
+        {
+            action.NewPokemon.Owner.Hand.RemoveCard(action.NewPokemon);
+            action.NewPokemon.PreEvolutions.Add(action.TargetPokemon);
+
+            if (action.TargetPokemon == action.TargetPokemon.Owner.ActivePokemon)
+                action.TargetPokemon.Owner.ActivePokemon = action.NewPokemon;
+            else
+            {
+                action.TargetPokemon.Owner.Bench.RemoveCard(action.TargetPokemon);
+                action.NewPokemon.Owner.Bench.AddCards(new() { action.NewPokemon });
+            }
+
+            action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
+            action.TargetPokemon.AttachedEnergyCards.Clear();
+
+            foreach (var preEvolution in action.TargetPokemon.PreEvolutions)
+                action.NewPokemon.PreEvolutions.Add(preEvolution);
+
+            action.TargetPokemon.PreEvolutions.Clear();
+
+            action.TargetPokemon.WasEvolved();
             return Task.FromResult(action);
         }
     }

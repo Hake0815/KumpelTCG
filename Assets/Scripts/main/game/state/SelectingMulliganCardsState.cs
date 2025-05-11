@@ -33,8 +33,8 @@ namespace gamecore.game.state
                 var mulliganCount = i;
                 interactions.Add(
                     new(
-                        gameControllerMethod: () =>
-                            gameController.SelectMulligans(mulliganCount, player),
+                        gameControllerMethod: async () =>
+                            await gameController.SelectMulligans(mulliganCount, player),
                         type: GameInteractionType.SelectMulligans,
                         data: new() { new NumberData(i) }
                     )

@@ -34,7 +34,8 @@ namespace gamecore.card
         bool IsPlayable();
         Task PlayWithTargets(List<ICardLogic> targets);
         bool IsPlayableWithTargets();
-        List<ICardLogic> GetTargets();
+        List<ICardLogic> GetPossibleTargets();
+        int GetNumberOfTargets();
         void Discard();
     }
 }
