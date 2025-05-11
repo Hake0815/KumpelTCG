@@ -28,10 +28,10 @@ namespace gamecore.game.state
             }
             interactions.Add(
                 new(
-                    () =>
+                    async () =>
                     {
                         _doneSelecting = true;
-                        gameController.Confirm();
+                        await gameController.Confirm();
                     },
                     GameInteractionType.Confirm
                 )
@@ -45,7 +45,7 @@ namespace gamecore.game.state
         )
         {
             return new GameInteraction(
-                () => gameController.PlayCard(basicPokemon),
+                async () => await gameController.PlayCard(basicPokemon),
                 GameInteractionType.PlayCard,
                 new() { new InteractionCard(basicPokemon) }
             );

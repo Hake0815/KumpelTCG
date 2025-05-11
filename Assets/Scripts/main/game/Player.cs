@@ -59,7 +59,17 @@ namespace gamecore.game
                     ResetOncePerTurnActions();
             }
         }
-        public IPokemonCardLogic ActivePokemon { get; set; }
+        private IPokemonCardLogic _activePokemon;
+        public IPokemonCardLogic ActivePokemon
+        {
+            get => _activePokemon;
+            set
+            {
+                _activePokemon = value;
+                if (value != null)
+                    ActivePokemonSet?.Invoke(value);
+            }
+        }
         public IDeckLogic Deck { get; set; }
         public IHandLogic Hand { get; } = new Hand();
         public IBenchLogic Bench { get; } = new Bench();
@@ -83,7 +93,6 @@ namespace gamecore.game
         {
             Bench.RemoveCard(pokemon);
             ActivePokemon = pokemon;
-            ActivePokemonSet?.Invoke(pokemon);
         }
 
         public void ResetOncePerTurnActions()

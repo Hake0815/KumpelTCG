@@ -32,6 +32,8 @@ namespace gameview
 
         private void SetActivePokemon(IPokemonCard card)
         {
+            Debug.Log("Set active pokemon called");
+            Debug.Log($"Setting active pokemon: {card.Name}");
             SetActivePokemon(CardViewRegistry.INSTANCE.Get(card));
         }
 
@@ -40,8 +42,10 @@ namespace gameview
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
-                    cardView.transform.DOMove(transform.position + Vector3.back, 0.25f);
-                    cardView.transform.DORotateQuaternion(transform.rotation, 0.25f);
+                    DOTween
+                        .Sequence()
+                        .Join(cardView.transform.DOMove(transform.position + Vector3.back, 0.25f))
+                        .Join(cardView.transform.DORotateQuaternion(transform.rotation, 0.25f));
                     callback.Invoke();
                 }
             );

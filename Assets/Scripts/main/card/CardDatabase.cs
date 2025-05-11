@@ -24,10 +24,11 @@ namespace gamecore.card
                     id: "TWM128",
                     name: "Dreepy",
                     stage: Stage.Basic,
+                    evolvesFrom: null,
                     type: PokemonType.Dragon,
                     weakness: PokemonType.None,
                     resistance: PokemonType.None,
-                    retreatCost: 1,
+                    retreatCost: 2,
                     maxHP: 70,
                     attacks: new List<IAttackLogic>
                     {
@@ -51,6 +52,7 @@ namespace gamecore.card
                     id: "TWM129",
                     name: "Drakloak",
                     stage: Stage.Stage1,
+                    evolvesFrom: "Dreepy",
                     type: PokemonType.Dragon,
                     weakness: PokemonType.None,
                     resistance: PokemonType.None,

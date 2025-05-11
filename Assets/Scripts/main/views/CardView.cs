@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using gamecore.card;
 using TMPro;
@@ -72,6 +73,11 @@ namespace gameview
             }
         }
 
+        private float _height;
+        private float _width;
+        private Vector3 _verticalDirection;
+        private Vector3 _horizontalDirection;
+
         private void SetImageSprite()
         {
             if (Attached && _attachedSprite != null)
@@ -122,6 +128,10 @@ namespace gameview
             _imageMaterial = new Material(_image.material);
             _image.material = _imageMaterial;
             TurnOffHighlight();
+            _height = RectTransform.rect.height;
+            _width = RectTransform.rect.width;
+            _verticalDirection = transform.rotation * Vector3.up;
+            _horizontalDirection = transform.rotation * Vector3.right;
         }
 
         private void OnEnable()
@@ -133,6 +143,7 @@ namespace gameview
                 {
                     pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
                     pokemonCard.DamageModified += UpdateDamage;
+                    pokemonCard.Evolved += OnEvolved;
                 }
             }
         }
@@ -143,8 +154,23 @@ namespace gameview
             {
                 Card.CardDiscarded -= Discard;
                 if (Card is IPokemonCard pokemonCard)
+                {
                     pokemonCard.OnAttachedEnergyChanged -= AttachEnergy;
+                    pokemonCard.DamageModified -= UpdateDamage;
+                    pokemonCard.Evolved -= OnEvolved;
+                }
             }
+        }
+
+        private void OnEvolved()
+        {
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    Destroy(gameObject);
+                    callback.Invoke();
+                }
+            );
         }
 
         private void Discard()
@@ -153,16 +179,21 @@ namespace gameview
             MoveToDiscardPile();
         }
 
-        private void AttachEnergy(IEnergyCard card)
+        private void AttachEnergy(List<IEnergyCard> cards)
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
                     var sequence = DOTween.Sequence();
-                    if (card != null)
-                        CardViewRegistry.INSTANCE.Get(card).TransformToAttachedEnergyView(sequence);
-                    UpdateAttachedEnergyCards(sequence);
-                    sequence.OnComplete(() => callback.Invoke());
+                    foreach (var card in cards)
+                    {
+                        if (cards != null)
+                            CardViewRegistry
+                                .INSTANCE.Get(card)
+                                .TransformToAttachedEnergyView(sequence);
+                    }
+                    UpdateAttachedEnergyCards(sequence, callback);
+                    // sequence.OnComplete(() => callback.Invoke());
                 }
             );
         }
@@ -176,30 +207,48 @@ namespace gameview
             Attached = true;
         }
 
-        private void UpdateAttachedEnergyCards(Sequence sequence)
+        private void UpdateAttachedEnergyCards(Sequence sequence, Action callback)
         {
-            var height = RectTransform.rect.height;
-            var width = RectTransform.rect.width;
-            var verticalDirection = transform.rotation * Vector3.up;
-            var horizontalDirection = transform.rotation * Vector3.right;
-            var firstCardPosition =
-                transform.position
-                - height * (1 - ATTACHED_SCALE / 1.375f) / 2 * verticalDirection
-                - width * (1 - ATTACHED_SCALE) / 2 * horizontalDirection
-                + Vector3.back;
             int i = 0;
             foreach (var energyCard in ((IPokemonCard)Card).AttachedEnergyCards)
             {
                 var energyCardView = CardViewRegistry.INSTANCE.Get(energyCard);
                 energyCardView.RectTransform.SetParent(transform);
-                sequence.Join(
-                    energyCardView.transform.DOMove(
-                        firstCardPosition + i * width * ATTACHED_SCALE * horizontalDirection,
-                        0.25f
+                var tweener = energyCardView.transform.DOMove(GetEnergyTargetPosition(i), 0.25f);
+                tweener.OnUpdate(() =>
+                {
+                    if (
+                        Vector3.Distance(
+                            energyCardView.transform.position,
+                            GetEnergyTargetPosition(i)
+                        ) > 0.001f
                     )
-                );
+                        tweener.ChangeEndValue(GetEnergyTargetPosition(i));
+                });
+                tweener.OnComplete(() => callback.Invoke());
+                tweener.Complete();
+                // sequence.Join(tweener);
+                // sequence.Join(
+                //     energyCardView.transform.DOMove(
+                //         GetFirstCardPosition() + i * _width * ATTACHED_SCALE * _horizontalDirection,
+                //         0.25f
+                //     )
+                // );
                 i++;
             }
+        }
+
+        private Vector3 GetEnergyTargetPosition(int i)
+        {
+            return GetFirstCardPosition() + i * _width * ATTACHED_SCALE * _horizontalDirection;
+        }
+
+        private Vector3 GetFirstCardPosition()
+        {
+            return transform.position
+                - _height * (1 - ATTACHED_SCALE / 1.375f) / 2 * _verticalDirection
+                - _width * (1 - ATTACHED_SCALE) / 2 * _horizontalDirection
+                + Vector3.back;
         }
 
         private void UpdateDamage()
@@ -258,14 +307,12 @@ namespace gameview
 
         private void TurnOnHighlight(Color color)
         {
-            Debug.Log($"Turn on highlight with color {color}");
             _imageMaterial.SetColor("_Color", color);
             _imageMaterial.SetFloat("_Brightness", 5f);
         }
 
         private void TurnOffHighlight()
         {
-            Debug.Log("Turn off highlight");
             _imageMaterial.SetColor("_Color", Color.white);
             _imageMaterial.SetFloat("_Brightness", 0f);
         }

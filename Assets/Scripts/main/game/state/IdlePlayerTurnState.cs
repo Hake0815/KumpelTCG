@@ -28,7 +28,10 @@ namespace gamecore.game.state
             AddAttackInteractions(interactions, gameController, player);
             AddRetreatInteraction(interactions, gameController, player);
             interactions.Add(
-                new GameInteraction(gameController.EndTurn, GameInteractionType.EndTurn)
+                new GameInteraction(
+                    async () => await gameController.EndTurn(),
+                    GameInteractionType.EndTurn
+                )
             );
             return interactions;
         }
@@ -44,7 +47,7 @@ namespace gamecore.game.state
             {
                 interactions.Add(
                     new GameInteraction(
-                        () => gameController.PlayCard(card),
+                        async () => await gameController.PlayCard(card),
                         GameInteractionType.PlayCard,
                         new() { new InteractionCard(card) }
                     )
@@ -72,11 +75,11 @@ namespace gamecore.game.state
             var playableCards = GetPlayableCardsWithTargetFromHand(player);
             foreach (var card in playableCards)
             {
-                var targets = card.GetTargets();
+                var targets = card.GetPossibleTargets();
                 interactions.Add(
                     new GameInteraction(
-                        (selectedTargets) =>
-                            gameController.PlayCardWithTargets(
+                        async (selectedTargets) =>
+                            await gameController.PlayCardWithTargets(
                                 card,
                                 selectedTargets.Cast<ICardLogic>().ToList()
                             ),
@@ -84,7 +87,10 @@ namespace gamecore.game.state
                         new()
                         {
                             new InteractionCard(card),
-                            new TargetData(card.GetTargets().Count, targets.Cast<ICard>().ToList()),
+                            new TargetData(
+                                card.GetNumberOfTargets(),
+                                targets.Cast<ICard>().ToList()
+                            ),
                         }
                     )
                 );
@@ -114,7 +120,8 @@ namespace gamecore.game.state
             {
                 interactions.Add(
                     new GameInteraction(
-                        () => gameController.PerformAttack(attack, player.ActivePokemon),
+                        async () =>
+                            await gameController.PerformAttack(attack, player.ActivePokemon),
                         GameInteractionType.PerformAttack,
                         new() { new InteractionCard(player.ActivePokemon), new AttackData(attack) }
                     )
@@ -160,8 +167,8 @@ namespace gamecore.game.state
         {
             interactions.Add(
                 new GameInteraction(
-                    (energyCardsToDiscard) =>
-                        gameController.Retreat(
+                    async (energyCardsToDiscard) =>
+                        await gameController.Retreat(
                             player.ActivePokemon,
                             energyCardsToDiscard.Cast<IEnergyCardLogic>().ToList()
                         ),
@@ -196,7 +203,8 @@ namespace gamecore.game.state
             }
             interactions.Add(
                 new GameInteraction(
-                    () => gameController.Retreat(player.ActivePokemon, energyCardsToDiscard),
+                    async () =>
+                        await gameController.Retreat(player.ActivePokemon, energyCardsToDiscard),
                     GameInteractionType.Retreat,
                     new() { new InteractionCard(player.ActivePokemon) }
                 )

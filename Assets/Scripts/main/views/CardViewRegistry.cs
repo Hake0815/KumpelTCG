@@ -12,21 +12,21 @@ namespace gameview
 
         private CardViewRegistry() { }
 
-        private readonly Dictionary<ICard, CardView> regsitry = new();
+        private readonly Dictionary<ICard, CardView> registry = new();
 
         public void Register(CardView cardView)
         {
-            regsitry[cardView.Card] = cardView;
+            registry[cardView.Card] = cardView;
         }
 
         public void Unregister(ICard card)
         {
-            regsitry.Remove(card);
+            registry.Remove(card);
         }
 
         public CardView Get(ICard card)
         {
-            return regsitry[card];
+            return registry[card];
         }
 
         public List<CardView> GetAll(ICollection<ICard> cards)
@@ -34,7 +34,7 @@ namespace gameview
             List<CardView> cardViews = new();
             foreach (var card in cards)
             {
-                cardViews.Add(regsitry[card]);
+                cardViews.Add(registry[card]);
             }
             return cardViews;
         }
@@ -44,7 +44,7 @@ namespace gameview
             var cardViews = new List<CardView>();
             foreach (var card in cards)
             {
-                if (regsitry.TryGetValue(card, out var cardView))
+                if (registry.TryGetValue(card, out var cardView))
                     cardViews.Add(cardView);
             }
             return cardViews;

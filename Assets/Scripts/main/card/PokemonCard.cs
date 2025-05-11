@@ -12,14 +12,17 @@ namespace gamecore.card
     public interface IPokemonCard : ICard
     {
         Stage Stage { get; }
+        string EvolvesFrom { get; }
         List<IAttack> Attacks { get; }
         List<IEnergyCard> AttachedEnergyCards { get; }
         List<PokemonType> AttachedEnergy { get; }
+        List<IPokemonCard> PreEvolutions { get; }
         int Damage { get; }
         int MaxHP { get; }
         int RetreatCost { get; }
-        event Action<IEnergyCard> OnAttachedEnergyChanged;
+        event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         event Action DamageModified;
+        event Action Evolved;
     }
 
     internal interface IPokemonCardLogic : ICardLogic, IPokemonCard
@@ -28,7 +31,7 @@ namespace gamecore.card
         PokemonType Weakness { get; set; }
         PokemonType Resistance { get; set; }
         int NumberOfPrizeCardsOnKnockout { get; set; }
-        void AttachEnergy(IEnergyCardLogic energy);
+        void AttachEnergyCards(List<IEnergyCardLogic> energyCards);
         new List<IEnergyCardLogic> AttachedEnergyCards { get; }
         new List<IAttackLogic> Attacks { get; }
         List<IAttackLogic> GetUsableAttacks();
@@ -37,6 +40,7 @@ namespace gamecore.card
         void TakeDamage(int damage);
         bool CanPayRetreatCost();
         void DiscardEnergy(List<IEnergyCardLogic> energyCardsToDiscard);
+        void WasEvolved();
     }
 
     internal class PokemonCard : IPokemonCardLogic
@@ -84,9 +88,13 @@ namespace gamecore.card
             }
         }
 
+        public string EvolvesFrom => PokemonCardData.EvolvesFrom;
+        public List<IPokemonCard> PreEvolutions { get; } = new();
+
         public event Action CardDiscarded;
         public event Action DamageModified;
-        public event Action<IEnergyCard> OnAttachedEnergyChanged;
+        public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
+        public event Action Evolved;
 
         public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
         {
@@ -106,11 +114,6 @@ namespace gamecore.card
             Owner.DiscardPile.AddCards(new() { this });
             Damage = 0;
             CardDiscarded?.Invoke();
-        }
-
-        public bool IsPlayable()
-        {
-            return Stage == Stage.Basic && !Owner.Bench.Full;
         }
 
         public List<IAttackLogic> GetUsableAttacks()
@@ -168,6 +171,11 @@ namespace gamecore.card
             return false;
         }
 
+        public bool IsPlayable()
+        {
+            return Stage == Stage.Basic && !Owner.Bench.Full;
+        }
+
         public async Task Play()
         {
             if (Owner.ActivePokemon == null)
@@ -184,30 +192,50 @@ namespace gamecore.card
             }
         }
 
-        public Task PlayWithTargets(List<ICardLogic> targets)
-        {
-            throw new IlleagalActionException("Pokemon cards cannot be played with a target.");
-        }
-
         public bool IsPlayableWithTargets()
         {
+            if (Owner.ActivePokemon.Name == EvolvesFrom)
+                return true;
+            foreach (var benchPokemon in Owner.Bench.Cards)
+            {
+                if (benchPokemon.Name == EvolvesFrom)
+                    return true;
+            }
             return false;
         }
+
+        public List<ICardLogic> GetPossibleTargets()
+        {
+            var targets = new List<ICardLogic>();
+            foreach (var benchPokemon in Owner.Bench.Cards)
+            {
+                if (benchPokemon.Name == EvolvesFrom)
+                    targets.Add(benchPokemon);
+            }
+            if (Owner.ActivePokemon.Name == EvolvesFrom)
+                targets.Add(Owner.ActivePokemon);
+
+            return targets;
+        }
+
+        public async Task PlayWithTargets(List<ICardLogic> targets)
+        {
+            await ActionSystem.INSTANCE.Perform(
+                new EvolveGA(targets[0] as IPokemonCardLogic, this)
+            );
+        }
+
+        public int GetNumberOfTargets() => 1;
 
         public bool IsEnergyCard()
         {
             return false;
         }
 
-        public void AttachEnergy(IEnergyCardLogic energy)
+        public void AttachEnergyCards(List<IEnergyCardLogic> energyCards)
         {
-            AttachedEnergyCards.Add(energy);
-            OnAttachedEnergyChanged?.Invoke(energy);
-        }
-
-        public List<ICardLogic> GetTargets()
-        {
-            throw new IlleagalActionException("Pokemon cards cannot be played with a target.");
+            AttachedEnergyCards.AddRange(energyCards);
+            OnAttachedEnergyChanged?.Invoke(energyCards.Cast<IEnergyCard>().ToList());
         }
 
         public bool IsActive()
@@ -238,7 +266,12 @@ namespace gamecore.card
                 energyCard.Discard();
                 AttachedEnergyCards.Remove(energyCard);
             }
-            OnAttachedEnergyChanged?.Invoke(null);
+            OnAttachedEnergyChanged?.Invoke(new());
+        }
+
+        public void WasEvolved()
+        {
+            Evolved?.Invoke();
         }
     }
 }
