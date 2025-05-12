@@ -217,10 +217,13 @@ namespace gamecore.card
             var targets = new List<ICardLogic>();
             foreach (var benchPokemon in Owner.Bench.Cards)
             {
-                if (benchPokemon.Name == EvolvesFrom)
+                if (
+                    benchPokemon.Name == EvolvesFrom
+                    && !(benchPokemon as IPokemonCardLogic).PutIntoPlayThisTurn
+                )
                     targets.Add(benchPokemon);
             }
-            if (Owner.ActivePokemon.Name == EvolvesFrom)
+            if (Owner.ActivePokemon.Name == EvolvesFrom && !Owner.ActivePokemon.PutIntoPlayThisTurn)
                 targets.Add(Owner.ActivePokemon);
 
             return targets;
