@@ -16,7 +16,6 @@ namespace gamecore.game
         Task SetUpGame();
     }
 
-    // #pragma warning disable 4014
     internal class GameController : IGameController
     {
         private readonly Game _game;
@@ -116,5 +115,4 @@ namespace gamecore.game
             await _game.Retreat(pokemon, energyCardsToDiscard);
         }
     }
-    // #pragma warning restore 4014
 }

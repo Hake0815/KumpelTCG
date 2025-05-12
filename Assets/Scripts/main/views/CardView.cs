@@ -75,8 +75,6 @@ namespace gameview
 
         private float _height;
         private float _width;
-        private Vector3 _verticalDirection;
-        private Vector3 _horizontalDirection;
 
         private void SetImageSprite()
         {
@@ -130,8 +128,6 @@ namespace gameview
             TurnOffHighlight();
             _height = RectTransform.rect.height;
             _width = RectTransform.rect.width;
-            _verticalDirection = transform.rotation * Vector3.up;
-            _horizontalDirection = transform.rotation * Vector3.right;
         }
 
         private void OnEnable()
@@ -192,8 +188,8 @@ namespace gameview
                                 .INSTANCE.Get(card)
                                 .TransformToAttachedEnergyView(sequence);
                     }
-                    UpdateAttachedEnergyCards(sequence, callback);
-                    // sequence.OnComplete(() => callback.Invoke());
+                    UpdateAttachedEnergyCards(sequence);
+                    sequence.OnComplete(() => callback.Invoke());
                 }
             );
         }
@@ -207,47 +203,29 @@ namespace gameview
             Attached = true;
         }
 
-        private void UpdateAttachedEnergyCards(Sequence sequence, Action callback)
+        private void UpdateAttachedEnergyCards(Sequence sequence)
         {
             int i = 0;
             foreach (var energyCard in ((IPokemonCard)Card).AttachedEnergyCards)
             {
                 var energyCardView = CardViewRegistry.INSTANCE.Get(energyCard);
                 energyCardView.RectTransform.SetParent(transform);
-                var tweener = energyCardView.transform.DOMove(GetEnergyTargetPosition(i), 0.25f);
-                tweener.OnUpdate(() =>
-                {
-                    if (
-                        Vector3.Distance(
-                            energyCardView.transform.position,
-                            GetEnergyTargetPosition(i)
-                        ) > 0.001f
-                    )
-                        tweener.ChangeEndValue(GetEnergyTargetPosition(i));
-                });
-                tweener.OnComplete(() => callback.Invoke());
-                tweener.Complete();
-                // sequence.Join(tweener);
-                // sequence.Join(
-                //     energyCardView.transform.DOMove(
-                //         GetFirstCardPosition() + i * _width * ATTACHED_SCALE * _horizontalDirection,
-                //         0.25f
-                //     )
-                // );
+                sequence.Join(
+                    energyCardView.transform.DOLocalMove(GetEnergyTargetPosition(i), 0.25f)
+                );
                 i++;
             }
         }
 
         private Vector3 GetEnergyTargetPosition(int i)
         {
-            return GetFirstCardPosition() + i * _width * ATTACHED_SCALE * _horizontalDirection;
+            return GetFirstLocalCardPosition() + i * _width * ATTACHED_SCALE * Vector3.right;
         }
 
-        private Vector3 GetFirstCardPosition()
+        private Vector3 GetFirstLocalCardPosition()
         {
-            return transform.position
-                - _height * (1 - ATTACHED_SCALE / 1.375f) / 2 * _verticalDirection
-                - _width * (1 - ATTACHED_SCALE) / 2 * _horizontalDirection
+            return -_height * (1 - ATTACHED_SCALE / 1.375f) / 2 * Vector3.up
+                - _width * (1 - ATTACHED_SCALE) / 2 * Vector3.right
                 + Vector3.back;
         }
 

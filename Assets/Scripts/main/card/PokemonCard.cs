@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
-using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
+using UnityEngine;
 
 namespace gamecore.card
 {
@@ -25,7 +25,7 @@ namespace gamecore.card
         event Action Evolved;
     }
 
-    internal interface IPokemonCardLogic : ICardLogic, IPokemonCard
+    internal interface IPokemonCardLogic : ICardLogic, IPokemonCard, IActionSubscriber<StartTurnGA>
     {
         PokemonType Type { get; set; }
         PokemonType Weakness { get; set; }
@@ -34,6 +34,7 @@ namespace gamecore.card
         void AttachEnergyCards(List<IEnergyCardLogic> energyCards);
         new List<IEnergyCardLogic> AttachedEnergyCards { get; }
         new List<IAttackLogic> Attacks { get; }
+        bool PutIntoPlayThisTurn { get; set; }
         List<IAttackLogic> GetUsableAttacks();
         bool IsActive();
         bool IsKnockedOut();
@@ -90,6 +91,7 @@ namespace gamecore.card
 
         public string EvolvesFrom => PokemonCardData.EvolvesFrom;
         public List<IPokemonCard> PreEvolutions { get; } = new();
+        public bool PutIntoPlayThisTurn { get; set; }
 
         public event Action CardDiscarded;
         public event Action DamageModified;
@@ -188,17 +190,23 @@ namespace gamecore.card
             if (!Owner.Bench.Full)
             {
                 await ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
+                SetPutInPlay();
                 Damage = 0;
             }
         }
 
         public bool IsPlayableWithTargets()
         {
-            if (Owner.ActivePokemon.Name == EvolvesFrom)
+            if (Owner.TurnCounter < 2)
+                return false;
+            if (Owner.ActivePokemon.Name == EvolvesFrom && !Owner.ActivePokemon.PutIntoPlayThisTurn)
                 return true;
             foreach (var benchPokemon in Owner.Bench.Cards)
             {
-                if (benchPokemon.Name == EvolvesFrom)
+                if (
+                    benchPokemon.Name == EvolvesFrom
+                    && !(benchPokemon as IPokemonCardLogic).PutIntoPlayThisTurn
+                )
                     return true;
             }
             return false;
@@ -223,6 +231,13 @@ namespace gamecore.card
             await ActionSystem.INSTANCE.Perform(
                 new EvolveGA(targets[0] as IPokemonCardLogic, this)
             );
+            SetPutInPlay();
+        }
+
+        private void SetPutInPlay()
+        {
+            PutIntoPlayThisTurn = true;
+            ActionSystem.INSTANCE.SubscribeToGameAction<StartTurnGA>(this, ReactionTiming.PRE);
         }
 
         public int GetNumberOfTargets() => 1;
@@ -272,6 +287,12 @@ namespace gamecore.card
         public void WasEvolved()
         {
             Evolved?.Invoke();
+        }
+
+        public StartTurnGA React(StartTurnGA action)
+        {
+            ActionSystem.INSTANCE.AddReaction(new ResetPokemonInPlayStateGA(this));
+            return action;
         }
     }
 }

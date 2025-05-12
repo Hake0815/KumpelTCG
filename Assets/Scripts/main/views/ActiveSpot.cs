@@ -32,8 +32,6 @@ namespace gameview
 
         private void SetActivePokemon(IPokemonCard card)
         {
-            Debug.Log("Set active pokemon called");
-            Debug.Log($"Setting active pokemon: {card.Name}");
             SetActivePokemon(CardViewRegistry.INSTANCE.Get(card));
         }
 
