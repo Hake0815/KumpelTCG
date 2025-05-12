@@ -39,6 +39,7 @@ namespace gamecore.game
         new IDiscardPileLogic DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
         IPlayerLogic Opponent { get; }
+        int TurnCounter { get; set; }
         void Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
@@ -77,6 +78,7 @@ namespace gamecore.game
         public IPrizesLogic Prizes { get; } = new Prizes();
         public HashSet<string> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
+        public int TurnCounter { get; set; } = 0;
 
         public event Action<IPokemonCard> ActivePokemonSet;
 

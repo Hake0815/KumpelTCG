@@ -15,7 +15,8 @@ namespace gamecore.game.action
             IActionPerformer<BenchPokemonGA>,
             IActionPerformer<MovePokemonToBenchGA>,
             IActionPerformer<EvolveGA>,
-            IActionSubscriber<EndTurnGA>
+            IActionPerformer<ResetPokemonInPlayStateGA>,
+            IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
         public static CardSystem INSTANCE => lazy.Value;
@@ -34,7 +35,8 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
             _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
-            _actionSystem.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
+            _actionSystem.AttachPerformer<ResetPokemonInPlayStateGA>(INSTANCE);
+            _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
         public void Disable()
@@ -46,14 +48,15 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
             _actionSystem.DetachPerformer<BenchPokemonGA>();
             _actionSystem.DetachPerformer<EvolveGA>();
-            _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
+            _actionSystem.DetachPerformer<ResetPokemonInPlayStateGA>();
+            _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
-        public EndTurnGA React(EndTurnGA endTurnGA)
+        public StartTurnGA React(StartTurnGA startTurnGA)
         {
-            var drawCardGA = new DrawCardGA(1, endTurnGA.NextPlayer);
+            var drawCardGA = new DrawCardGA(1, startTurnGA.NextPlayer);
             _actionSystem.AddReaction(drawCardGA);
-            return endTurnGA;
+            return startTurnGA;
         }
 
         public Task<DrawCardGA> Perform(DrawCardGA drawCardGA)
@@ -137,6 +140,16 @@ namespace gamecore.game.action
             action.TargetPokemon.PreEvolutions.Clear();
 
             action.TargetPokemon.WasEvolved();
+            return Task.FromResult(action);
+        }
+
+        public Task<ResetPokemonInPlayStateGA> Perform(ResetPokemonInPlayStateGA action)
+        {
+            action.PokemonToReset.PutIntoPlayThisTurn = false;
+            ActionSystem.INSTANCE.UnsubscribeFromGameAction<StartTurnGA>(
+                action.PokemonToReset,
+                ReactionTiming.PRE
+            );
             return Task.FromResult(action);
         }
     }
