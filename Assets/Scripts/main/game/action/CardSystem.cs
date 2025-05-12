@@ -127,8 +127,10 @@ namespace gamecore.game.action
                 action.TargetPokemon.Owner.ActivePokemon = action.NewPokemon;
             else
             {
-                action.TargetPokemon.Owner.Bench.RemoveCard(action.TargetPokemon);
-                action.NewPokemon.Owner.Bench.AddCards(new() { action.NewPokemon });
+                action.TargetPokemon.Owner.Bench.ReplaceInPlace(
+                    action.TargetPokemon,
+                    action.NewPokemon
+                );
             }
 
             action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
