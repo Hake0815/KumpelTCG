@@ -94,7 +94,12 @@ namespace gamecore.card
             return false;
         }
 
-        public List<ICardLogic> GetTargets()
+        public List<ICardLogic> GetPossibleTargets()
+        {
+            throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
+        }
+
+        public int GetNumberOfTargets()
         {
             throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }

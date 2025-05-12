@@ -34,7 +34,7 @@ namespace gamecore.game.state
             return new List<GameInteraction>()
             {
                 new(
-                    gameController.Confirm,
+                    async () => await gameController.Confirm(),
                     GameInteractionType.ConfirmMulligans,
                     new() { new MulliganData(mulligansToShow) }
                 ),

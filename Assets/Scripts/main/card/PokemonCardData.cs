@@ -5,6 +5,7 @@ namespace gamecore.card
     internal interface IPokemonCardData : ICardData
     {
         Stage Stage { get; }
+        string EvolvesFrom { get; }
         PokemonType Type { get; }
         PokemonType Weakness { get; }
         PokemonType Resistance { get; }
@@ -19,6 +20,7 @@ namespace gamecore.card
         public string Id { get; }
         public string Name { get; }
         public Stage Stage { get; }
+        public string EvolvesFrom { get; }
         public PokemonType Type { get; }
         public PokemonType Weakness { get; }
         public PokemonType Resistance { get; }
@@ -31,6 +33,7 @@ namespace gamecore.card
             string id,
             string name,
             Stage stage,
+            string evolvesFrom,
             PokemonType type,
             PokemonType weakness,
             PokemonType resistance,
@@ -43,6 +46,7 @@ namespace gamecore.card
             Id = id;
             Name = name;
             Stage = stage;
+            EvolvesFrom = evolvesFrom;
             Type = type;
             Weakness = weakness;
             Resistance = resistance;

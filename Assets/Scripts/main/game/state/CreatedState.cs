@@ -17,7 +17,7 @@ namespace gamecore.game.state
         )
         {
             var gameInteraction = new GameInteraction(
-                gameController.SetUpGame,
+                async () => await gameController.SetUpGame(),
                 GameInteractionType.SetUpGame
             );
             return new List<GameInteraction>() { gameInteraction };

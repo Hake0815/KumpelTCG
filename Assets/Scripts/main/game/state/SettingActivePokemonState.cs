@@ -38,7 +38,7 @@ namespace gamecore.game.state
         )
         {
             return new GameInteraction(
-                () => gameController.SelectActivePokemon(basicPokemon),
+                async () => await gameController.SelectActivePokemon(basicPokemon),
                 GameInteractionType.SelectActivePokemon,
                 new() { new InteractionCard(basicPokemon) }
             );
