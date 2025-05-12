@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using gamecore.card;
 using TMPro;
@@ -72,6 +73,9 @@ namespace gameview
             }
         }
 
+        private float _height;
+        private float _width;
+
         private void SetImageSprite()
         {
             if (Attached && _attachedSprite != null)
@@ -122,6 +126,8 @@ namespace gameview
             _imageMaterial = new Material(_image.material);
             _image.material = _imageMaterial;
             TurnOffHighlight();
+            _height = RectTransform.rect.height;
+            _width = RectTransform.rect.width;
         }
 
         private void OnEnable()
@@ -133,6 +139,7 @@ namespace gameview
                 {
                     pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
                     pokemonCard.DamageModified += UpdateDamage;
+                    pokemonCard.Evolved += OnEvolved;
                 }
             }
         }
@@ -143,8 +150,23 @@ namespace gameview
             {
                 Card.CardDiscarded -= Discard;
                 if (Card is IPokemonCard pokemonCard)
+                {
                     pokemonCard.OnAttachedEnergyChanged -= AttachEnergy;
+                    pokemonCard.DamageModified -= UpdateDamage;
+                    pokemonCard.Evolved -= OnEvolved;
+                }
             }
+        }
+
+        private void OnEvolved()
+        {
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    Destroy(gameObject);
+                    callback.Invoke();
+                }
+            );
         }
 
         private void Discard()
@@ -153,14 +175,19 @@ namespace gameview
             MoveToDiscardPile();
         }
 
-        private void AttachEnergy(IEnergyCard card)
+        private void AttachEnergy(List<IEnergyCard> cards)
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
                     var sequence = DOTween.Sequence();
-                    if (card != null)
-                        CardViewRegistry.INSTANCE.Get(card).TransformToAttachedEnergyView(sequence);
+                    foreach (var card in cards)
+                    {
+                        if (cards != null)
+                            CardViewRegistry
+                                .INSTANCE.Get(card)
+                                .TransformToAttachedEnergyView(sequence);
+                    }
                     UpdateAttachedEnergyCards(sequence);
                     sequence.OnComplete(() => callback.Invoke());
                 }
@@ -178,28 +205,28 @@ namespace gameview
 
         private void UpdateAttachedEnergyCards(Sequence sequence)
         {
-            var height = RectTransform.rect.height;
-            var width = RectTransform.rect.width;
-            var verticalDirection = transform.rotation * Vector3.up;
-            var horizontalDirection = transform.rotation * Vector3.right;
-            var firstCardPosition =
-                transform.position
-                - height * (1 - ATTACHED_SCALE / 1.375f) / 2 * verticalDirection
-                - width * (1 - ATTACHED_SCALE) / 2 * horizontalDirection
-                + Vector3.back;
             int i = 0;
             foreach (var energyCard in ((IPokemonCard)Card).AttachedEnergyCards)
             {
                 var energyCardView = CardViewRegistry.INSTANCE.Get(energyCard);
                 energyCardView.RectTransform.SetParent(transform);
                 sequence.Join(
-                    energyCardView.transform.DOMove(
-                        firstCardPosition + i * width * ATTACHED_SCALE * horizontalDirection,
-                        0.25f
-                    )
+                    energyCardView.transform.DOLocalMove(GetEnergyTargetPosition(i), 0.25f)
                 );
                 i++;
             }
+        }
+
+        private Vector3 GetEnergyTargetPosition(int i)
+        {
+            return GetFirstLocalCardPosition() + i * _width * ATTACHED_SCALE * Vector3.right;
+        }
+
+        private Vector3 GetFirstLocalCardPosition()
+        {
+            return -_height * (1 - ATTACHED_SCALE / 1.375f) / 2 * Vector3.up
+                - _width * (1 - ATTACHED_SCALE) / 2 * Vector3.right
+                + Vector3.back;
         }
 
         private void UpdateDamage()
@@ -258,14 +285,12 @@ namespace gameview
 
         private void TurnOnHighlight(Color color)
         {
-            Debug.Log($"Turn on highlight with color {color}");
             _imageMaterial.SetColor("_Color", color);
             _imageMaterial.SetFloat("_Brightness", 5f);
         }
 
         private void TurnOffHighlight()
         {
-            Debug.Log("Turn off highlight");
             _imageMaterial.SetColor("_Color", Color.white);
             _imageMaterial.SetFloat("_Brightness", 0f);
         }

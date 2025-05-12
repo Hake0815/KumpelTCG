@@ -14,7 +14,9 @@ namespace gamecore.game.action
             IActionPerformer<DiscardAttachedEnergyCardsGA>,
             IActionPerformer<BenchPokemonGA>,
             IActionPerformer<MovePokemonToBenchGA>,
-            IActionSubscriber<EndTurnGA>
+            IActionPerformer<EvolveGA>,
+            IActionPerformer<ResetPokemonInPlayStateGA>,
+            IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
         public static CardSystem INSTANCE => lazy.Value;
@@ -32,7 +34,9 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
-            _actionSystem.SubscribeToGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
+            _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
+            _actionSystem.AttachPerformer<ResetPokemonInPlayStateGA>(INSTANCE);
+            _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
         public void Disable()
@@ -43,15 +47,16 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
             _actionSystem.DetachPerformer<BenchPokemonGA>();
-            _actionSystem.DetachPerformer<MovePokemonToBenchGA>();
-            _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(INSTANCE, ReactionTiming.POST);
+            _actionSystem.DetachPerformer<EvolveGA>();
+            _actionSystem.DetachPerformer<ResetPokemonInPlayStateGA>();
+            _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
-        public EndTurnGA React(EndTurnGA endTurnGA)
+        public StartTurnGA React(StartTurnGA startTurnGA)
         {
-            var drawCardGA = new DrawCardGA(1, endTurnGA.NextPlayer);
+            var drawCardGA = new DrawCardGA(1, startTurnGA.NextPlayer);
             _actionSystem.AddReaction(drawCardGA);
-            return endTurnGA;
+            return startTurnGA;
         }
 
         public Task<DrawCardGA> Perform(DrawCardGA drawCardGA)
@@ -89,7 +94,7 @@ namespace gamecore.game.action
         {
             var energyCard = action.EnergyCard;
             energyCard.Owner.Hand.RemoveCard(energyCard);
-            action.TargetPokemon.AttachEnergy(energyCard);
+            action.TargetPokemon.AttachEnergyCards(new() { energyCard });
         }
 
         public Task<DiscardAttachedEnergyCardsGA> Perform(DiscardAttachedEnergyCardsGA action)
@@ -110,6 +115,43 @@ namespace gamecore.game.action
         {
             var pokemon = action.Pokemon;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
+            return Task.FromResult(action);
+        }
+
+        public Task<EvolveGA> Perform(EvolveGA action)
+        {
+            action.NewPokemon.Owner.Hand.RemoveCard(action.NewPokemon);
+            action.NewPokemon.PreEvolutions.Add(action.TargetPokemon);
+
+            if (action.TargetPokemon == action.TargetPokemon.Owner.ActivePokemon)
+                action.TargetPokemon.Owner.ActivePokemon = action.NewPokemon;
+            else
+            {
+                action.TargetPokemon.Owner.Bench.ReplaceInPlace(
+                    action.TargetPokemon,
+                    action.NewPokemon
+                );
+            }
+
+            action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
+            action.TargetPokemon.AttachedEnergyCards.Clear();
+
+            foreach (var preEvolution in action.TargetPokemon.PreEvolutions)
+                action.NewPokemon.PreEvolutions.Add(preEvolution);
+
+            action.TargetPokemon.PreEvolutions.Clear();
+
+            action.TargetPokemon.WasEvolved();
+            return Task.FromResult(action);
+        }
+
+        public Task<ResetPokemonInPlayStateGA> Perform(ResetPokemonInPlayStateGA action)
+        {
+            action.PokemonToReset.PutIntoPlayThisTurn = false;
+            ActionSystem.INSTANCE.UnsubscribeFromGameAction<StartTurnGA>(
+                action.PokemonToReset,
+                ReactionTiming.PRE
+            );
             return Task.FromResult(action);
         }
     }

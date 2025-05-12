@@ -41,13 +41,15 @@ namespace gamecore.card
             CardDiscarded?.Invoke();
         }
 
-        public List<ICardLogic> GetTargets()
+        public List<ICardLogic> GetPossibleTargets()
         {
             var targets = new List<ICardLogic>();
             targets.AddRange(Owner.Bench.Cards);
             targets.Add(Owner.ActivePokemon);
             return targets;
         }
+
+        public int GetNumberOfTargets() => 1;
 
         public bool IsEnergyCard()
         {
