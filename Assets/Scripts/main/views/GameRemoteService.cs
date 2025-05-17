@@ -66,6 +66,9 @@ namespace gameview
                     case GameInteractionType.PerformAttack:
                         HandlePerformAttack(interaction);
                         break;
+                    case GameInteractionType.PerformAbility:
+                        HandlePerformAbility(interaction);
+                        break;
                     case GameInteractionType.Retreat:
                         HandleRetreat(interaction);
                         break;
@@ -186,6 +189,26 @@ namespace gameview
             );
             var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
             cardView.SetPlayable(true, clickBehaviour);
+        }
+
+        private void HandlePerformAbility(GameInteraction interaction)
+        {
+            var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            if (card.Owner.ActivePokemon == card)
+            {
+                cardView.AddAbility(
+                    (card as IPokemonCard).Ability,
+                    () =>
+                    {
+                        OnInteract();
+                        interaction.GameControllerMethod.Invoke();
+                    }
+                );
+                var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
+                cardView.SetPlayable(true, clickBehaviour);
+            }
         }
 
         private void HandleRetreat(GameInteraction interaction)

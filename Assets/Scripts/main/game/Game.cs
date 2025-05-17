@@ -122,7 +122,7 @@ namespace gamecore.game
         /* Returns if both active Pokemon are set */
         internal async Task SetActivePokemon(ICardLogic basicPokemon)
         {
-            await basicPokemon.Play();
+            await _actionSystem.Perform(new PlayCardGA(basicPokemon));
             await AdvanceGameState();
         }
 
@@ -134,7 +134,7 @@ namespace gamecore.game
 
         internal async Task PlayCard(ICardLogic card)
         {
-            await card.Play();
+            await _actionSystem.Perform(new PlayCardGA(card));
             await AdvanceGameState();
         }
 
@@ -176,7 +176,7 @@ namespace gamecore.game
 
         internal async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
-            await card.PlayWithTargets(targets);
+            await _actionSystem.Perform(new PlayCardGA(card, targets));
             await AdvanceGameState();
         }
 

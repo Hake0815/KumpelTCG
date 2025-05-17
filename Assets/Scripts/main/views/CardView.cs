@@ -29,7 +29,6 @@ namespace gameview
         private Image _image;
         private Material _imageMaterial;
         private protected Collider2D _col;
-        private protected Vector3 _positionBeforeDrag;
         private protected Transform _discardPilePosition;
         public RectTransform RectTransform { get; set; }
 
@@ -247,8 +246,7 @@ namespace gameview
                 .Sequence()
                 .Append(transform.DOMove(_discardPilePosition.position, 0.25f))
                 .Join(transform.DORotateQuaternion(_discardPilePosition.rotation, 0.25f))
-                .OnComplete(() => Destroy(gameObject))
-                .WaitForCompletion();
+                .OnComplete(() => Destroy(gameObject));
         }
 
         private void OnMouseDown()
@@ -302,6 +300,15 @@ namespace gameview
                 CreateCurrentActivePokemonActionsView();
             }
             _currentActivePokemonActionsView.AddAttackInteraction(attack, onAttackAction);
+        }
+
+        public void AddAbility(IAbility ability, Action onAbilityAction)
+        {
+            if (_currentActivePokemonActionsView == null)
+            {
+                CreateCurrentActivePokemonActionsView();
+            }
+            _currentActivePokemonActionsView.AddAbilityInteraction(ability, onAbilityAction);
         }
 
         public void AddRetreat(Action onRetreatAction)

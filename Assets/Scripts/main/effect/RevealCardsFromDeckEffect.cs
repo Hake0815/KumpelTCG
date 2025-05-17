@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using UnityEngine;
 
 namespace gamecore.effect
 {
@@ -14,9 +15,9 @@ namespace gamecore.effect
             Count = cardsToReveal;
         }
 
-        public async Task Perform(ICardLogic card)
+        public void Perform(ICardLogic card)
         {
-            await ActionSystem.INSTANCE.Perform(new RevealCardsFromDeckGA(card.Owner, Count));
+            ActionSystem.INSTANCE.AddReaction(new RevealCardsFromDeckGA(card.Owner, Count));
         }
     }
 }

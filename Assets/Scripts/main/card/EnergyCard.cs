@@ -76,14 +76,14 @@ namespace gamecore.card
             return false;
         }
 
-        public Task Play()
+        public void Play()
         {
             throw new IlleagalActionException("Energy cards can only be played with a target");
         }
 
-        public async Task PlayWithTargets(List<ICardLogic> targets)
+        public void PlayWithTargets(List<ICardLogic> targets)
         {
-            await ActionSystem.INSTANCE.Perform(
+            ActionSystem.INSTANCE.AddReaction(
                 new AttachEnergyFromHandForTurnGA(this, targets[0] as IPokemonCardLogic)
             );
         }

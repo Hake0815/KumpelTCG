@@ -455,6 +455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afeb27bc54334f231aeb51c6f4631039, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _abilityButtonPrefab: {fileID: 1777344197738372711, guid: 08e142cde93ca0ce3a88e27059361712, type: 3}
   _attackButtonPrefab: {fileID: 1777344197738372711, guid: 32a277d01a4bfb2489e4c8ac48c6a201, type: 3}
   _retreatButton: {fileID: 6095789123516355348}
   _energyCost: {fileID: 2204239298926957436}

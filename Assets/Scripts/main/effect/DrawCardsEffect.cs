@@ -14,9 +14,9 @@ namespace gamecore.effect
             Amount = amount;
         }
 
-        public async Task Perform(ICardLogic card)
+        public void Perform(ICardLogic card)
         {
-            await ActionSystem.INSTANCE.Perform(new DrawCardGA(Amount, card.Owner));
+            ActionSystem.INSTANCE.AddReaction(new DrawCardGA(Amount, card.Owner));
         }
     }
 }
