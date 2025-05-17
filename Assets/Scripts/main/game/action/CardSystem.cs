@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -6,7 +8,7 @@ using UnityEngine;
 
 namespace gamecore.game.action
 {
-    internal class CardSystem
+    class CardSystem
         : IActionPerformer<DrawCardGA>,
             IActionPerformer<DiscardCardsFromHandGA>,
             IActionPerformer<AttachEnergyFromHandGA>,
@@ -15,7 +17,10 @@ namespace gamecore.game.action
             IActionPerformer<BenchPokemonGA>,
             IActionPerformer<MovePokemonToBenchGA>,
             IActionPerformer<EvolveGA>,
-            IActionPerformer<ResetPokemonInPlayStateGA>,
+            IActionPerformer<ResetPokemonTurnStateGA>,
+            IActionPerformer<RevealCardsFromDeckGA>,
+            IActionPerformer<TakeSelectionToHandGA>,
+            IActionPerformer<PutRemainingCardsUnderDeckGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -23,9 +28,12 @@ namespace gamecore.game.action
 
         private CardSystem() { }
 
-        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        protected static readonly System.Random _rng = new();
 
-        public void Enable()
+        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        private Game _game;
+
+        public void Enable(Game game)
         {
             _actionSystem.AttachPerformer<DrawCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
@@ -35,8 +43,12 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
             _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
-            _actionSystem.AttachPerformer<ResetPokemonInPlayStateGA>(INSTANCE);
+            _actionSystem.AttachPerformer<ResetPokemonTurnStateGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RevealCardsFromDeckGA>(INSTANCE);
+            _actionSystem.AttachPerformer<TakeSelectionToHandGA>(INSTANCE);
+            _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
+            _game = game;
         }
 
         public void Disable()
@@ -48,7 +60,10 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
             _actionSystem.DetachPerformer<BenchPokemonGA>();
             _actionSystem.DetachPerformer<EvolveGA>();
-            _actionSystem.DetachPerformer<ResetPokemonInPlayStateGA>();
+            _actionSystem.DetachPerformer<ResetPokemonTurnStateGA>();
+            _actionSystem.DetachPerformer<RevealCardsFromDeckGA>();
+            _actionSystem.DetachPerformer<TakeSelectionToHandGA>();
+            _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -145,14 +160,52 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        public Task<ResetPokemonInPlayStateGA> Perform(ResetPokemonInPlayStateGA action)
+        public Task<ResetPokemonTurnStateGA> Perform(ResetPokemonTurnStateGA action)
         {
             action.PokemonToReset.PutIntoPlayThisTurn = false;
-            ActionSystem.INSTANCE.UnsubscribeFromGameAction<StartTurnGA>(
+            action.PokemonToReset.AbilityUsedThisTurn = false;
+            ActionSystem.INSTANCE.UnsubscribeFromGameAction<EndTurnGA>(
                 action.PokemonToReset,
                 ReactionTiming.PRE
             );
             return Task.FromResult(action);
+        }
+
+        public Task<RevealCardsFromDeckGA> Perform(RevealCardsFromDeckGA action)
+        {
+            var revealedCards = action.Player.Deck.Draw(action.Count);
+            action.RevealedCards.AddRange(revealedCards);
+            return Task.FromResult(action);
+        }
+
+        public async Task<TakeSelectionToHandGA> Perform(TakeSelectionToHandGA action)
+        {
+            var selectedCards = await _game.AwaitSelection(
+                action.Player,
+                action.Options,
+                action.Amount
+            );
+            action.Player.Hand.AddCards(selectedCards);
+            action.RemainingCards.AddRange(action.Options.Except(selectedCards));
+            return action;
+        }
+
+        public Task<PutRemainingCardsUnderDeckGA> Perform(PutRemainingCardsUnderDeckGA action)
+        {
+            action.Player.Deck.AddCards(Shuffle(action.RemainingCards));
+            return Task.FromResult(action);
+        }
+
+        private static List<ICardLogic> Shuffle(List<ICardLogic> cards)
+        {
+            var n = cards.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = _rng.Next(n + 1);
+                (cards[n], cards[k]) = (cards[k], cards[n]);
+            }
+            return cards;
         }
     }
 }

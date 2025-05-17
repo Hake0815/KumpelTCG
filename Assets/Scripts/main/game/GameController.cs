@@ -16,7 +16,7 @@ namespace gamecore.game
         Task SetUpGame();
     }
 
-    internal class GameController : IGameController
+    class GameController : IGameController
     {
         private readonly Game _game;
 
@@ -113,6 +113,11 @@ namespace gamecore.game
         )
         {
             await _game.Retreat(pokemon, energyCardsToDiscard);
+        }
+
+        internal async Task PerformAbility(IPokemonCardLogic pokemon)
+        {
+            await _game.PerformAbility(pokemon);
         }
     }
 }

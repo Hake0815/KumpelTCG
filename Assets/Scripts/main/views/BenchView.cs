@@ -55,9 +55,11 @@ namespace gameview
 
         private void UpdateBenchedPokemonPositions()
         {
+            Debug.Log("UpdateBenchedPokemonPositions");
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
+                    Debug.Log("Start updating benched pokemon positions");
                     var benchedPokemon = _player.Bench;
                     var spacing = _rectTransform.rect.width / benchedPokemon.MaxBenchSpots;
                     var orientation = _rectTransform.rotation * Vector3.right;
@@ -69,6 +71,7 @@ namespace gameview
                     int i = 0;
                     foreach (var pokemon in benchedPokemon)
                     {
+                        Debug.Log($"UpdateBenchedPokemonPositions: {pokemon.Name}");
                         var pokemonView = CardViewRegistry.INSTANCE.Get(pokemon);
                         pokemonView.transform.DOMove(
                             firstPosition + i * spacing * orientation,

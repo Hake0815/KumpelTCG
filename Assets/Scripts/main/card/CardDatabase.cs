@@ -5,7 +5,7 @@ using gamecore.effect;
 
 namespace gamecore.card
 {
-    internal class CardDatabase
+    static class CardDatabase
     {
         public static Dictionary<string, ICardData> cardDataDict = new()
         {
@@ -15,7 +15,7 @@ namespace gamecore.card
                     "Bill",
                     "bill",
                     new List<IEffect> { new DrawCardsEffect(2), new DiscardCardEffect() },
-                    new List<IPlayCondition> { new HasCardsInDeck() }
+                    new List<IUseCondition> { new HasCardsInDeck() }
                 )
             },
             {
@@ -66,7 +66,17 @@ namespace gamecore.card
                             new() { new DealDamageToDefendingPokemonEffect(70) }
                         ),
                     },
-                    numberOfPrizeCardsOnKnockout: 1
+                    numberOfPrizeCardsOnKnockout: 1,
+                    ability: new Ability(
+                        "Recon Directive",
+                        new List<IUseCondition> { new HasCardsInDeck(), new AbilityNotUsed() },
+                        new List<IEffect>
+                        {
+                            new PutRemainingCardsUnderDeckEffect(),
+                            new TakeSelectionToHandEffect(1),
+                            new RevealCardsFromDeckEffect(2),
+                        }
+                    )
                 )
             },
             // EnergyCard Cards

@@ -5,10 +5,10 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class KnockOutCheckGA : GameAction
+    class KnockOutCheckGA : GameAction
     {
         public List<IPokemonCardLogic> KnockedOutPokemon { get; } = new();
-        public List<IPlayerLogic> Players { get; } = new();
+        public List<IPlayerLogic> Players { get; }
 
         public KnockOutCheckGA(List<IPlayerLogic> players)
         {

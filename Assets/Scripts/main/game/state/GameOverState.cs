@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
-    internal class GameOverState : IGameState
+    class GameOverState : IGameState
     {
         private readonly IPlayerLogic _winner;
 

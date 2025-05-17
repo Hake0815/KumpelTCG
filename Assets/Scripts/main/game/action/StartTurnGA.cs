@@ -2,7 +2,7 @@ using gamecore.actionsystem;
 
 namespace gamecore.game.action
 {
-    internal class StartTurnGA : GameAction
+    class StartTurnGA : GameAction
     {
         public IPlayerLogic NextPlayer { get; }
 

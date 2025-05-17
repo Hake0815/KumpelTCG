@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace gamecore.game.state
 {
-    internal class IdlePlayerTurnState : IGameState
+    class IdlePlayerTurnState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {
@@ -27,6 +27,7 @@ namespace gamecore.game.state
             AddPlayCardWithTargetsInteractions(interactions, gameController, player);
             AddAttackInteractions(interactions, gameController, player);
             AddRetreatInteraction(interactions, gameController, player);
+            AddAbilityInteraction(interactions, gameController, player);
             interactions.Add(
                 new GameInteraction(
                     async () => await gameController.EndTurn(),
@@ -236,6 +237,37 @@ namespace gamecore.game.state
                     return false;
             }
             return true;
+        }
+
+        private static void AddAbilityInteraction(
+            List<GameInteraction> interactions,
+            GameController gameController,
+            IPlayerLogic player
+        )
+        {
+            AddAbilityIfPossible(player.ActivePokemon, interactions, gameController);
+            foreach (var pokemon in player.Bench.Cards)
+            {
+                AddAbilityIfPossible(pokemon as IPokemonCardLogic, interactions, gameController);
+            }
+        }
+
+        private static void AddAbilityIfPossible(
+            IPokemonCardLogic pokemon,
+            List<GameInteraction> interactions,
+            GameController gameController
+        )
+        {
+            if (pokemon.HasUsableAbility())
+            {
+                interactions.Add(
+                    new GameInteraction(
+                        async () => await gameController.PerformAbility(pokemon),
+                        GameInteractionType.PerformAbility,
+                        new() { new InteractionCard(pokemon) }
+                    )
+                );
+            }
         }
 
         public Task OnAdvanced(Game game)

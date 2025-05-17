@@ -60,6 +60,7 @@ namespace gamecore.game
         GameOver,
         SelectCards,
         Retreat,
+        PerformAbility,
     }
 
     public interface IGameInteractionData { }

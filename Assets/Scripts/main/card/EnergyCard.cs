@@ -17,7 +17,7 @@ namespace gamecore.card
         PokemonType ProvidedEnergyType { get; }
     }
 
-    internal class EnergyCard : IEnergyCardLogic
+    class EnergyCard : IEnergyCardLogic
     {
         public static string ATTACHED_ENERGY_FOR_TURN = "attachedEnergyForTurn";
 

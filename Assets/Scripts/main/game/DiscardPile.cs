@@ -19,7 +19,7 @@ namespace gamecore.game
         void RemoveCards(List<ICard> cards);
     }
 
-    internal class DiscardPile : IDiscardPileLogic
+    class DiscardPile : IDiscardPileLogic
     {
         public List<ICard> Cards { get; } = new();
         public event Action CardsChanged;

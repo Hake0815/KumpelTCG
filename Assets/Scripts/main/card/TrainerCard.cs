@@ -12,10 +12,10 @@ namespace gamecore.card
     internal interface ITrainerCardLogic : ITrainerCard, ICardLogic
     {
         List<IEffect> Effects { get; }
-        List<IPlayCondition> Conditions { get; }
+        List<IUseCondition> Conditions { get; }
     }
 
-    internal class TrainerCard : ITrainerCardLogic
+    class TrainerCard : ITrainerCardLogic
     {
         public ICardData CardData { get; }
         public ITrainerCardData TrainerCardData
@@ -24,7 +24,7 @@ namespace gamecore.card
         }
         public IPlayerLogic Owner { get; }
         public List<IEffect> Effects { get; }
-        public List<IPlayCondition> Conditions { get; }
+        public List<IUseCondition> Conditions { get; }
 
         IPlayer ICard.Owner => Owner;
 

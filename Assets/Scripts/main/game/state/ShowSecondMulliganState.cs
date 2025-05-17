@@ -5,7 +5,7 @@ using gamecore.card;
 
 namespace gamecore.game.state
 {
-    internal class ShowSecondMulliganState : IGameState
+    class ShowSecondMulliganState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {

@@ -12,7 +12,7 @@ namespace gamecore.card
         new List<ICardLogic> Cards { get; }
     }
 
-    internal class Hand : IHandLogic
+    class Hand : IHandLogic
     {
         public List<ICardLogic> Cards { get; } = new();
 

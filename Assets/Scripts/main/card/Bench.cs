@@ -24,7 +24,7 @@ namespace gamecore.card
         void ReplaceInPlace(IPokemonCardLogic oldPokemon, IPokemonCardLogic newPokemon);
     }
 
-    internal class Bench : IBenchLogic
+    class Bench : IBenchLogic
     {
         public List<ICardLogic> Cards { get; } = new();
         public int MaxBenchSpots { get; set; } = 5;

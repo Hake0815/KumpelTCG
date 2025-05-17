@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
-    internal class SetupCompletedState : IGameState
+    class SetupCompletedState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {

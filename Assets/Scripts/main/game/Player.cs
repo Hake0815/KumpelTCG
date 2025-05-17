@@ -46,7 +46,7 @@ namespace gamecore.game
         void Promote(IPokemonCardLogic pokemon);
     }
 
-    internal class Player : IPlayerLogic
+    class Player : IPlayerLogic
     {
         private bool _isActive;
         public string Name { get; set; }

@@ -8,7 +8,7 @@ using gamecore.common;
 
 namespace gamecore.effect
 {
-    internal class DealDamageToDefendingPokemonEffect : IEffect
+    class DealDamageToDefendingPokemonEffect : IEffect
     {
         public int Damage { get; }
 
