@@ -38,9 +38,9 @@ namespace gamecore.card
             Conditions = cardData.Conditions;
         }
 
-        public async Task Play()
+        public void Play()
         {
-            await PerformEffects();
+            PerformEffects();
         }
 
         public bool IsPlayable()
@@ -55,11 +55,11 @@ namespace gamecore.card
             return true;
         }
 
-        private async Task PerformEffects() // During effect performing the card is still in the player's hand, might be a problem later
+        private void PerformEffects() // During effect performing the card is still in the player's hand, might be a problem later
         {
             foreach (var effect in Effects)
             {
-                await effect.Perform(this);
+                effect.Perform(this);
             }
         }
 
@@ -79,7 +79,7 @@ namespace gamecore.card
             return false;
         }
 
-        public Task PlayWithTargets(List<ICardLogic> targets)
+        public void PlayWithTargets(List<ICardLogic> targets)
         {
             throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }

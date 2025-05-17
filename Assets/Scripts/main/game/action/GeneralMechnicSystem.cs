@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -17,7 +15,8 @@ namespace gamecore.action
             IActionPerformer<CheckWinConditionGA>,
             IActionPerformer<PromoteGA>,
             IActionPerformer<RetreatGA>,
-            IActionPerformer<PerformAbilityGA>
+            IActionPerformer<PerformAbilityGA>,
+            IActionPerformer<EvolveGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
             () => new GeneralMechnicSystem()
@@ -37,6 +36,7 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<PromoteGA>(INSTANCE);
             _actionSystem.AttachPerformer<RetreatGA>(INSTANCE);
             _actionSystem.AttachPerformer<PerformAbilityGA>(INSTANCE);
+            _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
             _game = game;
         }
 
@@ -48,6 +48,7 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<PromoteGA>();
             _actionSystem.DetachPerformer<RetreatGA>();
             _actionSystem.DetachPerformer<PerformAbilityGA>();
+            _actionSystem.DetachPerformer<EvolveGA>();
         }
 
         public Task<AttackGA> Perform(AttackGA action)
@@ -108,11 +109,7 @@ namespace gamecore.action
                     }
                     else
                     {
-                        var selection = await _game.AwaitSelection(
-                            player,
-                            ((ICardListLogic)player.Bench).Cards,
-                            1
-                        );
+                        var selection = await _game.AwaitSelection(player, player.Bench.Cards, 1);
                         player.Promote(selection[0] as IPokemonCardLogic);
                     }
                 }
@@ -139,6 +136,39 @@ namespace gamecore.action
             {
                 effect.Perform(action.Pokemon);
             }
+            action.Pokemon.AbilityUsedThisTurn = true;
+            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(
+                action.Pokemon,
+                ReactionTiming.PRE
+            );
+            return Task.FromResult(action);
+        }
+
+        public Task<EvolveGA> Perform(EvolveGA action)
+        {
+            action.NewPokemon.Owner.Hand.RemoveCard(action.NewPokemon);
+            action.NewPokemon.PreEvolutions.Add(action.TargetPokemon);
+
+            if (action.TargetPokemon == action.TargetPokemon.Owner.ActivePokemon)
+                action.TargetPokemon.Owner.ActivePokemon = action.NewPokemon;
+            else
+            {
+                action.TargetPokemon.Owner.Bench.ReplaceInPlace(
+                    action.TargetPokemon,
+                    action.NewPokemon
+                );
+            }
+
+            action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
+            action.TargetPokemon.AttachedEnergyCards.Clear();
+
+            foreach (var preEvolution in action.TargetPokemon.PreEvolutions)
+                action.NewPokemon.PreEvolutions.Add(preEvolution);
+
+            action.TargetPokemon.PreEvolutions.Clear();
+
+            action.TargetPokemon.WasEvolved();
+            action.TargetPokemon.SetPutInPlay();
             return Task.FromResult(action);
         }
     }

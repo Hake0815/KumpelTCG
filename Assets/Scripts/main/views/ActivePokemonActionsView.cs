@@ -10,6 +10,9 @@ namespace gameview
     public class ActivePokemonActionsView : MonoBehaviour
     {
         [SerializeField]
+        private Button _abilityButtonPrefab;
+
+        [SerializeField]
         private Button _attackButtonPrefab;
 
         [SerializeField]
@@ -56,6 +59,19 @@ namespace gameview
             Canvas.enabled = false;
         }
 
+        public void AddAbilityInteraction(IAbility ability, Action onAbilityAction)
+        {
+            var abilityButton = Instantiate(
+                _abilityButtonPrefab,
+                transform.position + _buttonSpacing * _verticalDirection,
+                transform.rotation
+            );
+            abilityButton.transform.SetParent(transform);
+            abilityButton.GetComponent<AbilityButtonView>().Show(ability);
+            Collider.Add(abilityButton.GetComponent<Collider2D>());
+            abilityButton.onClick.AddListener(() => onAbilityAction.Invoke());
+        }
+
         public void AddAttackInteraction(IAttack attack, Action onAttackAction)
         {
             Attacks.Add(attack);
@@ -76,7 +92,7 @@ namespace gameview
             Destroy(gameObject);
         }
 
-        internal void AddRetreatInteraction(int cost, Action onRetreatAction)
+        public void AddRetreatInteraction(int cost, Action onRetreatAction)
         {
             _retreatButton.gameObject.SetActive(true);
             _retreatButton.onClick.AddListener(() => onRetreatAction.Invoke());

@@ -30,9 +30,9 @@ namespace gamecore.card
         }
         new IPlayerLogic Owner { get; }
         IPlayer ICard.Owner => Owner;
-        Task Play();
+        void Play();
         bool IsPlayable();
-        Task PlayWithTargets(List<ICardLogic> targets);
+        void PlayWithTargets(List<ICardLogic> targets);
         bool IsPlayableWithTargets();
         List<ICardLogic> GetPossibleTargets();
         int GetNumberOfTargets();

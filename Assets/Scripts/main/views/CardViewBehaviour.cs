@@ -36,6 +36,7 @@ namespace gameview
         private readonly Action _onPlayed;
         private protected Vector3 _positionBeforeDrag;
         private protected int _orderBeforeDrag;
+        private protected bool mouseDownRegistered = false;
 
         public DragBehaviour(Action onPlayed)
         {
@@ -44,6 +45,7 @@ namespace gameview
 
         public override void OnMouseDown(CardView cardView)
         {
+            mouseDownRegistered = true;
             _positionBeforeDrag = cardView.transform.position;
             _orderBeforeDrag = cardView.Canvas.sortingOrder;
             cardView.transform.position = GetMousePosition();
@@ -51,6 +53,8 @@ namespace gameview
 
         public override void OnMouseDrag(CardView cardView)
         {
+            if (!mouseDownRegistered)
+                return;
             cardView.Canvas.sortingOrder = 99;
             cardView.transform.position = GetMousePosition();
         }
@@ -64,6 +68,8 @@ namespace gameview
 
         public override void OnMouseUp(Collider2D col, CardView cardView)
         {
+            if (!mouseDownRegistered)
+                return;
             col.enabled = false;
             var hitCollider = Physics2D.OverlapPoint(cardView.transform.position);
             col.enabled = true;
@@ -79,6 +85,7 @@ namespace gameview
             }
             cardView.transform.position = _positionBeforeDrag;
             cardView.Canvas.sortingOrder = _orderBeforeDrag;
+            mouseDownRegistered = false;
         }
     }
 
@@ -96,6 +103,8 @@ namespace gameview
 
         public override void OnMouseUp(Collider2D col, CardView cardView)
         {
+            if (!mouseDownRegistered)
+                return;
             col.enabled = false;
             var hitCollider = Physics2D.OverlapPoint(cardView.transform.position);
             col.enabled = true;
@@ -111,6 +120,7 @@ namespace gameview
             }
             cardView.transform.position = _positionBeforeDrag;
             cardView.Canvas.sortingOrder = _orderBeforeDrag;
+            mouseDownRegistered = false;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace gamecore.effect
             Damage = damage;
         }
 
-        public Task Perform(ICardLogic card)
+        public void Perform(ICardLogic card)
         {
             if (!ActionSystem.INSTANCE.IsPerforming)
                 throw new IlleagalStateException(
@@ -30,7 +30,6 @@ namespace gamecore.effect
                     card.Owner.Opponent.ActivePokemon
                 )
             );
-            return Task.CompletedTask;
         }
     }
 }

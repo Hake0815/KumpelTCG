@@ -47,6 +47,7 @@ namespace gamecore.card
         bool CanPayRetreatCost();
         void DiscardEnergy(List<IEnergyCardLogic> energyCardsToDiscard);
         void WasEvolved();
+        void SetPutInPlay();
     }
 
     class PokemonCard : IPokemonCardLogic
@@ -189,7 +190,7 @@ namespace gamecore.card
             return Stage == Stage.Basic && !Owner.Bench.Full;
         }
 
-        public async Task Play()
+        public void Play()
         {
             if (Owner.ActivePokemon == null)
             {
@@ -200,8 +201,7 @@ namespace gamecore.card
             }
             if (!Owner.Bench.Full)
             {
-                await ActionSystem.INSTANCE.Perform(new BenchPokemonGA(this));
-                SetPutInPlay();
+                ActionSystem.INSTANCE.AddReaction(new BenchPokemonGA(this));
                 Damage = 0;
             }
         }
@@ -240,15 +240,12 @@ namespace gamecore.card
             return targets;
         }
 
-        public async Task PlayWithTargets(List<ICardLogic> targets)
+        public void PlayWithTargets(List<ICardLogic> targets)
         {
-            await ActionSystem.INSTANCE.Perform(
-                new EvolveGA(targets[0] as IPokemonCardLogic, this)
-            );
-            SetPutInPlay();
+            ActionSystem.INSTANCE.AddReaction(new EvolveGA(targets[0] as IPokemonCardLogic, this));
         }
 
-        private void SetPutInPlay()
+        public void SetPutInPlay()
         {
             PutIntoPlayThisTurn = true;
             ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(this, ReactionTiming.PRE);

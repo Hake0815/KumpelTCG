@@ -16,11 +16,11 @@ namespace gamecore.game.action
             IActionPerformer<DiscardAttachedEnergyCardsGA>,
             IActionPerformer<BenchPokemonGA>,
             IActionPerformer<MovePokemonToBenchGA>,
-            IActionPerformer<EvolveGA>,
             IActionPerformer<ResetPokemonTurnStateGA>,
             IActionPerformer<RevealCardsFromDeckGA>,
             IActionPerformer<TakeSelectionToHandGA>,
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
+            IActionPerformer<PlayCardGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -42,11 +42,11 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
-            _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
             _actionSystem.AttachPerformer<ResetPokemonTurnStateGA>(INSTANCE);
             _actionSystem.AttachPerformer<RevealCardsFromDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<TakeSelectionToHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
+            _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -59,11 +59,11 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
             _actionSystem.DetachPerformer<BenchPokemonGA>();
-            _actionSystem.DetachPerformer<EvolveGA>();
             _actionSystem.DetachPerformer<ResetPokemonTurnStateGA>();
             _actionSystem.DetachPerformer<RevealCardsFromDeckGA>();
             _actionSystem.DetachPerformer<TakeSelectionToHandGA>();
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
+            _actionSystem.DetachPerformer<PlayCardGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -123,6 +123,7 @@ namespace gamecore.game.action
             var pokemon = action.Card;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
             pokemon.Owner.Hand.RemoveCard(pokemon);
+            pokemon.SetPutInPlay();
             return Task.FromResult(action);
         }
 
@@ -130,33 +131,6 @@ namespace gamecore.game.action
         {
             var pokemon = action.Pokemon;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
-            return Task.FromResult(action);
-        }
-
-        public Task<EvolveGA> Perform(EvolveGA action)
-        {
-            action.NewPokemon.Owner.Hand.RemoveCard(action.NewPokemon);
-            action.NewPokemon.PreEvolutions.Add(action.TargetPokemon);
-
-            if (action.TargetPokemon == action.TargetPokemon.Owner.ActivePokemon)
-                action.TargetPokemon.Owner.ActivePokemon = action.NewPokemon;
-            else
-            {
-                action.TargetPokemon.Owner.Bench.ReplaceInPlace(
-                    action.TargetPokemon,
-                    action.NewPokemon
-                );
-            }
-
-            action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
-            action.TargetPokemon.AttachedEnergyCards.Clear();
-
-            foreach (var preEvolution in action.TargetPokemon.PreEvolutions)
-                action.NewPokemon.PreEvolutions.Add(preEvolution);
-
-            action.TargetPokemon.PreEvolutions.Clear();
-
-            action.TargetPokemon.WasEvolved();
             return Task.FromResult(action);
         }
 
@@ -206,6 +180,15 @@ namespace gamecore.game.action
                 (cards[n], cards[k]) = (cards[k], cards[n]);
             }
             return cards;
+        }
+
+        public Task<PlayCardGA> Perform(PlayCardGA action)
+        {
+            if (action.Targets != null)
+                action.Card.PlayWithTargets(action.Targets);
+            else
+                action.Card.Play();
+            return Task.FromResult(action);
         }
     }
 }

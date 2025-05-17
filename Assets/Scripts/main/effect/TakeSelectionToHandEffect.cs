@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using UnityEngine;
 
 namespace gamecore.effect
 {
@@ -15,13 +16,12 @@ namespace gamecore.effect
             Amount = amount;
         }
 
-        public Task Perform(ICardLogic card)
+        public void Perform(ICardLogic card)
         {
             new EffectSubscriber<RevealCardsFromDeckGA>(
                 action => Reaction(action, card),
                 ReactionTiming.POST
             );
-            return Task.CompletedTask;
         }
 
         private RevealCardsFromDeckGA Reaction(RevealCardsFromDeckGA action, ICardLogic card)
