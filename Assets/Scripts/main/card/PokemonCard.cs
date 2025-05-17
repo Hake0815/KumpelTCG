@@ -17,6 +17,8 @@ namespace gamecore.card
         List<IEnergyCard> AttachedEnergyCards { get; }
         List<PokemonType> AttachedEnergy { get; }
         List<IPokemonCard> PreEvolutions { get; }
+        IAbility Ability { get; }
+        bool AbilityUsedThisTurn { get; }
         int Damage { get; }
         int MaxHP { get; }
         int RetreatCost { get; }
@@ -25,7 +27,7 @@ namespace gamecore.card
         event Action Evolved;
     }
 
-    internal interface IPokemonCardLogic : ICardLogic, IPokemonCard, IActionSubscriber<StartTurnGA>
+    internal interface IPokemonCardLogic : ICardLogic, IPokemonCard, IActionSubscriber<EndTurnGA>
     {
         PokemonType Type { get; set; }
         PokemonType Weakness { get; set; }
@@ -34,8 +36,11 @@ namespace gamecore.card
         void AttachEnergyCards(List<IEnergyCardLogic> energyCards);
         new List<IEnergyCardLogic> AttachedEnergyCards { get; }
         new List<IAttackLogic> Attacks { get; }
-        bool PutIntoPlayThisTurn { get; set; }
         List<IAttackLogic> GetUsableAttacks();
+        bool PutIntoPlayThisTurn { get; set; }
+        new IAbilityLogic Ability { get; }
+        bool HasUsableAbility();
+        new bool AbilityUsedThisTurn { get; set; }
         bool IsActive();
         bool IsKnockedOut();
         void TakeDamage(int damage);
@@ -44,7 +49,7 @@ namespace gamecore.card
         void WasEvolved();
     }
 
-    internal class PokemonCard : IPokemonCardLogic
+    class PokemonCard : IPokemonCardLogic
     {
         public static string RETREATED = "retreated";
         public IPokemonCardData PokemonCardData { get; }
@@ -65,6 +70,7 @@ namespace gamecore.card
         public int MaxHP { get; private set; }
         public int RetreatCost { get; private set; }
         public int NumberOfPrizeCardsOnKnockout { get; set; }
+        public bool AbilityUsedThisTurn { get; set; } = false;
 
         private int _damage = 0;
         public int Damage
@@ -93,6 +99,10 @@ namespace gamecore.card
         public List<IPokemonCard> PreEvolutions { get; } = new();
         public bool PutIntoPlayThisTurn { get; set; }
 
+        public IAbilityLogic Ability { get; }
+
+        IAbility IPokemonCard.Ability => Ability;
+
         public event Action CardDiscarded;
         public event Action DamageModified;
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
@@ -109,6 +119,7 @@ namespace gamecore.card
             MaxHP = cardData.MaxHP;
             NumberOfPrizeCardsOnKnockout = cardData.NumberOfPrizeCardsOnKnockout;
             RetreatCost = cardData.RetreatCost;
+            Ability = cardData.Ability;
         }
 
         public void Discard()
@@ -240,7 +251,7 @@ namespace gamecore.card
         private void SetPutInPlay()
         {
             PutIntoPlayThisTurn = true;
-            ActionSystem.INSTANCE.SubscribeToGameAction<StartTurnGA>(this, ReactionTiming.PRE);
+            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(this, ReactionTiming.PRE);
         }
 
         public int GetNumberOfTargets() => 1;
@@ -292,10 +303,22 @@ namespace gamecore.card
             Evolved?.Invoke();
         }
 
-        public StartTurnGA React(StartTurnGA action)
+        public EndTurnGA React(EndTurnGA action)
         {
-            ActionSystem.INSTANCE.AddReaction(new ResetPokemonInPlayStateGA(this));
+            ActionSystem.INSTANCE.AddReaction(new ResetPokemonTurnStateGA(this));
             return action;
+        }
+
+        public bool HasUsableAbility()
+        {
+            if (Ability == null)
+                return false;
+            foreach (var condition in Ability.Conditions)
+            {
+                if (!condition.IsMet(this))
+                    return false;
+            }
+            return true;
         }
     }
 }

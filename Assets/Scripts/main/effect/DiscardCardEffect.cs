@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace gamecore.effect
 {
-    internal class DiscardCardEffect : IEffect
+    class DiscardCardEffect : IEffect
     {
         async Task IEffect.Perform(ICardLogic card)
         {

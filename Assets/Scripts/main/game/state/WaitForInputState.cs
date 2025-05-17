@@ -6,7 +6,7 @@ using gamecore.card;
 
 namespace gamecore.game.state
 {
-    internal class WaitForInputState : IGameState
+    class WaitForInputState : IGameState
     {
         public WaitForInputState(
             TaskCompletionSource<List<ICardLogic>> selectTask,

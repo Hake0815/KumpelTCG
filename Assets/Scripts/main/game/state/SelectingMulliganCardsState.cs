@@ -6,7 +6,7 @@ using gamecore.game;
 
 namespace gamecore.game.state
 {
-    internal class SelectingMulliganCardsState : IGameState
+    class SelectingMulliganCardsState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {

@@ -22,7 +22,7 @@ namespace gamecore.game
         int TurnCounter { get; }
     }
 
-    internal class Game : IGame, IActionPerformer<EndTurnGA>, IActionPerformer<StartTurnGA>
+    class Game : IGame, IActionPerformer<EndTurnGA>, IActionPerformer<StartTurnGA>
     {
         public IPlayerLogic Player1 { get; private set; }
         public IPlayerLogic Player2 { get; private set; }
@@ -66,7 +66,7 @@ namespace gamecore.game
             Player2 = player2;
             _actionSystem.AttachPerformer<EndTurnGA>(this);
             _actionSystem.AttachPerformer<StartTurnGA>(this);
-            CardSystem.INSTANCE.Enable();
+            CardSystem.INSTANCE.Enable(this);
             DamageSystem.INSTANCE.Enable();
             GeneralMechnicSystem.INSTANCE.Enable(this);
             GameState = new CreatedState();
@@ -201,6 +201,12 @@ namespace gamecore.game
             action.NextPlayer.TurnCounter++;
             TurnCounter++;
             return Task.FromResult(action);
+        }
+
+        internal async Task PerformAbility(IPokemonCardLogic pokemon)
+        {
+            await _actionSystem.Perform(new PerformAbilityGA(pokemon));
+            await AdvanceGameState();
         }
     }
 }

@@ -11,12 +11,13 @@ using UnityEngine;
 
 namespace gamecore.action
 {
-    internal class GeneralMechnicSystem
+    class GeneralMechnicSystem
         : IActionPerformer<AttackGA>,
             IActionPerformer<DrawPrizeCardsGA>,
             IActionPerformer<CheckWinConditionGA>,
             IActionPerformer<PromoteGA>,
-            IActionPerformer<RetreatGA>
+            IActionPerformer<RetreatGA>,
+            IActionPerformer<PerformAbilityGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
             () => new GeneralMechnicSystem()
@@ -35,6 +36,7 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<CheckWinConditionGA>(INSTANCE);
             _actionSystem.AttachPerformer<PromoteGA>(INSTANCE);
             _actionSystem.AttachPerformer<RetreatGA>(INSTANCE);
+            _actionSystem.AttachPerformer<PerformAbilityGA>(INSTANCE);
             _game = game;
         }
 
@@ -45,6 +47,7 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<CheckWinConditionGA>();
             _actionSystem.DetachPerformer<PromoteGA>();
             _actionSystem.DetachPerformer<RetreatGA>();
+            _actionSystem.DetachPerformer<PerformAbilityGA>();
         }
 
         public Task<AttackGA> Perform(AttackGA action)
@@ -105,7 +108,11 @@ namespace gamecore.action
                     }
                     else
                     {
-                        var selection = await _game.AwaitSelection(player, player.Bench.Cards, 1);
+                        var selection = await _game.AwaitSelection(
+                            player,
+                            ((ICardListLogic)player.Bench).Cards,
+                            1
+                        );
                         player.Promote(selection[0] as IPokemonCardLogic);
                     }
                 }
@@ -123,6 +130,15 @@ namespace gamecore.action
             _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
             _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
             pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
+            return Task.FromResult(action);
+        }
+
+        public Task<PerformAbilityGA> Perform(PerformAbilityGA action)
+        {
+            foreach (var effect in action.Pokemon.Ability.Effects)
+            {
+                effect.Perform(action.Pokemon);
+            }
             return Task.FromResult(action);
         }
     }

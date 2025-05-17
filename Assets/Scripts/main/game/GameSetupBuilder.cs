@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace gamecore
 {
-    internal class GameSetupBuilder
+    class GameSetupBuilder
     {
         public IPlayerLogic Player1 { get; private set; }
         public IPlayerLogic Player2 { get; private set; }

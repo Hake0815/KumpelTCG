@@ -5,7 +5,7 @@ using gamecore.game.action;
 
 namespace gamecore.effect
 {
-    internal class DrawCardsEffect : IEffect
+    class DrawCardsEffect : IEffect
     {
         public int Amount { get; }
 

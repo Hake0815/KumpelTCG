@@ -18,7 +18,7 @@ namespace gamecore.game
         List<ICardLogic> Draw(int amount);
     }
 
-    internal class Deck : IDeckLogic
+    class Deck : IDeckLogic
     {
         public List<ICardLogic> Cards { get; set; }
         public int CardCount

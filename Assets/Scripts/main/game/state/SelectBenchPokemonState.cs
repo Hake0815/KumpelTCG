@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.state
 {
-    internal class SelectBenchPokemonState : IGameState
+    class SelectBenchPokemonState : IGameState
     {
         private bool _doneSelecting = false;
 
