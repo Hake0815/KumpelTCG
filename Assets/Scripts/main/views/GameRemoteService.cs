@@ -113,6 +113,17 @@ namespace gameview
         private void HandleSelectCards(GameInteraction interaction)
         {
             var targetData = interaction.Data[typeof(TargetData)] as TargetData;
+            switch ((interaction.Data[typeof(SelectFromData)] as SelectFromData).SelectFrom)
+            {
+                case SelectFrom.InPlay:
+                    // Nothing to do here
+                    break;
+                case SelectFrom.Floating:
+                    PrepareFloatingSelection(targetData.PossibleTargets);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
             if (targetData.NumberOfTargets != 1)
                 throw new NotImplementedException();
 
@@ -129,6 +140,11 @@ namespace gameview
                     })
                 );
             }
+        }
+
+        private void PrepareFloatingSelection(List<ICard> possibleTargets)
+        {
+            _gameManager.ActivateFloatingSelectionView(possibleTargets);
         }
 
         private void HandleSetupCompleted(GameInteraction interaction)
@@ -346,6 +362,7 @@ namespace gameview
         private void OnInteract()
         {
             _gameManager.DisableButton();
+            _gameManager.DisableFloatingSelection();
             ClearPlayableCards();
         }
 

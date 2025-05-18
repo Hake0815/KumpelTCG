@@ -157,7 +157,8 @@ namespace gamecore.game.action
             var selectedCards = await _game.AwaitSelection(
                 action.Player,
                 action.Options,
-                action.Amount
+                action.Amount,
+                SelectFrom.Floating
             );
             action.Player.Hand.AddCards(selectedCards);
             action.RemainingCards.AddRange(action.Options.Except(selectedCards));

@@ -119,7 +119,6 @@ namespace gamecore.game
             AwaitGeneralInteraction();
         }
 
-        /* Returns if both active Pokemon are set */
         internal async Task SetActivePokemon(ICardLogic basicPokemon)
         {
             await _actionSystem.Perform(new PlayCardGA(basicPokemon));
@@ -151,11 +150,12 @@ namespace gamecore.game
         internal async Task<List<ICardLogic>> AwaitSelection(
             IPlayerLogic player,
             List<ICardLogic> options,
-            int amount
+            int amount,
+            SelectFrom selectFrom
         )
         {
             var tcs = new TaskCompletionSource<List<ICardLogic>>();
-            GameState = new WaitForInputState(tcs, player, options, amount);
+            GameState = new WaitForInputState(tcs, player, options, amount, selectFrom);
             AwaitInteraction();
             return await tcs.Task;
         }
