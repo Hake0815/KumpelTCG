@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using gamecore.card;
 using gamecore.game;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace gameview
     public class ActivePokemonActionsView : MonoBehaviour
     {
         [SerializeField]
-        private Button _abilityButtonPrefab;
+        private Button _abilityButton;
 
         [SerializeField]
         private Button _attackButtonPrefab;
@@ -33,6 +34,7 @@ namespace gameview
 
         private void Awake()
         {
+            Debug.Log("ActivePokemonActionsView.Awake");
             _buttonSpacing = _attackButtonPrefab.GetComponent<RectTransform>().rect.height * 1.1f;
             _verticalDirection = transform.rotation * Vector3.up;
             Canvas = GetComponent<Canvas>();
@@ -61,15 +63,10 @@ namespace gameview
 
         public void AddAbilityInteraction(IAbility ability, Action onAbilityAction)
         {
-            var abilityButton = Instantiate(
-                _abilityButtonPrefab,
-                transform.position + _buttonSpacing * _verticalDirection,
-                transform.rotation
-            );
-            abilityButton.transform.SetParent(transform);
-            abilityButton.GetComponent<AbilityButtonView>().Show(ability);
-            Collider.Add(abilityButton.GetComponent<Collider2D>());
-            abilityButton.onClick.AddListener(() => onAbilityAction.Invoke());
+            _abilityButton.gameObject.SetActive(true);
+            _abilityButton.GetComponentInChildren<TMP_Text>().text = ability.Name;
+            Collider.Add(_abilityButton.GetComponent<Collider2D>());
+            _abilityButton.onClick.AddListener(() => onAbilityAction.Invoke());
         }
 
         public void AddAttackInteraction(IAttack attack, Action onAttackAction)
