@@ -141,4 +141,20 @@ namespace gamecore.game
             Winner = winner;
         }
     }
+
+    public record SelectFromData : IGameInteractionData
+    {
+        public SelectFrom SelectFrom { get; }
+
+        public SelectFromData(SelectFrom selectFrom)
+        {
+            SelectFrom = selectFrom;
+        }
+    }
+
+    public enum SelectFrom
+    {
+        InPlay,
+        Floating,
+    }
 }

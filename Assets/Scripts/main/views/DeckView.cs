@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
 using TMPro;
@@ -108,13 +109,18 @@ namespace gameview
             });
         }
 
-        private static void OnCardsAdded(List<ICard> cards)
+        private void OnCardsAdded(List<ICard> cards)
         {
             var cardViews = CardViewRegistry.INSTANCE.GetAllAvailable(cards);
             foreach (var cardView in cardViews)
             {
+                cardView.FaceUp = false;
                 CardViewRegistry.INSTANCE.Unregister(cardView.Card);
-                Destroy(cardView.gameObject);
+                cardView.Canvas.sortingOrder = -99;
+                cardView
+                    .GetComponent<Transform>()
+                    .DOMove(transform.position, 0.25f)
+                    .OnComplete(() => Destroy(cardView.gameObject));
             }
         }
     }

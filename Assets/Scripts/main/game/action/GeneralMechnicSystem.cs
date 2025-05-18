@@ -109,7 +109,12 @@ namespace gamecore.action
                     }
                     else
                     {
-                        var selection = await _game.AwaitSelection(player, player.Bench.Cards, 1);
+                        var selection = await _game.AwaitSelection(
+                            player,
+                            player.Bench.Cards,
+                            1,
+                            SelectFrom.InPlay
+                        );
                         player.Promote(selection[0] as IPokemonCardLogic);
                     }
                 }
