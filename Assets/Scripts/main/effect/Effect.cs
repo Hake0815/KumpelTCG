@@ -5,6 +5,6 @@ namespace gamecore.effect
 {
     internal interface IEffect
     {
-        Task Perform(ICardLogic card);
+        void Perform(ICardLogic card);
     }
 }

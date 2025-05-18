@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
-    internal class SetupCompletedState : IGameState
+    class SetupCompletedState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {
@@ -16,7 +16,10 @@ namespace gamecore.game.state
             IPlayerLogic player
         )
         {
-            return new() { new(gameController.Confirm, GameInteractionType.SetupCompleted) };
+            return new()
+            {
+                new(async () => await gameController.Confirm(), GameInteractionType.SetupCompleted),
+            };
         }
 
         public Task OnAdvanced(Game game)

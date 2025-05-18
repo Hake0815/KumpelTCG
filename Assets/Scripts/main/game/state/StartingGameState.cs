@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
-    internal class StartingGameState : IGameState
+    class StartingGameState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {

@@ -5,7 +5,7 @@ using gamecore.card;
 
 namespace gamecore.game.state
 {
-    internal class ShowSecondMulliganState : IGameState
+    class ShowSecondMulliganState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {
@@ -34,7 +34,7 @@ namespace gamecore.game.state
             return new List<GameInteraction>()
             {
                 new(
-                    gameController.Confirm,
+                    async () => await gameController.Confirm(),
                     GameInteractionType.ConfirmMulligans,
                     new() { new MulliganData(mulligansToShow) }
                 ),

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
-    internal class CreatedState : IGameState
+    class CreatedState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {
@@ -17,7 +17,7 @@ namespace gamecore.game.state
         )
         {
             var gameInteraction = new GameInteraction(
-                gameController.SetUpGame,
+                async () => await gameController.SetUpGame(),
                 GameInteractionType.SetUpGame
             );
             return new List<GameInteraction>() { gameInteraction };

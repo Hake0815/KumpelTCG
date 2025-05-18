@@ -3,7 +3,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class BenchPokemonGA : GameAction
+    class BenchPokemonGA : GameAction
     {
         public BenchPokemonGA(IPokemonCardLogic card)
         {

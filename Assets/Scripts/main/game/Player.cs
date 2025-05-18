@@ -39,13 +39,14 @@ namespace gamecore.game
         new IDiscardPileLogic DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
         IPlayerLogic Opponent { get; }
+        int TurnCounter { get; set; }
         void Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
         void Promote(IPokemonCardLogic pokemon);
     }
 
-    internal class Player : IPlayerLogic
+    class Player : IPlayerLogic
     {
         private bool _isActive;
         public string Name { get; set; }
@@ -59,7 +60,17 @@ namespace gamecore.game
                     ResetOncePerTurnActions();
             }
         }
-        public IPokemonCardLogic ActivePokemon { get; set; }
+        private IPokemonCardLogic _activePokemon;
+        public IPokemonCardLogic ActivePokemon
+        {
+            get => _activePokemon;
+            set
+            {
+                _activePokemon = value;
+                if (value != null)
+                    ActivePokemonSet?.Invoke(value);
+            }
+        }
         public IDeckLogic Deck { get; set; }
         public IHandLogic Hand { get; } = new Hand();
         public IBenchLogic Bench { get; } = new Bench();
@@ -67,6 +78,7 @@ namespace gamecore.game
         public IPrizesLogic Prizes { get; } = new Prizes();
         public HashSet<string> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
+        public int TurnCounter { get; set; } = 0;
 
         public event Action<IPokemonCard> ActivePokemonSet;
 
@@ -83,7 +95,6 @@ namespace gamecore.game
         {
             Bench.RemoveCard(pokemon);
             ActivePokemon = pokemon;
-            ActivePokemonSet?.Invoke(pokemon);
         }
 
         public void ResetOncePerTurnActions()

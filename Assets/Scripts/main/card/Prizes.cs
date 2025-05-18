@@ -14,7 +14,7 @@ namespace gamecore.card
         List<ICardLogic> TakePrizes(int amount);
     }
 
-    internal class Prizes : IPrizesLogic
+    class Prizes : IPrizesLogic
     {
         public List<ICardLogic> Cards { get; } = new();
 

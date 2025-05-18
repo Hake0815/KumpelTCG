@@ -17,7 +17,7 @@ namespace gamecore.card
         PokemonType ProvidedEnergyType { get; }
     }
 
-    internal class EnergyCard : IEnergyCardLogic
+    class EnergyCard : IEnergyCardLogic
     {
         public static string ATTACHED_ENERGY_FOR_TURN = "attachedEnergyForTurn";
 
@@ -41,13 +41,15 @@ namespace gamecore.card
             CardDiscarded?.Invoke();
         }
 
-        public List<ICardLogic> GetTargets()
+        public List<ICardLogic> GetPossibleTargets()
         {
             var targets = new List<ICardLogic>();
             targets.AddRange(Owner.Bench.Cards);
             targets.Add(Owner.ActivePokemon);
             return targets;
         }
+
+        public int GetNumberOfTargets() => 1;
 
         public bool IsEnergyCard()
         {
@@ -74,14 +76,14 @@ namespace gamecore.card
             return false;
         }
 
-        public Task Play()
+        public void Play()
         {
             throw new IlleagalActionException("Energy cards can only be played with a target");
         }
 
-        public async Task PlayWithTargets(List<ICardLogic> targets)
+        public void PlayWithTargets(List<ICardLogic> targets)
         {
-            await ActionSystem.INSTANCE.Perform(
+            ActionSystem.INSTANCE.AddReaction(
                 new AttachEnergyFromHandForTurnGA(this, targets[0] as IPokemonCardLogic)
             );
         }

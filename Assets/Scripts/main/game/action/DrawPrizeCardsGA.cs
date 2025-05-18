@@ -3,7 +3,7 @@ using gamecore.actionsystem;
 
 namespace gamecore.game.action
 {
-    internal class DrawPrizeCardsGA : GameAction
+    class DrawPrizeCardsGA : GameAction
     {
         public Dictionary<IPlayerLogic, int> NumberOfPrizeCardsPerPlayer { get; }
 

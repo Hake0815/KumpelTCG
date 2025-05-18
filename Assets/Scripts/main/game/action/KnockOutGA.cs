@@ -5,7 +5,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class KnockOutGA : GameAction
+    class KnockOutGA : GameAction
     {
         public IPokemonCardLogic Pokemon { get; }
         public int NumberOfPrizeCards { get; set; }

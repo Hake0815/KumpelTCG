@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using gamecore.card;
 using TMPro;
@@ -16,6 +17,10 @@ namespace gameview
         private ActivePokemonActionsView _currentActivePokemonActionsView;
 
         [SerializeField]
+        private BenchedPokemonActionsView _benchedPokemonActionsViewPrefab;
+        private BenchedPokemonActionsView _currentBenchedPokemonActionsView;
+
+        [SerializeField]
         private Image _damageIcon;
 
         [SerializeField]
@@ -28,7 +33,6 @@ namespace gameview
         private Image _image;
         private Material _imageMaterial;
         private protected Collider2D _col;
-        private protected Vector3 _positionBeforeDrag;
         private protected Transform _discardPilePosition;
         public RectTransform RectTransform { get; set; }
 
@@ -71,6 +75,9 @@ namespace gameview
                     TurnOffHighlight();
             }
         }
+
+        private float _height;
+        private float _width;
 
         private void SetImageSprite()
         {
@@ -122,6 +129,8 @@ namespace gameview
             _imageMaterial = new Material(_image.material);
             _image.material = _imageMaterial;
             TurnOffHighlight();
+            _height = RectTransform.rect.height;
+            _width = RectTransform.rect.width;
         }
 
         private void OnEnable()
@@ -133,6 +142,7 @@ namespace gameview
                 {
                     pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
                     pokemonCard.DamageModified += UpdateDamage;
+                    pokemonCard.Evolved += OnEvolved;
                 }
             }
         }
@@ -143,8 +153,23 @@ namespace gameview
             {
                 Card.CardDiscarded -= Discard;
                 if (Card is IPokemonCard pokemonCard)
+                {
                     pokemonCard.OnAttachedEnergyChanged -= AttachEnergy;
+                    pokemonCard.DamageModified -= UpdateDamage;
+                    pokemonCard.Evolved -= OnEvolved;
+                }
             }
+        }
+
+        private void OnEvolved()
+        {
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    Destroy(gameObject);
+                    callback.Invoke();
+                }
+            );
         }
 
         private void Discard()
@@ -153,14 +178,19 @@ namespace gameview
             MoveToDiscardPile();
         }
 
-        private void AttachEnergy(IEnergyCard card)
+        private void AttachEnergy(List<IEnergyCard> cards)
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
                     var sequence = DOTween.Sequence();
-                    if (card != null)
-                        CardViewRegistry.INSTANCE.Get(card).TransformToAttachedEnergyView(sequence);
+                    foreach (var card in cards)
+                    {
+                        if (cards != null)
+                            CardViewRegistry
+                                .INSTANCE.Get(card)
+                                .TransformToAttachedEnergyView(sequence);
+                    }
                     UpdateAttachedEnergyCards(sequence);
                     sequence.OnComplete(() => callback.Invoke());
                 }
@@ -178,28 +208,28 @@ namespace gameview
 
         private void UpdateAttachedEnergyCards(Sequence sequence)
         {
-            var height = RectTransform.rect.height;
-            var width = RectTransform.rect.width;
-            var verticalDirection = transform.rotation * Vector3.up;
-            var horizontalDirection = transform.rotation * Vector3.right;
-            var firstCardPosition =
-                transform.position
-                - height * (1 - ATTACHED_SCALE / 1.375f) / 2 * verticalDirection
-                - width * (1 - ATTACHED_SCALE) / 2 * horizontalDirection
-                + Vector3.back;
             int i = 0;
             foreach (var energyCard in ((IPokemonCard)Card).AttachedEnergyCards)
             {
                 var energyCardView = CardViewRegistry.INSTANCE.Get(energyCard);
                 energyCardView.RectTransform.SetParent(transform);
                 sequence.Join(
-                    energyCardView.transform.DOMove(
-                        firstCardPosition + i * width * ATTACHED_SCALE * horizontalDirection,
-                        0.25f
-                    )
+                    energyCardView.transform.DOLocalMove(GetEnergyTargetPosition(i), 0.25f)
                 );
                 i++;
             }
+        }
+
+        private Vector3 GetEnergyTargetPosition(int i)
+        {
+            return GetFirstLocalCardPosition() + i * _width * ATTACHED_SCALE * Vector3.right;
+        }
+
+        private Vector3 GetFirstLocalCardPosition()
+        {
+            return -_height * (1 - ATTACHED_SCALE / 1.375f) / 2 * Vector3.up
+                - _width * (1 - ATTACHED_SCALE) / 2 * Vector3.right
+                + Vector3.back;
         }
 
         private void UpdateDamage()
@@ -220,8 +250,7 @@ namespace gameview
                 .Sequence()
                 .Append(transform.DOMove(_discardPilePosition.position, 0.25f))
                 .Join(transform.DORotateQuaternion(_discardPilePosition.rotation, 0.25f))
-                .OnComplete(() => Destroy(gameObject))
-                .WaitForCompletion();
+                .OnComplete(() => Destroy(gameObject));
         }
 
         private void OnMouseDown()
@@ -252,20 +281,20 @@ namespace gameview
                 _cardViewBehaviour = null;
                 _currentActivePokemonActionsView?.DestroyThis();
                 _currentActivePokemonActionsView = null;
+                _currentBenchedPokemonActionsView?.DestroyThis();
+                _currentBenchedPokemonActionsView = null;
                 TurnOffHighlight();
             }
         }
 
         private void TurnOnHighlight(Color color)
         {
-            Debug.Log($"Turn on highlight with color {color}");
             _imageMaterial.SetColor("_Color", color);
             _imageMaterial.SetFloat("_Brightness", 5f);
         }
 
         private void TurnOffHighlight()
         {
-            Debug.Log("Turn off highlight");
             _imageMaterial.SetColor("_Color", Color.white);
             _imageMaterial.SetFloat("_Brightness", 0f);
         }
@@ -277,6 +306,58 @@ namespace gameview
                 CreateCurrentActivePokemonActionsView();
             }
             _currentActivePokemonActionsView.AddAttackInteraction(attack, onAttackAction);
+        }
+
+        public void AddAbility(
+            IAbility ability,
+            Action onAbilityAction,
+            bool isActivePokemon = true
+        )
+        {
+            if (isActivePokemon)
+            {
+                if (_currentActivePokemonActionsView == null)
+                {
+                    CreateCurrentActivePokemonActionsView();
+                }
+                _currentActivePokemonActionsView.AddAbilityInteraction(ability, onAbilityAction);
+            }
+            else
+            {
+                if (_currentBenchedPokemonActionsView == null)
+                {
+                    CreateCurrentBenchedPokemonActionsView();
+                }
+                _currentBenchedPokemonActionsView.AddAbilityInteraction(ability, onAbilityAction);
+            }
+        }
+
+        private void CreateCurrentBenchedPokemonActionsView()
+        {
+            _currentBenchedPokemonActionsView = Instantiate(_benchedPokemonActionsViewPrefab);
+            _currentBenchedPokemonActionsView.Collider.Add(_col);
+        }
+
+        public void ShowBenchedPokemonActions()
+        {
+            Vector3 distance = GetBenchedPokemonActionsDistance();
+            _currentBenchedPokemonActionsView.transform.position = transform.position + distance;
+            _currentBenchedPokemonActionsView.transform.rotation = transform.rotation;
+            _currentBenchedPokemonActionsView.Canvas.enabled = true;
+        }
+
+        private Vector3 GetBenchedPokemonActionsDistance()
+        {
+            var verticalDirection = transform.rotation * Vector3.up;
+            var distance =
+                (
+                    _benchedPokemonActionsViewPrefab.GetComponent<RectTransform>().rect.height
+                    + RectTransform.rect.height
+                )
+                / 2f
+                * 1.1f
+                * verticalDirection;
+            return distance;
         }
 
         public void AddRetreat(Action onRetreatAction)
@@ -298,13 +379,13 @@ namespace gameview
 
         public void ShowActivePokemonActions()
         {
-            Vector3 distance = GetDistance();
+            Vector3 distance = GetActivePokemonActionsDistance();
             _currentActivePokemonActionsView.transform.position = transform.position + distance;
             _currentActivePokemonActionsView.transform.rotation = transform.rotation;
             _currentActivePokemonActionsView.Canvas.enabled = true;
         }
 
-        private Vector3 GetDistance()
+        private Vector3 GetActivePokemonActionsDistance()
         {
             var horizontalDirection = transform.rotation * Vector3.right;
             var distance =

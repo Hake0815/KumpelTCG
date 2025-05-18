@@ -49,6 +49,10 @@ namespace gameview
 
         [SerializeField]
         private PrizeView _prizeViewPrefab;
+
+        [SerializeField]
+        private FloatingSelectionView _floatingSelectionViewPrefab;
+        private FloatingSelectionView _floatingSelectionView;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
@@ -63,6 +67,7 @@ namespace gameview
             DisableButton();
             Instantiate(_cardViewCreatorPrefab);
             Instantiate(_inputHandlerPrefab);
+            _floatingSelectionView = Instantiate(_floatingSelectionViewPrefab);
 
             var gameRemoteService = new GameRemoteService(this);
 
@@ -270,6 +275,16 @@ namespace gameview
         {
             var endGameView = Instantiate(_endGameViewPrefab);
             endGameView.ShowWinner(winner);
+        }
+
+        internal void ActivateFloatingSelectionView(List<ICard> possibleTargets)
+        {
+            _floatingSelectionView.DisplayCards(possibleTargets);
+        }
+
+        internal void DisableFloatingSelection()
+        {
+            _floatingSelectionView.Clear();
         }
     }
 }

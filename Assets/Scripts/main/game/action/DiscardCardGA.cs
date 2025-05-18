@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class DiscardCardsFromHandGA : GameAction
+    class DiscardCardsFromHandGA : GameAction
     {
         public List<ICardLogic> Cards { get; private set; }
 
