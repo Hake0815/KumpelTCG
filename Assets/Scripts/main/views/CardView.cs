@@ -373,7 +373,6 @@ namespace gameview
 
         private void CreateCurrentActivePokemonActionsView()
         {
-            Debug.Log("CreateCurrentActivePokemonActionsView");
             _currentActivePokemonActionsView = Instantiate(_activePokemonActionsViewPrefab);
             _currentActivePokemonActionsView.Collider.Add(_col);
         }

@@ -34,7 +34,6 @@ namespace gameview
 
         private void Awake()
         {
-            Debug.Log("ActivePokemonActionsView.Awake");
             _buttonSpacing = _attackButtonPrefab.GetComponent<RectTransform>().rect.height * 1.1f;
             _verticalDirection = transform.rotation * Vector3.up;
             Canvas = GetComponent<Canvas>();

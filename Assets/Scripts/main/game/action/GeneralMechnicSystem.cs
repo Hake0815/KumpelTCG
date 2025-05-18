@@ -166,6 +166,7 @@ namespace gamecore.action
 
             action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
             action.TargetPokemon.AttachedEnergyCards.Clear();
+            action.NewPokemon.TakeDamage(action.TargetPokemon.Damage);
 
             foreach (var preEvolution in action.TargetPokemon.PreEvolutions)
                 action.NewPokemon.PreEvolutions.Add(preEvolution);
