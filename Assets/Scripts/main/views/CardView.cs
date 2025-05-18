@@ -17,6 +17,10 @@ namespace gameview
         private ActivePokemonActionsView _currentActivePokemonActionsView;
 
         [SerializeField]
+        private BenchedPokemonActionsView _benchedPokemonActionsViewPrefab;
+        private BenchedPokemonActionsView _currentBenchedPokemonActionsView;
+
+        [SerializeField]
         private Image _damageIcon;
 
         [SerializeField]
@@ -277,6 +281,8 @@ namespace gameview
                 _cardViewBehaviour = null;
                 _currentActivePokemonActionsView?.DestroyThis();
                 _currentActivePokemonActionsView = null;
+                _currentBenchedPokemonActionsView?.DestroyThis();
+                _currentBenchedPokemonActionsView = null;
                 TurnOffHighlight();
             }
         }
@@ -302,13 +308,56 @@ namespace gameview
             _currentActivePokemonActionsView.AddAttackInteraction(attack, onAttackAction);
         }
 
-        public void AddAbility(IAbility ability, Action onAbilityAction)
+        public void AddAbility(
+            IAbility ability,
+            Action onAbilityAction,
+            bool isActivePokemon = true
+        )
         {
-            if (_currentActivePokemonActionsView == null)
+            if (isActivePokemon)
             {
-                CreateCurrentActivePokemonActionsView();
+                if (_currentActivePokemonActionsView == null)
+                {
+                    CreateCurrentActivePokemonActionsView();
+                }
+                _currentActivePokemonActionsView.AddAbilityInteraction(ability, onAbilityAction);
             }
-            _currentActivePokemonActionsView.AddAbilityInteraction(ability, onAbilityAction);
+            else
+            {
+                if (_currentBenchedPokemonActionsView == null)
+                {
+                    CreateCurrentBenchedPokemonActionsView();
+                }
+                _currentBenchedPokemonActionsView.AddAbilityInteraction(ability, onAbilityAction);
+            }
+        }
+
+        private void CreateCurrentBenchedPokemonActionsView()
+        {
+            _currentBenchedPokemonActionsView = Instantiate(_benchedPokemonActionsViewPrefab);
+            _currentBenchedPokemonActionsView.Collider.Add(_col);
+        }
+
+        public void ShowBenchedPokemonActions()
+        {
+            Vector3 distance = GetBenchedPokemonActionsDistance();
+            _currentBenchedPokemonActionsView.transform.position = transform.position + distance;
+            _currentBenchedPokemonActionsView.transform.rotation = transform.rotation;
+            _currentBenchedPokemonActionsView.Canvas.enabled = true;
+        }
+
+        private Vector3 GetBenchedPokemonActionsDistance()
+        {
+            var verticalDirection = transform.rotation * Vector3.up;
+            var distance =
+                (
+                    _benchedPokemonActionsViewPrefab.GetComponent<RectTransform>().rect.height
+                    + RectTransform.rect.height
+                )
+                / 2f
+                * 1.1f
+                * verticalDirection;
+            return distance;
         }
 
         public void AddRetreat(Action onRetreatAction)
@@ -324,19 +373,20 @@ namespace gameview
 
         private void CreateCurrentActivePokemonActionsView()
         {
+            Debug.Log("CreateCurrentActivePokemonActionsView");
             _currentActivePokemonActionsView = Instantiate(_activePokemonActionsViewPrefab);
             _currentActivePokemonActionsView.Collider.Add(_col);
         }
 
         public void ShowActivePokemonActions()
         {
-            Vector3 distance = GetDistance();
+            Vector3 distance = GetActivePokemonActionsDistance();
             _currentActivePokemonActionsView.transform.position = transform.position + distance;
             _currentActivePokemonActionsView.transform.rotation = transform.rotation;
             _currentActivePokemonActionsView.Canvas.enabled = true;
         }
 
-        private Vector3 GetDistance()
+        private Vector3 GetActivePokemonActionsDistance()
         {
             var horizontalDirection = transform.rotation * Vector3.right;
             var distance =

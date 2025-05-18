@@ -196,17 +196,23 @@ namespace gameview
             var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.AddAbility(
+                (card as IPokemonCard).Ability,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                },
+                card.Owner.ActivePokemon == card
+            );
             if (card.Owner.ActivePokemon == card)
             {
-                cardView.AddAbility(
-                    (card as IPokemonCard).Ability,
-                    () =>
-                    {
-                        OnInteract();
-                        interaction.GameControllerMethod.Invoke();
-                    }
-                );
                 var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
+                cardView.SetPlayable(true, clickBehaviour);
+            }
+            else
+            {
+                var clickBehaviour = new ClickBehaviour(cardView.ShowBenchedPokemonActions);
                 cardView.SetPlayable(true, clickBehaviour);
             }
         }
