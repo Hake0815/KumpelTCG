@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -11,12 +9,14 @@ using UnityEngine;
 
 namespace gamecore.action
 {
-    internal class GeneralMechnicSystem
+    class GeneralMechnicSystem
         : IActionPerformer<AttackGA>,
             IActionPerformer<DrawPrizeCardsGA>,
             IActionPerformer<CheckWinConditionGA>,
             IActionPerformer<PromoteGA>,
-            IActionPerformer<RetreatGA>
+            IActionPerformer<RetreatGA>,
+            IActionPerformer<PerformAbilityGA>,
+            IActionPerformer<EvolveGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
             () => new GeneralMechnicSystem()
@@ -35,6 +35,8 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<CheckWinConditionGA>(INSTANCE);
             _actionSystem.AttachPerformer<PromoteGA>(INSTANCE);
             _actionSystem.AttachPerformer<RetreatGA>(INSTANCE);
+            _actionSystem.AttachPerformer<PerformAbilityGA>(INSTANCE);
+            _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
             _game = game;
         }
 
@@ -45,6 +47,8 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<CheckWinConditionGA>();
             _actionSystem.DetachPerformer<PromoteGA>();
             _actionSystem.DetachPerformer<RetreatGA>();
+            _actionSystem.DetachPerformer<PerformAbilityGA>();
+            _actionSystem.DetachPerformer<EvolveGA>();
         }
 
         public Task<AttackGA> Perform(AttackGA action)
@@ -105,7 +109,12 @@ namespace gamecore.action
                     }
                     else
                     {
-                        var selection = await _game.AwaitSelection(player, player.Bench.Cards, 1);
+                        var selection = await _game.AwaitSelection(
+                            player,
+                            player.Bench.Cards,
+                            1,
+                            SelectFrom.InPlay
+                        );
                         player.Promote(selection[0] as IPokemonCardLogic);
                     }
                 }
@@ -123,6 +132,49 @@ namespace gamecore.action
             _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
             _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
             pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
+            return Task.FromResult(action);
+        }
+
+        public Task<PerformAbilityGA> Perform(PerformAbilityGA action)
+        {
+            foreach (var effect in action.Pokemon.Ability.Effects)
+            {
+                effect.Perform(action.Pokemon);
+            }
+            action.Pokemon.AbilityUsedThisTurn = true;
+            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(
+                action.Pokemon,
+                ReactionTiming.PRE
+            );
+            return Task.FromResult(action);
+        }
+
+        public Task<EvolveGA> Perform(EvolveGA action)
+        {
+            action.NewPokemon.Owner.Hand.RemoveCard(action.NewPokemon);
+            action.NewPokemon.PreEvolutions.Add(action.TargetPokemon);
+
+            if (action.TargetPokemon == action.TargetPokemon.Owner.ActivePokemon)
+                action.TargetPokemon.Owner.ActivePokemon = action.NewPokemon;
+            else
+            {
+                action.TargetPokemon.Owner.Bench.ReplaceInPlace(
+                    action.TargetPokemon,
+                    action.NewPokemon
+                );
+            }
+
+            action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
+            action.TargetPokemon.AttachedEnergyCards.Clear();
+            action.NewPokemon.TakeDamage(action.TargetPokemon.Damage);
+
+            foreach (var preEvolution in action.TargetPokemon.PreEvolutions)
+                action.NewPokemon.PreEvolutions.Add(preEvolution);
+
+            action.TargetPokemon.PreEvolutions.Clear();
+
+            action.TargetPokemon.WasEvolved();
+            action.TargetPokemon.SetPutInPlay();
             return Task.FromResult(action);
         }
     }

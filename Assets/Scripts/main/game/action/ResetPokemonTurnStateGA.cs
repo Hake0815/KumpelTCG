@@ -3,11 +3,11 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class ResetPokemonInPlayStateGA : GameAction
+    class ResetPokemonTurnStateGA : GameAction
     {
         public IPokemonCardLogic PokemonToReset { get; }
 
-        public ResetPokemonInPlayStateGA(IPokemonCardLogic pokemonToReset)
+        public ResetPokemonTurnStateGA(IPokemonCardLogic pokemonToReset)
         {
             PokemonToReset = pokemonToReset;
         }

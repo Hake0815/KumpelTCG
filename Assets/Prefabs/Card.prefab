@@ -405,6 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activePokemonActionsViewPrefab: {fileID: -6665240836573825943, guid: 946ede76edaac99bf9e1c79b9ddb79f2, type: 3}
+  _benchedPokemonActionsViewPrefab: {fileID: 4574039419618092792, guid: 7be7842571266a315bd543a14409fad5, type: 3}
   _damageIcon: {fileID: 203603192966745337}
   _damageText: {fileID: 1112427015880156359}
   _backSideSprite: {fileID: 2444483277926139015, guid: 668405f19aa23a15094453dca0f65bae, type: 3}

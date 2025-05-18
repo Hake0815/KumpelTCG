@@ -22,7 +22,7 @@ namespace gamecore.game
         int TurnCounter { get; }
     }
 
-    internal class Game : IGame, IActionPerformer<EndTurnGA>, IActionPerformer<StartTurnGA>
+    class Game : IGame, IActionPerformer<EndTurnGA>, IActionPerformer<StartTurnGA>
     {
         public IPlayerLogic Player1 { get; private set; }
         public IPlayerLogic Player2 { get; private set; }
@@ -66,7 +66,7 @@ namespace gamecore.game
             Player2 = player2;
             _actionSystem.AttachPerformer<EndTurnGA>(this);
             _actionSystem.AttachPerformer<StartTurnGA>(this);
-            CardSystem.INSTANCE.Enable();
+            CardSystem.INSTANCE.Enable(this);
             DamageSystem.INSTANCE.Enable();
             GeneralMechnicSystem.INSTANCE.Enable(this);
             GameState = new CreatedState();
@@ -119,10 +119,9 @@ namespace gamecore.game
             AwaitGeneralInteraction();
         }
 
-        /* Returns if both active Pokemon are set */
         internal async Task SetActivePokemon(ICardLogic basicPokemon)
         {
-            await basicPokemon.Play();
+            await _actionSystem.Perform(new PlayCardGA(basicPokemon));
             await AdvanceGameState();
         }
 
@@ -134,7 +133,7 @@ namespace gamecore.game
 
         internal async Task PlayCard(ICardLogic card)
         {
-            await card.Play();
+            await _actionSystem.Perform(new PlayCardGA(card));
             await AdvanceGameState();
         }
 
@@ -151,11 +150,12 @@ namespace gamecore.game
         internal async Task<List<ICardLogic>> AwaitSelection(
             IPlayerLogic player,
             List<ICardLogic> options,
-            int amount
+            int amount,
+            SelectFrom selectFrom
         )
         {
             var tcs = new TaskCompletionSource<List<ICardLogic>>();
-            GameState = new WaitForInputState(tcs, player, options, amount);
+            GameState = new WaitForInputState(tcs, player, options, amount, selectFrom);
             AwaitInteraction();
             return await tcs.Task;
         }
@@ -176,7 +176,7 @@ namespace gamecore.game
 
         internal async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
-            await card.PlayWithTargets(targets);
+            await _actionSystem.Perform(new PlayCardGA(card, targets));
             await AdvanceGameState();
         }
 
@@ -201,6 +201,12 @@ namespace gamecore.game
             action.NextPlayer.TurnCounter++;
             TurnCounter++;
             return Task.FromResult(action);
+        }
+
+        internal async Task PerformAbility(IPokemonCardLogic pokemon)
+        {
+            await _actionSystem.Perform(new PerformAbilityGA(pokemon));
+            await AdvanceGameState();
         }
     }
 }

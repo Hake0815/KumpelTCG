@@ -2,7 +2,7 @@ using gamecore.card;
 
 namespace gamecore.effect
 {
-    internal interface IPlayCondition
+    internal interface IUseCondition
     {
         bool IsMet(ICardLogic card);
     }

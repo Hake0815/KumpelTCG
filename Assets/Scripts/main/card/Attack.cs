@@ -18,7 +18,7 @@ namespace gamecore.card
         List<IEffect> Effects { get; }
     }
 
-    internal class Attack : IAttackLogic
+    class Attack : IAttackLogic
     {
         public string Name { get; }
         public int Damage => GetDamageToActivePokemon();

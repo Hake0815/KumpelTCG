@@ -3,7 +3,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class EvolveGA : GameAction
+    class EvolveGA : GameAction
     {
         public EvolveGA(IPokemonCardLogic targetPokemon, IPokemonCardLogic newPokemon)
         {
