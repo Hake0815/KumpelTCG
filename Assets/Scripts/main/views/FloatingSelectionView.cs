@@ -4,6 +4,7 @@ using DG.Tweening;
 using gamecore.card;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace gameview
@@ -79,7 +80,7 @@ namespace gameview
         {
             if (
                 _cardViewColliders.Contains(clickedCollider)
-                || clickedCollider == _toggleCardsButton.GetComponent<Collider2D>()
+                || EventSystem.current.currentSelectedGameObject == _toggleCardsButton.gameObject
             )
                 return;
             Hidden = true;
