@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class AttachEnergyGA : GameAction
+    class AttachEnergyGA : GameAction
     {
         public IEnergyCardLogic EnergyCard { get; }
         public IPokemonCardLogic TargetPokemon { get; }

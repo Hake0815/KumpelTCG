@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
 using TMPro;
@@ -40,6 +42,7 @@ namespace gameview
                 Deck.CardCountChanged += UpdateView;
                 Deck.CardsDrawn += OnCardsDrawn;
                 Deck.CardsDrawnFaceDown += OnCardsDrawnFaceDown;
+                Deck.CardsAdded += OnCardsAdded;
             }
         }
 
@@ -50,6 +53,7 @@ namespace gameview
                 Deck.CardCountChanged -= UpdateView;
                 Deck.CardsDrawn -= OnCardsDrawn;
                 Deck.CardsDrawnFaceDown -= OnCardsDrawnFaceDown;
+                Deck.CardsAdded -= OnCardsAdded;
             }
         }
 
@@ -62,7 +66,7 @@ namespace gameview
                 _image.sprite = _sprite;
         }
 
-        private void OnCardsDrawn(object sender, List<ICard> drawnCards)
+        private void OnCardsDrawn(List<ICard> drawnCards)
         {
             CreateDrawnCards(drawnCards);
         }
@@ -73,13 +77,18 @@ namespace gameview
             {
                 foreach (var card in drawnCards)
                 {
-                    CardViewCreator.INSTANCE.CreateAt(card, transform.position, transform.rotation);
+                    var cardView = CardViewCreator.INSTANCE.CreateAt(
+                        card,
+                        transform.position,
+                        transform.rotation
+                    );
+                    cardView.Canvas.sortingOrder = card.Owner.Hand.Cards.Count + 1;
                 }
                 CallbackOnDone.Invoke();
             });
         }
 
-        private void OnCardsDrawnFaceDown(object sender, List<ICard> drawnCards)
+        private void OnCardsDrawnFaceDown(List<ICard> drawnCards)
         {
             CreateDrawnCardsFaceDown(drawnCards);
         }
@@ -98,6 +107,21 @@ namespace gameview
                 }
                 CallbackOnDone.Invoke();
             });
+        }
+
+        private void OnCardsAdded(List<ICard> cards)
+        {
+            var cardViews = CardViewRegistry.INSTANCE.GetAllAvailable(cards);
+            foreach (var cardView in cardViews)
+            {
+                cardView.FaceUp = false;
+                CardViewRegistry.INSTANCE.Unregister(cardView.Card);
+                cardView.Canvas.sortingOrder = -99;
+                cardView
+                    .GetComponent<Transform>()
+                    .DOMove(transform.position, 0.25f)
+                    .OnComplete(() => Destroy(cardView.gameObject));
+            }
         }
     }
 }

@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace gamecore.effect
 {
-    internal class DiscardCardEffect : IEffect
+    class DiscardCardEffect : IEffect
     {
-        async Task IEffect.Perform(ICardLogic card)
+        public void Perform(ICardLogic card)
         {
-            await ActionSystem.INSTANCE.Perform(
+            ActionSystem.INSTANCE.AddReaction(
                 new DiscardCardsFromHandGA(new List<ICardLogic> { card })
             );
         }

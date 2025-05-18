@@ -66,6 +66,9 @@ namespace gameview
                     case GameInteractionType.PerformAttack:
                         HandlePerformAttack(interaction);
                         break;
+                    case GameInteractionType.PerformAbility:
+                        HandlePerformAbility(interaction);
+                        break;
                     case GameInteractionType.Retreat:
                         HandleRetreat(interaction);
                         break;
@@ -110,6 +113,17 @@ namespace gameview
         private void HandleSelectCards(GameInteraction interaction)
         {
             var targetData = interaction.Data[typeof(TargetData)] as TargetData;
+            switch ((interaction.Data[typeof(SelectFromData)] as SelectFromData).SelectFrom)
+            {
+                case SelectFrom.InPlay:
+                    // Nothing to do here
+                    break;
+                case SelectFrom.Floating:
+                    PrepareFloatingSelection(targetData.PossibleTargets);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
             if (targetData.NumberOfTargets != 1)
                 throw new NotImplementedException();
 
@@ -126,6 +140,11 @@ namespace gameview
                     })
                 );
             }
+        }
+
+        private void PrepareFloatingSelection(List<ICard> possibleTargets)
+        {
+            _gameManager.ActivateFloatingSelectionView(possibleTargets);
         }
 
         private void HandleSetupCompleted(GameInteraction interaction)
@@ -186,6 +205,32 @@ namespace gameview
             );
             var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
             cardView.SetPlayable(true, clickBehaviour);
+        }
+
+        private void HandlePerformAbility(GameInteraction interaction)
+        {
+            var card = (interaction.Data[typeof(InteractionCard)] as InteractionCard).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.AddAbility(
+                (card as IPokemonCard).Ability,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                },
+                card.Owner.ActivePokemon == card
+            );
+            if (card.Owner.ActivePokemon == card)
+            {
+                var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
+                cardView.SetPlayable(true, clickBehaviour);
+            }
+            else
+            {
+                var clickBehaviour = new ClickBehaviour(cardView.ShowBenchedPokemonActions);
+                cardView.SetPlayable(true, clickBehaviour);
+            }
         }
 
         private void HandleRetreat(GameInteraction interaction)
@@ -317,6 +362,7 @@ namespace gameview
         private void OnInteract()
         {
             _gameManager.DisableButton();
+            _gameManager.DisableFloatingSelection();
             ClearPlayableCards();
         }
 

@@ -2,7 +2,7 @@ using gamecore.actionsystem;
 
 namespace gamecore.game.action
 {
-    internal class DrawCardGA : GameAction
+    class DrawCardGA : GameAction
     {
         public int Amount { get; }
         public IPlayer Player { get; }

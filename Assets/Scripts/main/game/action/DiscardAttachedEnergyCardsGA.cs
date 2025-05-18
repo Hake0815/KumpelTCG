@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class DiscardAttachedEnergyCardsGA : GameAction
+    class DiscardAttachedEnergyCardsGA : GameAction
     {
         public DiscardAttachedEnergyCardsGA(
             IPokemonCardLogic pokemon,

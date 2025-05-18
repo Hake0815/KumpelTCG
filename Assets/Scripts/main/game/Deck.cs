@@ -8,8 +8,9 @@ namespace gamecore.game
 {
     public interface IDeck : ICardList
     {
-        event EventHandler<List<ICard>> CardsDrawn;
-        event EventHandler<List<ICard>> CardsDrawnFaceDown;
+        event Action<List<ICard>> CardsDrawn;
+        event Action<List<ICard>> CardsDrawnFaceDown;
+        event Action<List<ICard>> CardsAdded;
     }
 
     internal interface IDeckLogic : IDeck, ICardListLogic
@@ -18,7 +19,7 @@ namespace gamecore.game
         List<ICardLogic> Draw(int amount);
     }
 
-    internal class Deck : IDeckLogic
+    class Deck : IDeckLogic
     {
         public List<ICardLogic> Cards { get; set; }
         public int CardCount
@@ -27,8 +28,9 @@ namespace gamecore.game
         }
 
         public event Action CardCountChanged;
-        public event EventHandler<List<ICard>> CardsDrawn;
-        public event EventHandler<List<ICard>> CardsDrawnFaceDown;
+        public event Action<List<ICard>> CardsDrawn;
+        public event Action<List<ICard>> CardsDrawnFaceDown;
+        public event Action<List<ICard>> CardsAdded;
 
         public Deck(List<ICardLogic> cards)
         {
@@ -60,6 +62,7 @@ namespace gamecore.game
         public void AddCards(List<ICardLogic> cards)
         {
             Cards.AddRange(cards);
+            OnCardsAdded(cards);
             OnCardCountChanged();
         }
 
@@ -70,12 +73,17 @@ namespace gamecore.game
 
         public void OnCardsDrawn(List<ICardLogic> cards)
         {
-            CardsDrawn?.Invoke(this, cards.Cast<ICard>().ToList());
+            CardsDrawn?.Invoke(cards.Cast<ICard>().ToList());
         }
 
         public void OnCardsDrawnFaceDown(List<ICardLogic> cards)
         {
-            CardsDrawnFaceDown?.Invoke(this, cards.Cast<ICard>().ToList());
+            CardsDrawnFaceDown?.Invoke(cards.Cast<ICard>().ToList());
+        }
+
+        public void OnCardsAdded(List<ICardLogic> cards)
+        {
+            CardsAdded?.Invoke(cards.Cast<ICard>().ToList());
         }
     }
 }

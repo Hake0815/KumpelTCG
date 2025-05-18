@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.state
 {
-    internal class SettingActivePokemonState : IGameState
+    class SettingActivePokemonState : IGameState
     {
         private int _numberOfActivePokemonSelected = 0;
 
