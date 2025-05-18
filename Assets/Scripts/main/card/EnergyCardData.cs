@@ -6,7 +6,7 @@ namespace gamecore.card
         public EnergyCardType EnergyCardType { get; }
     }
 
-    internal class EnergyCardData : IEnergyCardData
+    class EnergyCardData : IEnergyCardData
     {
         public EnergyCardData(
             string id,

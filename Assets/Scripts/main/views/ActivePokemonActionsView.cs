@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using gamecore.card;
 using gamecore.game;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,9 @@ namespace gameview
 {
     public class ActivePokemonActionsView : MonoBehaviour
     {
+        [SerializeField]
+        private Button _abilityButton;
+
         [SerializeField]
         private Button _attackButtonPrefab;
 
@@ -56,6 +60,14 @@ namespace gameview
             Canvas.enabled = false;
         }
 
+        public void AddAbilityInteraction(IAbility ability, Action onAbilityAction)
+        {
+            _abilityButton.gameObject.SetActive(true);
+            _abilityButton.GetComponentInChildren<TMP_Text>().text = ability.Name;
+            Collider.Add(_abilityButton.GetComponent<Collider2D>());
+            _abilityButton.onClick.AddListener(() => onAbilityAction.Invoke());
+        }
+
         public void AddAttackInteraction(IAttack attack, Action onAttackAction)
         {
             Attacks.Add(attack);
@@ -76,7 +88,7 @@ namespace gameview
             Destroy(gameObject);
         }
 
-        internal void AddRetreatInteraction(int cost, Action onRetreatAction)
+        public void AddRetreatInteraction(int cost, Action onRetreatAction)
         {
             _retreatButton.gameObject.SetActive(true);
             _retreatButton.onClick.AddListener(() => onRetreatAction.Invoke());

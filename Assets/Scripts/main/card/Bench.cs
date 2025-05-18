@@ -21,9 +21,10 @@ namespace gamecore.card
     {
         new int MaxBenchSpots { get; set; }
         int IBench.MaxBenchSpots => MaxBenchSpots;
+        void ReplaceInPlace(IPokemonCardLogic oldPokemon, IPokemonCardLogic newPokemon);
     }
 
-    internal class Bench : IBenchLogic
+    class Bench : IBenchLogic
     {
         public List<ICardLogic> Cards { get; } = new();
         public int MaxBenchSpots { get; set; } = 5;
@@ -33,6 +34,13 @@ namespace gamecore.card
         public void OnCardCountChanged()
         {
             CardCountChanged?.Invoke();
+        }
+
+        public void ReplaceInPlace(IPokemonCardLogic oldPokemon, IPokemonCardLogic newPokemon)
+        {
+            var index = Cards.IndexOf(oldPokemon);
+            Cards[index] = newPokemon;
+            OnCardCountChanged();
         }
     }
 }

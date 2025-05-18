@@ -3,7 +3,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class AttachEnergyFromHandForTurnGA : AttachEnergyFromHandGA
+    class AttachEnergyFromHandForTurnGA : AttachEnergyFromHandGA
     {
         public AttachEnergyFromHandForTurnGA(
             IEnergyCardLogic energyCard,

@@ -22,7 +22,7 @@ namespace gamecore.game
         int TurnCounter { get; }
     }
 
-    internal class Game : IGame, IActionPerformer<EndTurnGA>
+    class Game : IGame, IActionPerformer<EndTurnGA>, IActionPerformer<StartTurnGA>
     {
         public IPlayerLogic Player1 { get; private set; }
         public IPlayerLogic Player2 { get; private set; }
@@ -65,7 +65,8 @@ namespace gamecore.game
             Player1 = player1;
             Player2 = player2;
             _actionSystem.AttachPerformer<EndTurnGA>(this);
-            CardSystem.INSTANCE.Enable();
+            _actionSystem.AttachPerformer<StartTurnGA>(this);
+            CardSystem.INSTANCE.Enable(this);
             DamageSystem.INSTANCE.Enable();
             GeneralMechnicSystem.INSTANCE.Enable(this);
             GameState = new CreatedState();
@@ -82,9 +83,7 @@ namespace gamecore.game
 
         public async Task StartGame()
         {
-            TurnCounter++;
-            Player1.IsActive = true;
-            await _actionSystem.Perform(new DrawCardGA(1, Player1));
+            await _actionSystem.Perform(new StartTurnGA(Player1));
         }
 
         public async Task EndTurn()
@@ -99,22 +98,20 @@ namespace gamecore.game
             if (Player1.IsActive)
             {
                 Player1.IsActive = false;
-                Player2.IsActive = true;
-                endTurnGA.NextPlayer = Player2;
+                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player2));
             }
             else
             {
                 Player2.IsActive = false;
-                Player1.IsActive = true;
-                endTurnGA.NextPlayer = Player1;
+                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player1));
             }
-            TurnCounter++;
             return Task.FromResult(endTurnGA);
         }
 
         public void EndGame(IPlayerLogic winner)
         {
             _actionSystem.DetachPerformer<EndTurnGA>();
+            _actionSystem.DetachPerformer<StartTurnGA>();
             CardSystem.INSTANCE.Disable();
             DamageSystem.INSTANCE.Disable();
             GeneralMechnicSystem.INSTANCE.Disable();
@@ -122,10 +119,9 @@ namespace gamecore.game
             AwaitGeneralInteraction();
         }
 
-        /* Returns if both active Pokemon are set */
         internal async Task SetActivePokemon(ICardLogic basicPokemon)
         {
-            await basicPokemon.Play();
+            await _actionSystem.Perform(new PlayCardGA(basicPokemon));
             await AdvanceGameState();
         }
 
@@ -137,7 +133,7 @@ namespace gamecore.game
 
         internal async Task PlayCard(ICardLogic card)
         {
-            await card.Play();
+            await _actionSystem.Perform(new PlayCardGA(card));
             await AdvanceGameState();
         }
 
@@ -154,11 +150,12 @@ namespace gamecore.game
         internal async Task<List<ICardLogic>> AwaitSelection(
             IPlayerLogic player,
             List<ICardLogic> options,
-            int amount
+            int amount,
+            SelectFrom selectFrom
         )
         {
             var tcs = new TaskCompletionSource<List<ICardLogic>>();
-            GameState = new WaitForInputState(tcs, player, options, amount);
+            GameState = new WaitForInputState(tcs, player, options, amount, selectFrom);
             AwaitInteraction();
             return await tcs.Task;
         }
@@ -179,7 +176,7 @@ namespace gamecore.game
 
         internal async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
-            await card.PlayWithTargets(targets);
+            await _actionSystem.Perform(new PlayCardGA(card, targets));
             await AdvanceGameState();
         }
 
@@ -195,6 +192,20 @@ namespace gamecore.game
         )
         {
             await _actionSystem.Perform(new RetreatGA(pokemon, energyCardsToDiscard));
+            await AdvanceGameState();
+        }
+
+        public Task<StartTurnGA> Perform(StartTurnGA action)
+        {
+            action.NextPlayer.IsActive = true;
+            action.NextPlayer.TurnCounter++;
+            TurnCounter++;
+            return Task.FromResult(action);
+        }
+
+        internal async Task PerformAbility(IPokemonCardLogic pokemon)
+        {
+            await _actionSystem.Perform(new PerformAbilityGA(pokemon));
             await AdvanceGameState();
         }
     }

@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.state
 {
-    internal class SelectBenchPokemonState : IGameState
+    class SelectBenchPokemonState : IGameState
     {
         private bool _doneSelecting = false;
 
@@ -28,10 +28,10 @@ namespace gamecore.game.state
             }
             interactions.Add(
                 new(
-                    () =>
+                    async () =>
                     {
                         _doneSelecting = true;
-                        gameController.Confirm();
+                        await gameController.Confirm();
                     },
                     GameInteractionType.Confirm
                 )
@@ -45,7 +45,7 @@ namespace gamecore.game.state
         )
         {
             return new GameInteraction(
-                () => gameController.PlayCard(basicPokemon),
+                async () => await gameController.PlayCard(basicPokemon),
                 GameInteractionType.PlayCard,
                 new() { new InteractionCard(basicPokemon) }
             );

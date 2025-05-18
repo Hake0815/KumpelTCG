@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.state
 {
-    internal class SettingActivePokemonState : IGameState
+    class SettingActivePokemonState : IGameState
     {
         private int _numberOfActivePokemonSelected = 0;
 
@@ -38,7 +38,7 @@ namespace gamecore.game.state
         )
         {
             return new GameInteraction(
-                () => gameController.SelectActivePokemon(basicPokemon),
+                async () => await gameController.SelectActivePokemon(basicPokemon),
                 GameInteractionType.SelectActivePokemon,
                 new() { new InteractionCard(basicPokemon) }
             );

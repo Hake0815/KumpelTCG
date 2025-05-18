@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game.action
 {
-    internal class AttackGA : GameAction
+    class AttackGA : GameAction
     {
         public AttackGA(IAttackLogic attack, IPokemonCardLogic attacker)
         {

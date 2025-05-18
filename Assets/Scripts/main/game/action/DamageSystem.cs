@@ -10,7 +10,7 @@ using UnityEngine.Animations;
 
 namespace gamecore.action
 {
-    internal class DamageSystem
+    class DamageSystem
         : IActionPerformer<DealDamgeGA>,
             IActionPerformer<KnockOutCheckGA>,
             IActionPerformer<KnockOutGA>

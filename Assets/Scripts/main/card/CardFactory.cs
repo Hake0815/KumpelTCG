@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace gamecore.card
 {
-    internal class CardFactory
+    static class CardFactory
     {
         public static ICardLogic CreateCard(string id, IPlayerLogic owner)
         {
@@ -16,17 +16,17 @@ namespace gamecore.card
             }
 
             var cardData = CardDatabase.cardDataDict[id];
-            if (cardData is ITrainerCardData)
+            if (cardData is ITrainerCardData trainerCardData)
             {
-                return new TrainerCard(cardData as ITrainerCardData, owner);
+                return new TrainerCard(trainerCardData, owner);
             }
-            else if (cardData is IPokemonCardData)
+            else if (cardData is IPokemonCardData pokemonCardData)
             {
-                return new PokemonCard(cardData as IPokemonCardData, owner);
+                return new PokemonCard(pokemonCardData, owner);
             }
-            else if (cardData is IEnergyCardData)
+            else if (cardData is IEnergyCardData energyCardData)
             {
-                return new EnergyCard(cardData as IEnergyCardData, owner);
+                return new EnergyCard(energyCardData, owner);
             }
             Debug.LogError(
                 $"Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"
