@@ -17,6 +17,11 @@ namespace gamecore.actionsystem
         private readonly ConcurrentQueue<GameActionLogEntry> _queue = new();
         private readonly CancellationTokenSource _cts = new();
         private readonly Task _writerTask;
+        private static readonly JsonSerializerSettings _serializerSettings = new()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            TypeNameHandling = TypeNameHandling.Auto,
+        };
 
         private bool _disposed;
 
@@ -92,7 +97,7 @@ namespace gamecore.actionsystem
 
                 foreach (var entry in buffer)
                 {
-                    var json = JsonConvert.SerializeObject(entry);
+                    var json = JsonConvert.SerializeObject(entry, _serializerSettings);
                     await writer.WriteLineAsync(json);
                 }
 
