@@ -33,12 +33,14 @@ namespace gamecore.game
             return this;
         }
 
-        private Deck CreateDeckFromDecklist(Dictionary<string, int> decklist, Player player)
+        private static Deck CreateDeckFromDecklist(Dictionary<string, int> decklist, Player player)
         {
             var cards = new List<ICardLogic>();
+            var deckId = 0;
             foreach (var entry in decklist)
             {
-                cards.AddRange(CardFactory.CreateCard(entry.Key, player, entry.Value));
+                cards.AddRange(CardFactory.CreateCard(entry.Key, player, entry.Value, deckId));
+                deckId += entry.Value;
             }
             return new Deck(cards);
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.Rendering.VirtualTexturing;
@@ -23,24 +24,45 @@ namespace gamecore.game
     internal interface IPlayerLogic : IPlayer
     {
         new string Name { get; set; }
+
+        [JsonIgnore]
         new bool IsActive { get; set; }
+
+        [JsonIgnore]
         new IPokemonCardLogic ActivePokemon { get; set; }
+
+        [JsonIgnore]
         IPokemonCard IPlayer.ActivePokemon => ActivePokemon;
+
+        [JsonIgnore]
         new IDeckLogic Deck { get; set; }
         IDeck IPlayer.Deck => Deck;
+
+        [JsonIgnore]
         new IHandLogic Hand { get; }
         IHand IPlayer.Hand => Hand;
+
+        [JsonIgnore]
         new IBenchLogic Bench { get; }
         IBench IPlayer.Bench => Bench;
+
+        [JsonIgnore]
         new IPrizesLogic Prizes { get; }
         IPrizes IPlayer.Prizes => Prizes;
+
+        [JsonIgnore]
         HashSet<string> PerformedOncePerTurnActions { get; }
 
+        [JsonIgnore]
         new IDiscardPileLogic DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
+
+        [JsonIgnore]
         IPlayerLogic Opponent { get; }
+
+        [JsonIgnore]
         int TurnCounter { get; set; }
-        void Draw(int amount);
+        List<ICardLogic> Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
         void Promote(IPokemonCardLogic pokemon);
@@ -82,13 +104,14 @@ namespace gamecore.game
 
         public event Action<IPokemonCard> ActivePokemonSet;
 
-        public void Draw(int amount)
+        public List<ICardLogic> Draw(int amount)
         {
             var drawnCards = Deck.Draw(amount);
             if (drawnCards != null)
             {
                 Hand.AddCards(drawnCards);
             }
+            return drawnCards;
         }
 
         public void Promote(IPokemonCardLogic pokemon)

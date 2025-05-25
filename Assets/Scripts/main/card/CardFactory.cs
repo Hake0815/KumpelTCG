@@ -7,7 +7,7 @@ namespace gamecore.card
 {
     static class CardFactory
     {
-        public static ICardLogic CreateCard(string id, IPlayerLogic owner)
+        public static ICardLogic CreateCard(string id, IPlayerLogic owner, int deckId)
         {
             if (!CardDatabase.cardDataDict.ContainsKey(id))
             {
@@ -18,15 +18,15 @@ namespace gamecore.card
             var cardData = CardDatabase.cardDataDict[id];
             if (cardData is ITrainerCardData trainerCardData)
             {
-                return new TrainerCard(trainerCardData, owner);
+                return new TrainerCard(trainerCardData, owner, deckId);
             }
             else if (cardData is IPokemonCardData pokemonCardData)
             {
-                return new PokemonCard(pokemonCardData, owner);
+                return new PokemonCard(pokemonCardData, owner, deckId);
             }
             else if (cardData is IEnergyCardData energyCardData)
             {
-                return new EnergyCard(energyCardData, owner);
+                return new EnergyCard(energyCardData, owner, deckId);
             }
             Debug.LogError(
                 $"Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"
@@ -34,9 +34,17 @@ namespace gamecore.card
             return null;
         }
 
-        public static List<ICardLogic> CreateCard(string id, IPlayerLogic owner, int count)
+        public static List<ICardLogic> CreateCard(
+            string id,
+            IPlayerLogic owner,
+            int count,
+            int deckId
+        )
         {
-            return Enumerable.Range(0, count).Select(i => CreateCard(id, owner)).ToList();
+            return Enumerable
+                .Range(0, count)
+                .Select(i => CreateCard(id, owner, deckId + i))
+                .ToList();
         }
     }
 }
