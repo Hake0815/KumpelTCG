@@ -7,6 +7,7 @@ namespace gamecore.card
 {
     public interface ICard
     {
+        int DeckId { get; }
         event Action CardDiscarded;
         IPlayer Owner { get; }
 
@@ -19,8 +20,6 @@ namespace gamecore.card
 
     internal interface ICardLogic : ICard
     {
-        int DeckId { get; }
-
         [JsonIgnore]
         new IPlayerLogic Owner { get; }
         IPlayer ICard.Owner => Owner;

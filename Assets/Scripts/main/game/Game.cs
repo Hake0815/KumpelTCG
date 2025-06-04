@@ -22,7 +22,12 @@ namespace gamecore.game
         int TurnCounter { get; }
     }
 
-    class Game : IGame, IActionPerformer<EndTurnGA>, IActionPerformer<StartTurnGA>
+    class Game
+        : IGame,
+            IActionPerformer<EndTurnGA>,
+            IActionPerformer<StartTurnGA>,
+            IActionPerformer<SetupGA>,
+            IActionPerformer<SetPrizeCardsGA>
     {
         public IPlayerLogic Player1 { get; private set; }
         public IPlayerLogic Player2 { get; private set; }
@@ -35,15 +40,14 @@ namespace gamecore.game
             get => Player2;
         }
         private readonly List<IPlayerLogic> _players = new();
-
-        public GameSetupBuilder GameSetupBuilder { get; private set; }
         public IGameState GameState { get; set; }
+        private Dictionary<IPlayerLogic, List<List<ICardLogic>>> _mulligans;
         public Dictionary<IPlayer, List<List<ICard>>> Mulligans
         {
             get
             {
                 var result = new Dictionary<IPlayer, List<List<ICard>>>();
-                foreach (var pair in GameSetupBuilder.Mulligans)
+                foreach (var pair in _mulligans)
                 {
                     var outerList = new List<List<ICard>>();
                     foreach (var innerList in pair.Value)
@@ -66,6 +70,8 @@ namespace gamecore.game
             Player2 = player2;
             _actionSystem.AttachPerformer<EndTurnGA>(this);
             _actionSystem.AttachPerformer<StartTurnGA>(this);
+            _actionSystem.AttachPerformer<SetupGA>(this);
+            _actionSystem.AttachPerformer<SetPrizeCardsGA>(this);
             CardSystem.INSTANCE.Enable(this);
             DamageSystem.INSTANCE.Enable();
             GeneralMechnicSystem.INSTANCE.Enable(this);
@@ -74,23 +80,9 @@ namespace gamecore.game
             _players.Add(player2);
         }
 
-        public async Task PerformSetup()
-        {
-            GameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
-            await GameSetupBuilder.Setup();
-            await AdvanceGameState();
-        }
-
         public async Task StartGame()
         {
             await _actionSystem.Perform(new StartTurnGA(Player1));
-        }
-
-        public async Task EndTurn()
-        {
-            var endTurn = new EndTurnGA();
-            await _actionSystem.Perform(endTurn);
-            await AdvanceGameState();
         }
 
         public Task<EndTurnGA> Perform(EndTurnGA endTurnGA)
@@ -112,6 +104,8 @@ namespace gamecore.game
         {
             _actionSystem.DetachPerformer<EndTurnGA>();
             _actionSystem.DetachPerformer<StartTurnGA>();
+            _actionSystem.DetachPerformer<SetupGA>();
+            _actionSystem.DetachPerformer<SetPrizeCardsGA>();
             CardSystem.INSTANCE.Disable();
             DamageSystem.INSTANCE.Disable();
             GeneralMechnicSystem.INSTANCE.Disable();
@@ -119,22 +113,10 @@ namespace gamecore.game
             AwaitGeneralInteraction();
         }
 
-        internal async Task SetActivePokemon(ICardLogic basicPokemon)
-        {
-            await _actionSystem.Perform(new PlayCardGA(basicPokemon));
-            await AdvanceGameState();
-        }
-
         public async Task AdvanceGameState()
         {
             GameState = GameState.AdvanceSuccesfully();
             await GameState.OnAdvanced(this);
-        }
-
-        internal async Task PlayCard(ICardLogic card)
-        {
-            await _actionSystem.Perform(new PlayCardGA(card));
-            await AdvanceGameState();
         }
 
         internal void AwaitInteraction()
@@ -160,41 +142,6 @@ namespace gamecore.game
             return await tcs.Task;
         }
 
-        internal async Task DrawMulliganCards(int numberOfExtraCards, IPlayerLogic player)
-        {
-            await _actionSystem.Perform(new DrawCardGA(numberOfExtraCards, player));
-            await AdvanceGameState();
-        }
-
-        internal void SetPrizeCards()
-        {
-            foreach (var player in _players)
-            {
-                player.SetPrizeCards();
-            }
-        }
-
-        internal async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
-        {
-            await _actionSystem.Perform(new PlayCardGA(card, targets));
-            await AdvanceGameState();
-        }
-
-        internal async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
-        {
-            await _actionSystem.Perform(new AttackGA(attack, attacker));
-            await AdvanceGameState();
-        }
-
-        internal async Task Retreat(
-            IPokemonCardLogic pokemon,
-            List<IEnergyCardLogic> energyCardsToDiscard
-        )
-        {
-            await _actionSystem.Perform(new RetreatGA(pokemon, energyCardsToDiscard));
-            await AdvanceGameState();
-        }
-
         public Task<StartTurnGA> Perform(StartTurnGA action)
         {
             action.NextPlayer.IsActive = true;
@@ -203,10 +150,45 @@ namespace gamecore.game
             return Task.FromResult(action);
         }
 
-        internal async Task PerformAbility(IPokemonCardLogic pokemon)
+        public Task<SetupGA> Perform(SetupGA action)
         {
-            await _actionSystem.Perform(new PerformAbilityGA(pokemon));
-            await AdvanceGameState();
+            var gameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
+            gameSetupBuilder.Setup();
+            _mulligans = gameSetupBuilder.Mulligans;
+            action.Mulligans = new Dictionary<string, List<List<ICardLogic>>>
+            {
+                { Player1.Name, gameSetupBuilder.GetMulligansForPlayer(Player1) },
+                { Player2.Name, gameSetupBuilder.GetMulligansForPlayer(Player2) },
+            };
+            action.PlayerHands = new Dictionary<string, IHandLogic>
+            {
+                { Player1.Name, Player1.Hand },
+                { Player2.Name, Player2.Hand },
+            };
+            return Task.FromResult(action);
         }
+
+        public Task<SetPrizeCardsGA> Perform(SetPrizeCardsGA action)
+        {
+            foreach (var player in _players)
+            {
+                player.SetPrizeCards();
+            }
+            action.PrizeCards = new Dictionary<string, List<ICardLogic>>
+            {
+                { Player1.Name, Player1.Prizes.Cards },
+                { Player2.Name, Player2.Prizes.Cards },
+            };
+            return Task.FromResult(action);
+        }
+
+        // internal void SetPrizeCards() { }
+
+        // public async Task PerformSetup()
+        // {
+        //     GameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
+        //     GameSetupBuilder.Setup();
+        //     await AdvanceGameState();
+        // }
     }
 }
