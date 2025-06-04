@@ -148,7 +148,7 @@ namespace gamecore.actionsystem
             {
                 var reactionLogEntry = GameActionLogEntry.Builder();
                 logEntryBuilder.WithReaction(reactionLogEntry);
-                await Flow(reaction, logEntryBuilder);
+                await Flow(reaction, reactionLogEntry);
             }
             logEntryBuilder.NextTiming();
         }
