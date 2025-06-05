@@ -69,18 +69,16 @@ namespace gameview
             Instantiate(_inputHandlerPrefab);
             _floatingSelectionView = Instantiate(_floatingSelectionViewPrefab);
 
-            var gameRemoteService = new GameRemoteService(this);
+            new GameRemoteService(this);
+            // SetUpPlayerViews(gameRemoteService);
+            // gameRemoteService.CreateGame();
+        }
 
-            SetUpPlayerViews(
-                gameRemoteService.GameController.Game.Player1,
-                new Quaternion(0f, 0f, 0f, 1f)
-            );
-            SetUpPlayerViews(
-                gameRemoteService.GameController.Game.Player2,
-                new Quaternion(0f, 0f, 1f, 0f)
-            );
+        public void SetUpPlayerViews(IPlayer player1, IPlayer player2)
+        {
+            SetUpPlayerViews(player1, new Quaternion(0f, 0f, 0f, 1f));
+            SetUpPlayerViews(player2, new Quaternion(0f, 0f, 1f, 0f));
             DisablePlayerViews();
-            gameRemoteService.StartGame();
         }
 
         public void EnablePlayerHandViews()

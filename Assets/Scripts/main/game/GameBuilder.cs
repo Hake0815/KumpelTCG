@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game
 {
-    public class GameBuilder
+    class GameBuilder
     {
         private readonly Player _player1 = new() { Name = "Player1" };
         private readonly Player _player2 = new() { Name = "Player2" };
@@ -45,12 +45,11 @@ namespace gamecore.game
             return new Deck(cards);
         }
 
-        public IGameController Build()
+        public Game Build()
         {
             _player1.Opponent = _player2;
             _player2.Opponent = _player1;
-            var game = new Game(_player1, _player2);
-            return new GameController(game);
+            return new Game(_player1, _player2);
         }
     }
 }

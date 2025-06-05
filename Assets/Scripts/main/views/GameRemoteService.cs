@@ -22,18 +22,23 @@ namespace gameview
 
         private void InitializeGame()
         {
-            GameController = new GameBuilder()
-                .WithPlayer1Decklist(CreateDeckList())
-                .WithPlayer2Decklist(CreateDeckList())
-                .Build();
+            GameController = IGameController.Create();
             GameController.NotifyPlayer1 += HandlePlayer1Interactions;
             GameController.NotifyPlayer2 += HandlePlayer2Interactions;
             GameController.NotifyGeneral += HandleGeneralInteractions;
+            GameController.CreateGame(CreateDeckList(), CreateDeckList(), "Player 1", "Player 2");
         }
 
-        public void StartGame()
+        private static Dictionary<string, int> CreateDeckList()
         {
-            GameController.SetUpGame();
+            return new Dictionary<string, int>
+            {
+                { "bill", 16 },
+                { "TWM128", 8 },
+                { "TWM129", 8 },
+                { "FireNRG", 14 },
+                { "PsychicNRG", 14 },
+            };
         }
 
         private void HandlePlayer1Interactions(object sender, List<GameInteraction> interactions)
@@ -82,7 +87,7 @@ namespace gameview
                         HandleSelectActivePokemon(interaction);
                         break;
                     case GameInteractionType.SetUpGame:
-                        interaction.GameControllerMethod.Invoke();
+                        HandleSetUpGame(interaction);
                         break;
                     case GameInteractionType.SetupCompleted:
                         HandleSetupCompleted(interaction);
@@ -108,6 +113,12 @@ namespace gameview
                         throw new NotImplementedException();
                 }
             }
+        }
+
+        private void HandleSetUpGame(GameInteraction interaction)
+        {
+            _gameManager.SetUpPlayerViews(GameController.Game.Player1, GameController.Game.Player2);
+            interaction.GameControllerMethod.Invoke();
         }
 
         private void HandleSelectCards(GameInteraction interaction)
@@ -382,18 +393,6 @@ namespace gameview
                 cardView.Selected = false;
             }
             _selectedCards.Clear();
-        }
-
-        private static Dictionary<string, int> CreateDeckList()
-        {
-            return new Dictionary<string, int>
-            {
-                { "bill", 16 },
-                { "TWM128", 8 },
-                { "TWM129", 8 },
-                { "FireNRG", 14 },
-                { "PsychicNRG", 14 },
-            };
         }
     }
 }
