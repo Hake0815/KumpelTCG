@@ -14,13 +14,23 @@ namespace gamecore.game
         event EventHandler<List<GameInteraction>> NotifyPlayer1;
         event EventHandler<List<GameInteraction>> NotifyPlayer2;
         event EventHandler<List<GameInteraction>> NotifyGeneral;
+        static IGameController Create()
+        {
+            return new GameController();
+        }
 
         Task SetUpGame();
+        Task CreateGame(
+            Dictionary<string, int> deckList1,
+            Dictionary<string, int> deckList2,
+            string player1Name,
+            string player2Name
+        );
     }
 
-    class GameController : IGameController
+    class GameController : IGameController, IActionPerformer<CreateGameGA>
     {
-        private readonly Game _game;
+        private Game _game;
 
         public event EventHandler<List<GameInteraction>> NotifyPlayer1;
         public event EventHandler<List<GameInteraction>> NotifyPlayer2;
@@ -37,6 +47,11 @@ namespace gamecore.game
             _game = game;
             _game.AwaitInteractionEvent += NotifyPlayers;
             _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
+        }
+
+        public GameController()
+        {
+            _actionSystem.AttachPerformer<CreateGameGA>(this);
         }
 
         private void NotifyPlayers()
@@ -68,6 +83,19 @@ namespace gamecore.game
             var interactions = _game.GameState.GetGameInteractions(this, null);
             if (interactions.Count > 0)
                 NotifyGeneral?.Invoke(this, interactions);
+        }
+
+        public async Task CreateGame(
+            Dictionary<string, int> deckList1,
+            Dictionary<string, int> deckList2,
+            string player1Name,
+            string player2Name
+        )
+        {
+            await _actionSystem.Perform(
+                new CreateGameGA(deckList1, deckList2, player1Name, player2Name)
+            );
+            _game.AwaitGeneralInteraction();
         }
 
         public async Task SetUpGame()
@@ -130,6 +158,19 @@ namespace gamecore.game
         {
             await _actionSystem.Perform(new PerformAbilityGA(pokemon));
             await _game.AdvanceGameState();
+        }
+
+        public Task<CreateGameGA> Perform(CreateGameGA action)
+        {
+            _game = new GameBuilder()
+                .WithPlayer1(action.Player1Name)
+                .WithPlayer2(action.Player2Name)
+                .WithPlayer1Decklist(action.DeckList1)
+                .WithPlayer2Decklist(action.DeckList2)
+                .Build();
+            _game.AwaitInteractionEvent += NotifyPlayers;
+            _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
+            return Task.FromResult(action);
         }
     }
 }

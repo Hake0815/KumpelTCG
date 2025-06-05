@@ -65,6 +65,7 @@ namespace gamecore.action
             foreach (var playerEntry in action.NumberOfPrizeCardsPerPlayer)
             {
                 var prizes = playerEntry.Key.Prizes.TakePrizes(playerEntry.Value);
+                action.DrawnCards.Add(playerEntry.Key.Name, prizes);
                 playerEntry.Key.Hand.AddCards(prizes);
             }
             return Task.FromResult(action);
