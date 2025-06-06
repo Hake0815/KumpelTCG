@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using gamecore.common;
 using gamecore.effect;
 using gamecore.game;
+using Newtonsoft.Json;
 
 namespace gamecore.card
 {
@@ -11,31 +12,35 @@ namespace gamecore.card
 
     internal interface ITrainerCardLogic : ITrainerCard, ICardLogic
     {
+        [JsonIgnore]
         List<IEffect> Effects { get; }
+
+        [JsonIgnore]
         List<IUseCondition> Conditions { get; }
     }
 
     class TrainerCard : ITrainerCardLogic
     {
-        public ICardData CardData { get; }
-        public ITrainerCardData TrainerCardData
-        {
-            get => CardData as ITrainerCardData;
-        }
+        private readonly ITrainerCardData _trainerCardData;
+        public string Name => _trainerCardData.Name;
+        public string Id => _trainerCardData.Id;
         public IPlayerLogic Owner { get; }
         public List<IEffect> Effects { get; }
         public List<IUseCondition> Conditions { get; }
 
         IPlayer ICard.Owner => Owner;
 
+        public int DeckId { get; }
+
         public event Action CardDiscarded;
 
-        public TrainerCard(ITrainerCardData cardData, IPlayerLogic owner)
+        public TrainerCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
         {
-            CardData = cardData;
+            _trainerCardData = cardData;
             Owner = owner;
             Effects = cardData.Effects;
             Conditions = cardData.Conditions;
+            DeckId = deckId;
         }
 
         public void Play()

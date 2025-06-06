@@ -230,10 +230,10 @@ namespace gamecore.game.state
         {
             if (attachedEnergyCards.Count <= 1)
                 return true;
-            var firstEnergyCardId = attachedEnergyCards[0].CardData.Id;
+            var firstEnergyCardId = attachedEnergyCards[0].Id;
             for (int i = 1; i < attachedEnergyCards.Count; i++)
             {
-                if (attachedEnergyCards[i].CardData.Id != firstEnergyCardId)
+                if (attachedEnergyCards[i].Id != firstEnergyCardId)
                     return false;
             }
             return true;

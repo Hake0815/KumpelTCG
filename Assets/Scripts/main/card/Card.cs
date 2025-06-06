@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using gamecore.game;
+using Newtonsoft.Json;
 
 namespace gamecore.card
 {
     public interface ICard
     {
+        int DeckId { get; }
         event Action CardDiscarded;
         IPlayer Owner { get; }
 
@@ -19,15 +20,7 @@ namespace gamecore.card
 
     internal interface ICardLogic : ICard
     {
-        ICardData CardData { get; }
-        string ICard.Name
-        {
-            get => CardData.Name;
-        }
-        string ICard.Id
-        {
-            get => CardData.Id;
-        }
+        [JsonIgnore]
         new IPlayerLogic Owner { get; }
         IPlayer ICard.Owner => Owner;
         void Play();

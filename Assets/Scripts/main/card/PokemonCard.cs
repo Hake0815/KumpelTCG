@@ -5,22 +5,44 @@ using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.game;
 using gamecore.game.action;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace gamecore.card
 {
     public interface IPokemonCard : ICard
     {
+        [JsonIgnore]
         Stage Stage { get; }
+
+        [JsonIgnore]
         string EvolvesFrom { get; }
+
+        [JsonIgnore]
         List<IAttack> Attacks { get; }
+
+        [JsonIgnore]
         List<IEnergyCard> AttachedEnergyCards { get; }
+
+        [JsonIgnore]
         List<PokemonType> AttachedEnergy { get; }
+
+        [JsonIgnore]
         List<IPokemonCard> PreEvolutions { get; }
+
+        [JsonIgnore]
         IAbility Ability { get; }
+
+        [JsonIgnore]
         bool AbilityUsedThisTurn { get; }
+
+        [JsonIgnore]
         int Damage { get; }
+
+        [JsonIgnore]
         int MaxHP { get; }
+
+        [JsonIgnore]
         int RetreatCost { get; }
         event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         event Action DamageModified;
@@ -29,17 +51,34 @@ namespace gamecore.card
 
     internal interface IPokemonCardLogic : ICardLogic, IPokemonCard, IActionSubscriber<EndTurnGA>
     {
+        [JsonIgnore]
         PokemonType Type { get; set; }
+
+        [JsonIgnore]
         PokemonType Weakness { get; set; }
+
+        [JsonIgnore]
         PokemonType Resistance { get; set; }
+
+        [JsonIgnore]
         int NumberOfPrizeCardsOnKnockout { get; set; }
         void AttachEnergyCards(List<IEnergyCardLogic> energyCards);
+
+        [JsonIgnore]
         new List<IEnergyCardLogic> AttachedEnergyCards { get; }
+
+        [JsonIgnore]
         new List<IAttackLogic> Attacks { get; }
         List<IAttackLogic> GetUsableAttacks();
+
+        [JsonIgnore]
         bool PutIntoPlayThisTurn { get; set; }
+
+        [JsonIgnore]
         new IAbilityLogic Ability { get; }
         bool HasUsableAbility();
+
+        [JsonIgnore]
         new bool AbilityUsedThisTurn { get; set; }
         bool IsActive();
         bool IsKnockedOut();
@@ -53,11 +92,13 @@ namespace gamecore.card
     class PokemonCard : IPokemonCardLogic
     {
         public static string RETREATED = "retreated";
-        public IPokemonCardData PokemonCardData { get; }
-        public ICardData CardData => PokemonCardData;
+
+        private IPokemonCardData _pokemonCardData { get; }
+        public string Name => _pokemonCardData.Name;
+        public string Id => _pokemonCardData.Id;
         public List<IAttackLogic> Attacks { get; }
         public IPlayerLogic Owner { get; }
-        public Stage Stage => PokemonCardData.Stage;
+        public Stage Stage => _pokemonCardData.Stage;
 
         public List<IEnergyCardLogic> AttachedEnergyCards { get; } = new();
 
@@ -96,7 +137,7 @@ namespace gamecore.card
             }
         }
 
-        public string EvolvesFrom => PokemonCardData.EvolvesFrom;
+        public string EvolvesFrom => _pokemonCardData.EvolvesFrom;
         public List<IPokemonCard> PreEvolutions { get; } = new();
         public bool PutIntoPlayThisTurn { get; set; }
 
@@ -104,14 +145,15 @@ namespace gamecore.card
 
         IAbility IPokemonCard.Ability => Ability;
 
+        public int DeckId { get; }
         public event Action CardDiscarded;
         public event Action DamageModified;
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         public event Action Evolved;
 
-        public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner)
+        public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner, int deckId)
         {
-            PokemonCardData = cardData;
+            _pokemonCardData = cardData;
             Owner = owner;
             Attacks = cardData.Attacks.ConvertAll(attack => attack.Clone());
             Weakness = cardData.Weakness;
@@ -121,6 +163,7 @@ namespace gamecore.card
             NumberOfPrizeCardsOnKnockout = cardData.NumberOfPrizeCardsOnKnockout;
             RetreatCost = cardData.RetreatCost;
             Ability = cardData.Ability;
+            DeckId = deckId;
         }
 
         public void Discard()

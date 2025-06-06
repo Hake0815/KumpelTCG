@@ -76,7 +76,8 @@ namespace gamecore.game.action
 
         public Task<DrawCardGA> Perform(DrawCardGA drawCardGA)
         {
-            ((IPlayerLogic)drawCardGA.Player).Draw(drawCardGA.Amount);
+            var drawnCards = drawCardGA.Player.Draw(drawCardGA.Amount);
+            drawCardGA.DrawnCards.AddRange(drawnCards);
             return Task.FromResult(drawCardGA);
         }
 
