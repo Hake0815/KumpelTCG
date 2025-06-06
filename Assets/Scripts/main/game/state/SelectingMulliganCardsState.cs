@@ -47,7 +47,6 @@ namespace gamecore.game.state
 
         public async Task OnAdvanced(Game game)
         {
-            // game.SetPrizeCards();
             await ActionSystem.INSTANCE.Perform(new SetPrizeCardsGA());
             var mulligans = game.Mulligans.Values.ToList();
             if (mulligans[0].Count != mulligans[1].Count)

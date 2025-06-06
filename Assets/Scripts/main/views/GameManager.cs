@@ -70,8 +70,6 @@ namespace gameview
             _floatingSelectionView = Instantiate(_floatingSelectionViewPrefab);
 
             new GameRemoteService(this);
-            // SetUpPlayerViews(gameRemoteService);
-            // gameRemoteService.CreateGame();
         }
 
         public void SetUpPlayerViews(IPlayer player1, IPlayer player2)
