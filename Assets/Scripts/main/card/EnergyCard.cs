@@ -5,6 +5,7 @@ using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
+using Newtonsoft.Json;
 
 namespace gamecore.card
 {
@@ -12,8 +13,7 @@ namespace gamecore.card
 
     internal interface IEnergyCardLogic : IEnergyCard, ICardLogic
     {
-        new IEnergyCardData CardData { get; }
-        ICardData ICardLogic.CardData => CardData;
+        [JsonIgnore]
         PokemonType ProvidedEnergyType { get; }
     }
 
@@ -21,17 +21,21 @@ namespace gamecore.card
     {
         public static string ATTACHED_ENERGY_FOR_TURN = "attachedEnergyForTurn";
 
-        public EnergyCard(IEnergyCardData energyCardData, IPlayerLogic owner)
+        public EnergyCard(IEnergyCardData energyCardData, IPlayerLogic owner, int deckId)
         {
-            EnergyCardData = energyCardData;
+            _energyCardData = energyCardData;
             Owner = owner;
+            DeckId = deckId;
         }
 
-        public IEnergyCardData EnergyCardData { get; }
+        private readonly IEnergyCardData _energyCardData;
+        public string Name => _energyCardData.Name;
+        public string Id => _energyCardData.Id;
         public IPlayerLogic Owner { get; }
-        public IEnergyCardData CardData => EnergyCardData;
 
-        public PokemonType ProvidedEnergyType => EnergyCardData.Type;
+        public int DeckId { get; }
+
+        public PokemonType ProvidedEnergyType => _energyCardData.Type;
 
         public event Action CardDiscarded;
 

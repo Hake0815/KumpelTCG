@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.game.action;
 using UnityEngine;
 
 namespace gamecore.game
@@ -12,17 +14,28 @@ namespace gamecore.game
         event EventHandler<List<GameInteraction>> NotifyPlayer1;
         event EventHandler<List<GameInteraction>> NotifyPlayer2;
         event EventHandler<List<GameInteraction>> NotifyGeneral;
+        static IGameController Create()
+        {
+            return new GameController();
+        }
 
         Task SetUpGame();
+        Task CreateGame(
+            Dictionary<string, int> deckList1,
+            Dictionary<string, int> deckList2,
+            string player1Name,
+            string player2Name
+        );
     }
 
-    class GameController : IGameController
+    class GameController : IGameController, IActionPerformer<CreateGameGA>
     {
-        private readonly Game _game;
+        private Game _game;
 
         public event EventHandler<List<GameInteraction>> NotifyPlayer1;
         public event EventHandler<List<GameInteraction>> NotifyPlayer2;
         public event EventHandler<List<GameInteraction>> NotifyGeneral;
+        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
 
         public IGame Game
         {
@@ -36,34 +49,9 @@ namespace gamecore.game
             _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
         }
 
-        public async Task SetUpGame()
+        public GameController()
         {
-            await _game.PerformSetup();
-        }
-
-        public async Task SelectActivePokemon(ICardLogic basicPokemon)
-        {
-            await _game.SetActivePokemon(basicPokemon);
-        }
-
-        public async Task PlayCard(ICardLogic card)
-        {
-            await _game.PlayCard(card);
-        }
-
-        public async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
-        {
-            await _game.PlayCardWithTargets(card, targets);
-        }
-
-        public async Task SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
-        {
-            await _game.DrawMulliganCards(numberOfExtraCards, player);
-        }
-
-        public async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
-        {
-            await _game.PerformAttack(attack, attacker);
+            _actionSystem.AttachPerformer<CreateGameGA>(this);
         }
 
         private void NotifyPlayers()
@@ -97,9 +85,59 @@ namespace gamecore.game
                 NotifyGeneral?.Invoke(this, interactions);
         }
 
+        public async Task CreateGame(
+            Dictionary<string, int> deckList1,
+            Dictionary<string, int> deckList2,
+            string player1Name,
+            string player2Name
+        )
+        {
+            await _actionSystem.Perform(
+                new CreateGameGA(deckList1, deckList2, player1Name, player2Name)
+            );
+            _game.AwaitGeneralInteraction();
+        }
+
+        public async Task SetUpGame()
+        {
+            await _actionSystem.Perform(new SetupGA());
+            await _game.AdvanceGameState();
+        }
+
+        public async Task SelectActivePokemon(ICardLogic basicPokemon)
+        {
+            await _actionSystem.Perform(new PlayCardGA(basicPokemon));
+            await _game.AdvanceGameState();
+        }
+
+        public async Task PlayCard(ICardLogic card)
+        {
+            await _actionSystem.Perform(new PlayCardGA(card));
+            await _game.AdvanceGameState();
+        }
+
+        public async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
+        {
+            await _actionSystem.Perform(new PlayCardGA(card, targets));
+            await _game.AdvanceGameState();
+        }
+
+        public async Task SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
+        {
+            await _actionSystem.Perform(new DrawCardGA(numberOfExtraCards, player));
+            await _game.AdvanceGameState();
+        }
+
+        public async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
+        {
+            await _actionSystem.Perform(new AttackGA(attack, attacker));
+            await _game.AdvanceGameState();
+        }
+
         internal async Task EndTurn()
         {
-            await _game.EndTurn();
+            await _actionSystem.Perform(new EndTurnGA());
+            await _game.AdvanceGameState();
         }
 
         internal async Task Confirm()
@@ -112,12 +150,27 @@ namespace gamecore.game
             List<IEnergyCardLogic> energyCardsToDiscard
         )
         {
-            await _game.Retreat(pokemon, energyCardsToDiscard);
+            await _actionSystem.Perform(new RetreatGA(pokemon, energyCardsToDiscard));
+            await _game.AdvanceGameState();
         }
 
         internal async Task PerformAbility(IPokemonCardLogic pokemon)
         {
-            await _game.PerformAbility(pokemon);
+            await _actionSystem.Perform(new PerformAbilityGA(pokemon));
+            await _game.AdvanceGameState();
+        }
+
+        public Task<CreateGameGA> Perform(CreateGameGA action)
+        {
+            _game = new GameBuilder()
+                .WithPlayer1(action.Player1Name)
+                .WithPlayer2(action.Player2Name)
+                .WithPlayer1Decklist(action.DeckList1)
+                .WithPlayer2Decklist(action.DeckList2)
+                .Build();
+            _game.AwaitInteractionEvent += NotifyPlayers;
+            _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
+            return Task.FromResult(action);
         }
     }
 }

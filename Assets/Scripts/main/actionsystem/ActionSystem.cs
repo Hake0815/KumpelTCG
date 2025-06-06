@@ -11,8 +11,12 @@ namespace gamecore.actionsystem
         private static readonly Lazy<ActionSystem> lazy = new(() => new ActionSystem());
         public static ActionSystem INSTANCE => lazy.Value;
 
-        private ActionSystem() { }
+        private ActionSystem()
+        {
+            _logWriter = new AsyncGameLogWriter("action_log.json");
+        }
 
+        private readonly AsyncGameLogWriter _logWriter;
         private List<GameAction> reactions = null;
         public bool IsPerforming { get; private set; } = false;
         private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> preSubs = new();
@@ -82,29 +86,37 @@ namespace gamecore.actionsystem
             if (IsPerforming)
                 return;
             IsPerforming = true;
+            var logEntryBuilder = GameActionLogEntry.Builder();
             await Flow(
                 action,
+                logEntryBuilder,
                 () =>
                 {
                     IsPerforming = false;
+                    _logWriter.Log(logEntryBuilder.Build());
                     OnPerformFinished?.Invoke();
                 }
             );
         }
 
-        private async Task Flow(GameAction action, Action OnFlowFinished = null)
+        private async Task Flow(
+            GameAction action,
+            GameActionLogEntry.GameActionLogEntryBuilder logEntryBuilder,
+            Action OnFlowFinished = null
+        )
         {
             reactions = action.PreReactions;
             action = NotifySubscribers(action, preSubs);
-            await PerformReactions();
+            await PerformReactions(logEntryBuilder);
 
             reactions = action.PerformReactions;
             action = await PerformAction(action);
-            await PerformReactions();
+            logEntryBuilder.WithGameAction(action);
+            await PerformReactions(logEntryBuilder);
 
             reactions = action.PostReactions;
             NotifySubscribers(action, postSubs);
-            await PerformReactions();
+            await PerformReactions(logEntryBuilder);
 
             OnFlowFinished?.Invoke();
         }
@@ -128,12 +140,17 @@ namespace gamecore.actionsystem
             return action;
         }
 
-        private async Task PerformReactions()
+        private async Task PerformReactions(
+            GameActionLogEntry.GameActionLogEntryBuilder logEntryBuilder
+        )
         {
             foreach (var reaction in reactions)
             {
-                await Flow(reaction);
+                var reactionLogEntry = GameActionLogEntry.Builder();
+                logEntryBuilder.WithReaction(reactionLogEntry);
+                await Flow(reaction, reactionLogEntry);
             }
+            logEntryBuilder.NextTiming();
         }
 
         private async Task<GameAction> PerformAction(GameAction action)

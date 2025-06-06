@@ -4,7 +4,7 @@ using gamecore.card;
 
 namespace gamecore.game
 {
-    public class GameBuilder
+    class GameBuilder
     {
         private readonly Player _player1 = new() { Name = "Player1" };
         private readonly Player _player2 = new() { Name = "Player2" };
@@ -33,22 +33,23 @@ namespace gamecore.game
             return this;
         }
 
-        private Deck CreateDeckFromDecklist(Dictionary<string, int> decklist, Player player)
+        private static Deck CreateDeckFromDecklist(Dictionary<string, int> decklist, Player player)
         {
             var cards = new List<ICardLogic>();
+            var deckId = 0;
             foreach (var entry in decklist)
             {
-                cards.AddRange(CardFactory.CreateCard(entry.Key, player, entry.Value));
+                cards.AddRange(CardFactory.CreateCard(entry.Key, player, entry.Value, deckId));
+                deckId += entry.Value;
             }
             return new Deck(cards);
         }
 
-        public IGameController Build()
+        public Game Build()
         {
             _player1.Opponent = _player2;
             _player2.Opponent = _player1;
-            var game = new Game(_player1, _player2);
-            return new GameController(game);
+            return new Game(_player1, _player2);
         }
     }
 }
