@@ -181,14 +181,5 @@ namespace gamecore.game
             };
             return Task.FromResult(action);
         }
-
-        // internal void SetPrizeCards() { }
-
-        // public async Task PerformSetup()
-        // {
-        //     GameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
-        //     GameSetupBuilder.Setup();
-        //     await AdvanceGameState();
-        // }
     }
 }
