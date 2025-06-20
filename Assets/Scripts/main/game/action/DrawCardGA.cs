@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
@@ -10,6 +11,7 @@ namespace gamecore.game.action
         public IPlayerLogic Player { get; }
         public List<ICardLogic> DrawnCards { get; } = new();
 
+        [JsonConstructor]
         public DrawCardGA(int amount, IPlayerLogic player)
         {
             Amount = amount;

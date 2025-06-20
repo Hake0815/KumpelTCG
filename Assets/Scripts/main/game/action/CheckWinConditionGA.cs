@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.game;
+using Newtonsoft.Json;
 
 namespace gamecore.gamegame.action
 {
@@ -9,6 +10,7 @@ namespace gamecore.gamegame.action
     {
         public List<IPlayerLogic> Players { get; }
 
+        [JsonConstructor]
         public CheckWinConditionGA(List<IPlayerLogic> players)
         {
             Players = players;

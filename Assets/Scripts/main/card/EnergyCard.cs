@@ -21,6 +21,12 @@ namespace gamecore.card
     {
         public static string ATTACHED_ENERGY_FOR_TURN = "attachedEnergyForTurn";
 
+        [JsonConstructor]
+        public EnergyCard(string name, string id, int deckId)
+        {
+            DeckId = deckId;
+        }
+
         public EnergyCard(IEnergyCardData energyCardData, IPlayerLogic owner, int deckId)
         {
             _energyCardData = energyCardData;

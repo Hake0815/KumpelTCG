@@ -42,15 +42,15 @@ namespace gamecore.card
             OnCardCountChanged();
         }
 
-        void RemoveCards(List<ICard> cards)
+        void RemoveCards(List<ICardLogic> cards)
         {
             Cards.RemoveAll(cards.Contains);
             OnCardCountChanged();
         }
 
-        void RemoveCard(ICard card)
+        void RemoveCard(ICardLogic card)
         {
-            Cards.Remove((ICardLogic)card);
+            Cards.Remove(card);
             OnCardCountChanged();
         }
 
@@ -70,6 +70,24 @@ namespace gamecore.card
                 }
             }
             return basicPokemon;
+        }
+
+        List<ICardLogic> GetCardsByDeckIds(List<int> deckIds)
+        {
+            var resultCards = new List<ICardLogic>();
+            foreach (var card in Cards)
+            {
+                if (deckIds.Contains(card.DeckId))
+                {
+                    resultCards.Add(card);
+                }
+            }
+            return resultCards;
+        }
+
+        List<ICardLogic> GetCardsByDeckIds(List<ICardLogic> deckIds)
+        {
+            return GetCardsByDeckIds(deckIds.Select(card => card.DeckId).ToList());
         }
 
         IEnumerator<ICardLogic> IEnumerable<ICardLogic>.GetEnumerator()

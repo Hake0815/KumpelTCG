@@ -85,21 +85,6 @@ namespace gamecore.game
             await _actionSystem.Perform(new StartTurnGA(Player1));
         }
 
-        public Task<EndTurnGA> Perform(EndTurnGA endTurnGA)
-        {
-            if (Player1.IsActive)
-            {
-                Player1.IsActive = false;
-                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player2));
-            }
-            else
-            {
-                Player2.IsActive = false;
-                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player1));
-            }
-            return Task.FromResult(endTurnGA);
-        }
-
         public void EndGame(IPlayerLogic winner)
         {
             _actionSystem.DetachPerformer<EndTurnGA>();
@@ -142,6 +127,28 @@ namespace gamecore.game
             return await tcs.Task;
         }
 
+        public Task<EndTurnGA> Perform(EndTurnGA endTurnGA)
+        {
+            if (Player1.IsActive)
+            {
+                Player1.IsActive = false;
+                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player2));
+            }
+            else
+            {
+                Player2.IsActive = false;
+                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player1));
+            }
+            return Task.FromResult(endTurnGA);
+        }
+
+        public Task<EndTurnGA> Reperform(EndTurnGA endTurnGA)
+        {
+            Player1.IsActive = false;
+            Player2.IsActive = false;
+            return Task.FromResult(endTurnGA);
+        }
+
         public Task<StartTurnGA> Perform(StartTurnGA action)
         {
             action.NextPlayer.IsActive = true;
@@ -160,12 +167,50 @@ namespace gamecore.game
                 { Player1.Name, gameSetupBuilder.GetMulligansForPlayer(Player1) },
                 { Player2.Name, gameSetupBuilder.GetMulligansForPlayer(Player2) },
             };
-            action.PlayerHands = new Dictionary<string, IHandLogic>
+            action.PlayerHands = new Dictionary<string, List<ICardLogic>>
             {
-                { Player1.Name, Player1.Hand },
-                { Player2.Name, Player2.Hand },
+                { Player1.Name, Player1.Hand.Cards },
+                { Player2.Name, Player2.Hand.Cards },
             };
             return Task.FromResult(action);
+        }
+
+        public Task<SetupGA> Reperform(SetupGA action)
+        {
+            Debug.Log("Reperforming setup");
+            _mulligans = RecreateMulligans(action.Mulligans);
+            foreach (var player in _players)
+            {
+                player.Deck.Shuffle();
+                var handCards = player.Deck.GetCardsByDeckIds(action.PlayerHands[player.Name]);
+                player.Hand.AddCards(handCards);
+                player.Deck.RemoveCards(handCards);
+            }
+            GameState = new SetupCompletedState();
+            return Task.FromResult(action);
+        }
+
+        private Dictionary<IPlayerLogic, List<List<ICardLogic>>> RecreateMulligans(
+            Dictionary<string, List<List<ICardLogic>>> loggedMulligans
+        )
+        {
+            var result = new Dictionary<IPlayerLogic, List<List<ICardLogic>>>();
+            foreach (var pair in loggedMulligans)
+            {
+                var player = GetPlayerByName(pair.Key);
+                var outerList = new List<List<ICardLogic>>();
+                foreach (var innerList in pair.Value)
+                {
+                    outerList.Add(player.Deck.GetCardsByDeckIds(innerList));
+                }
+                result[player] = outerList;
+            }
+            return result;
+        }
+
+        private IPlayerLogic GetPlayerByName(string name)
+        {
+            return name == Player1.Name ? Player1 : Player2;
         }
 
         public Task<SetPrizeCardsGA> Perform(SetPrizeCardsGA action)
@@ -179,6 +224,16 @@ namespace gamecore.game
                 { Player1.Name, Player1.Prizes.Cards },
                 { Player2.Name, Player2.Prizes.Cards },
             };
+            return Task.FromResult(action);
+        }
+
+        public Task<SetPrizeCardsGA> Reperform(SetPrizeCardsGA action)
+        {
+            foreach (var player in _players)
+            {
+                player.Deck.RemoveFaceDown(action.PrizeCards[player.Name]);
+                player.Prizes.AddCards(action.PrizeCards[player.Name]);
+            }
             return Task.FromResult(action);
         }
     }

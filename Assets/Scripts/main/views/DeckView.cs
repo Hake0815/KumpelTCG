@@ -73,6 +73,7 @@ namespace gameview
 
         public void CreateDrawnCards(List<ICard> drawnCards)
         {
+            Debug.Log("CreateDrawnCards");
             UIQueue.INSTANCE.Queue(CallbackOnDone =>
             {
                 foreach (var card in drawnCards)

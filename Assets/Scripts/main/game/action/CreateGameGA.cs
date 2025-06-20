@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using gamecore.actionsystem;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
-    class CreateGameGA : GameAction
+    public class CreateGameGA : GameAction
     {
+        [JsonConstructor]
         public CreateGameGA(
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,

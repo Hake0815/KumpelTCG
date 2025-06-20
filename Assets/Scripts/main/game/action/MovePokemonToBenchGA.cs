@@ -1,5 +1,6 @@
 using gamecore.actionsystem;
 using gamecore.card;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
@@ -7,6 +8,7 @@ namespace gamecore.game.action
     {
         public IPokemonCardLogic Pokemon { get; }
 
+        [JsonConstructor]
         public MovePokemonToBenchGA(IPokemonCardLogic pokemon)
         {
             Pokemon = pokemon;

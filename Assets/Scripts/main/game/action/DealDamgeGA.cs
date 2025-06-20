@@ -1,6 +1,7 @@
 using System;
 using gamecore.actionsystem;
 using gamecore.card;
+using Newtonsoft.Json;
 
 namespace gamecore.action
 {
@@ -13,6 +14,7 @@ namespace gamecore.action
         public int ModifierAfterWeaknessResistance { get; set; } = 0;
         public bool IsNegated { get; set; } = false;
 
+        [JsonConstructor]
         public DealDamgeGA(int damage, IPokemonCardLogic attacker, IPokemonCardLogic target)
         {
             Damage = damage;
