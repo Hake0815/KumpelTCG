@@ -151,6 +151,12 @@ namespace gamecore.card
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         public event Action Evolved;
 
+        [JsonConstructor]
+        public PokemonCard(string name, string id, int deckId)
+        {
+            DeckId = deckId;
+        }
+
         public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner, int deckId)
         {
             _pokemonCardData = cardData;

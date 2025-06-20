@@ -19,13 +19,14 @@ namespace gamecore.game
             return new GameController();
         }
 
-        Task SetUpGame();
         Task CreateGame(
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
-            string player2Name
+            string player2Name,
+            string logFilePath
         );
+        Task RecreateGameFromLog(string logFilePath);
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -89,12 +90,20 @@ namespace gamecore.game
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
-            string player2Name
+            string player2Name,
+            string logFilePath
         )
         {
+            _actionSystem.SetupLogFile(logFilePath);
             await _actionSystem.Perform(
                 new CreateGameGA(deckList1, deckList2, player1Name, player2Name)
             );
+            _game.AwaitGeneralInteraction();
+        }
+
+        public async Task RecreateGameFromLog(string logFilePath)
+        {
+            await _actionSystem.RecreateGameStateFromLog(logFilePath);
             _game.AwaitGeneralInteraction();
         }
 

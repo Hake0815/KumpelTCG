@@ -43,6 +43,12 @@ namespace gamecore.card
             DeckId = deckId;
         }
 
+        [JsonConstructor]
+        public TrainerCard(string name, string id, int deckId)
+        {
+            DeckId = deckId;
+        }
+
         public void Play()
         {
             PerformEffects();

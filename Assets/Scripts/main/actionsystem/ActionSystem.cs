@@ -11,12 +11,9 @@ namespace gamecore.actionsystem
         private static readonly Lazy<ActionSystem> lazy = new(() => new ActionSystem());
         public static ActionSystem INSTANCE => lazy.Value;
 
-        private ActionSystem()
-        {
-            _logWriter = new AsyncGameLogWriter("action_log.json");
-        }
+        private ActionSystem() { }
 
-        private readonly AsyncGameLogWriter _logWriter;
+        private AsyncGameLogWriter _logWriter;
         private List<GameAction> reactions = null;
         public bool IsPerforming { get; private set; } = false;
         private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> preSubs = new();
@@ -182,6 +179,61 @@ namespace gamecore.actionsystem
             reactions?.Add(gameAction);
         }
 
+        public async Task RecreateGameStateFromLog(string logFilePath)
+        {
+            _logWriter = new AsyncGameLogWriter(logFilePath);
+            var logEntries = _logWriter.LoadExistingLog();
+            Debug.Log($"Loaded {logEntries.Count} log entries");
+            foreach (var logEntry in logEntries)
+            {
+                await Reperform(logEntry);
+            }
+        }
+
+        public void SetupLogFile(string logFilePath)
+        {
+            _logWriter = new AsyncGameLogWriter(logFilePath);
+        }
+
+        private async Task Reperform(GameActionLogEntry logEntry)
+        {
+            foreach (var preReaction in logEntry.PreReactions)
+            {
+                await Reperform(preReaction);
+            }
+            await ReperformAction(logEntry.GameAction);
+            foreach (var performReaction in logEntry.PerformReactions)
+            {
+                await Reperform(performReaction);
+            }
+            foreach (var postReaction in logEntry.PostReactions)
+            {
+                await Reperform(postReaction);
+            }
+        }
+
+        private async Task ReperformAction(GameAction action)
+        {
+            if (action == null)
+            {
+                Debug.LogError("Attempted to reperform null action");
+                return;
+            }
+
+            var type = action.GetType();
+
+            if (performers.ContainsKey(type))
+            {
+                var performer = performers[type];
+                if (performer == null)
+                    Debug.LogError($"No reperformer found for action type: {type.Name}");
+                else
+                    await performer.Reperform(action);
+            }
+            else
+                Debug.LogWarning($"No reperformer registered for action type: {type.Name}");
+        }
+
         private class ActionPerformerWrapper<T> : IActionPerformer<GameAction>
             where T : GameAction
         {
@@ -197,6 +249,15 @@ namespace gamecore.actionsystem
                 if (action is T typedAction)
                 {
                     return await _wrappedPerformer.Perform(typedAction);
+                }
+                return action;
+            }
+
+            async Task<GameAction> IActionPerformer<GameAction>.Reperform(GameAction action)
+            {
+                if (action is T typedAction)
+                {
+                    return await _wrappedPerformer.Reperform(typedAction);
                 }
                 return action;
             }

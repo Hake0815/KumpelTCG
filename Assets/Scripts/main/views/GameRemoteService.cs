@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using gamecore.card;
 using gamecore.game;
@@ -26,7 +27,26 @@ namespace gameview
             GameController.NotifyPlayer1 += HandlePlayer1Interactions;
             GameController.NotifyPlayer2 += HandlePlayer2Interactions;
             GameController.NotifyGeneral += HandleGeneralInteractions;
-            GameController.CreateGame(CreateDeckList(), CreateDeckList(), "Player 1", "Player 2");
+            var gameLogFile = "action_log.json";
+            if (File.Exists(gameLogFile) && File.ReadAllText(gameLogFile).Length > 0)
+            {
+                GameController.RecreateGameFromLog(gameLogFile);
+
+                _gameManager.SetUpPlayerViews(
+                    GameController.Game.Player1,
+                    GameController.Game.Player2
+                );
+                _gameManager.EnablePlayerHandViews();
+                _gameManager.ShowGameState();
+            }
+            else
+                GameController.CreateGame(
+                    CreateDeckList(),
+                    CreateDeckList(),
+                    "Player 1",
+                    "Player 2",
+                    gameLogFile
+                );
         }
 
         private static Dictionary<string, int> CreateDeckList()

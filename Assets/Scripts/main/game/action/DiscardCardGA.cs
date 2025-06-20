@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
@@ -8,6 +9,7 @@ namespace gamecore.game.action
     {
         public List<ICardLogic> Cards { get; private set; }
 
+        [JsonConstructor]
         public DiscardCardsFromHandGA(List<ICardLogic> cards)
         {
             Cards = cards;

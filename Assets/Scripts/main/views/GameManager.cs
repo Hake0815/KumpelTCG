@@ -76,7 +76,7 @@ namespace gameview
         {
             SetUpPlayerViews(player1, new Quaternion(0f, 0f, 0f, 1f));
             SetUpPlayerViews(player2, new Quaternion(0f, 0f, 1f, 0f));
-            DisablePlayerViews();
+            DisablePlayerHandViews();
         }
 
         public void EnablePlayerHandViews()
@@ -91,7 +91,7 @@ namespace gameview
             }
         }
 
-        public void DisablePlayerViews()
+        private void DisablePlayerHandViews()
         {
             foreach (var handView in _playerHandViews.Values)
             {
@@ -218,8 +218,10 @@ namespace gameview
 
         public void ShowGameState()
         {
+            Debug.Log("ShowGameState");
             foreach (var player in _playerHandViews.Keys)
             {
+                Debug.Log($"Showing game state for {player.Name}");
                 _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
                 _playerDeckViews[player].UpdateView();
                 _playerHandViews[player].HandleCardCountChanged();

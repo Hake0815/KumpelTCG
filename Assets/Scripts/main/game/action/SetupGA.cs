@@ -8,6 +8,6 @@ namespace gamecore.game.action
     class SetupGA : GameAction
     {
         public Dictionary<string, List<List<ICardLogic>>> Mulligans { get; set; }
-        public Dictionary<string, IHandLogic> PlayerHands { get; set; }
+        public Dictionary<string, List<ICardLogic>> PlayerHands { get; set; }
     }
 }
