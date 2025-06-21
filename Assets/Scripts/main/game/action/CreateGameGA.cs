@@ -18,6 +18,7 @@ namespace gamecore.game.action
             DeckList2 = deckList2;
             Player1Name = player1Name;
             Player2Name = player2Name;
+            PostReactions.Add(new SetupGA());
         }
 
         public Dictionary<string, int> DeckList1 { get; }

@@ -75,7 +75,6 @@ namespace gamecore.game
             CardSystem.INSTANCE.Enable(this);
             DamageSystem.INSTANCE.Enable();
             GeneralMechnicSystem.INSTANCE.Enable(this);
-            GameState = new CreatedState();
             _players.Add(player1);
             _players.Add(player2);
         }
@@ -172,6 +171,7 @@ namespace gamecore.game
                 { Player1.Name, Player1.Hand.Cards },
                 { Player2.Name, Player2.Hand.Cards },
             };
+            GameState = new SetupCompletedState();
             return Task.FromResult(action);
         }
 
