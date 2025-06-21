@@ -20,7 +20,6 @@ namespace gamecore.card
 
     internal interface ICardLogic : ICard
     {
-        [JsonIgnore]
         new IPlayerLogic Owner { get; }
         IPlayer ICard.Owner => Owner;
         void Play();

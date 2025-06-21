@@ -68,9 +68,12 @@ namespace gamecore.game
         void Promote(IPokemonCardLogic pokemon);
     }
 
+    [JsonObject(MemberSerialization.OptIn)]
     class Player : IPlayerLogic
     {
         private bool _isActive;
+
+        [JsonProperty]
         public string Name { get; set; }
         public bool IsActive
         {

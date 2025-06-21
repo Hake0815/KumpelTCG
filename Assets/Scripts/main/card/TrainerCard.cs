@@ -44,9 +44,10 @@ namespace gamecore.card
         }
 
         [JsonConstructor]
-        public TrainerCard(string name, string id, int deckId)
+        public TrainerCard(string name, string id, int deckId, IPlayerLogic owner)
         {
             DeckId = deckId;
+            Owner = owner;
         }
 
         public void Play()

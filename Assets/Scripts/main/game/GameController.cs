@@ -108,12 +108,12 @@ namespace gamecore.game
 
         public void StartGame()
         {
-            _game.AwaitGeneralInteraction();
+            _game.GameState.OnAdvanced(_game);
         }
 
-        public async Task SelectActivePokemon(ICardLogic basicPokemon)
+        public async Task SelectActivePokemon(IPokemonCardLogic basicPokemon)
         {
-            await _actionSystem.Perform(new PlayCardGA(basicPokemon));
+            await _actionSystem.Perform(new SetActivePokemonGA(basicPokemon));
             await _game.AdvanceGameState();
         }
 

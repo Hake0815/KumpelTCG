@@ -9,6 +9,7 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
 using gamecore.game.state;
+using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -40,7 +41,16 @@ namespace gamecore.game
             get => Player2;
         }
         private readonly List<IPlayerLogic> _players = new();
-        public IGameState GameState { get; set; }
+        public IGameState GameState
+        {
+            get => _gameState;
+            set
+            {
+                _gameState = value;
+                Debug.Log($"GameState set to {value}");
+            }
+        }
+        private IGameState _gameState;
         private Dictionary<IPlayerLogic, List<List<ICardLogic>>> _mulligans;
         public Dictionary<IPlayer, List<List<ICard>>> Mulligans
         {
@@ -101,6 +111,12 @@ namespace gamecore.game
         {
             GameState = GameState.AdvanceSuccesfully();
             await GameState.OnAdvanced(this);
+        }
+
+        public void AdvanceGameStateQuietly()
+        {
+            Debug.Log($"Advance current GameState {GameState} quietly");
+            GameState = GameState.AdvanceSuccesfully();
         }
 
         internal void AwaitInteraction()
@@ -177,7 +193,6 @@ namespace gamecore.game
 
         public Task<SetupGA> Reperform(SetupGA action)
         {
-            Debug.Log("Reperforming setup");
             _mulligans = RecreateMulligans(action.Mulligans);
             foreach (var player in _players)
             {
@@ -186,7 +201,7 @@ namespace gamecore.game
                 player.Hand.AddCards(handCards);
                 player.Deck.RemoveCards(handCards);
             }
-            GameState = new SetupCompletedState();
+            GameState = new SettingActivePokemonState();
             return Task.FromResult(action);
         }
 
@@ -208,7 +223,7 @@ namespace gamecore.game
             return result;
         }
 
-        private IPlayerLogic GetPlayerByName(string name)
+        public IPlayerLogic GetPlayerByName(string name)
         {
             return name == Player1.Name ? Player1 : Player2;
         }
@@ -231,10 +246,46 @@ namespace gamecore.game
         {
             foreach (var player in _players)
             {
-                player.Deck.RemoveFaceDown(action.PrizeCards[player.Name]);
-                player.Prizes.AddCards(action.PrizeCards[player.Name]);
+                var cards = player.Deck.GetCardsByDeckIds(action.PrizeCards[player.Name]);
+                player.Deck.RemoveFaceDown(cards);
+                player.Prizes.AddCards(cards);
             }
             return Task.FromResult(action);
+        }
+
+        public List<ICardLogic> FindCardsAnywhere(List<ICardLogic> cards)
+        {
+            var result = new List<ICardLogic>();
+            foreach (var card in cards)
+            {
+                result.Add(FindCardAnyWhere(card));
+            }
+            return result;
+        }
+
+        public ICardLogic FindCardAnyWhere(ICardLogic card1)
+        {
+            var owner = GetPlayerByName(card1.Owner.Name);
+            var deckId = card1.DeckId;
+
+            var cardReference = owner.Deck.GetCardByDeckId(deckId);
+            if (cardReference != null)
+                return cardReference;
+            cardReference = owner.Hand.GetCardByDeckId(deckId);
+            if (cardReference != null)
+                return cardReference;
+            cardReference = owner.Bench.GetCardByDeckId(deckId);
+            if (cardReference != null)
+                return cardReference;
+            cardReference = owner.Prizes.GetCardByDeckId(deckId);
+            if (cardReference != null)
+                return cardReference;
+            cardReference = owner.DiscardPile.GetCardByDeckId(deckId);
+            if (cardReference != null)
+                return cardReference;
+            if (owner.ActivePokemon.DeckId == deckId)
+                return owner.ActivePokemon;
+            return null;
         }
     }
 }

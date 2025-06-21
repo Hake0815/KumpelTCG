@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using gamecore.card;
+using UnityEngine;
 
 namespace gamecore.game.state
 {
@@ -11,6 +12,9 @@ namespace gamecore.game.state
         public IGameState AdvanceSuccesfully()
         {
             _numberOfActivePokemonSelected++;
+            Debug.Log(
+                $"SettingActivePokemonState.AdvanceSuccesfully with _numberOfActivePokemonSelected {_numberOfActivePokemonSelected}"
+            );
             if (_numberOfActivePokemonSelected == 2)
                 return new ShowSecondMulliganState();
 
@@ -33,7 +37,7 @@ namespace gamecore.game.state
         }
 
         private static GameInteraction CreateGameInteraction(
-            ICardLogic basicPokemon,
+            IPokemonCardLogic basicPokemon,
             GameController gameController
         )
         {
