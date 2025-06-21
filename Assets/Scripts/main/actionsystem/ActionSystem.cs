@@ -183,7 +183,6 @@ namespace gamecore.actionsystem
         {
             _logWriter = new AsyncGameLogWriter(logFilePath);
             var logEntries = _logWriter.LoadExistingLog();
-            Debug.Log($"Loaded {logEntries.Count} log entries");
             foreach (var logEntry in logEntries)
             {
                 await Reperform(logEntry);

@@ -10,7 +10,7 @@ namespace gameview
 {
     public class GameRemoteService
     {
-        public IGameController GameController { get; set; }
+        private IGameController _gameController;
         private readonly GameManager _gameManager;
         private readonly List<ICard> _playableCards = new();
         private readonly List<ICard> _selectedCards = new();
@@ -23,30 +23,32 @@ namespace gameview
 
         private void InitializeGame()
         {
-            GameController = IGameController.Create();
-            GameController.NotifyPlayer1 += HandlePlayer1Interactions;
-            GameController.NotifyPlayer2 += HandlePlayer2Interactions;
-            GameController.NotifyGeneral += HandleGeneralInteractions;
+            _gameController = IGameController.Create();
+            _gameController.NotifyPlayer1 += HandlePlayer1Interactions;
+            _gameController.NotifyPlayer2 += HandlePlayer2Interactions;
+            _gameController.NotifyGeneral += HandleGeneralInteractions;
             var gameLogFile = "action_log.json";
             if (File.Exists(gameLogFile) && File.ReadAllText(gameLogFile).Length > 0)
             {
-                GameController.RecreateGameFromLog(gameLogFile);
-
-                _gameManager.SetUpPlayerViews(
-                    GameController.Game.Player1,
-                    GameController.Game.Player2
-                );
-                _gameManager.EnablePlayerHandViews();
-                _gameManager.ShowGameState();
+                _gameController.RecreateGameFromLog(gameLogFile);
             }
             else
-                GameController.CreateGame(
+            {
+                _gameController.CreateGame(
                     CreateDeckList(),
                     CreateDeckList(),
                     "Player 1",
                     "Player 2",
                     gameLogFile
                 );
+            }
+            _gameManager.SetUpPlayerViews(
+                _gameController.Game.Player1,
+                _gameController.Game.Player2
+            );
+            _gameManager.EnablePlayerHandViews();
+            _gameManager.ShowGameState();
+            _gameController.StartGame();
         }
 
         private static Dictionary<string, int> CreateDeckList()
@@ -106,9 +108,6 @@ namespace gameview
                     case GameInteractionType.SelectActivePokemon:
                         HandleSelectActivePokemon(interaction);
                         break;
-                    case GameInteractionType.SetUpGame:
-                        HandleSetUpGame(interaction);
-                        break;
                     case GameInteractionType.SetupCompleted:
                         HandleSetupCompleted(interaction);
                         break;
@@ -133,12 +132,6 @@ namespace gameview
                         throw new NotImplementedException();
                 }
             }
-        }
-
-        private void HandleSetUpGame(GameInteraction interaction)
-        {
-            _gameManager.SetUpPlayerViews(GameController.Game.Player1, GameController.Game.Player2);
-            interaction.GameControllerMethod.Invoke();
         }
 
         private void HandleSelectCards(GameInteraction interaction)
@@ -178,10 +171,8 @@ namespace gameview
             _gameManager.ActivateFloatingSelectionView(possibleTargets);
         }
 
-        private void HandleSetupCompleted(GameInteraction interaction)
+        private static void HandleSetupCompleted(GameInteraction interaction)
         {
-            _gameManager.EnablePlayerHandViews();
-            _gameManager.ShowGameState();
             interaction.GameControllerMethod.Invoke();
         }
 

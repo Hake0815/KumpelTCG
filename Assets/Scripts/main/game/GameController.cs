@@ -27,6 +27,7 @@ namespace gamecore.game
             string logFilePath
         );
         Task RecreateGameFromLog(string logFilePath);
+        void StartGame();
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -98,19 +99,16 @@ namespace gamecore.game
             await _actionSystem.Perform(
                 new CreateGameGA(deckList1, deckList2, player1Name, player2Name)
             );
-            _game.AwaitGeneralInteraction();
         }
 
         public async Task RecreateGameFromLog(string logFilePath)
         {
             await _actionSystem.RecreateGameStateFromLog(logFilePath);
-            _game.AwaitGeneralInteraction();
         }
 
-        public async Task SetUpGame()
+        public void StartGame()
         {
-            await _actionSystem.Perform(new SetupGA());
-            await _game.AdvanceGameState();
+            _game.AwaitGeneralInteraction();
         }
 
         public async Task SelectActivePokemon(ICardLogic basicPokemon)
