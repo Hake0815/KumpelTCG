@@ -179,5 +179,11 @@ namespace gamecore.game
             _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
             return Task.FromResult(action);
         }
+
+        internal async Task SetPrizeCards()
+        {
+            await _actionSystem.Perform(new SetPrizeCardsGA());
+            await _game.AdvanceGameState();
+        }
     }
 }

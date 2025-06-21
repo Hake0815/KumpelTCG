@@ -109,7 +109,7 @@ namespace gameview
                         HandleSelectActivePokemon(interaction);
                         break;
                     case GameInteractionType.SetupCompleted:
-                        HandleSetupCompleted(interaction);
+                        SimpleProceed(interaction);
                         break;
                     case GameInteractionType.ConfirmMulligans:
                         HandleConfirmMulligans(interaction);
@@ -127,6 +127,9 @@ namespace gameview
                         break;
                     case GameInteractionType.SelectCards:
                         HandleSelectCards(interaction);
+                        break;
+                    case GameInteractionType.SetPrizeCards:
+                        SimpleProceed(interaction);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -171,7 +174,7 @@ namespace gameview
             _gameManager.ActivateFloatingSelectionView(possibleTargets);
         }
 
-        private static void HandleSetupCompleted(GameInteraction interaction)
+        private static void SimpleProceed(GameInteraction interaction)
         {
             interaction.GameControllerMethod.Invoke();
         }

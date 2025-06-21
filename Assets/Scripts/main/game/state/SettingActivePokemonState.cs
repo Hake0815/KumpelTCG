@@ -12,11 +12,8 @@ namespace gamecore.game.state
         public IGameState AdvanceSuccesfully()
         {
             _numberOfActivePokemonSelected++;
-            Debug.Log(
-                $"SettingActivePokemonState.AdvanceSuccesfully with _numberOfActivePokemonSelected {_numberOfActivePokemonSelected}"
-            );
             if (_numberOfActivePokemonSelected == 2)
-                return new ShowSecondMulliganState();
+                return new SettingPrizeCardsState();
 
             return this;
         }

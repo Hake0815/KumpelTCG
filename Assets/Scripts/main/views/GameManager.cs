@@ -56,6 +56,7 @@ namespace gameview
         private FloatingSelectionView _floatingSelectionView;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
+        private readonly Dictionary<IPlayer, PrizeView> _playerPrizeViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
         private Button _button;
@@ -187,6 +188,7 @@ namespace gameview
                 rotation
             );
             prizeView.SetUp(player);
+            _playerPrizeViews.Add(player, prizeView);
         }
 
         public void ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
@@ -225,6 +227,7 @@ namespace gameview
                 player.ActivePokemon?.Let(activePokemon =>
                     ShowActivePokemon(player, activePokemon)
                 );
+                ShowPrizeCards(player);
                 _playerDeckViews[player].UpdateView();
             }
         }
@@ -240,6 +243,12 @@ namespace gameview
             _playerDeckViews[player].CreateDrawnCards(new() { activePokemon });
             PlayerActiveSpots[player]
                 .SetActivePokemon(CardViewRegistry.INSTANCE.Get(activePokemon));
+        }
+
+        private void ShowPrizeCards(IPlayer player)
+        {
+            _playerDeckViews[player].CreateDrawnCardsFaceDown(player.Prizes.Cards);
+            _playerPrizeViews[player].UpdateView();
         }
 
         public void EnableEndTurnButton(Action gameControllerMethod, Action onInteract)

@@ -219,7 +219,6 @@ namespace gamecore.game.action
 
         public Task<SetActivePokemonGA> Reperform(SetActivePokemonGA action)
         {
-            Debug.Log("Replaying SetActivePokemonGA");
             var card = _game
                 .GetPlayerByName(action.Card.Owner.Name)
                 .Hand.GetCardByDeckId(action.Card.DeckId);
