@@ -5,24 +5,17 @@ using gamecore.card;
 
 namespace gamecore.game
 {
-    public interface IDiscardPile
+    public interface IDiscardPile : ICardList
     {
-        List<ICard> Cards { get; }
-        int CardCount { get; }
         ICard LastCard { get; }
-        event Action CardsChanged;
     }
 
-    internal interface IDiscardPileLogic : IDiscardPile
-    {
-        void AddCards(List<ICard> cards);
-        void RemoveCards(List<ICard> cards);
-    }
+    internal interface IDiscardPileLogic : IDiscardPile, ICardListLogic { }
 
     class DiscardPile : IDiscardPileLogic
     {
-        public List<ICard> Cards { get; } = new();
-        public event Action CardsChanged;
+        public List<ICardLogic> Cards { get; } = new();
+        public event Action CardCountChanged;
 
         public int CardCount
         {
@@ -34,21 +27,9 @@ namespace gamecore.game
             get => Cards.LastOrDefault();
         }
 
-        public void AddCards(List<ICard> cards)
+        public void OnCardCountChanged()
         {
-            Cards.AddRange(cards);
-            OnCardsChanged();
-        }
-
-        public void RemoveCards(List<ICard> cards)
-        {
-            Cards.RemoveAll(cards.Contains);
-            OnCardsChanged();
-        }
-
-        protected virtual void OnCardsChanged()
-        {
-            CardsChanged?.Invoke();
+            CardCountChanged?.Invoke();
         }
     }
 }

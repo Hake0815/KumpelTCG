@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
 using TMPro;
@@ -218,14 +219,27 @@ namespace gameview
 
         public void ShowGameState()
         {
-            Debug.Log("ShowGameState");
             foreach (var player in _playerHandViews.Keys)
             {
-                Debug.Log($"Showing game state for {player.Name}");
-                _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
+                ShowHandCards(player);
+                player.ActivePokemon?.Let(activePokemon =>
+                    ShowActivePokemon(player, activePokemon)
+                );
                 _playerDeckViews[player].UpdateView();
-                _playerHandViews[player].HandleCardCountChanged();
             }
+        }
+
+        private void ShowHandCards(IPlayer player)
+        {
+            _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
+            _playerHandViews[player].HandleCardCountChanged();
+        }
+
+        private void ShowActivePokemon(IPlayer player, IPokemonCard activePokemon)
+        {
+            _playerDeckViews[player].CreateDrawnCards(new() { activePokemon });
+            PlayerActiveSpots[player]
+                .SetActivePokemon(CardViewRegistry.INSTANCE.Get(activePokemon));
         }
 
         public void EnableEndTurnButton(Action gameControllerMethod, Action onInteract)

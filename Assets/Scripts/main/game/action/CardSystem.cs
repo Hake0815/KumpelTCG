@@ -21,6 +21,7 @@ namespace gamecore.game.action
             IActionPerformer<TakeSelectionToHandGA>,
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
             IActionPerformer<PlayCardGA>,
+            IActionPerformer<SetActivePokemonGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -47,6 +48,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<TakeSelectionToHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
+            _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -64,6 +66,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<TakeSelectionToHandGA>();
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
             _actionSystem.DetachPerformer<PlayCardGA>();
+            _actionSystem.DetachPerformer<SetActivePokemonGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -190,6 +193,38 @@ namespace gamecore.game.action
                 action.Card.PlayWithTargets(action.Targets);
             else
                 action.Card.Play();
+            return Task.FromResult(action);
+        }
+
+        public Task<PlayCardGA> Reperform(PlayCardGA action)
+        {
+            var card = _game
+                .GetPlayerByName(action.Card.Owner.Name)
+                .Hand.GetCardByDeckId(action.Card.DeckId);
+            if (action.Targets != null)
+            {
+                var targets = _game.FindCardsAnywhere(action.Targets);
+                card.PlayWithTargets(targets);
+            }
+            else
+                card.Play();
+            return Task.FromResult(action);
+        }
+
+        public Task<SetActivePokemonGA> Perform(SetActivePokemonGA action)
+        {
+            action.Card.Play();
+            return Task.FromResult(action);
+        }
+
+        public Task<SetActivePokemonGA> Reperform(SetActivePokemonGA action)
+        {
+            Debug.Log("Replaying SetActivePokemonGA");
+            var card = _game
+                .GetPlayerByName(action.Card.Owner.Name)
+                .Hand.GetCardByDeckId(action.Card.DeckId);
+            card.Play();
+            _game.AdvanceGameStateQuietly();
             return Task.FromResult(action);
         }
     }

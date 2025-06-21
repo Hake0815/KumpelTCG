@@ -152,8 +152,9 @@ namespace gamecore.card
         public event Action Evolved;
 
         [JsonConstructor]
-        public PokemonCard(string name, string id, int deckId)
+        public PokemonCard(string name, string id, int deckId, IPlayerLogic owner)
         {
+            Owner = owner;
             DeckId = deckId;
         }
 
