@@ -131,7 +131,7 @@ namespace gamecore.game
 
         public async Task SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
         {
-            await _actionSystem.Perform(new DrawCardGA(numberOfExtraCards, player));
+            await _actionSystem.Perform(new DrawMulliganCardsGA(numberOfExtraCards, player));
             await _game.AdvanceGameState();
         }
 
