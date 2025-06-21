@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.game.state;
 using UnityEngine;
 
 namespace gamecore.game.action
 {
     class CardSystem
         : IActionPerformer<DrawCardGA>,
+            IActionPerformer<DrawMulliganCardsGA>,
             IActionPerformer<DiscardCardsFromHandGA>,
             IActionPerformer<AttachEnergyFromHandGA>,
             IActionPerformer<AttachEnergyFromHandForTurnGA>,
@@ -37,6 +39,7 @@ namespace gamecore.game.action
         public void Enable(Game game)
         {
             _actionSystem.AttachPerformer<DrawCardGA>(INSTANCE);
+            _actionSystem.AttachPerformer<DrawMulliganCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
@@ -56,6 +59,7 @@ namespace gamecore.game.action
         public void Disable()
         {
             _actionSystem.DetachPerformer<DrawCardGA>();
+            _actionSystem.DetachPerformer<DrawMulliganCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
@@ -81,6 +85,27 @@ namespace gamecore.game.action
         {
             var drawnCards = drawCardGA.Player.Draw(drawCardGA.Amount);
             drawCardGA.DrawnCards.AddRange(drawnCards);
+            return Task.FromResult(drawCardGA);
+        }
+
+        public Task<DrawCardGA> Reperform(DrawCardGA drawCardGA)
+        {
+            var player = _game.GetPlayerByName(drawCardGA.Player.Name);
+            var drawnCards = player.Deck.GetCardsByDeckIds(drawCardGA.DrawnCards);
+            player.Deck.RemoveCards(drawnCards);
+            player.Hand.AddCards(drawnCards);
+            return Task.FromResult(drawCardGA);
+        }
+
+        public Task<DrawMulliganCardsGA> Perform(DrawMulliganCardsGA drawCardGA)
+        {
+            _actionSystem.AddReaction(new DrawCardGA(drawCardGA.Amount, drawCardGA.Player));
+            return Task.FromResult(drawCardGA);
+        }
+
+        public Task<DrawMulliganCardsGA> Reperform(DrawMulliganCardsGA drawCardGA)
+        {
+            _game.GameState = new SelectBenchPokemonState();
             return Task.FromResult(drawCardGA);
         }
 
