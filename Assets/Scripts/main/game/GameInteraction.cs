@@ -60,6 +60,7 @@ namespace gamecore.game
         SelectCards,
         Retreat,
         PerformAbility,
+        SetPrizeCards,
     }
 
     public interface IGameInteractionData { }

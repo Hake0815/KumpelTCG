@@ -54,7 +54,7 @@ namespace gameview
             }
         }
 
-        private void UpdateView()
+        public void UpdateView()
         {
             UIQueue.INSTANCE.Queue(
                 (OnUICompleted) =>

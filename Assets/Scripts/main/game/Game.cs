@@ -115,7 +115,6 @@ namespace gamecore.game
 
         public void AdvanceGameStateQuietly()
         {
-            Debug.Log($"Advance current GameState {GameState} quietly");
             GameState = GameState.AdvanceSuccesfully();
         }
 
@@ -250,6 +249,7 @@ namespace gamecore.game
                 player.Deck.RemoveFaceDown(cards);
                 player.Prizes.AddCards(cards);
             }
+            AdvanceGameStateQuietly();
             return Task.FromResult(action);
         }
 
