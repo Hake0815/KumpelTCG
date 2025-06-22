@@ -57,6 +57,7 @@ namespace gameview
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
         private readonly Dictionary<IPlayer, PrizeView> _playerPrizeViews = new();
+        private readonly Dictionary<IPlayer, BenchView> _playerBenchViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
         private Button _button;
@@ -178,6 +179,7 @@ namespace gameview
                 rotation
             );
             benchView.SetUp(player);
+            _playerBenchViews.Add(player, benchView);
         }
 
         private void SetUpPrizeView(IPlayer player, Quaternion rotation)
@@ -228,6 +230,7 @@ namespace gameview
                     ShowActivePokemon(player, activePokemon)
                 );
                 ShowPrizeCards(player);
+                ShowBenchedPokemon(player);
                 _playerDeckViews[player].UpdateView();
             }
         }
@@ -251,10 +254,17 @@ namespace gameview
             _playerPrizeViews[player].UpdateView();
         }
 
+        private void ShowBenchedPokemon(IPlayer player)
+        {
+            _playerDeckViews[player].CreateDrawnCards(player.Bench.Cards);
+            _playerBenchViews[player].UpdateBenchedPokemonPositions();
+        }
+
         public void EnableEndTurnButton(Action gameControllerMethod, Action onInteract)
         {
             _button.gameObject.SetActive(true);
             _buttonText.text = "EndTurn";
+            _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(() =>
             {
                 onInteract();
@@ -285,6 +295,7 @@ namespace gameview
         {
             _button.gameObject.SetActive(true);
             _buttonText.text = "Done";
+            _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(() =>
             {
                 onInteract();

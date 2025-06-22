@@ -185,5 +185,11 @@ namespace gamecore.game
             await _actionSystem.Perform(new SetPrizeCardsGA());
             await _game.AdvanceGameState();
         }
+
+        internal async Task StartFirstTurnOfGame()
+        {
+            await _actionSystem.Perform(new StartTurnGA(_game.Player1));
+            await _game.AdvanceGameState();
+        }
     }
 }

@@ -149,11 +149,21 @@ namespace gamecore.game.action
 
         public Task<BenchPokemonGA> Perform(BenchPokemonGA action)
         {
-            var pokemon = action.Card;
+            BenchPokemon(action.Card);
+            return Task.FromResult(action);
+        }
+
+        public Task<BenchPokemonGA> Reperform(BenchPokemonGA action)
+        {
+            BenchPokemon(_game.FindCardAnywhere(action.Card) as IPokemonCardLogic);
+            return Task.FromResult(action);
+        }
+
+        private static void BenchPokemon(IPokemonCardLogic pokemon)
+        {
             pokemon.Owner.Bench.AddCards(new() { pokemon });
             pokemon.Owner.Hand.RemoveCard(pokemon);
             pokemon.SetPutInPlay();
-            return Task.FromResult(action);
         }
 
         public Task<MovePokemonToBenchGA> Perform(MovePokemonToBenchGA action)

@@ -19,6 +19,9 @@ namespace gamecore.game.state
             IPlayerLogic player
         )
         {
+            Debug.Log(
+                $"Get interactions for player {player.Name} who is active: {player.IsActive}"
+            );
             if (!player.IsActive)
                 return new();
 
