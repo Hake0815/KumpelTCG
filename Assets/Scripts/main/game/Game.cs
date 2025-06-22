@@ -89,11 +89,6 @@ namespace gamecore.game
             _players.Add(player2);
         }
 
-        public async Task StartGame()
-        {
-            await _actionSystem.Perform(new StartTurnGA(Player1));
-        }
-
         public void EndGame(IPlayerLogic winner)
         {
             _actionSystem.DetachPerformer<EndTurnGA>();
@@ -165,10 +160,22 @@ namespace gamecore.game
 
         public Task<StartTurnGA> Perform(StartTurnGA action)
         {
-            action.NextPlayer.IsActive = true;
-            action.NextPlayer.TurnCounter++;
-            TurnCounter++;
+            StartTurnForPlayer(action.NextPlayer);
             return Task.FromResult(action);
+        }
+
+        public Task<StartTurnGA> Reperform(StartTurnGA action)
+        {
+            StartTurnForPlayer(GetPlayerByName(action.NextPlayer.Name));
+            GameState = new IdlePlayerTurnState();
+            return Task.FromResult(action);
+        }
+
+        private void StartTurnForPlayer(IPlayerLogic nextPlayer)
+        {
+            nextPlayer.IsActive = true;
+            nextPlayer.TurnCounter++;
+            TurnCounter++;
         }
 
         public Task<SetupGA> Perform(SetupGA action)
@@ -258,15 +265,15 @@ namespace gamecore.game
             var result = new List<ICardLogic>();
             foreach (var card in cards)
             {
-                result.Add(FindCardAnyWhere(card));
+                result.Add(FindCardAnywhere(card));
             }
             return result;
         }
 
-        public ICardLogic FindCardAnyWhere(ICardLogic card1)
+        public ICardLogic FindCardAnywhere(ICardLogic card)
         {
-            var owner = GetPlayerByName(card1.Owner.Name);
-            var deckId = card1.DeckId;
+            var owner = GetPlayerByName(card.Owner.Name);
+            var deckId = card.DeckId;
 
             var cardReference = owner.Deck.GetCardByDeckId(deckId);
             if (cardReference != null)

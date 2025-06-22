@@ -53,7 +53,7 @@ namespace gameview
             return false;
         }
 
-        private void UpdateBenchedPokemonPositions()
+        public void UpdateBenchedPokemonPositions()
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>

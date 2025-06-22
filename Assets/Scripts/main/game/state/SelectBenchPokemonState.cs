@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using gamecore.card;
+using UnityEngine;
 
 namespace gamecore.game.state
 {
@@ -11,7 +12,9 @@ namespace gamecore.game.state
         public IGameState AdvanceSuccesfully()
         {
             if (_doneSelecting)
-                return new StartingGameState();
+            {
+                return new IdlePlayerTurnState();
+            }
             else
                 return this;
         }
@@ -31,7 +34,7 @@ namespace gamecore.game.state
                     async () =>
                     {
                         _doneSelecting = true;
-                        await gameController.Confirm();
+                        await gameController.StartFirstTurnOfGame();
                     },
                     GameInteractionType.Confirm
                 )
