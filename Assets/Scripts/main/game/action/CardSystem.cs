@@ -91,7 +91,7 @@ namespace gamecore.game.action
         public Task<DrawCardGA> Reperform(DrawCardGA drawCardGA)
         {
             var player = _game.GetPlayerByName(drawCardGA.Player.Name);
-            var drawnCards = player.Deck.GetCardsByDeckIds(drawCardGA.DrawnCards);
+            var drawnCards = player.DeckList.GetCardsByDeckIds(drawCardGA.DrawnCards);
             player.Deck.RemoveCards(drawnCards);
             player.Hand.AddCards(drawnCards);
             return Task.FromResult(drawCardGA);
@@ -124,7 +124,7 @@ namespace gamecore.game.action
             {
                 var cardReference = _game
                     .GetPlayerByName(card.Owner.Name)
-                    .Hand.GetCardByDeckId(card.DeckId);
+                    .DeckList.GetCardByDeckId(card.DeckId);
                 DiscardCardFromHand(cardReference);
             }
             return Task.FromResult(action);
@@ -147,7 +147,7 @@ namespace gamecore.game.action
             var energyCard =
                 _game
                     .GetPlayerByName(action.EnergyCard.Owner.Name)
-                    .Hand.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
+                    .DeckList.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
             var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
             AttachEnergyFromHand(energyCard, targetPokemon);
             return Task.FromResult(action);
@@ -167,7 +167,7 @@ namespace gamecore.game.action
             var energyCard =
                 _game
                     .GetPlayerByName(action.EnergyCard.Owner.Name)
-                    .Hand.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
+                    .DeckList.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
             var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
             AttachEnergyFromHand(energyCard, targetPokemon);
             energyCard.Owner.PerformedOncePerTurnActions.Add(EnergyCard.ATTACHED_ENERGY_FOR_TURN);
@@ -233,6 +233,14 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
+        public Task<RevealCardsFromDeckGA> Reperform(RevealCardsFromDeckGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var revealedCards = player.DeckList.GetCardsByDeckIds(action.RevealedCards);
+            player.Deck.RemoveCards(revealedCards);
+            return Task.FromResult(action);
+        }
+
         public async Task<TakeSelectionToHandGA> Perform(TakeSelectionToHandGA action)
         {
             var selectedCards = await _game.AwaitSelection(
@@ -246,9 +254,29 @@ namespace gamecore.game.action
             return action;
         }
 
+        public Task<TakeSelectionToHandGA> Reperform(TakeSelectionToHandGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var selectedStubs = action.Options;
+            selectedStubs.RemoveAll(card =>
+                action.RemainingCards.Select(card => card.DeckId).Contains(card.DeckId)
+            );
+            var selectedCards = player.DeckList.GetCardsByDeckIds(selectedStubs);
+            player.Hand.AddCards(selectedCards);
+            return Task.FromResult(action);
+        }
+
         public Task<PutRemainingCardsUnderDeckGA> Perform(PutRemainingCardsUnderDeckGA action)
         {
             action.Player.Deck.AddCards(Shuffle(action.RemainingCards));
+            return Task.FromResult(action);
+        }
+
+        public Task<PutRemainingCardsUnderDeckGA> Reperform(PutRemainingCardsUnderDeckGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var remainingCards = player.DeckList.GetCardsByDeckIds(action.RemainingCards);
+            player.Deck.AddCards(Shuffle(remainingCards));
             return Task.FromResult(action);
         }
 
@@ -288,7 +316,7 @@ namespace gamecore.game.action
         {
             var card = _game
                 .GetPlayerByName(action.Card.Owner.Name)
-                .Hand.GetCardByDeckId(action.Card.DeckId);
+                .DeckList.GetCardByDeckId(action.Card.DeckId);
             SetActivePokemon(card as IPokemonCardLogic);
             _game.AdvanceGameStateQuietly();
             return Task.FromResult(action);

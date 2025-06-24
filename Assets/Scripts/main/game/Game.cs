@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.common;
 using gamecore.game.action;
 using gamecore.game.state;
 using UnityEngine;
@@ -190,7 +191,7 @@ namespace gamecore.game
             foreach (var player in _players)
             {
                 player.Deck.Shuffle();
-                var handCards = player.Deck.GetCardsByDeckIds(action.PlayerHands[player.Name]);
+                var handCards = player.DeckList.GetCardsByDeckIds(action.PlayerHands[player.Name]);
                 player.Hand.AddCards(handCards);
                 player.Deck.RemoveCards(handCards);
             }
@@ -209,7 +210,7 @@ namespace gamecore.game
                 var outerList = new List<List<ICardLogic>>();
                 foreach (var innerList in pair.Value)
                 {
-                    outerList.Add(player.Deck.GetCardsByDeckIds(innerList));
+                    outerList.Add(player.DeckList.GetCardsByDeckIds(innerList));
                 }
                 result[player] = outerList;
             }
@@ -239,7 +240,7 @@ namespace gamecore.game
         {
             foreach (var player in _players)
             {
-                var cards = player.Deck.GetCardsByDeckIds(action.PrizeCards[player.Name]);
+                var cards = player.DeckList.GetCardsByDeckIds(action.PrizeCards[player.Name]);
                 player.Deck.RemoveFaceDown(cards);
                 player.Prizes.AddCards(cards);
             }
@@ -262,24 +263,10 @@ namespace gamecore.game
             var owner = GetPlayerByName(card.Owner.Name);
             var deckId = card.DeckId;
 
-            var cardReference = owner.Deck.GetCardByDeckId(deckId);
+            var cardReference = owner.DeckList.GetCardByDeckId(deckId);
             if (cardReference != null)
                 return cardReference;
-            cardReference = owner.Hand.GetCardByDeckId(deckId);
-            if (cardReference != null)
-                return cardReference;
-            cardReference = owner.Bench.GetCardByDeckId(deckId);
-            if (cardReference != null)
-                return cardReference;
-            cardReference = owner.Prizes.GetCardByDeckId(deckId);
-            if (cardReference != null)
-                return cardReference;
-            cardReference = owner.DiscardPile.GetCardByDeckId(deckId);
-            if (cardReference != null)
-                return cardReference;
-            if (owner.ActivePokemon.DeckId == deckId)
-                return owner.ActivePokemon;
-            return null;
+            throw new IlleagalStateException($"Could not find card {card} for Player {owner}!");
         }
     }
 }
