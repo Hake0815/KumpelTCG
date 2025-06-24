@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using gamecore.actionsystem;
+using gamecore.card;
 using Newtonsoft.Json;
 
 namespace gamecore.game.action
@@ -13,5 +14,6 @@ namespace gamecore.game.action
         }
 
         public List<IPlayerLogic> Players { get; }
+        public Dictionary<string, IPokemonCardLogic> PromotedPokemon { get; } = new();
     }
 }

@@ -104,23 +104,37 @@ namespace gamecore.action
             {
                 if (player.ActivePokemon == null)
                 {
-                    if (player.Bench.CardCount == 1)
-                    {
-                        player.Promote(player.Bench.Cards[0] as IPokemonCardLogic);
-                    }
-                    else
-                    {
-                        var selection = await _game.AwaitSelection(
-                            player,
-                            player.Bench.Cards,
-                            1,
-                            SelectFrom.InPlay
-                        );
-                        player.Promote(selection[0] as IPokemonCardLogic);
-                    }
+                    var pokemon =
+                        player.Bench.CardCount == 1
+                            ? player.Bench.Cards[0] as IPokemonCardLogic
+                            : await GetPokemonFromUserSelection(player);
+                    player.Promote(pokemon);
+                    action.PromotedPokemon.Add(player.Name, pokemon);
                 }
             }
             return action;
+        }
+
+        private async Task<IPokemonCardLogic> GetPokemonFromUserSelection(IPlayerLogic player)
+        {
+            var selection = await _game.AwaitSelection(
+                player,
+                player.Bench.Cards,
+                1,
+                SelectFrom.InPlay
+            );
+            return selection[0] as IPokemonCardLogic;
+        }
+
+        public Task<PromoteGA> Reperform(PromoteGA action)
+        {
+            foreach (var playerPokemonEntry in action.PromotedPokemon)
+            {
+                var player = _game.GetPlayerByName(playerPokemonEntry.Key);
+                var pokemon = player.DeckList.GetCardByDeckId(playerPokemonEntry.Value.DeckId);
+                player.Promote(pokemon as IPokemonCardLogic);
+            }
+            return Task.FromResult(action);
         }
 
         public Task<RetreatGA> Perform(RetreatGA action)
@@ -132,6 +146,14 @@ namespace gamecore.action
             pokemon.Owner.ActivePokemon = null;
             _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
             _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
+            pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
+            return Task.FromResult(action);
+        }
+
+        public Task<RetreatGA> Reperform(RetreatGA action)
+        {
+            var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
+            pokemon.Owner.ActivePokemon = null;
             pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
             return Task.FromResult(action);
         }

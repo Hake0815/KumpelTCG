@@ -189,6 +189,17 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
+        public Task<DiscardAttachedEnergyCardsGA> Reperform(DiscardAttachedEnergyCardsGA action)
+        {
+            var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
+            var energyCards = _game
+                .FindCardsAnywhere(action.EnergyCards.Cast<ICardLogic>().ToList())
+                .Cast<IEnergyCardLogic>()
+                .ToList();
+            pokemon.DiscardEnergy(energyCards);
+            return Task.FromResult(action);
+        }
+
         public Task<BenchPokemonGA> Perform(BenchPokemonGA action)
         {
             BenchPokemon(action.Card);
@@ -212,6 +223,14 @@ namespace gamecore.game.action
         {
             var pokemon = action.Pokemon;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
+            return Task.FromResult(action);
+        }
+
+        public Task<MovePokemonToBenchGA> Reperform(MovePokemonToBenchGA action)
+        {
+            var player = _game.GetPlayerByName(action.Pokemon.Owner.Name);
+            var pokemon = player.DeckList.GetCardByDeckId(action.Pokemon.DeckId);
+            player.Bench.AddCards(new() { pokemon });
             return Task.FromResult(action);
         }
 
