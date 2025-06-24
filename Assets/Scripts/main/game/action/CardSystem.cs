@@ -250,22 +250,12 @@ namespace gamecore.game.action
 
         public Task<PlayCardGA> Reperform(PlayCardGA action)
         {
-            var card = _game
-                .GetPlayerByName(action.Card.Owner.Name)
-                .Hand.GetCardByDeckId(action.Card.DeckId);
-            if (action.Targets != null)
-            {
-                var targets = _game.FindCardsAnywhere(action.Targets);
-                card.PlayWithTargets(targets);
-            }
-            else
-                card.Play();
             return Task.FromResult(action);
         }
 
         public Task<SetActivePokemonGA> Perform(SetActivePokemonGA action)
         {
-            action.Card.Play();
+            SetActivePokemon(action.Card);
             return Task.FromResult(action);
         }
 
@@ -274,9 +264,22 @@ namespace gamecore.game.action
             var card = _game
                 .GetPlayerByName(action.Card.Owner.Name)
                 .Hand.GetCardByDeckId(action.Card.DeckId);
-            card.Play();
+            SetActivePokemon(card as IPokemonCardLogic);
             _game.AdvanceGameStateQuietly();
             return Task.FromResult(action);
+        }
+
+        private static void SetActivePokemon(IPokemonCardLogic pokemon)
+        {
+            if (pokemon.Owner.ActivePokemon == null)
+            {
+                pokemon.Owner.ActivePokemon = pokemon;
+                pokemon.Owner.Hand.RemoveCard(pokemon);
+            }
+            else
+            {
+                throw new Exception("There is already an active pokemon");
+            }
         }
     }
 }

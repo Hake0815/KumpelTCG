@@ -152,31 +152,44 @@ namespace gamecore.action
 
         public Task<EvolveGA> Perform(EvolveGA action)
         {
-            action.NewPokemon.Owner.Hand.RemoveCard(action.NewPokemon);
-            action.NewPokemon.PreEvolutions.Add(action.TargetPokemon);
+            EvolvePokemon(action.NewPokemon, action.TargetPokemon);
+            return Task.FromResult(action);
+        }
 
-            if (action.TargetPokemon == action.TargetPokemon.Owner.ActivePokemon)
-                action.TargetPokemon.Owner.ActivePokemon = action.NewPokemon;
+        public Task<EvolveGA> Reperform(EvolveGA action)
+        {
+            var newPokemon = _game.FindCardAnywhere(action.NewPokemon) as IPokemonCardLogic;
+            var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
+            EvolvePokemon(newPokemon, targetPokemon);
+            return Task.FromResult(action);
+        }
+
+        private static void EvolvePokemon(
+            IPokemonCardLogic newPokemon,
+            IPokemonCardLogic targetPokemon
+        )
+        {
+            newPokemon.Owner.Hand.RemoveCard(newPokemon);
+            newPokemon.PreEvolutions.Add(targetPokemon);
+
+            if (targetPokemon == targetPokemon.Owner.ActivePokemon)
+                targetPokemon.Owner.ActivePokemon = newPokemon;
             else
             {
-                action.TargetPokemon.Owner.Bench.ReplaceInPlace(
-                    action.TargetPokemon,
-                    action.NewPokemon
-                );
+                targetPokemon.Owner.Bench.ReplaceInPlace(targetPokemon, newPokemon);
             }
 
-            action.NewPokemon.AttachEnergyCards(action.TargetPokemon.AttachedEnergyCards);
-            action.TargetPokemon.AttachedEnergyCards.Clear();
-            action.NewPokemon.TakeDamage(action.TargetPokemon.Damage);
+            newPokemon.AttachEnergyCards(targetPokemon.AttachedEnergyCards);
+            targetPokemon.AttachedEnergyCards.Clear();
+            newPokemon.TakeDamage(targetPokemon.Damage);
 
-            foreach (var preEvolution in action.TargetPokemon.PreEvolutions)
-                action.NewPokemon.PreEvolutions.Add(preEvolution);
+            foreach (var preEvolution in targetPokemon.PreEvolutions)
+                newPokemon.PreEvolutions.Add(preEvolution);
 
-            action.TargetPokemon.PreEvolutions.Clear();
+            targetPokemon.PreEvolutions.Clear();
 
-            action.TargetPokemon.WasEvolved();
-            action.TargetPokemon.SetPutInPlay();
-            return Task.FromResult(action);
+            targetPokemon.WasEvolved();
+            targetPokemon.SetPutInPlay();
         }
     }
 }

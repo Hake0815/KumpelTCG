@@ -242,17 +242,14 @@ namespace gamecore.card
 
         public void Play()
         {
-            if (Owner.ActivePokemon == null)
-            {
-                Owner.ActivePokemon = this;
-                Owner.Hand.RemoveCard(this);
-                Damage = 0;
-                return;
-            }
             if (!Owner.Bench.Full)
             {
                 ActionSystem.INSTANCE.AddReaction(new BenchPokemonGA(this));
                 Damage = 0;
+            }
+            else
+            {
+                throw new Exception("Bench is full");
             }
         }
 
