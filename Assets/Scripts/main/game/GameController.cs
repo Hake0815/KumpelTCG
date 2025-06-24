@@ -114,42 +114,42 @@ namespace gamecore.game
         public async Task SelectActivePokemon(IPokemonCardLogic basicPokemon)
         {
             await _actionSystem.Perform(new SetActivePokemonGA(basicPokemon));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public async Task PlayCard(ICardLogic card)
         {
             await _actionSystem.Perform(new PlayCardGA(card));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
             await _actionSystem.Perform(new PlayCardGA(card, targets));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public async Task SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
         {
             await _actionSystem.Perform(new DrawMulliganCardsGA(numberOfExtraCards, player));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
         {
             await _actionSystem.Perform(new AttackGA(attack, attacker));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         internal async Task EndTurn()
         {
             await _actionSystem.Perform(new EndTurnGA());
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
-        internal async Task Confirm()
+        internal void Confirm()
         {
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         internal async Task Retreat(
@@ -158,13 +158,13 @@ namespace gamecore.game
         )
         {
             await _actionSystem.Perform(new RetreatGA(pokemon, energyCardsToDiscard));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         internal async Task PerformAbility(IPokemonCardLogic pokemon)
         {
             await _actionSystem.Perform(new PerformAbilityGA(pokemon));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public Task<CreateGameGA> Perform(CreateGameGA action)
@@ -183,13 +183,13 @@ namespace gamecore.game
         internal async Task SetPrizeCards()
         {
             await _actionSystem.Perform(new SetPrizeCardsGA());
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         internal async Task StartFirstTurnOfGame()
         {
             await _actionSystem.Perform(new StartTurnGA(_game.Player1));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
     }
 }

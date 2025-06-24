@@ -24,10 +24,9 @@ namespace gamecore.game.state
             };
         }
 
-        public Task OnAdvanced(Game game)
+        public void OnAdvanced(Game game)
         {
             game.AwaitGeneralInteraction();
-            return Task.CompletedTask;
         }
     }
 }

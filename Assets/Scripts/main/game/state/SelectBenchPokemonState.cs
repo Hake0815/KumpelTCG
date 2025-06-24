@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using gamecore.card;
-using UnityEngine;
 
 namespace gamecore.game.state
 {
@@ -54,10 +52,9 @@ namespace gamecore.game.state
             );
         }
 
-        public Task OnAdvanced(Game game)
+        public void OnAdvanced(Game game)
         {
             game.AwaitInteraction();
-            return Task.CompletedTask;
         }
     }
 }

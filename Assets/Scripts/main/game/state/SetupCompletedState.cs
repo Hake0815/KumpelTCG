@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
@@ -18,14 +16,13 @@ namespace gamecore.game.state
         {
             return new()
             {
-                new(async () => await gameController.Confirm(), GameInteractionType.SetupCompleted),
+                new(() => gameController.Confirm(), GameInteractionType.SetupCompleted),
             };
         }
 
-        public Task OnAdvanced(Game game)
+        public void OnAdvanced(Game game)
         {
             game.AwaitGeneralInteraction();
-            return Task.CompletedTask;
         }
     }
 }
