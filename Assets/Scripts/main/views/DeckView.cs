@@ -119,7 +119,7 @@ namespace gameview
                 cardView.Canvas.sortingOrder = -99;
                 cardView
                     .GetComponent<Transform>()
-                    .DOMove(transform.position, 0.25f)
+                    .DOMove(transform.position, AnimationSpeedHolder.AnimationSpeed)
                     .OnComplete(() => Destroy(cardView.gameObject));
             }
         }

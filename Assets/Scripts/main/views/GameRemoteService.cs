@@ -47,8 +47,17 @@ namespace gameview
                 _gameController.Game.Player2
             );
             _gameManager.EnablePlayerHandViews();
+            var cachedSpeed = AnimationSpeedHolder.AnimationSpeed;
+            AnimationSpeedHolder.AnimationSpeed = 0.0f;
             _gameManager.ShowGameState();
-            _gameController.StartGame();
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    AnimationSpeedHolder.AnimationSpeed = cachedSpeed;
+                    _gameController.StartGame();
+                    callback.Invoke();
+                }
+            );
         }
 
         private static Dictionary<string, int> CreateDeckList()
@@ -342,7 +351,7 @@ namespace gameview
             var clickBehaviour = new ClickBehaviour(() =>
             {
                 OnInteract();
-                _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(cardView);
+                _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(card);
 
                 interaction.GameControllerMethod.Invoke();
             });

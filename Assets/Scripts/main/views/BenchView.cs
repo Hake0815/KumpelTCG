@@ -72,11 +72,11 @@ namespace gameview
                         var pokemonView = CardViewRegistry.INSTANCE.Get(pokemon);
                         pokemonView.transform.DOMove(
                             firstPosition + i * spacing * orientation,
-                            0.25f
+                            AnimationSpeedHolder.AnimationSpeed
                         );
                         pokemonView.transform.DOLocalRotateQuaternion(
                             _rectTransform.rotation,
-                            0.25f
+                            AnimationSpeedHolder.AnimationSpeed
                         );
                         i++;
                     }

@@ -37,16 +37,7 @@ namespace gamecore.game
             get => Player2;
         }
         private readonly List<IPlayerLogic> _players = new();
-        public IGameState GameState
-        {
-            get => _gameState;
-            set
-            {
-                _gameState = value;
-                Debug.Log($"GameState set to {value}");
-            }
-        }
-        private IGameState _gameState;
+        public IGameState GameState { get; set; }
         private Dictionary<IPlayerLogic, List<List<ICardLogic>>> _mulligans;
         public Dictionary<IPlayer, List<List<ICard>>> Mulligans
         {

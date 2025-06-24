@@ -31,8 +31,16 @@ namespace gameview
                     var rotation =
                         parentRotation // spline.EvaluatePosition(p) seems to disregard the rotation of the spline container
                         * Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
-                    cardViews[i].transform.DOMove(splinePosition + i * Vector3.back, 0.25f);
-                    cardViews[i].transform.DOLocalRotateQuaternion(rotation, 0.25f);
+                    cardViews[i]
+                        .transform.DOMove(
+                            splinePosition + i * Vector3.back,
+                            AnimationSpeedHolder.AnimationSpeed
+                        );
+                    cardViews[i]
+                        .transform.DOLocalRotateQuaternion(
+                            rotation,
+                            AnimationSpeedHolder.AnimationSpeed
+                        );
                 }
                 CallbackOnDone.Invoke();
             });
