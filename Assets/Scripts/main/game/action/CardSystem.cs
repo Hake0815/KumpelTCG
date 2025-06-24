@@ -138,24 +138,49 @@ namespace gamecore.game.action
 
         public Task<AttachEnergyFromHandGA> Perform(AttachEnergyFromHandGA action)
         {
-            AttachEnergyFromHand(action);
+            AttachEnergyFromHand(action.EnergyCard, action.TargetPokemon);
+            return Task.FromResult(action);
+        }
+
+        public Task<AttachEnergyFromHandGA> Reperform(AttachEnergyFromHandGA action)
+        {
+            var energyCard =
+                _game
+                    .GetPlayerByName(action.EnergyCard.Owner.Name)
+                    .Hand.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
+            var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
+            AttachEnergyFromHand(energyCard, targetPokemon);
             return Task.FromResult(action);
         }
 
         public Task<AttachEnergyFromHandForTurnGA> Perform(AttachEnergyFromHandForTurnGA action)
         {
-            AttachEnergyFromHand(action);
+            AttachEnergyFromHand(action.EnergyCard, action.TargetPokemon);
             action.EnergyCard.Owner.PerformedOncePerTurnActions.Add(
                 EnergyCard.ATTACHED_ENERGY_FOR_TURN
             );
             return Task.FromResult(action);
         }
 
-        private static void AttachEnergyFromHand(AttachEnergyFromHandGA action)
+        public Task<AttachEnergyFromHandForTurnGA> Reperform(AttachEnergyFromHandForTurnGA action)
         {
-            var energyCard = action.EnergyCard;
+            var energyCard =
+                _game
+                    .GetPlayerByName(action.EnergyCard.Owner.Name)
+                    .Hand.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
+            var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
+            AttachEnergyFromHand(energyCard, targetPokemon);
+            energyCard.Owner.PerformedOncePerTurnActions.Add(EnergyCard.ATTACHED_ENERGY_FOR_TURN);
+            return Task.FromResult(action);
+        }
+
+        private static void AttachEnergyFromHand(
+            IEnergyCardLogic energyCard,
+            IPokemonCardLogic targetPokemon
+        )
+        {
             energyCard.Owner.Hand.RemoveCard(energyCard);
-            action.TargetPokemon.AttachEnergyCards(new() { energyCard });
+            targetPokemon.AttachEnergyCards(new() { energyCard });
         }
 
         public Task<DiscardAttachedEnergyCardsGA> Perform(DiscardAttachedEnergyCardsGA action)
