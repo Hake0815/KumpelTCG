@@ -14,6 +14,6 @@ namespace gamecore.game.state
             GameController gameController,
             IPlayerLogic player
         );
-        Task OnAdvanced(Game game);
+        void OnAdvanced(Game game);
     }
 }

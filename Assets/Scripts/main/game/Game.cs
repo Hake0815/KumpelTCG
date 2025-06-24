@@ -1,17 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization.Formatters;
 using System.Threading.Tasks;
 using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
 using gamecore.game.state;
-using Mono.Cecil;
 using UnityEngine;
-using UnityEngine.Android;
 
 namespace gamecore.game
 {
@@ -102,10 +98,10 @@ namespace gamecore.game
             AwaitGeneralInteraction();
         }
 
-        public async Task AdvanceGameState()
+        public void AdvanceGameState()
         {
             GameState = GameState.AdvanceSuccesfully();
-            await GameState.OnAdvanced(this);
+            GameState.OnAdvanced(this);
         }
 
         public void AdvanceGameStateQuietly()
