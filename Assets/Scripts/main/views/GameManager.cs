@@ -58,6 +58,7 @@ namespace gameview
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
         private readonly Dictionary<IPlayer, PrizeView> _playerPrizeViews = new();
         private readonly Dictionary<IPlayer, BenchView> _playerBenchViews = new();
+        private readonly Dictionary<IPlayer, DiscardPileView> _playerDiscardPileViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
         private Button _button;
@@ -126,6 +127,7 @@ namespace gameview
             );
             discardPileView.SetUp(player.DiscardPile);
             CardViewCreator.INSTANCE.DiscardPileViews.Add(player, discardPileView);
+            _playerDiscardPileViews.Add(player, discardPileView);
         }
 
         private void SetUpDeckView(IPlayer player, Quaternion rotation)
@@ -231,6 +233,7 @@ namespace gameview
                 );
                 ShowPrizeCards(player);
                 ShowBenchedPokemon(player);
+                ShowDiscardPile(player);
                 _playerDeckViews[player].UpdateView();
             }
         }
@@ -258,6 +261,11 @@ namespace gameview
         {
             _playerDeckViews[player].CreateDrawnCards(player.Bench.Cards);
             _playerBenchViews[player].UpdateBenchedPokemonPositions();
+        }
+
+        private void ShowDiscardPile(IPlayer player)
+        {
+            _playerDiscardPileViews[player].UpdateView();
         }
 
         public void EnableEndTurnButton(Action gameControllerMethod, Action onInteract)
