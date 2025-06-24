@@ -41,7 +41,7 @@ namespace gameview
                 _discardPile.CardCountChanged -= OnCardsChanged;
         }
 
-        private void UpdateView()
+        public void UpdateView()
         {
             var topCard = _discardPile.LastCard;
             if (topCard != null)

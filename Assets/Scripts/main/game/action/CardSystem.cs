@@ -113,10 +113,27 @@ namespace gamecore.game.action
         {
             foreach (var card in action.Cards)
             {
-                card.Discard();
-                card.Owner.Hand.RemoveCards(new() { card });
+                DiscardCardFromHand(card);
             }
             return Task.FromResult(action);
+        }
+
+        public Task<DiscardCardsFromHandGA> Reperform(DiscardCardsFromHandGA action)
+        {
+            foreach (var card in action.Cards)
+            {
+                var cardReference = _game
+                    .GetPlayerByName(card.Owner.Name)
+                    .Hand.GetCardByDeckId(card.DeckId);
+                DiscardCardFromHand(cardReference);
+            }
+            return Task.FromResult(action);
+        }
+
+        private static void DiscardCardFromHand(ICardLogic card)
+        {
+            card.Discard();
+            card.Owner.Hand.RemoveCards(new() { card });
         }
 
         public Task<AttachEnergyFromHandGA> Perform(AttachEnergyFromHandGA action)
