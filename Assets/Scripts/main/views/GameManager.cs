@@ -248,10 +248,9 @@ namespace gameview
         private void ShowActivePokemon(IPlayer player, IPokemonCard activePokemon)
         {
             _playerDeckViews[player].CreateDrawnCards(new() { activePokemon });
-            var cardView = CardViewRegistry.INSTANCE.Get(activePokemon);
-            PlayerActiveSpots[player].SetActivePokemon(cardView);
+            PlayerActiveSpots[player].SetActivePokemon(activePokemon);
             if (activePokemon.AttachedEnergyCards.Count > 0)
-                ShowAttachedEnergyCards(cardView);
+                ShowAttachedEnergyCards(activePokemon);
         }
 
         private void ShowBenchedPokemon(IPlayer player)
@@ -262,17 +261,23 @@ namespace gameview
             {
                 if ((pokemon as IPokemonCard).AttachedEnergyCards.Count > 0)
                 {
-                    ShowAttachedEnergyCards(CardViewRegistry.INSTANCE.Get(pokemon));
+                    ShowAttachedEnergyCards(pokemon as IPokemonCard);
                 }
             }
         }
 
-        private void ShowAttachedEnergyCards(CardView cardView)
+        private void ShowAttachedEnergyCards(IPokemonCard card)
         {
-            var attachedEnergyCards = (cardView.Card as IPokemonCard).AttachedEnergyCards;
-            _playerDeckViews[cardView.Card.Owner]
+            var attachedEnergyCards = card.AttachedEnergyCards;
+            _playerDeckViews[card.Owner]
                 .CreateDrawnCards(attachedEnergyCards.Cast<ICard>().ToList());
-            cardView.AttachEnergy(attachedEnergyCards);
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    CardViewRegistry.INSTANCE.Get(card).AttachEnergy(attachedEnergyCards);
+                    callback.Invoke();
+                }
+            );
         }
 
         private void ShowPrizeCards(IPlayer player)

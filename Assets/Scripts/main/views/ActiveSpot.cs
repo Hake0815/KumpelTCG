@@ -30,20 +30,26 @@ namespace gameview
             return false;
         }
 
-        private void SetActivePokemon(IPokemonCard card)
-        {
-            SetActivePokemon(CardViewRegistry.INSTANCE.Get(card));
-        }
-
-        public void SetActivePokemon(CardView cardView)
+        public void SetActivePokemon(ICard card)
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
+                    var cardView = CardViewRegistry.INSTANCE.Get(card);
                     DOTween
                         .Sequence()
-                        .Join(cardView.transform.DOMove(transform.position + Vector3.back, 0.25f))
-                        .Join(cardView.transform.DORotateQuaternion(transform.rotation, 0.25f));
+                        .Join(
+                            cardView.transform.DOMove(
+                                transform.position + Vector3.back,
+                                AnimationSpeedHolder.AnimationSpeed
+                            )
+                        )
+                        .Join(
+                            cardView.transform.DORotateQuaternion(
+                                transform.rotation,
+                                AnimationSpeedHolder.AnimationSpeed
+                            )
+                        );
                     callback.Invoke();
                 }
             );
