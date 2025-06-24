@@ -178,7 +178,7 @@ namespace gameview
             MoveToDiscardPile();
         }
 
-        private void AttachEnergy(List<IEnergyCard> cards)
+        public void AttachEnergy(List<IEnergyCard> cards)
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>
@@ -197,7 +197,7 @@ namespace gameview
             );
         }
 
-        public void TransformToAttachedEnergyView(Sequence sequence)
+        private void TransformToAttachedEnergyView(Sequence sequence)
         {
             sequence
                 .Join(transform.DOScaleX(ATTACHED_SCALE, 0.25f))

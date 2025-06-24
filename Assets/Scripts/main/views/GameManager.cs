@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -247,20 +248,37 @@ namespace gameview
         private void ShowActivePokemon(IPlayer player, IPokemonCard activePokemon)
         {
             _playerDeckViews[player].CreateDrawnCards(new() { activePokemon });
-            PlayerActiveSpots[player]
-                .SetActivePokemon(CardViewRegistry.INSTANCE.Get(activePokemon));
-        }
-
-        private void ShowPrizeCards(IPlayer player)
-        {
-            _playerDeckViews[player].CreateDrawnCardsFaceDown(player.Prizes.Cards);
-            _playerPrizeViews[player].UpdateView();
+            var cardView = CardViewRegistry.INSTANCE.Get(activePokemon);
+            PlayerActiveSpots[player].SetActivePokemon(cardView);
+            if (activePokemon.AttachedEnergyCards.Count > 0)
+                ShowAttachedEnergyCards(cardView);
         }
 
         private void ShowBenchedPokemon(IPlayer player)
         {
             _playerDeckViews[player].CreateDrawnCards(player.Bench.Cards);
             _playerBenchViews[player].UpdateBenchedPokemonPositions();
+            foreach (var pokemon in player.Bench.Cards)
+            {
+                if ((pokemon as IPokemonCard).AttachedEnergyCards.Count > 0)
+                {
+                    ShowAttachedEnergyCards(CardViewRegistry.INSTANCE.Get(pokemon));
+                }
+            }
+        }
+
+        private void ShowAttachedEnergyCards(CardView cardView)
+        {
+            var attachedEnergyCards = (cardView.Card as IPokemonCard).AttachedEnergyCards;
+            _playerDeckViews[cardView.Card.Owner]
+                .CreateDrawnCards(attachedEnergyCards.Cast<ICard>().ToList());
+            cardView.AttachEnergy(attachedEnergyCards);
+        }
+
+        private void ShowPrizeCards(IPlayer player)
+        {
+            _playerDeckViews[player].CreateDrawnCardsFaceDown(player.Prizes.Cards);
+            _playerPrizeViews[player].UpdateView();
         }
 
         private void ShowDiscardPile(IPlayer player)
