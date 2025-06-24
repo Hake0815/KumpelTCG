@@ -245,6 +245,18 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
+        public Task<ResetPokemonTurnStateGA> Reperform(ResetPokemonTurnStateGA action)
+        {
+            var pokemonToReset = _game.FindCardAnywhere(action.PokemonToReset) as IPokemonCardLogic;
+            pokemonToReset.PutIntoPlayThisTurn = false;
+            pokemonToReset.AbilityUsedThisTurn = false;
+            ActionSystem.INSTANCE.UnsubscribeFromGameAction<EndTurnGA>(
+                pokemonToReset,
+                ReactionTiming.PRE
+            );
+            return Task.FromResult(action);
+        }
+
         public Task<RevealCardsFromDeckGA> Perform(RevealCardsFromDeckGA action)
         {
             var revealedCards = action.Player.Deck.Draw(action.Count);
