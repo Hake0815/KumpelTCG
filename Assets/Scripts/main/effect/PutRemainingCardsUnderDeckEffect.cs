@@ -17,7 +17,7 @@ namespace gamecore.effect
             );
         }
 
-        private TakeSelectionToHandGA Reaction(TakeSelectionToHandGA action, ICardLogic card)
+        private static TakeSelectionToHandGA Reaction(TakeSelectionToHandGA action, ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
                 new PutRemainingCardsUnderDeckGA(card.Owner, action.RemainingCards)

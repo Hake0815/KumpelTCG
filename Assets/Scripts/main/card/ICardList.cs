@@ -72,36 +72,6 @@ namespace gamecore.card
             return basicPokemon;
         }
 
-        List<ICardLogic> GetCardsByDeckIds(List<int> deckIds)
-        {
-            var resultCards = new List<ICardLogic>();
-            foreach (var card in Cards)
-            {
-                if (deckIds.Contains(card.DeckId))
-                {
-                    resultCards.Add(card);
-                }
-            }
-            return resultCards;
-        }
-
-        List<ICardLogic> GetCardsByDeckIds(List<ICardLogic> deckIds)
-        {
-            return GetCardsByDeckIds(deckIds.Select(card => card.DeckId).ToList());
-        }
-
-        ICardLogic GetCardByDeckId(int deckId)
-        {
-            foreach (var card in Cards)
-            {
-                if (card.DeckId == deckId)
-                {
-                    return card;
-                }
-            }
-            return null;
-        }
-
         IEnumerator<ICardLogic> IEnumerable<ICardLogic>.GetEnumerator()
         {
             return Cards.GetEnumerator();

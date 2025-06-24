@@ -150,6 +150,14 @@ namespace gamecore.action
             return Task.FromResult(action);
         }
 
+        public Task<PerformAbilityGA> Reperform(PerformAbilityGA action)
+        {
+            var pokemon = (IPokemonCardLogic)_game.FindCardAnywhere(action.Pokemon);
+            pokemon.AbilityUsedThisTurn = true;
+            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(pokemon, ReactionTiming.PRE);
+            return Task.FromResult(action);
+        }
+
         public Task<EvolveGA> Perform(EvolveGA action)
         {
             EvolvePokemon(action.NewPokemon, action.TargetPokemon);
