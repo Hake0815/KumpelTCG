@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
     class TakeSelectionToHandGA : GameAction
     {
+        [JsonConstructor]
         public TakeSelectionToHandGA(List<ICardLogic> options, IPlayerLogic player, int amount)
         {
             Options = options;

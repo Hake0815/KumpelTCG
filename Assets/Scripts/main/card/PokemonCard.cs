@@ -151,6 +151,13 @@ namespace gamecore.card
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         public event Action Evolved;
 
+        [JsonConstructor]
+        public PokemonCard(string name, string id, int deckId, IPlayerLogic owner)
+        {
+            Owner = owner;
+            DeckId = deckId;
+        }
+
         public PokemonCard(IPokemonCardData cardData, IPlayerLogic owner, int deckId)
         {
             _pokemonCardData = cardData;
@@ -235,17 +242,14 @@ namespace gamecore.card
 
         public void Play()
         {
-            if (Owner.ActivePokemon == null)
-            {
-                Owner.ActivePokemon = this;
-                Owner.Hand.RemoveCard(this);
-                Damage = 0;
-                return;
-            }
             if (!Owner.Bench.Full)
             {
                 ActionSystem.INSTANCE.AddReaction(new BenchPokemonGA(this));
                 Damage = 0;
+            }
+            else
+            {
+                throw new Exception("Bench is full");
             }
         }
 

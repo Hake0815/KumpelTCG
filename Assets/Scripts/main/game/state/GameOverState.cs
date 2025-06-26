@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
@@ -32,9 +31,6 @@ namespace gamecore.game.state
             };
         }
 
-        public Task OnAdvanced(Game game)
-        {
-            return Task.CompletedTask;
-        }
+        public void OnAdvanced(Game game) { }
     }
 }

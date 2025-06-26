@@ -19,13 +19,15 @@ namespace gamecore.game
             return new GameController();
         }
 
-        Task SetUpGame();
         Task CreateGame(
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
-            string player2Name
+            string player2Name,
+            string logFilePath
         );
+        Task RecreateGameFromLog(string logFilePath);
+        void StartGame();
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -89,60 +91,65 @@ namespace gamecore.game
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
-            string player2Name
+            string player2Name,
+            string logFilePath
         )
         {
+            _actionSystem.SetupLogFile(logFilePath);
             await _actionSystem.Perform(
                 new CreateGameGA(deckList1, deckList2, player1Name, player2Name)
             );
-            _game.AwaitGeneralInteraction();
         }
 
-        public async Task SetUpGame()
+        public async Task RecreateGameFromLog(string logFilePath)
         {
-            await _actionSystem.Perform(new SetupGA());
-            await _game.AdvanceGameState();
+            await _actionSystem.RecreateGameStateFromLog(logFilePath);
         }
 
-        public async Task SelectActivePokemon(ICardLogic basicPokemon)
+        public void StartGame()
         {
-            await _actionSystem.Perform(new PlayCardGA(basicPokemon));
-            await _game.AdvanceGameState();
+            _game.GameState.OnAdvanced(_game);
+        }
+
+        public async Task SelectActivePokemon(IPokemonCardLogic basicPokemon)
+        {
+            await _actionSystem.Perform(new SetActivePokemonGA(basicPokemon));
+            _game.AdvanceGameState();
         }
 
         public async Task PlayCard(ICardLogic card)
         {
             await _actionSystem.Perform(new PlayCardGA(card));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public async Task PlayCardWithTargets(ICardLogic card, List<ICardLogic> targets)
         {
             await _actionSystem.Perform(new PlayCardGA(card, targets));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public async Task SelectMulligans(int numberOfExtraCards, IPlayerLogic player)
         {
-            await _actionSystem.Perform(new DrawCardGA(numberOfExtraCards, player));
-            await _game.AdvanceGameState();
+            await _actionSystem.Perform(new DrawMulliganCardsGA(numberOfExtraCards, player));
+            _game.AdvanceGameState();
         }
 
         public async Task PerformAttack(IAttackLogic attack, IPokemonCardLogic attacker)
         {
             await _actionSystem.Perform(new AttackGA(attack, attacker));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         internal async Task EndTurn()
         {
             await _actionSystem.Perform(new EndTurnGA());
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
-        internal async Task Confirm()
+        internal void Confirm()
         {
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         internal async Task Retreat(
@@ -151,16 +158,26 @@ namespace gamecore.game
         )
         {
             await _actionSystem.Perform(new RetreatGA(pokemon, energyCardsToDiscard));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         internal async Task PerformAbility(IPokemonCardLogic pokemon)
         {
             await _actionSystem.Perform(new PerformAbilityGA(pokemon));
-            await _game.AdvanceGameState();
+            _game.AdvanceGameState();
         }
 
         public Task<CreateGameGA> Perform(CreateGameGA action)
+        {
+            return CreateGame(action);
+        }
+
+        public Task<CreateGameGA> Reperform(CreateGameGA action)
+        {
+            return CreateGame(action);
+        }
+
+        private Task<CreateGameGA> CreateGame(CreateGameGA action)
         {
             _game = new GameBuilder()
                 .WithPlayer1(action.Player1Name)
@@ -171,6 +188,18 @@ namespace gamecore.game
             _game.AwaitInteractionEvent += NotifyPlayers;
             _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
             return Task.FromResult(action);
+        }
+
+        internal async Task SetPrizeCards()
+        {
+            await _actionSystem.Perform(new SetPrizeCardsGA());
+            _game.AdvanceGameState();
+        }
+
+        internal async Task StartFirstTurnOfGame()
+        {
+            await _actionSystem.Perform(new StartTurnGA(_game.Player1));
+            _game.AdvanceGameState();
         }
     }
 }

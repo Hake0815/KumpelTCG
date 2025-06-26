@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using gamecore.actionsystem;
-using gamecore.game;
-using gamecore.game.action;
 
 namespace gamecore.game.state
 {
@@ -45,14 +41,13 @@ namespace gamecore.game.state
             return interactions;
         }
 
-        public async Task OnAdvanced(Game game)
+        public void OnAdvanced(Game game)
         {
-            await ActionSystem.INSTANCE.Perform(new SetPrizeCardsGA());
             var mulligans = game.Mulligans.Values.ToList();
             if (mulligans[0].Count != mulligans[1].Count)
                 game.AwaitInteraction();
             else
-                await game.AdvanceGameState();
+                game.AdvanceGameState();
         }
     }
 }

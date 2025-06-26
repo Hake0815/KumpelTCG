@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.game.state;
 using UnityEngine;
 
 namespace gamecore.game.action
 {
     class CardSystem
         : IActionPerformer<DrawCardGA>,
+            IActionPerformer<DrawMulliganCardsGA>,
             IActionPerformer<DiscardCardsFromHandGA>,
             IActionPerformer<AttachEnergyFromHandGA>,
             IActionPerformer<AttachEnergyFromHandForTurnGA>,
@@ -21,6 +23,7 @@ namespace gamecore.game.action
             IActionPerformer<TakeSelectionToHandGA>,
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
             IActionPerformer<PlayCardGA>,
+            IActionPerformer<SetActivePokemonGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -36,6 +39,7 @@ namespace gamecore.game.action
         public void Enable(Game game)
         {
             _actionSystem.AttachPerformer<DrawCardGA>(INSTANCE);
+            _actionSystem.AttachPerformer<DrawMulliganCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
@@ -47,6 +51,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<TakeSelectionToHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
+            _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -54,6 +59,7 @@ namespace gamecore.game.action
         public void Disable()
         {
             _actionSystem.DetachPerformer<DrawCardGA>();
+            _actionSystem.DetachPerformer<DrawMulliganCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
@@ -64,6 +70,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<TakeSelectionToHandGA>();
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
             _actionSystem.DetachPerformer<PlayCardGA>();
+            _actionSystem.DetachPerformer<SetActivePokemonGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -81,36 +88,99 @@ namespace gamecore.game.action
             return Task.FromResult(drawCardGA);
         }
 
+        public Task<DrawCardGA> Reperform(DrawCardGA drawCardGA)
+        {
+            var player = _game.GetPlayerByName(drawCardGA.Player.Name);
+            var drawnCards = player.DeckList.GetCardsByDeckIds(drawCardGA.DrawnCards);
+            player.Deck.RemoveCards(drawnCards);
+            player.Hand.AddCards(drawnCards);
+            return Task.FromResult(drawCardGA);
+        }
+
+        public Task<DrawMulliganCardsGA> Perform(DrawMulliganCardsGA drawCardGA)
+        {
+            _actionSystem.AddReaction(new DrawCardGA(drawCardGA.Amount, drawCardGA.Player));
+            return Task.FromResult(drawCardGA);
+        }
+
+        public Task<DrawMulliganCardsGA> Reperform(DrawMulliganCardsGA drawCardGA)
+        {
+            _game.GameState = new SelectBenchPokemonState();
+            return Task.FromResult(drawCardGA);
+        }
+
         public Task<DiscardCardsFromHandGA> Perform(DiscardCardsFromHandGA action)
         {
             foreach (var card in action.Cards)
             {
-                card.Discard();
-                card.Owner.Hand.RemoveCards(new() { card });
+                DiscardCardFromHand(card);
             }
             return Task.FromResult(action);
         }
 
+        public Task<DiscardCardsFromHandGA> Reperform(DiscardCardsFromHandGA action)
+        {
+            foreach (var card in action.Cards)
+            {
+                var cardReference = _game
+                    .GetPlayerByName(card.Owner.Name)
+                    .DeckList.GetCardByDeckId(card.DeckId);
+                DiscardCardFromHand(cardReference);
+            }
+            return Task.FromResult(action);
+        }
+
+        private static void DiscardCardFromHand(ICardLogic card)
+        {
+            card.Discard();
+            card.Owner.Hand.RemoveCards(new() { card });
+        }
+
         public Task<AttachEnergyFromHandGA> Perform(AttachEnergyFromHandGA action)
         {
-            AttachEnergyFromHand(action);
+            AttachEnergyFromHand(action.EnergyCard, action.TargetPokemon);
+            return Task.FromResult(action);
+        }
+
+        public Task<AttachEnergyFromHandGA> Reperform(AttachEnergyFromHandGA action)
+        {
+            var energyCard =
+                _game
+                    .GetPlayerByName(action.EnergyCard.Owner.Name)
+                    .DeckList.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
+            var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
+            AttachEnergyFromHand(energyCard, targetPokemon);
             return Task.FromResult(action);
         }
 
         public Task<AttachEnergyFromHandForTurnGA> Perform(AttachEnergyFromHandForTurnGA action)
         {
-            AttachEnergyFromHand(action);
+            AttachEnergyFromHand(action.EnergyCard, action.TargetPokemon);
             action.EnergyCard.Owner.PerformedOncePerTurnActions.Add(
                 EnergyCard.ATTACHED_ENERGY_FOR_TURN
             );
             return Task.FromResult(action);
         }
 
-        private static void AttachEnergyFromHand(AttachEnergyFromHandGA action)
+        public Task<AttachEnergyFromHandForTurnGA> Reperform(AttachEnergyFromHandForTurnGA action)
         {
-            var energyCard = action.EnergyCard;
+            var energyCard =
+                _game
+                    .GetPlayerByName(action.EnergyCard.Owner.Name)
+                    .DeckList.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
+            var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
+            AttachEnergyFromHand(energyCard, targetPokemon);
+            energyCard.Owner.PerformedOncePerTurnActions.Add(EnergyCard.ATTACHED_ENERGY_FOR_TURN);
+            return Task.FromResult(action);
+        }
+
+        private static void AttachEnergyFromHand(
+            IEnergyCardLogic energyCard,
+            IPokemonCardLogic targetPokemon
+        )
+        {
             energyCard.Owner.Hand.RemoveCard(energyCard);
-            action.TargetPokemon.AttachEnergyCards(new() { energyCard });
+            targetPokemon.AttachEnergyCards(new() { energyCard });
         }
 
         public Task<DiscardAttachedEnergyCardsGA> Perform(DiscardAttachedEnergyCardsGA action)
@@ -119,19 +189,48 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
+        public Task<DiscardAttachedEnergyCardsGA> Reperform(DiscardAttachedEnergyCardsGA action)
+        {
+            var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
+            var energyCards = _game
+                .FindCardsAnywhere(action.EnergyCards.Cast<ICardLogic>().ToList())
+                .Cast<IEnergyCardLogic>()
+                .ToList();
+            pokemon.DiscardEnergy(energyCards);
+            return Task.FromResult(action);
+        }
+
         public Task<BenchPokemonGA> Perform(BenchPokemonGA action)
         {
-            var pokemon = action.Card;
+            BenchPokemon(action.Card);
+            return Task.FromResult(action);
+        }
+
+        public Task<BenchPokemonGA> Reperform(BenchPokemonGA action)
+        {
+            BenchPokemon(_game.FindCardAnywhere(action.Card) as IPokemonCardLogic);
+            return Task.FromResult(action);
+        }
+
+        private static void BenchPokemon(IPokemonCardLogic pokemon)
+        {
             pokemon.Owner.Bench.AddCards(new() { pokemon });
             pokemon.Owner.Hand.RemoveCard(pokemon);
             pokemon.SetPutInPlay();
-            return Task.FromResult(action);
         }
 
         public Task<MovePokemonToBenchGA> Perform(MovePokemonToBenchGA action)
         {
             var pokemon = action.Pokemon;
             pokemon.Owner.Bench.AddCards(new() { pokemon });
+            return Task.FromResult(action);
+        }
+
+        public Task<MovePokemonToBenchGA> Reperform(MovePokemonToBenchGA action)
+        {
+            var player = _game.GetPlayerByName(action.Pokemon.Owner.Name);
+            var pokemon = player.DeckList.GetCardByDeckId(action.Pokemon.DeckId);
+            player.Bench.AddCards(new() { pokemon });
             return Task.FromResult(action);
         }
 
@@ -146,10 +245,30 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
+        public Task<ResetPokemonTurnStateGA> Reperform(ResetPokemonTurnStateGA action)
+        {
+            var pokemonToReset = _game.FindCardAnywhere(action.PokemonToReset) as IPokemonCardLogic;
+            pokemonToReset.PutIntoPlayThisTurn = false;
+            pokemonToReset.AbilityUsedThisTurn = false;
+            ActionSystem.INSTANCE.UnsubscribeFromGameAction<EndTurnGA>(
+                pokemonToReset,
+                ReactionTiming.PRE
+            );
+            return Task.FromResult(action);
+        }
+
         public Task<RevealCardsFromDeckGA> Perform(RevealCardsFromDeckGA action)
         {
             var revealedCards = action.Player.Deck.Draw(action.Count);
             action.RevealedCards.AddRange(revealedCards);
+            return Task.FromResult(action);
+        }
+
+        public Task<RevealCardsFromDeckGA> Reperform(RevealCardsFromDeckGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var revealedCards = player.DeckList.GetCardsByDeckIds(action.RevealedCards);
+            player.Deck.RemoveCards(revealedCards);
             return Task.FromResult(action);
         }
 
@@ -166,9 +285,29 @@ namespace gamecore.game.action
             return action;
         }
 
+        public Task<TakeSelectionToHandGA> Reperform(TakeSelectionToHandGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var selectedStubs = action.Options;
+            selectedStubs.RemoveAll(card =>
+                action.RemainingCards.Select(card => card.DeckId).Contains(card.DeckId)
+            );
+            var selectedCards = player.DeckList.GetCardsByDeckIds(selectedStubs);
+            player.Hand.AddCards(selectedCards);
+            return Task.FromResult(action);
+        }
+
         public Task<PutRemainingCardsUnderDeckGA> Perform(PutRemainingCardsUnderDeckGA action)
         {
             action.Player.Deck.AddCards(Shuffle(action.RemainingCards));
+            return Task.FromResult(action);
+        }
+
+        public Task<PutRemainingCardsUnderDeckGA> Reperform(PutRemainingCardsUnderDeckGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var remainingCards = player.DeckList.GetCardsByDeckIds(action.RemainingCards);
+            player.Deck.AddCards(Shuffle(remainingCards));
             return Task.FromResult(action);
         }
 
@@ -191,6 +330,40 @@ namespace gamecore.game.action
             else
                 action.Card.Play();
             return Task.FromResult(action);
+        }
+
+        public Task<PlayCardGA> Reperform(PlayCardGA action)
+        {
+            return Task.FromResult(action);
+        }
+
+        public Task<SetActivePokemonGA> Perform(SetActivePokemonGA action)
+        {
+            SetActivePokemon(action.Card);
+            return Task.FromResult(action);
+        }
+
+        public Task<SetActivePokemonGA> Reperform(SetActivePokemonGA action)
+        {
+            var card = _game
+                .GetPlayerByName(action.Card.Owner.Name)
+                .DeckList.GetCardByDeckId(action.Card.DeckId);
+            SetActivePokemon(card as IPokemonCardLogic);
+            _game.AdvanceGameStateQuietly();
+            return Task.FromResult(action);
+        }
+
+        private static void SetActivePokemon(IPokemonCardLogic pokemon)
+        {
+            if (pokemon.Owner.ActivePokemon == null)
+            {
+                pokemon.Owner.ActivePokemon = pokemon;
+                pokemon.Owner.Hand.RemoveCard(pokemon);
+            }
+            else
+            {
+                throw new Exception("There is already an active pokemon");
+            }
         }
     }
 }

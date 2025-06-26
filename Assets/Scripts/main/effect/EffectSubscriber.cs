@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
+using gamecore.common;
 using gamecore.game.action;
 using UnityEngine;
 
@@ -32,6 +33,13 @@ namespace gamecore.effect
             ActionSystem.INSTANCE.UnsubscribeFromGameAction<T>(this, Timing);
             ActionSystem.INSTANCE.DetachPerformer<RemoveEffectSubscriberGA<T>>();
             return Task.FromResult(action);
+        }
+
+        public Task<RemoveEffectSubscriberGA<T>> Reperform(RemoveEffectSubscriberGA<T> action)
+        {
+            throw new IlleagalStateException(
+                "RemoveEffectSubscriberGA should never be reperformed!"
+            );
         }
     }
 }

@@ -20,14 +20,6 @@ namespace gamecore.game
         }
 
         [Test]
-        public async Task ShouldStartTurnForPlayer1()
-        {
-            await game.StartGame();
-
-            player1.VerifySet(p => p.IsActive = true);
-        }
-
-        [Test]
         public async Task ShouldStartTurnForPlayer2()
         {
             player1.SetupGet(p => p.IsActive).Returns(true);

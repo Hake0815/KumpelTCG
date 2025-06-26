@@ -48,7 +48,6 @@ namespace gamecore.game
     public enum GameInteractionType
     {
         SelectActivePokemon,
-        SetUpGame,
         PlayCard,
         EndTurn,
         ConfirmMulligans,
@@ -61,6 +60,7 @@ namespace gamecore.game
         SelectCards,
         Retreat,
         PerformAbility,
+        SetPrizeCards,
     }
 
     public interface IGameInteractionData { }

@@ -58,8 +58,11 @@ namespace gameview
             {
                 _cardViewColliders.Add(cardView.GetComponent<Collider2D>());
                 cardView.transform.SetParent(_cardHolder.transform);
-                cardView.transform.DOScale(SCALE_FACTOR, 0.25f);
-                cardView.transform.DOMove(firstPosition + i * spacing * Vector3.right, 0.25f);
+                cardView.transform.DOScale(SCALE_FACTOR, AnimationSpeedHolder.AnimationSpeed);
+                cardView.transform.DOMove(
+                    firstPosition + i * spacing * Vector3.right,
+                    AnimationSpeedHolder.AnimationSpeed
+                );
                 i++;
             }
             Hidden = false;
@@ -91,7 +94,7 @@ namespace gameview
             foreach (var cardView in _displayedCards)
             {
                 cardView.transform.SetParent(null);
-                cardView.transform.DOScale(Vector3.one, 0.25f);
+                cardView.transform.DOScale(Vector3.one, AnimationSpeedHolder.AnimationSpeed);
             }
             _displayedCards.Clear();
             gameObject.SetActive(false);

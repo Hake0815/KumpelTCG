@@ -42,15 +42,15 @@ namespace gamecore.card
             OnCardCountChanged();
         }
 
-        void RemoveCards(List<ICard> cards)
+        void RemoveCards(List<ICardLogic> cards)
         {
             Cards.RemoveAll(cards.Contains);
             OnCardCountChanged();
         }
 
-        void RemoveCard(ICard card)
+        void RemoveCard(ICardLogic card)
         {
-            Cards.Remove((ICardLogic)card);
+            Cards.Remove(card);
             OnCardCountChanged();
         }
 
@@ -59,14 +59,14 @@ namespace gamecore.card
             Cards.Clear();
             OnCardCountChanged();
         }
-        List<ICardLogic> GetBasicPokemon()
+        List<IPokemonCardLogic> GetBasicPokemon()
         {
-            var basicPokemon = new List<ICardLogic>();
+            var basicPokemon = new List<IPokemonCardLogic>();
             foreach (var card in Cards)
             {
-                if (card is IPokemonCard pokemonCard && pokemonCard.Stage == Stage.Basic)
+                if (card is IPokemonCardLogic pokemonCard && pokemonCard.Stage == Stage.Basic)
                 {
-                    basicPokemon.Add(card);
+                    basicPokemon.Add(pokemonCard);
                 }
             }
             return basicPokemon;

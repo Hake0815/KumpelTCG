@@ -39,6 +39,9 @@ namespace gamecore.game
         IDeck IPlayer.Deck => Deck;
 
         [JsonIgnore]
+        IDeckList DeckList { get; }
+
+        [JsonIgnore]
         new IHandLogic Hand { get; }
         IHand IPlayer.Hand => Hand;
 
@@ -68,9 +71,12 @@ namespace gamecore.game
         void Promote(IPokemonCardLogic pokemon);
     }
 
+    [JsonObject(MemberSerialization.OptIn)]
     class Player : IPlayerLogic
     {
         private bool _isActive;
+
+        [JsonProperty]
         public string Name { get; set; }
         public bool IsActive
         {
@@ -93,6 +99,7 @@ namespace gamecore.game
                     ActivePokemonSet?.Invoke(value);
             }
         }
+        public IDeckList DeckList { get; set; }
         public IDeckLogic Deck { get; set; }
         public IHandLogic Hand { get; } = new Hand();
         public IBenchLogic Bench { get; } = new Bench();

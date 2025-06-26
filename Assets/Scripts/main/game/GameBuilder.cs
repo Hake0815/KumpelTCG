@@ -23,17 +23,24 @@ namespace gamecore.game
 
         public GameBuilder WithPlayer1Decklist(Dictionary<string, int> decklist)
         {
-            _player1.Deck = CreateDeckFromDecklist(decklist, _player1);
+            var cards = CreateDeckFromDecklist(decklist, _player1);
+            _player1.Deck = new Deck(cards);
+            _player1.DeckList = new DeckList(new(cards));
             return this;
         }
 
         public GameBuilder WithPlayer2Decklist(Dictionary<string, int> decklist)
         {
-            _player2.Deck = CreateDeckFromDecklist(decklist, _player2);
+            var cards = CreateDeckFromDecklist(decklist, _player2);
+            _player2.Deck = new Deck(cards);
+            _player2.DeckList = new DeckList(new(cards));
             return this;
         }
 
-        private static Deck CreateDeckFromDecklist(Dictionary<string, int> decklist, Player player)
+        private static List<ICardLogic> CreateDeckFromDecklist(
+            Dictionary<string, int> decklist,
+            Player player
+        )
         {
             var cards = new List<ICardLogic>();
             var deckId = 0;
@@ -42,7 +49,7 @@ namespace gamecore.game
                 cards.AddRange(CardFactory.CreateCard(entry.Key, player, entry.Value, deckId));
                 deckId += entry.Value;
             }
-            return new Deck(cards);
+            return cards;
         }
 
         public Game Build()

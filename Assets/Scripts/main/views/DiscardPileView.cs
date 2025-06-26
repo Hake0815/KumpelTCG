@@ -27,7 +27,7 @@ namespace gameview
         private void OnEnable()
         {
             if (_discardPile != null)
-                _discardPile.CardsChanged += OnCardsChanged;
+                _discardPile.CardCountChanged += OnCardsChanged;
         }
 
         private void OnCardsChanged()
@@ -38,10 +38,10 @@ namespace gameview
         private void OnDisable()
         {
             if (_discardPile != null)
-                _discardPile.CardsChanged -= OnCardsChanged;
+                _discardPile.CardCountChanged -= OnCardsChanged;
         }
 
-        private void UpdateView()
+        public void UpdateView()
         {
             var topCard = _discardPile.LastCard;
             if (topCard != null)

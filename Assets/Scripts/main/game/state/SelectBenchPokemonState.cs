@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using gamecore.card;
 
 namespace gamecore.game.state
@@ -11,7 +10,9 @@ namespace gamecore.game.state
         public IGameState AdvanceSuccesfully()
         {
             if (_doneSelecting)
-                return new StartingGameState();
+            {
+                return new IdlePlayerTurnState();
+            }
             else
                 return this;
         }
@@ -31,7 +32,7 @@ namespace gamecore.game.state
                     async () =>
                     {
                         _doneSelecting = true;
-                        await gameController.Confirm();
+                        await gameController.StartFirstTurnOfGame();
                     },
                     GameInteractionType.Confirm
                 )
@@ -51,10 +52,9 @@ namespace gamecore.game.state
             );
         }
 
-        public Task OnAdvanced(Game game)
+        public void OnAdvanced(Game game)
         {
             game.AwaitInteraction();
-            return Task.CompletedTask;
         }
     }
 }

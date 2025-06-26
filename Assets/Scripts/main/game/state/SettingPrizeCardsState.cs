@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace gamecore.game.state
 {
-    class SetupCompletedState : IGameState
+    class SettingPrizeCardsState : IGameState
     {
         public IGameState AdvanceSuccesfully()
         {
-            return new ShowFirstMulliganState();
+            return new ShowSecondMulliganState();
         }
 
         public List<GameInteraction> GetGameInteractions(
@@ -14,9 +15,12 @@ namespace gamecore.game.state
             IPlayerLogic player
         )
         {
-            return new()
+            return new List<GameInteraction>()
             {
-                new(() => gameController.Confirm(), GameInteractionType.SetupCompleted),
+                new(
+                    async () => await gameController.SetPrizeCards(),
+                    GameInteractionType.SetPrizeCards
+                ),
             };
         }
 
