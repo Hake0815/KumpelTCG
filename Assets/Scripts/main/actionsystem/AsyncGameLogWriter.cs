@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace gamecore.actionsystem
 {
@@ -19,8 +20,8 @@ namespace gamecore.actionsystem
         private readonly Task _writerTask;
         private static readonly JsonSerializerSettings _serializerSettings = new()
         {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
         };
 
         private bool _disposed;
@@ -41,7 +42,10 @@ namespace gamecore.actionsystem
             var entries = new List<GameActionLogEntry>();
 
             if (!File.Exists(_filePath))
+            {
+                Debug.LogError($"No log file found at {_filePath}");
                 return entries;
+            }
 
             using var stream = new FileStream(
                 _filePath,
@@ -56,20 +60,38 @@ namespace gamecore.actionsystem
                 var line = reader.ReadLine();
                 if (!string.IsNullOrWhiteSpace(line))
                 {
-                    try
-                    {
-                        var obj = JsonConvert.DeserializeObject<GameActionLogEntry>(line);
-                        if (obj != null)
-                            entries.Add(obj);
-                    }
-                    catch
-                    {
-                        // Skip bad lines
-                    }
+                    DeserializeLine(entries, line);
                 }
             }
 
             return entries;
+        }
+
+        private static void DeserializeLine(List<GameActionLogEntry> entries, string line)
+        {
+            try
+            {
+                var obj = JsonConvert.DeserializeObject<GameActionLogEntry>(
+                    line,
+                    _serializerSettings
+                );
+                if (obj != null)
+                    entries.Add(obj);
+            }
+            catch (JsonSerializationException ex)
+            {
+                Debug.LogError($"Deserialization error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+            catch (JsonReaderException ex)
+            {
+                Debug.LogError($"JSON read error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(
+                    $"Unknown error during deserialization: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                );
+            }
         }
 
         private async Task WriteLoopAsync()

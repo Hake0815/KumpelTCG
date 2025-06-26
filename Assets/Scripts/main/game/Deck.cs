@@ -16,6 +16,7 @@ namespace gamecore.game
     internal interface IDeckLogic : IDeck, ICardListLogic
     {
         List<ICardLogic> DrawFaceDown(int amount);
+        void RemoveFaceDown(List<ICardLogic> cards);
         List<ICardLogic> Draw(int amount);
     }
 
@@ -63,6 +64,27 @@ namespace gamecore.game
         {
             Cards.AddRange(cards);
             OnCardsAdded(cards);
+            OnCardCountChanged();
+        }
+
+        public void RemoveCards(List<ICardLogic> cards)
+        {
+            Cards.RemoveAll(cards.Contains);
+            OnCardsDrawn(cards);
+            OnCardCountChanged();
+        }
+
+        public void RemoveCard(ICardLogic card)
+        {
+            Cards.Remove(card);
+            OnCardsDrawn(new() { card });
+            OnCardCountChanged();
+        }
+
+        public void RemoveFaceDown(List<ICardLogic> cards)
+        {
+            Cards.RemoveAll(cards.Contains);
+            OnCardsDrawnFaceDown(cards);
             OnCardCountChanged();
         }
 

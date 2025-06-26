@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using gamecore.card;
 
 namespace gamecore.game.state
@@ -32,18 +31,17 @@ namespace gamecore.game.state
             return new List<GameInteraction>()
             {
                 new(
-                    async () => await gameController.Confirm(),
+                    () => gameController.Confirm(),
                     GameInteractionType.ConfirmMulligans,
                     new() { new MulliganData(mulligansToShow) }
                 ),
             };
         }
 
-        public Task OnAdvanced(Game game)
+        public void OnAdvanced(Game game)
         {
             if (_numberConfirmations == 0)
                 game.AwaitGeneralInteraction();
-            return Task.CompletedTask;
         }
     }
 }

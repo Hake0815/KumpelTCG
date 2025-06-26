@@ -1,14 +1,18 @@
+using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace gamecore.actionsystem
 {
-    public record GameActionLogEntry
+    public class GameActionLogEntry
     {
         public GameAction GameAction { get; }
         public List<GameActionLogEntry> PreReactions { get; }
         public List<GameActionLogEntry> PerformReactions { get; }
         public List<GameActionLogEntry> PostReactions { get; }
 
+        [JsonConstructor]
         private GameActionLogEntry(
             GameAction gameAction,
             List<GameActionLogEntry> preReactions,

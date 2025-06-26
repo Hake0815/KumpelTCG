@@ -143,6 +143,7 @@ namespace gameview
                     pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
                     pokemonCard.DamageModified += UpdateDamage;
                     pokemonCard.Evolved += OnEvolved;
+                    UpdateDamage();
                 }
             }
         }
@@ -178,7 +179,7 @@ namespace gameview
             MoveToDiscardPile();
         }
 
-        private void AttachEnergy(List<IEnergyCard> cards)
+        public void AttachEnergy(List<IEnergyCard> cards)
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>
@@ -197,12 +198,19 @@ namespace gameview
             );
         }
 
-        public void TransformToAttachedEnergyView(Sequence sequence)
+        private void TransformToAttachedEnergyView(Sequence sequence)
         {
             sequence
-                .Join(transform.DOScaleX(ATTACHED_SCALE, 0.25f))
-                .Join(transform.DOScaleY(ATTACHED_SCALE / 1.375f, 0.25f))
-                .Join(transform.DORotateQuaternion(transform.rotation, 0.25f));
+                .Join(transform.DOScaleX(ATTACHED_SCALE, AnimationSpeedHolder.AnimationSpeed))
+                .Join(
+                    transform.DOScaleY(ATTACHED_SCALE / 1.375f, AnimationSpeedHolder.AnimationSpeed)
+                )
+                .Join(
+                    transform.DORotateQuaternion(
+                        transform.rotation,
+                        AnimationSpeedHolder.AnimationSpeed
+                    )
+                );
             Attached = true;
         }
 
@@ -214,7 +222,10 @@ namespace gameview
                 var energyCardView = CardViewRegistry.INSTANCE.Get(energyCard);
                 energyCardView.RectTransform.SetParent(transform);
                 sequence.Join(
-                    energyCardView.transform.DOLocalMove(GetEnergyTargetPosition(i), 0.25f)
+                    energyCardView.transform.DOLocalMove(
+                        GetEnergyTargetPosition(i),
+                        AnimationSpeedHolder.AnimationSpeed
+                    )
                 );
                 i++;
             }
@@ -248,8 +259,18 @@ namespace gameview
         {
             DOTween
                 .Sequence()
-                .Append(transform.DOMove(_discardPilePosition.position, 0.25f))
-                .Join(transform.DORotateQuaternion(_discardPilePosition.rotation, 0.25f))
+                .Append(
+                    transform.DOMove(
+                        _discardPilePosition.position,
+                        AnimationSpeedHolder.AnimationSpeed
+                    )
+                )
+                .Join(
+                    transform.DORotateQuaternion(
+                        _discardPilePosition.rotation,
+                        AnimationSpeedHolder.AnimationSpeed
+                    )
+                )
                 .OnComplete(() => Destroy(gameObject));
         }
 

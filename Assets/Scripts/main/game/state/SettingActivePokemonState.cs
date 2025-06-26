@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using gamecore.card;
 
 namespace gamecore.game.state
@@ -12,7 +11,7 @@ namespace gamecore.game.state
         {
             _numberOfActivePokemonSelected++;
             if (_numberOfActivePokemonSelected == 2)
-                return new ShowSecondMulliganState();
+                return new SettingPrizeCardsState();
 
             return this;
         }
@@ -33,7 +32,7 @@ namespace gamecore.game.state
         }
 
         private static GameInteraction CreateGameInteraction(
-            ICardLogic basicPokemon,
+            IPokemonCardLogic basicPokemon,
             GameController gameController
         )
         {
@@ -44,10 +43,9 @@ namespace gamecore.game.state
             );
         }
 
-        public Task OnAdvanced(Game game)
+        public void OnAdvanced(Game game)
         {
             game.AwaitInteraction();
-            return Task.CompletedTask;
         }
     }
 }

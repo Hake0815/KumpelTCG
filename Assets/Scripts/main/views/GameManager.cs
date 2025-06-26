@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
 using TMPro;
@@ -55,6 +57,9 @@ namespace gameview
         private FloatingSelectionView _floatingSelectionView;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
+        private readonly Dictionary<IPlayer, PrizeView> _playerPrizeViews = new();
+        private readonly Dictionary<IPlayer, BenchView> _playerBenchViews = new();
+        private readonly Dictionary<IPlayer, DiscardPileView> _playerDiscardPileViews = new();
         public Dictionary<IPlayer, ActiveSpot> PlayerActiveSpots { get; } = new();
 
         private Button _button;
@@ -76,7 +81,7 @@ namespace gameview
         {
             SetUpPlayerViews(player1, new Quaternion(0f, 0f, 0f, 1f));
             SetUpPlayerViews(player2, new Quaternion(0f, 0f, 1f, 0f));
-            DisablePlayerViews();
+            DisablePlayerHandViews();
         }
 
         public void EnablePlayerHandViews()
@@ -91,7 +96,7 @@ namespace gameview
             }
         }
 
-        public void DisablePlayerViews()
+        private void DisablePlayerHandViews()
         {
             foreach (var handView in _playerHandViews.Values)
             {
@@ -123,6 +128,7 @@ namespace gameview
             );
             discardPileView.SetUp(player.DiscardPile);
             CardViewCreator.INSTANCE.DiscardPileViews.Add(player, discardPileView);
+            _playerDiscardPileViews.Add(player, discardPileView);
         }
 
         private void SetUpDeckView(IPlayer player, Quaternion rotation)
@@ -176,6 +182,7 @@ namespace gameview
                 rotation
             );
             benchView.SetUp(player);
+            _playerBenchViews.Add(player, benchView);
         }
 
         private void SetUpPrizeView(IPlayer player, Quaternion rotation)
@@ -186,6 +193,7 @@ namespace gameview
                 rotation
             );
             prizeView.SetUp(player);
+            _playerPrizeViews.Add(player, prizeView);
         }
 
         public void ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
@@ -220,16 +228,74 @@ namespace gameview
         {
             foreach (var player in _playerHandViews.Keys)
             {
-                _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
+                ShowHandCards(player);
+                player.ActivePokemon?.Let(activePokemon =>
+                    ShowActivePokemon(player, activePokemon)
+                );
+                ShowPrizeCards(player);
+                ShowBenchedPokemon(player);
+                ShowDiscardPile(player);
                 _playerDeckViews[player].UpdateView();
-                _playerHandViews[player].HandleCardCountChanged();
             }
+        }
+
+        private void ShowHandCards(IPlayer player)
+        {
+            _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
+            _playerHandViews[player].HandleCardCountChanged();
+        }
+
+        private void ShowActivePokemon(IPlayer player, IPokemonCard activePokemon)
+        {
+            _playerDeckViews[player].CreateDrawnCards(new() { activePokemon });
+            PlayerActiveSpots[player].SetActivePokemon(activePokemon);
+            if (activePokemon.AttachedEnergyCards.Count > 0)
+                ShowAttachedEnergyCards(activePokemon);
+        }
+
+        private void ShowBenchedPokemon(IPlayer player)
+        {
+            _playerDeckViews[player].CreateDrawnCards(player.Bench.Cards);
+            _playerBenchViews[player].UpdateBenchedPokemonPositions();
+            foreach (var pokemon in player.Bench.Cards)
+            {
+                if ((pokemon as IPokemonCard).AttachedEnergyCards.Count > 0)
+                {
+                    ShowAttachedEnergyCards(pokemon as IPokemonCard);
+                }
+            }
+        }
+
+        private void ShowAttachedEnergyCards(IPokemonCard card)
+        {
+            var attachedEnergyCards = card.AttachedEnergyCards;
+            _playerDeckViews[card.Owner]
+                .CreateDrawnCards(attachedEnergyCards.Cast<ICard>().ToList());
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    CardViewRegistry.INSTANCE.Get(card).AttachEnergy(attachedEnergyCards);
+                    callback.Invoke();
+                }
+            );
+        }
+
+        private void ShowPrizeCards(IPlayer player)
+        {
+            _playerDeckViews[player].CreateDrawnCardsFaceDown(player.Prizes.Cards);
+            _playerPrizeViews[player].UpdateView();
+        }
+
+        private void ShowDiscardPile(IPlayer player)
+        {
+            _playerDiscardPileViews[player].UpdateView();
         }
 
         public void EnableEndTurnButton(Action gameControllerMethod, Action onInteract)
         {
             _button.gameObject.SetActive(true);
             _buttonText.text = "EndTurn";
+            _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(() =>
             {
                 onInteract();
@@ -260,6 +326,7 @@ namespace gameview
         {
             _button.gameObject.SetActive(true);
             _buttonText.text = "Done";
+            _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(() =>
             {
                 onInteract();

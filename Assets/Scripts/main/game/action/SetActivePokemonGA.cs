@@ -5,14 +5,14 @@ using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
-    class DiscardCardsFromHandGA : GameAction
+    class SetActivePokemonGA : GameAction
     {
-        public List<ICardLogic> Cards { get; }
+        public IPokemonCardLogic Card { get; }
 
         [JsonConstructor]
-        public DiscardCardsFromHandGA(List<ICardLogic> cards)
+        public SetActivePokemonGA(IPokemonCardLogic card)
         {
-            Cards = cards;
+            Card = card;
         }
     }
 }

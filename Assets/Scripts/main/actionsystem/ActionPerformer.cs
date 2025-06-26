@@ -6,5 +6,7 @@ namespace gamecore.actionsystem
         where T : GameAction
     {
         Task<T> Perform(T action);
+
+        Task<T> Reperform(T action);
     }
 }

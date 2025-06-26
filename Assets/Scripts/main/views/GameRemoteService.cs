@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using gamecore.card;
 using gamecore.game;
@@ -9,7 +10,7 @@ namespace gameview
 {
     public class GameRemoteService
     {
-        public IGameController GameController { get; set; }
+        private IGameController _gameController;
         private readonly GameManager _gameManager;
         private readonly List<ICard> _playableCards = new();
         private readonly List<ICard> _selectedCards = new();
@@ -22,11 +23,41 @@ namespace gameview
 
         private void InitializeGame()
         {
-            GameController = IGameController.Create();
-            GameController.NotifyPlayer1 += HandlePlayer1Interactions;
-            GameController.NotifyPlayer2 += HandlePlayer2Interactions;
-            GameController.NotifyGeneral += HandleGeneralInteractions;
-            GameController.CreateGame(CreateDeckList(), CreateDeckList(), "Player 1", "Player 2");
+            _gameController = IGameController.Create();
+            _gameController.NotifyPlayer1 += HandlePlayer1Interactions;
+            _gameController.NotifyPlayer2 += HandlePlayer2Interactions;
+            _gameController.NotifyGeneral += HandleGeneralInteractions;
+            var gameLogFile = "action_log.json";
+            if (File.Exists(gameLogFile) && File.ReadAllText(gameLogFile).Length > 0)
+            {
+                _gameController.RecreateGameFromLog(gameLogFile);
+            }
+            else
+            {
+                _gameController.CreateGame(
+                    CreateDeckList(),
+                    CreateDeckList(),
+                    "Player 1",
+                    "Player 2",
+                    gameLogFile
+                );
+            }
+            _gameManager.SetUpPlayerViews(
+                _gameController.Game.Player1,
+                _gameController.Game.Player2
+            );
+            _gameManager.EnablePlayerHandViews();
+            var cachedSpeed = AnimationSpeedHolder.AnimationSpeed;
+            AnimationSpeedHolder.AnimationSpeed = 0.0f;
+            _gameManager.ShowGameState();
+            UIQueue.INSTANCE.Queue(
+                (callback) =>
+                {
+                    AnimationSpeedHolder.AnimationSpeed = cachedSpeed;
+                    _gameController.StartGame();
+                    callback.Invoke();
+                }
+            );
         }
 
         private static Dictionary<string, int> CreateDeckList()
@@ -86,11 +117,8 @@ namespace gameview
                     case GameInteractionType.SelectActivePokemon:
                         HandleSelectActivePokemon(interaction);
                         break;
-                    case GameInteractionType.SetUpGame:
-                        HandleSetUpGame(interaction);
-                        break;
                     case GameInteractionType.SetupCompleted:
-                        HandleSetupCompleted(interaction);
+                        SimpleProceed(interaction);
                         break;
                     case GameInteractionType.ConfirmMulligans:
                         HandleConfirmMulligans(interaction);
@@ -109,16 +137,13 @@ namespace gameview
                     case GameInteractionType.SelectCards:
                         HandleSelectCards(interaction);
                         break;
+                    case GameInteractionType.SetPrizeCards:
+                        SimpleProceed(interaction);
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
             }
-        }
-
-        private void HandleSetUpGame(GameInteraction interaction)
-        {
-            _gameManager.SetUpPlayerViews(GameController.Game.Player1, GameController.Game.Player2);
-            interaction.GameControllerMethod.Invoke();
         }
 
         private void HandleSelectCards(GameInteraction interaction)
@@ -158,10 +183,8 @@ namespace gameview
             _gameManager.ActivateFloatingSelectionView(possibleTargets);
         }
 
-        private void HandleSetupCompleted(GameInteraction interaction)
+        private static void SimpleProceed(GameInteraction interaction)
         {
-            _gameManager.EnablePlayerHandViews();
-            _gameManager.ShowGameState();
             interaction.GameControllerMethod.Invoke();
         }
 
@@ -328,7 +351,7 @@ namespace gameview
             var clickBehaviour = new ClickBehaviour(() =>
             {
                 OnInteract();
-                _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(cardView);
+                _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(card);
 
                 interaction.GameControllerMethod.Invoke();
             });

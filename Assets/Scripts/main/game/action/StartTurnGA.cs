@@ -1,4 +1,5 @@
 using gamecore.actionsystem;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
@@ -6,6 +7,7 @@ namespace gamecore.game.action
     {
         public IPlayerLogic NextPlayer { get; }
 
+        [JsonConstructor]
         public StartTurnGA(IPlayerLogic nextPlayer)
         {
             NextPlayer = nextPlayer;

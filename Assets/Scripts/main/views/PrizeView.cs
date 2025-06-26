@@ -54,7 +54,7 @@ namespace gameview
             }
         }
 
-        private void UpdateView()
+        public void UpdateView()
         {
             UIQueue.INSTANCE.Queue(
                 (OnUICompleted) =>
@@ -75,16 +75,19 @@ namespace gameview
                         if (i < 3)
                             cardView.transform.DOMove(
                                 firstPosition + i * horizontalSpacing * relativeRight,
-                                0.25f
+                                AnimationSpeedHolder.AnimationSpeed
                             );
                         else
                             cardView.transform.DOMove(
                                 firstPosition
                                     + (i - 3) * horizontalSpacing * relativeRight
                                     + verticalSpacing * relativeDown,
-                                0.25f
+                                AnimationSpeedHolder.AnimationSpeed
                             );
-                        cardView.transform.DOLocalRotateQuaternion(_rectTransform.rotation, 0.25f);
+                        cardView.transform.DOLocalRotateQuaternion(
+                            _rectTransform.rotation,
+                            AnimationSpeedHolder.AnimationSpeed
+                        );
                         i++;
                     }
                     OnUICompleted.Invoke();

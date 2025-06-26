@@ -1,11 +1,13 @@
 using System;
 using gamecore.actionsystem;
 using gamecore.card;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
     class AttackGA : GameAction
     {
+        [JsonConstructor]
         public AttackGA(IAttackLogic attack, IPokemonCardLogic attacker)
         {
             Attack = attack;

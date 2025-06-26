@@ -40,10 +40,7 @@ namespace gameview
 
         public void HandleCardCountChanged()
         {
-            ((ISplineCardHolder)this).UpdateCardPosition(
-                CardViewRegistry.INSTANCE.GetAll(hand.Cards),
-                transform.rotation
-            );
+            ((ISplineCardHolder)this).UpdateCardPosition(hand.Cards, transform.rotation);
         }
     }
 }
