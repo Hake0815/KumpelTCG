@@ -143,6 +143,7 @@ namespace gameview
                     pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
                     pokemonCard.DamageModified += UpdateDamage;
                     pokemonCard.Evolved += OnEvolved;
+                    UpdateDamage();
                 }
             }
         }
