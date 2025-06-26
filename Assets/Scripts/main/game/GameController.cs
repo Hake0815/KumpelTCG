@@ -169,6 +169,16 @@ namespace gamecore.game
 
         public Task<CreateGameGA> Perform(CreateGameGA action)
         {
+            return CreateGame(action);
+        }
+
+        public Task<CreateGameGA> Reperform(CreateGameGA action)
+        {
+            return CreateGame(action);
+        }
+
+        private Task<CreateGameGA> CreateGame(CreateGameGA action)
+        {
             _game = new GameBuilder()
                 .WithPlayer1(action.Player1Name)
                 .WithPlayer2(action.Player2Name)
