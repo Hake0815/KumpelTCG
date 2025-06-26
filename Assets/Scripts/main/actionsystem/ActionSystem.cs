@@ -221,9 +221,6 @@ namespace gamecore.actionsystem
             }
 
             var type = action.GetType();
-            if (type.IsAssignableFrom(typeof(RemoveEffectSubscriberGA<>)))
-                return;
-
             if (performers.ContainsKey(type))
             {
                 var performer = performers[type];

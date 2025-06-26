@@ -8,9 +8,5 @@ namespace gamecore.actionsystem
         Task<T> Perform(T action);
 
         Task<T> Reperform(T action);
-        // async Task<T> Reperform(T action)
-        // {
-        //     return await Perform(action);
-        // }
     }
 }
