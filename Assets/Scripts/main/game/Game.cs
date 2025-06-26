@@ -71,7 +71,7 @@ namespace gamecore.game
             _actionSystem.AttachPerformer<SetupGA>(this);
             _actionSystem.AttachPerformer<SetPrizeCardsGA>(this);
             CardSystem.INSTANCE.Enable(this);
-            DamageSystem.INSTANCE.Enable();
+            DamageSystem.INSTANCE.Enable(this);
             GeneralMechnicSystem.INSTANCE.Enable(this);
             _players.Add(player1);
             _players.Add(player2);
@@ -243,6 +243,7 @@ namespace gamecore.game
                 var cards = player.DeckList.GetCardsByDeckIds(action.PrizeCards[player.Name]);
                 player.Deck.RemoveFaceDown(cards);
                 player.Prizes.AddCards(cards);
+                player.Prizes.Shuffle();
             }
             AdvanceGameStateQuietly();
             return Task.FromResult(action);

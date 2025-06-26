@@ -21,12 +21,14 @@ namespace gamecore.action
         private DamageSystem() { }
 
         private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        private Game _game;
 
-        public void Enable()
+        public void Enable(Game game)
         {
             _actionSystem.AttachPerformer<DealDamgeGA>(INSTANCE);
             _actionSystem.AttachPerformer<KnockOutCheckGA>(INSTANCE);
             _actionSystem.AttachPerformer<KnockOutGA>(INSTANCE);
+            _game = game;
         }
 
         public void Disable()
@@ -53,6 +55,13 @@ namespace gamecore.action
                 action.Damage *= 2;
             else if (action.Target.Resistance == action.Attacker.Type)
                 action.Damage -= 30;
+        }
+
+        public Task<DealDamgeGA> Reperform(DealDamgeGA action)
+        {
+            var target = _game.FindCardAnywhere(action.Target) as IPokemonCardLogic;
+            target.TakeDamage(action.Damage);
+            return Task.FromResult(action);
         }
 
         public Task<KnockOutCheckGA> Perform(KnockOutCheckGA action)
@@ -92,16 +101,33 @@ namespace gamecore.action
             }
         }
 
+        public Task<KnockOutCheckGA> Reperform(KnockOutCheckGA action)
+        {
+            return Task.FromResult(action);
+        }
+
         public Task<KnockOutGA> Perform(KnockOutGA action)
         {
             var pokemon = action.Pokemon;
+            KnockOutPokemon(pokemon);
+            return Task.FromResult(action);
+        }
+
+        public Task<KnockOutGA> Reperform(KnockOutGA action)
+        {
+            var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
+            KnockOutPokemon(pokemon);
+            return Task.FromResult(action);
+        }
+
+        private static void KnockOutPokemon(IPokemonCardLogic pokemon)
+        {
             pokemon.Discard();
             RemovePokemonFromPlay(pokemon);
             foreach (var energy in pokemon.AttachedEnergyCards)
             {
                 energy.Discard();
             }
-            return Task.FromResult(action);
         }
 
         private static void RemovePokemonFromPlay(IPokemonCardLogic pokemon)

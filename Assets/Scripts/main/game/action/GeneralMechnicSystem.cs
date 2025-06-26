@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
 using gamecore.gamegame.action;
@@ -60,6 +61,11 @@ namespace gamecore.action
             return Task.FromResult(action);
         }
 
+        public Task<AttackGA> Reperform(AttackGA action)
+        {
+            return Task.FromResult(action);
+        }
+
         public Task<DrawPrizeCardsGA> Perform(DrawPrizeCardsGA action)
         {
             foreach (var playerEntry in action.NumberOfPrizeCardsPerPlayer)
@@ -71,6 +77,18 @@ namespace gamecore.action
             return Task.FromResult(action);
         }
 
+        public Task<DrawPrizeCardsGA> Reperform(DrawPrizeCardsGA action)
+        {
+            foreach (var playerEntry in action.DrawnCards)
+            {
+                var player = _game.GetPlayerByName(playerEntry.Key);
+                var prizes = player.DeckList.GetCardsByDeckIds(playerEntry.Value);
+                player.Prizes.RemoveCards(prizes);
+                player.Hand.AddCards(prizes);
+            }
+            return Task.FromResult(action);
+        }
+
         public Task<CheckWinConditionGA> Perform(CheckWinConditionGA action)
         {
             var numberOfWinConditionsPlayer1 = GetNumberOfWinConditionsForPlayer(action.Players[0]);
@@ -78,11 +96,22 @@ namespace gamecore.action
             if (numberOfWinConditionsPlayer1 > 0 || numberOfWinConditionsPlayer2 > 0)
             {
                 if (numberOfWinConditionsPlayer1 > numberOfWinConditionsPlayer2)
+                {
+                    action.GameEnded = true;
+                    action.Winner = action.Players[0];
                     _game.EndGame(action.Players[0]);
+                }
                 else if (numberOfWinConditionsPlayer2 > numberOfWinConditionsPlayer1)
+                {
+                    action.GameEnded = true;
+                    action.Winner = action.Players[1];
                     _game.EndGame(action.Players[1]);
+                }
                 else
+                {
+                    action.GameEnded = true;
                     _game.EndGame(null);
+                }
             }
             return Task.FromResult(action);
         }
@@ -96,6 +125,18 @@ namespace gamecore.action
                 numberOfWinConditions++;
 
             return numberOfWinConditions;
+        }
+
+        public Task<CheckWinConditionGA> Reperform(CheckWinConditionGA action)
+        {
+            if (action.GameEnded)
+            {
+                action.Winner.Let(
+                    winnerStub => _game.EndGame(_game.GetPlayerByName(winnerStub.Name)),
+                    () => _game.EndGame(null)
+                );
+            }
+            return Task.FromResult(action);
         }
 
         public async Task<PromoteGA> Perform(PromoteGA action)
