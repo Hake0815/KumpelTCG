@@ -16,10 +16,7 @@ namespace gamecore.card
     {
         public List<ICardLogic> Cards { get; }
 
-        public DeckList(List<ICardLogic> cards)
-        {
-            Cards = cards;
-        }
+        public DeckList(List<ICardLogic> cards) => Cards = cards;
 
         public List<ICardLogic> GetCardsByDeckIds(List<int> deckIds)
         {

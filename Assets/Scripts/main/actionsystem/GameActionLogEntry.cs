@@ -7,10 +7,10 @@ namespace gamecore.actionsystem
 {
     public class GameActionLogEntry
     {
-        public GameAction GameAction { get; private set; }
-        public List<GameActionLogEntry> PreReactions { get; private set; }
-        public List<GameActionLogEntry> PerformReactions { get; private set; }
-        public List<GameActionLogEntry> PostReactions { get; private set; }
+        public GameAction GameAction { get; }
+        public List<GameActionLogEntry> PreReactions { get; }
+        public List<GameActionLogEntry> PerformReactions { get; }
+        public List<GameActionLogEntry> PostReactions { get; }
 
         [JsonConstructor]
         private GameActionLogEntry(
