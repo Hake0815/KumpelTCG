@@ -48,7 +48,6 @@ namespace gamecore.card
                     return card;
                 }
             }
-            Debug.Log($"Did not find card with deckId {deckId}");
             return null;
         }
     }

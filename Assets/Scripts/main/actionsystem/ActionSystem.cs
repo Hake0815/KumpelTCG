@@ -182,12 +182,10 @@ namespace gamecore.actionsystem
 
         public async Task RecreateGameStateFromLog(string logFilePath)
         {
-            Debug.Log("Start recreating Game");
             _logWriter = new AsyncGameLogWriter(logFilePath);
             var logEntries = _logWriter.LoadExistingLog();
             foreach (var logEntry in logEntries)
             {
-                Debug.Log($"Reperform Logentry {logEntry}");
                 await Reperform(logEntry);
             }
         }
@@ -216,7 +214,6 @@ namespace gamecore.actionsystem
 
         private async Task ReperformAction(GameAction action)
         {
-            Debug.Log($"Reperform action {action}");
             if (action == null)
             {
                 Debug.LogError("Attempted to reperform null action");
