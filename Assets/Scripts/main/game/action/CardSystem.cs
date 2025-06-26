@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.common;
 using gamecore.game.state;
 using UnityEngine;
 
@@ -24,6 +25,7 @@ namespace gamecore.game.action
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
             IActionPerformer<PlayCardGA>,
             IActionPerformer<SetActivePokemonGA>,
+            IActionPerformer<SelectCardsGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -34,6 +36,17 @@ namespace gamecore.game.action
         protected static readonly System.Random _rng = new();
 
         private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        private static readonly Dictionary<
+            SelectCardsGA.SelectedCardsOrigin,
+            SelectFrom
+        > _selectFromMap = new()
+        {
+            { SelectCardsGA.SelectedCardsOrigin.Hand, SelectFrom.InPlay },
+            { SelectCardsGA.SelectedCardsOrigin.Other, SelectFrom.Floating },
+            { SelectCardsGA.SelectedCardsOrigin.Deck, SelectFrom.Deck },
+            { SelectCardsGA.SelectedCardsOrigin.DiscardPile, SelectFrom.DiscardPile },
+        };
+
         private Game _game;
 
         public void Enable(Game game)
@@ -52,6 +65,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
+            _actionSystem.AttachPerformer<SelectCardsGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -71,6 +85,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
             _actionSystem.DetachPerformer<PlayCardGA>();
             _actionSystem.DetachPerformer<SetActivePokemonGA>();
+            _actionSystem.DetachPerformer<SelectCardsGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -274,27 +289,92 @@ namespace gamecore.game.action
 
         public async Task<TakeSelectionToHandGA> Perform(TakeSelectionToHandGA action)
         {
-            var selectedCards = await _game.AwaitSelection(
-                action.Player,
-                action.Options,
-                action.Amount,
-                SelectFrom.Floating
-            );
-            action.Player.Hand.AddCards(selectedCards);
-            action.RemainingCards.AddRange(action.Options.Except(selectedCards));
+            action.Player.Hand.AddCards(action.Cards);
             return action;
         }
 
         public Task<TakeSelectionToHandGA> Reperform(TakeSelectionToHandGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
-            var selectedStubs = action.Options;
-            selectedStubs.RemoveAll(card =>
-                action.RemainingCards.Select(card => card.DeckId).Contains(card.DeckId)
-            );
-            var selectedCards = player.DeckList.GetCardsByDeckIds(selectedStubs);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.Cards);
             player.Hand.AddCards(selectedCards);
             return Task.FromResult(action);
+        }
+
+        public async Task<SelectCardsGA> Perform(SelectCardsGA action)
+        {
+            var options = GetOptions(action);
+            var selectedCards = await GetSelectedCards(
+                action,
+                options,
+                _selectFromMap[action.Origin]
+            );
+            RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
+
+            action.SelectedCards.AddRange(selectedCards);
+            action.RemainingCards.AddRange(options.Except(selectedCards));
+
+            return action;
+        }
+
+        private async Task<List<ICardLogic>> GetSelectedCards(
+            SelectCardsGA action,
+            List<ICardLogic> options,
+            SelectFrom selectFrom
+        )
+        {
+            return await _game.AwaitSelection(
+                action.Player,
+                options,
+                action.NumberOfCards,
+                selectFrom
+            );
+        }
+
+        private static List<ICardLogic> GetOptions(SelectCardsGA action)
+        {
+            if (action.CardCondition is null)
+                return action.CardOptions.Cards;
+            var options = new List<ICardLogic>();
+            foreach (var card in action.CardOptions.Cards)
+            {
+                if (action.CardCondition(card))
+                    options.Add(card);
+            }
+            return options;
+        }
+
+        public Task<SelectCardsGA> Reperform(SelectCardsGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
+            RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
+            return Task.FromResult(action);
+        }
+
+        private static void RemoveSelectedCardsFromOrigin(
+            IPlayerLogic player,
+            List<ICardLogic> selectedCards,
+            SelectCardsGA.SelectedCardsOrigin origin
+        )
+        {
+            switch (origin)
+            {
+                case SelectCardsGA.SelectedCardsOrigin.Hand:
+                    player.Hand.RemoveCards(selectedCards);
+                    break;
+                case SelectCardsGA.SelectedCardsOrigin.Deck:
+                    player.Deck.RemoveCards(selectedCards);
+                    break;
+                case SelectCardsGA.SelectedCardsOrigin.DiscardPile:
+                    player.DiscardPile.RemoveCards(selectedCards);
+                    break;
+                case SelectCardsGA.SelectedCardsOrigin.Other:
+                    // No removal needed for 'Other' origin
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public Task<PutRemainingCardsUnderDeckGA> Perform(PutRemainingCardsUnderDeckGA action)
