@@ -156,5 +156,7 @@ namespace gamecore.game
     {
         InPlay,
         Floating,
+        Deck,
+        DiscardPile,
     }
 }
