@@ -29,25 +29,11 @@ namespace gamecore.effect
                 new SelectCardsGA(
                     card.Owner,
                     Amount,
-                    new RevealedCards(action.RevealedCards),
+                    new CardListLogic(action.RevealedCards),
                     SelectCardsGA.SelectedCardsOrigin.Other
                 )
             );
             return action;
-        }
-
-        private class RevealedCards : ICardListLogic
-        {
-            public List<ICardLogic> Cards { get; }
-
-            public RevealedCards(List<ICardLogic> cards)
-            {
-                Cards = cards;
-            }
-
-            public event Action CardCountChanged;
-
-            public void OnCardCountChanged() { }
         }
     }
 }

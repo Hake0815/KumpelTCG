@@ -26,6 +26,7 @@ namespace gamecore.game.action
             IActionPerformer<PlayCardGA>,
             IActionPerformer<SetActivePokemonGA>,
             IActionPerformer<SelectCardsGA>,
+            IActionPerformer<DiscardCardsGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -66,6 +67,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<SelectCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -86,6 +88,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<PlayCardGA>();
             _actionSystem.DetachPerformer<SetActivePokemonGA>();
             _actionSystem.DetachPerformer<SelectCardsGA>();
+            _actionSystem.DetachPerformer<DiscardCardsGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -287,16 +290,16 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        public async Task<TakeSelectionToHandGA> Perform(TakeSelectionToHandGA action)
+        public Task<TakeSelectionToHandGA> Perform(TakeSelectionToHandGA action)
         {
-            action.Player.Hand.AddCards(action.Cards);
-            return action;
+            action.Player.Hand.AddCards(action.SelectedCards);
+            return Task.FromResult(action);
         }
 
         public Task<TakeSelectionToHandGA> Reperform(TakeSelectionToHandGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
-            var selectedCards = player.DeckList.GetCardsByDeckIds(action.Cards);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
             player.Hand.AddCards(selectedCards);
             return Task.FromResult(action);
         }
@@ -309,12 +312,25 @@ namespace gamecore.game.action
                 options,
                 _selectFromMap[action.Origin]
             );
-            RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
+            action.CardOptions.RemoveCards(selectedCards);
 
             action.SelectedCards.AddRange(selectedCards);
             action.RemainingCards.AddRange(options.Except(selectedCards));
 
             return action;
+        }
+
+        private static List<ICardLogic> GetOptions(SelectCardsGA action)
+        {
+            if (action.CardCondition is null)
+                return action.CardOptions.Cards;
+            var options = new List<ICardLogic>();
+            foreach (var card in action.CardOptions.Cards)
+            {
+                if (action.CardCondition(card))
+                    options.Add(card);
+            }
+            return options;
         }
 
         private async Task<List<ICardLogic>> GetSelectedCards(
@@ -329,19 +345,6 @@ namespace gamecore.game.action
                 action.NumberOfCards,
                 selectFrom
             );
-        }
-
-        private static List<ICardLogic> GetOptions(SelectCardsGA action)
-        {
-            if (action.CardCondition is null)
-                return action.CardOptions.Cards;
-            var options = new List<ICardLogic>();
-            foreach (var card in action.CardOptions.Cards)
-            {
-                if (action.CardCondition(card))
-                    options.Add(card);
-            }
-            return options;
         }
 
         public Task<SelectCardsGA> Reperform(SelectCardsGA action)
@@ -444,6 +447,24 @@ namespace gamecore.game.action
             {
                 throw new Exception("There is already an active pokemon");
             }
+        }
+
+        public Task<DiscardCardsGA> Perform(DiscardCardsGA action)
+        {
+            foreach (var card in action.Cards)
+            {
+                card.Discard();
+            }
+            return Task.FromResult(action);
+        }
+
+        public Task<DiscardCardsGA> Reperform(DiscardCardsGA action)
+        {
+            foreach (var card in _game.FindCardsAnywhere(action.Cards))
+            {
+                card.Discard();
+            }
+            return Task.FromResult(action);
         }
     }
 }
