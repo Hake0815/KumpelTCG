@@ -67,8 +67,9 @@ namespace gameview
                 { "bill", 16 },
                 { "TWM128", 8 },
                 { "TWM129", 8 },
-                { "FireNRG", 14 },
-                { "PsychicNRG", 14 },
+                { "ultraBall", 8 },
+                { "FireNRG", 10 },
+                { "PsychicNRG", 10 },
             };
         }
 
@@ -160,22 +161,12 @@ namespace gameview
                 default:
                     throw new NotImplementedException();
             }
-            if (targetData.NumberOfTargets != 1)
-                throw new NotImplementedException();
 
-            foreach (var card in targetData.PossibleTargets)
-            {
-                _playableCards.Add(card);
-                var cardView = CardViewRegistry.INSTANCE.Get(card);
-                cardView.SetPlayable(
-                    true,
-                    new ClickBehaviour(() =>
-                    {
-                        OnInteract();
-                        interaction.GameControllerMethodWithTargets.Invoke(new() { card });
-                    })
-                );
-            }
+            SetUpSelection(
+                cards => cards.Count == targetData.NumberOfTargets,
+                targetData.PossibleTargets,
+                interaction.GameControllerMethodWithTargets
+            );
         }
 
         private void PrepareFloatingSelection(List<ICard> possibleTargets)

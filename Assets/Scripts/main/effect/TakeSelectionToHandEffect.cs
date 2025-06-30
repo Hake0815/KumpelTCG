@@ -20,7 +20,7 @@ namespace gamecore.effect
         private static SelectCardsGA Reaction(SelectCardsGA action, ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
-                new TakeSelectionToHandGA(action.SelectedCards, card.Owner)
+                new TakeSelectionToHandGA(action.SelectedCards, card.Owner, action.RemainingCards)
             );
             return action;
         }

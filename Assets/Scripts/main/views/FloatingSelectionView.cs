@@ -59,6 +59,7 @@ namespace gameview
                 _cardViewColliders.Add(cardView.GetComponent<Collider2D>());
                 cardView.transform.SetParent(_cardHolder.transform);
                 cardView.transform.DOScale(SCALE_FACTOR, AnimationSpeedHolder.AnimationSpeed);
+                cardView.Canvas.sortingOrder = 99;
                 cardView.transform.DOMove(
                     firstPosition + i * spacing * Vector3.right,
                     AnimationSpeedHolder.AnimationSpeed

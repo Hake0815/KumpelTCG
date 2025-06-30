@@ -23,8 +23,13 @@ namespace gamecore.card
                 new TrainerCardData(
                     name: "Ultra Ball",
                     id: "ultraBall",
-                    effects: new List<IEffect> { new DiscardCardEffect() },
-                    conditions: new List<IUseCondition> { }
+                    effects: new List<IEffect>
+                    {
+                        new SelectCardsFromHandEffect(2),
+                        new DiscardSelectedCardsEffect(),
+                        new DiscardCardEffect(),
+                    },
+                    conditions: new List<IUseCondition> { new HasAtLeatCardsInHand(3) }
                 )
             },
             {
