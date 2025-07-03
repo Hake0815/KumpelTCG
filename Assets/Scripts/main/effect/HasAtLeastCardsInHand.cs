@@ -2,11 +2,11 @@ using gamecore.card;
 
 namespace gamecore.effect
 {
-    class HasAtLeatCardsInHand : IUseCondition
+    class HasAtLeastCardsInHand : IUseCondition
     {
         public int Count { get; }
 
-        public HasAtLeatCardsInHand(int count)
+        public HasAtLeastCardsInHand(int count)
         {
             Count = count;
         }
