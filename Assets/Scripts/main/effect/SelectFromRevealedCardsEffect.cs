@@ -26,7 +26,7 @@ namespace gamecore.effect
         private RevealCardsFromDeckGA Reaction(RevealCardsFromDeckGA action, ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
-                new SelectCardsGA(
+                new SelectExactCardsGA(
                     card.Owner,
                     Amount,
                     new CardListLogic(action.RevealedCards),

@@ -18,15 +18,15 @@ namespace gamecore.effect
 
         public void Perform(ICardLogic card)
         {
-            ActionSystem.INSTANCE.AddReaction(
-                new SelectCardsGA(
-                    card.Owner,
-                    Amount,
-                    card.Owner.Hand,
-                    CardCondition,
-                    SelectCardsGA.SelectedCardsOrigin.Deck
-                )
-            );
+            // ActionSystem.INSTANCE.AddReaction(
+            //     new SelectCardsGA(
+            //         card.Owner,
+            //         Amount,
+            //         card.Owner.Hand,
+            //         CardCondition,
+            //         SelectCardsGA.SelectedCardsOrigin.Deck
+            //     )
+            // );
         }
     }
 }
