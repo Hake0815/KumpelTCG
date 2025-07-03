@@ -149,7 +149,8 @@ namespace gameview
 
         private void HandleSelectCards(GameInteraction interaction)
         {
-            var targetData = interaction.Data[typeof(TargetData)] as TargetData;
+            var targetData =
+                interaction.Data[typeof(ConditionalTargetData)] as ConditionalTargetData;
             switch ((interaction.Data[typeof(SelectFromData)] as SelectFromData).SelectFrom)
             {
                 case SelectFrom.InPlay:
@@ -166,9 +167,10 @@ namespace gameview
             }
 
             SetUpSelection(
-                cards => cards.Count == targetData.NumberOfTargets,
+                targetData.ConditionOnSelection,
                 targetData.PossibleTargets,
-                interaction.GameControllerMethodWithTargets
+                interaction.GameControllerMethodWithTargets,
+                targetData.IsQuickSelection
             );
         }
 
@@ -275,7 +277,8 @@ namespace gameview
                     SetUpSelection(
                         conditionalTargetData.ConditionOnSelection,
                         conditionalTargetData.PossibleTargets,
-                        interaction.GameControllerMethodWithTargets
+                        interaction.GameControllerMethodWithTargets,
+                        true
                     );
                 });
             }
@@ -294,7 +297,8 @@ namespace gameview
         private void SetUpSelection(
             Predicate<List<ICard>> conditionOnSelection,
             List<ICard> possibleTargets,
-            Action<List<ICard>> gameControllerMethodWithTargets
+            Action<List<ICard>> gameControllerMethodWithTargets,
+            bool isQuickSelection
         )
         {
             foreach (var possibleTarget in possibleTargets)
@@ -308,7 +312,8 @@ namespace gameview
                             HandleSelectionClicked(
                                 cardView,
                                 conditionOnSelection,
-                                gameControllerMethodWithTargets
+                                gameControllerMethodWithTargets,
+                                isQuickSelection
                             )
                     )
                 );
@@ -318,7 +323,8 @@ namespace gameview
         private void HandleSelectionClicked(
             CardView cardView,
             Predicate<List<ICard>> conditionOnSelection,
-            Action<List<ICard>> gameControllerMethodWithTargets
+            Action<List<ICard>> gameControllerMethodWithTargets,
+            bool isQuickSelection
         )
         {
             if (cardView.Selected)

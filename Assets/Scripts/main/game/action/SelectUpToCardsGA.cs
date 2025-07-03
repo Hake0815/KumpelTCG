@@ -4,46 +4,42 @@ using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
-    class SelectExactCardsGA : SelectCardsGA
+    class SelectUpToCardsGA : SelectCardsGA
     {
-        public SelectExactCardsGA(
+        public SelectUpToCardsGA(
             IPlayerLogic player,
-            int numberOfCards,
+            int amount,
             ICardListLogic cardOptions,
             Predicate<ICardLogic> cardCondition,
             SelectedCardsOrigin origin
         )
             : base(player, origin)
         {
-            NumberOfCards = numberOfCards;
+            Amount = amount;
             CardOptions = cardOptions;
             CardCondition = cardCondition;
         }
 
-        public SelectExactCardsGA(
+        public SelectUpToCardsGA(
             IPlayerLogic player,
-            int numberOfCards,
+            int amount,
             ICardListLogic cardOptions,
             SelectedCardsOrigin origin
         )
             : base(player, origin)
         {
-            NumberOfCards = numberOfCards;
+            Amount = amount;
             CardOptions = cardOptions;
         }
 
         [JsonConstructor]
-        public SelectExactCardsGA(
-            IPlayerLogic player,
-            int numberOfCards,
-            SelectedCardsOrigin origin
-        )
+        public SelectUpToCardsGA(IPlayerLogic player, int amount, SelectedCardsOrigin origin)
             : base(player, origin)
         {
-            NumberOfCards = numberOfCards;
+            Amount = amount;
         }
 
-        public int NumberOfCards { get; }
+        public int Amount { get; }
 
         [JsonIgnore]
         public ICardListLogic CardOptions { get; }

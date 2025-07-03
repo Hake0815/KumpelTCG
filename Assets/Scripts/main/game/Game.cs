@@ -111,15 +111,23 @@ namespace gamecore.game
             AwaitGeneralInteractionEvent?.Invoke();
         }
 
-        internal async Task<List<ICardLogic>> AwaitSelection(
+        public async Task<List<ICardLogic>> AwaitSelection(
             IPlayerLogic player,
             List<ICardLogic> options,
-            int amount,
+            Predicate<List<ICard>> selectionCondition,
+            bool isQuickSelection,
             SelectFrom selectFrom
         )
         {
             var tcs = new TaskCompletionSource<List<ICardLogic>>();
-            GameState = new WaitForInputState(tcs, player, options, amount, selectFrom);
+            GameState = new WaitForInputState(
+                tcs,
+                player,
+                options,
+                selectionCondition,
+                selectFrom,
+                isQuickSelection
+            );
             AwaitInteraction();
             return await tcs.Task;
         }

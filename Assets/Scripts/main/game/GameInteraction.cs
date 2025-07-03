@@ -101,15 +101,18 @@ namespace gamecore.game
     {
         public ConditionalTargetData(
             Predicate<List<ICard>> conditionOnSelection,
-            List<ICard> possibleTargets
+            List<ICard> possibleTargets,
+            bool isQuickSelection = true
         )
         {
             ConditionOnSelection = conditionOnSelection;
             PossibleTargets = possibleTargets;
+            IsQuickSelection = isQuickSelection;
         }
 
         public List<ICard> PossibleTargets { get; }
         public Predicate<List<ICard>> ConditionOnSelection { get; }
+        public bool IsQuickSelection { get; }
     }
 
     public record InteractionCard : IGameInteractionData

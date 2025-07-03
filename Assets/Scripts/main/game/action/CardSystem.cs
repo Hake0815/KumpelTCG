@@ -25,6 +25,7 @@ namespace gamecore.game.action
             IActionPerformer<PlayCardGA>,
             IActionPerformer<SetActivePokemonGA>,
             IActionPerformer<SelectExactCardsGA>,
+            IActionPerformer<SelectUpToCardsGA>,
             IActionPerformer<DiscardCardsGA>,
             IActionSubscriber<StartTurnGA>
     {
@@ -63,6 +64,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<SelectExactCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<SelectUpToCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
@@ -84,6 +86,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<PlayCardGA>();
             _actionSystem.DetachPerformer<SetActivePokemonGA>();
             _actionSystem.DetachPerformer<SelectExactCardsGA>();
+            _actionSystem.DetachPerformer<SelectUpToCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
@@ -300,82 +303,6 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        public async Task<SelectExactCardsGA> Perform(SelectExactCardsGA action)
-        {
-            var options = GetOptions(action);
-            var selectedCards = await GetSelectedCards(
-                action,
-                options,
-                _selectFromMap[action.Origin]
-            );
-            action.CardOptions.RemoveCards(selectedCards);
-
-            action.SelectedCards.AddRange(selectedCards);
-            action.RemainingCards.AddRange(options.Except(selectedCards));
-
-            return action;
-        }
-
-        private static List<ICardLogic> GetOptions(SelectExactCardsGA action)
-        {
-            if (action.CardCondition is null)
-                return action.CardOptions.Cards;
-            var options = new List<ICardLogic>();
-            foreach (var card in action.CardOptions.Cards)
-            {
-                if (action.CardCondition(card))
-                    options.Add(card);
-            }
-            return options;
-        }
-
-        private async Task<List<ICardLogic>> GetSelectedCards(
-            SelectExactCardsGA action,
-            List<ICardLogic> options,
-            SelectFrom selectFrom
-        )
-        {
-            return await _game.AwaitSelection(
-                action.Player,
-                options,
-                action.NumberOfCards,
-                selectFrom
-            );
-        }
-
-        public Task<SelectExactCardsGA> Reperform(SelectExactCardsGA action)
-        {
-            var player = _game.GetPlayerByName(action.Player.Name);
-            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
-            RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
-            return Task.FromResult(action);
-        }
-
-        private static void RemoveSelectedCardsFromOrigin(
-            IPlayerLogic player,
-            List<ICardLogic> selectedCards,
-            SelectExactCardsGA.SelectedCardsOrigin origin
-        )
-        {
-            switch (origin)
-            {
-                case SelectExactCardsGA.SelectedCardsOrigin.Hand:
-                    player.Hand.RemoveCards(selectedCards);
-                    break;
-                case SelectExactCardsGA.SelectedCardsOrigin.Deck:
-                    player.Deck.RemoveCards(selectedCards);
-                    break;
-                case SelectExactCardsGA.SelectedCardsOrigin.DiscardPile:
-                    player.DiscardPile.RemoveCards(selectedCards);
-                    break;
-                case SelectExactCardsGA.SelectedCardsOrigin.Other:
-                    // No removal needed for 'Other' origin
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
         public Task<PutRemainingCardsUnderDeckGA> Perform(PutRemainingCardsUnderDeckGA action)
         {
             action.Player.Deck.AddCards(Shuffle(action.RemainingCards));
@@ -461,6 +388,125 @@ namespace gamecore.game.action
                 card.Discard();
             }
             return Task.FromResult(action);
+        }
+
+        public async Task<SelectExactCardsGA> Perform(SelectExactCardsGA action)
+        {
+            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            var selectedCards = await GetSelectedCards(
+                action,
+                options,
+                _selectFromMap[action.Origin]
+            );
+            action.CardOptions.RemoveCards(selectedCards);
+
+            action.SelectedCards.AddRange(selectedCards);
+            action.RemainingCards.AddRange(options.Except(selectedCards));
+
+            return action;
+        }
+
+        private async Task<List<ICardLogic>> GetSelectedCards(
+            SelectExactCardsGA action,
+            List<ICardLogic> options,
+            SelectFrom selectFrom
+        )
+        {
+            return await _game.AwaitSelection(
+                action.Player,
+                options,
+                list => list.Count == action.NumberOfCards,
+                true,
+                selectFrom
+            );
+        }
+
+        public Task<SelectExactCardsGA> Reperform(SelectExactCardsGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
+            RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
+            return Task.FromResult(action);
+        }
+
+        public async Task<SelectUpToCardsGA> Perform(SelectUpToCardsGA action)
+        {
+            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            var selectedCards = await GetSelectedCards(
+                action,
+                options,
+                _selectFromMap[action.Origin]
+            );
+            action.CardOptions.RemoveCards(selectedCards);
+
+            action.SelectedCards.AddRange(selectedCards);
+            action.RemainingCards.AddRange(options.Except(selectedCards));
+
+            return action;
+        }
+
+        private async Task<List<ICardLogic>> GetSelectedCards(
+            SelectUpToCardsGA action,
+            List<ICardLogic> options,
+            SelectFrom selectFrom
+        )
+        {
+            return await _game.AwaitSelection(
+                action.Player,
+                options,
+                list => list.Count <= action.Amount,
+                false,
+                selectFrom
+            );
+        }
+
+        private static List<ICardLogic> GetOptions(
+            List<ICardLogic> availableCards,
+            Predicate<ICardLogic> cardCondition
+        )
+        {
+            if (cardCondition is null)
+                return availableCards;
+            var options = new List<ICardLogic>();
+            foreach (var card in availableCards)
+            {
+                if (cardCondition(card))
+                    options.Add(card);
+            }
+            return options;
+        }
+
+        public Task<SelectUpToCardsGA> Reperform(SelectUpToCardsGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
+            RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
+            return Task.FromResult(action);
+        }
+
+        private static void RemoveSelectedCardsFromOrigin(
+            IPlayerLogic player,
+            List<ICardLogic> selectedCards,
+            SelectExactCardsGA.SelectedCardsOrigin origin
+        )
+        {
+            switch (origin)
+            {
+                case SelectExactCardsGA.SelectedCardsOrigin.Hand:
+                    player.Hand.RemoveCards(selectedCards);
+                    break;
+                case SelectExactCardsGA.SelectedCardsOrigin.Deck:
+                    player.Deck.RemoveCards(selectedCards);
+                    break;
+                case SelectExactCardsGA.SelectedCardsOrigin.DiscardPile:
+                    player.DiscardPile.RemoveCards(selectedCards);
+                    break;
+                case SelectExactCardsGA.SelectedCardsOrigin.Other:
+                    // No removal needed for 'Other' origin
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }
