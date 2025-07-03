@@ -12,22 +12,25 @@ namespace gamecore.game.state
             TaskCompletionSource<List<ICardLogic>> selectTask,
             IPlayerLogic player,
             List<ICardLogic> options,
-            int amount,
-            SelectFrom selectFrom
+            Predicate<List<ICard>> selectionCondition,
+            SelectFrom selectFrom,
+            bool isQuickSelection
         )
         {
             _selectTask = selectTask;
             _player = player;
             _options = options;
-            _amount = amount;
             _selectFrom = selectFrom;
+            _selectionCondition = selectionCondition;
+            _isQuickSelection = isQuickSelection;
         }
 
         private readonly TaskCompletionSource<List<ICardLogic>> _selectTask;
         private readonly IPlayerLogic _player;
         private readonly List<ICardLogic> _options;
-        private readonly int _amount;
+        private readonly Predicate<List<ICard>> _selectionCondition;
         private readonly SelectFrom _selectFrom;
+        private readonly bool _isQuickSelection;
 
         public IGameState AdvanceSuccesfully()
         {
@@ -41,6 +44,11 @@ namespace gamecore.game.state
         {
             if (player != _player)
                 return new();
+            return CreateSelectCardsInteraction();
+        }
+
+        private List<GameInteraction> CreateSelectCardsInteraction()
+        {
             return new()
             {
                 new GameInteraction(
@@ -48,7 +56,11 @@ namespace gamecore.game.state
                     GameInteractionType.SelectCards,
                     new()
                     {
-                        new TargetData(_amount, _options.Cast<ICard>().ToList()),
+                        new ConditionalTargetData(
+                            _selectionCondition,
+                            _options.Cast<ICard>().ToList(),
+                            _isQuickSelection
+                        ),
                         new SelectFromData(_selectFrom),
                     }
                 ),
