@@ -27,9 +27,15 @@ namespace gamecore.card
                     {
                         new SelectCardsFromHandEffect(2),
                         new DiscardSelectedCardsEffect(),
+                        new SelectCardsFromDeckEffect(1, card => card.IsPokemonCard()),
+                        new TakeSelectionToHandEffect(),
                         new DiscardCardEffect(),
                     },
-                    conditions: new List<IUseCondition> { new HasAtLeatCardsInHand(3) }
+                    conditions: new List<IUseCondition>
+                    {
+                        new HasAtLeatCardsInHand(3),
+                        new HasCardsInDeck(),
+                    }
                 )
             },
             {

@@ -158,6 +158,9 @@ namespace gameview
                 case SelectFrom.Floating:
                     PrepareFloatingSelection(targetData.PossibleTargets);
                     break;
+                case SelectFrom.Deck:
+                    // PrepareFloatingSelection(interaction.);
+                    break;
                 default:
                     throw new NotImplementedException();
             }
