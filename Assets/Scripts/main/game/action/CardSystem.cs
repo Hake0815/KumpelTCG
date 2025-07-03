@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
-using gamecore.common;
 using gamecore.game.state;
-using UnityEngine;
+using static gamecore.game.action.SelectCardsGA;
 
 namespace gamecore.game.action
 {
@@ -25,7 +24,7 @@ namespace gamecore.game.action
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
             IActionPerformer<PlayCardGA>,
             IActionPerformer<SetActivePokemonGA>,
-            IActionPerformer<SelectCardsGA>,
+            IActionPerformer<SelectExactCardsGA>,
             IActionPerformer<DiscardCardsGA>,
             IActionSubscriber<StartTurnGA>
     {
@@ -37,15 +36,12 @@ namespace gamecore.game.action
         protected static readonly System.Random _rng = new();
 
         private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
-        private static readonly Dictionary<
-            SelectCardsGA.SelectedCardsOrigin,
-            SelectFrom
-        > _selectFromMap = new()
+        private static readonly Dictionary<SelectedCardsOrigin, SelectFrom> _selectFromMap = new()
         {
-            { SelectCardsGA.SelectedCardsOrigin.Hand, SelectFrom.InPlay },
-            { SelectCardsGA.SelectedCardsOrigin.Other, SelectFrom.Floating },
-            { SelectCardsGA.SelectedCardsOrigin.Deck, SelectFrom.Deck },
-            { SelectCardsGA.SelectedCardsOrigin.DiscardPile, SelectFrom.DiscardPile },
+            { SelectedCardsOrigin.Hand, SelectFrom.InPlay },
+            { SelectedCardsOrigin.Other, SelectFrom.Floating },
+            { SelectedCardsOrigin.Deck, SelectFrom.Deck },
+            { SelectedCardsOrigin.DiscardPile, SelectFrom.DiscardPile },
         };
 
         private Game _game;
@@ -66,7 +62,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
-            _actionSystem.AttachPerformer<SelectCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<SelectExactCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
@@ -87,7 +83,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
             _actionSystem.DetachPerformer<PlayCardGA>();
             _actionSystem.DetachPerformer<SetActivePokemonGA>();
-            _actionSystem.DetachPerformer<SelectCardsGA>();
+            _actionSystem.DetachPerformer<SelectExactCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
@@ -304,7 +300,7 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        public async Task<SelectCardsGA> Perform(SelectCardsGA action)
+        public async Task<SelectExactCardsGA> Perform(SelectExactCardsGA action)
         {
             var options = GetOptions(action);
             var selectedCards = await GetSelectedCards(
@@ -320,7 +316,7 @@ namespace gamecore.game.action
             return action;
         }
 
-        private static List<ICardLogic> GetOptions(SelectCardsGA action)
+        private static List<ICardLogic> GetOptions(SelectExactCardsGA action)
         {
             if (action.CardCondition is null)
                 return action.CardOptions.Cards;
@@ -334,7 +330,7 @@ namespace gamecore.game.action
         }
 
         private async Task<List<ICardLogic>> GetSelectedCards(
-            SelectCardsGA action,
+            SelectExactCardsGA action,
             List<ICardLogic> options,
             SelectFrom selectFrom
         )
@@ -347,7 +343,7 @@ namespace gamecore.game.action
             );
         }
 
-        public Task<SelectCardsGA> Reperform(SelectCardsGA action)
+        public Task<SelectExactCardsGA> Reperform(SelectExactCardsGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
             var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
@@ -358,21 +354,21 @@ namespace gamecore.game.action
         private static void RemoveSelectedCardsFromOrigin(
             IPlayerLogic player,
             List<ICardLogic> selectedCards,
-            SelectCardsGA.SelectedCardsOrigin origin
+            SelectExactCardsGA.SelectedCardsOrigin origin
         )
         {
             switch (origin)
             {
-                case SelectCardsGA.SelectedCardsOrigin.Hand:
+                case SelectExactCardsGA.SelectedCardsOrigin.Hand:
                     player.Hand.RemoveCards(selectedCards);
                     break;
-                case SelectCardsGA.SelectedCardsOrigin.Deck:
+                case SelectExactCardsGA.SelectedCardsOrigin.Deck:
                     player.Deck.RemoveCards(selectedCards);
                     break;
-                case SelectCardsGA.SelectedCardsOrigin.DiscardPile:
+                case SelectExactCardsGA.SelectedCardsOrigin.DiscardPile:
                     player.DiscardPile.RemoveCards(selectedCards);
                     break;
-                case SelectCardsGA.SelectedCardsOrigin.Other:
+                case SelectExactCardsGA.SelectedCardsOrigin.Other:
                     // No removal needed for 'Other' origin
                     break;
                 default:

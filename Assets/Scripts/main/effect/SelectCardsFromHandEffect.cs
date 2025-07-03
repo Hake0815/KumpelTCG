@@ -16,7 +16,7 @@ namespace gamecore.effect
         public void Perform(ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
-                new SelectCardsGA(
+                new SelectExactCardsGA(
                     card.Owner,
                     Amount,
                     card.Owner.Hand,
