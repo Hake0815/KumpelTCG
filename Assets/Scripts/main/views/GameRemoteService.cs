@@ -65,7 +65,7 @@ namespace gameview
         {
             return new Dictionary<string, int>
             {
-                { "bill", 8 },
+                { "professorsResearch", 8 },
                 { "TWM128", 8 },
                 { "TWM129", 8 },
                 { "ultraBall", 16 },
@@ -76,17 +76,29 @@ namespace gameview
 
         private void HandlePlayer1Interactions(object sender, List<GameInteraction> interactions)
         {
-            HandleInteraction(interactions);
+            UIQueue.INSTANCE.Queue(action =>
+            {
+                HandleInteraction(interactions);
+                action.Invoke();
+            });
         }
 
         private void HandlePlayer2Interactions(object sender, List<GameInteraction> interactions)
         {
-            HandleInteraction(interactions);
+            UIQueue.INSTANCE.Queue(action =>
+            {
+                HandleInteraction(interactions);
+                action.Invoke();
+            });
         }
 
         private void HandleGeneralInteractions(object sender, List<GameInteraction> interactions)
         {
-            HandleInteraction(interactions);
+            UIQueue.INSTANCE.Queue(action =>
+            {
+                HandleInteraction(interactions);
+                action.Invoke();
+            });
         }
 
         private void HandleInteraction(List<GameInteraction> interactions)
@@ -327,7 +339,6 @@ namespace gameview
                 button.interactable = conditionOnSelection(_selectedCards);
             }
 
-            Debug.Log($"Setting up selection for {possibleTargets.Count} possible targets");
             foreach (var possibleTarget in possibleTargets)
             {
                 _playableCards.Add(possibleTarget);

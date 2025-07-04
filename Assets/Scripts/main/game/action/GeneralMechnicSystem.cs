@@ -17,6 +17,7 @@ namespace gamecore.action
             IActionPerformer<PromoteGA>,
             IActionPerformer<RetreatGA>,
             IActionPerformer<PerformAbilityGA>,
+            IActionPerformer<PlaySupporterGA>,
             IActionPerformer<EvolveGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
@@ -37,6 +38,7 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<PromoteGA>(INSTANCE);
             _actionSystem.AttachPerformer<RetreatGA>(INSTANCE);
             _actionSystem.AttachPerformer<PerformAbilityGA>(INSTANCE);
+            _actionSystem.AttachPerformer<PlaySupporterGA>(INSTANCE);
             _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
             _game = game;
         }
@@ -49,6 +51,7 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<PromoteGA>();
             _actionSystem.DetachPerformer<RetreatGA>();
             _actionSystem.DetachPerformer<PerformAbilityGA>();
+            _actionSystem.DetachPerformer<PlaySupporterGA>();
             _actionSystem.DetachPerformer<EvolveGA>();
         }
 
@@ -262,6 +265,20 @@ namespace gamecore.action
 
             targetPokemon.WasEvolved();
             targetPokemon.SetPutInPlay();
+        }
+
+        public Task<PlaySupporterGA> Perform(PlaySupporterGA action)
+        {
+            action.Player.PerformedOncePerTurnActions.Add(SupporterCard.PLAYED_SUPPORTER_THIS_TURN);
+            return Task.FromResult(action);
+        }
+
+        public Task<PlaySupporterGA> Reperform(PlaySupporterGA action)
+        {
+            _game
+                .GetPlayerByName(action.Player.Name)
+                .PerformedOncePerTurnActions.Add(SupporterCard.PLAYED_SUPPORTER_THIS_TURN);
+            return Task.FromResult(action);
         }
     }
 }

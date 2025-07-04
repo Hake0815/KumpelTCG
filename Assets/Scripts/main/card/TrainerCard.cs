@@ -51,13 +51,13 @@ namespace gamecore.card
             Owner = owner;
         }
 
-        public void Play()
+        public virtual void Play()
         {
-            ActionSystem.INSTANCE.AddReaction(new RemoveCardFromHandGA(this));
+            ActionSystem.INSTANCE.AddReaction(new RemoveCardsFromHandGA(new() { this }, Owner));
             PerformEffects();
         }
 
-        public bool IsPlayable()
+        public virtual bool IsPlayable()
         {
             foreach (var condition in Conditions)
             {

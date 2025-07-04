@@ -10,11 +10,11 @@ namespace gamecore.card
         public static Dictionary<string, ICardData> cardDataDict = new()
         {
             {
-                "bill",
+                "professorsResearch",
                 new SupporterCardData(
-                    "Bill",
-                    "bill",
-                    new List<IEffect> { new DrawCardsEffect(2), new DiscardCardEffect() },
+                    "Professor's Research",
+                    "professorsResearch",
+                    new List<IEffect> { new DiscardHandEffect(), new DrawCardsEffect(7) },
                     new List<IUseCondition> { new HasCardsInDeck() }
                 )
             },

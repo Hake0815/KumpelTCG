@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
 using gamecore.game;
 using TMPro;
@@ -27,23 +30,18 @@ namespace gameview
         private void OnEnable()
         {
             if (_discardPile != null)
-                _discardPile.CardCountChanged += OnCardsChanged;
-        }
-
-        private void OnCardsChanged()
-        {
-            UpdateView();
+                _discardPile.CardCountChanged += UpdateView;
         }
 
         private void OnDisable()
         {
             if (_discardPile != null)
-                _discardPile.CardCountChanged -= OnCardsChanged;
+                _discardPile.CardCountChanged -= UpdateView;
         }
 
-        public void UpdateView()
+        private void UpdateView(List<ICard> cards)
         {
-            var topCard = _discardPile.LastCard;
+            var topCard = cards.LastOrDefault();
             if (topCard != null)
             {
                 _image.sprite = SpriteRegistry.INSTANCE.GetSprite(topCard.Id);
@@ -54,12 +52,12 @@ namespace gameview
                 _image.sprite = null;
                 _image.color = new Color(1, 1, 1, 0f);
             }
-            UpdateText();
+            Text.text = cards.Count.ToString();
         }
 
-        private void UpdateText()
+        public void UpdateView()
         {
-            Text.text = _discardPile.CardCount.ToString();
+            UpdateView(_discardPile.Cards);
         }
     }
 }

@@ -18,12 +18,12 @@ namespace gamecore.card
     {
         public List<ICardLogic> Cards { get; } = new();
 
-        public event Action CardCountChanged;
+        public event Action<List<ICard>> CardCountChanged;
         public event Action<List<ICard>> PrizesTaken;
 
         public void OnCardCountChanged()
         {
-            CardCountChanged?.Invoke();
+            CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
 
         public List<ICardLogic> TakePrizes(int amount)
