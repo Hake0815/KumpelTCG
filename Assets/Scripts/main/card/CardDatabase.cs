@@ -11,7 +11,7 @@ namespace gamecore.card
         {
             {
                 "bill",
-                new TrainerCardData(
+                new SupporterCardData(
                     "Bill",
                     "bill",
                     new List<IEffect> { new DrawCardsEffect(2), new DiscardCardEffect() },
@@ -20,7 +20,7 @@ namespace gamecore.card
             },
             {
                 "ultraBall",
-                new TrainerCardData(
+                new ItemCardData(
                     name: "Ultra Ball",
                     id: "ultraBall",
                     effects: new List<IEffect>
