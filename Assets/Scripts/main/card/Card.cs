@@ -30,9 +30,13 @@ namespace gamecore.card
                 return 1;
             if (!IsPokemonCard() && other.IsPokemonCard())
                 return -1;
-            if (IsTrainerCard() && !other.IsTrainerCard())
+            if (IsSupporterCard() && !other.IsSupporterCard())
                 return 1;
-            if (!IsTrainerCard() && other.IsTrainerCard())
+            if (!IsSupporterCard() && other.IsSupporterCard())
+                return -1;
+            if (IsItemCard() && !other.IsItemCard())
+                return 1;
+            if (!IsItemCard() && other.IsItemCard())
                 return -1;
             return 0;
         }
