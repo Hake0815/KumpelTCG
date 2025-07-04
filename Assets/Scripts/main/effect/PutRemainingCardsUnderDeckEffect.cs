@@ -11,18 +11,18 @@ namespace gamecore.effect
     {
         public void Perform(ICardLogic card)
         {
-            new EffectSubscriber<TakeSelectionToHandGA>(
+            new EffectSubscriber<DoOnSelectionGA>(
                 action => Reaction(action, card),
                 ReactionTiming.POST
             );
         }
 
-        private static TakeSelectionToHandGA Reaction(TakeSelectionToHandGA action, ICardLogic card)
+        private static bool Reaction(DoOnSelectionGA action, ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
                 new PutRemainingCardsUnderDeckGA(card.Owner, action.RemainingCards)
             );
-            return action;
+            return true;
         }
     }
 }

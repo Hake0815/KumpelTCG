@@ -5,19 +5,14 @@ using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
-    class TakeSelectionToHandGA : GameAction
+    class TakeSelectionToHandGA : DoOnSelectionGA
     {
         [JsonConstructor]
-        public TakeSelectionToHandGA(List<ICardLogic> options, IPlayerLogic player, int amount)
-        {
-            Options = options;
-            Player = player;
-            Amount = amount;
-        }
-
-        public List<ICardLogic> Options { get; }
-        public IPlayerLogic Player { get; }
-        public int Amount { get; }
-        public List<ICardLogic> RemainingCards { get; } = new();
+        public TakeSelectionToHandGA(
+            List<ICardLogic> selectedCards,
+            IPlayerLogic player,
+            List<ICardLogic> remainingCards
+        )
+            : base(selectedCards, player, remainingCards) { }
     }
 }

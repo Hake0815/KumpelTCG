@@ -19,6 +19,26 @@ namespace gamecore.card
                 )
             },
             {
+                "ultraBall",
+                new TrainerCardData(
+                    name: "Ultra Ball",
+                    id: "ultraBall",
+                    effects: new List<IEffect>
+                    {
+                        new SelectCardsFromHandEffect(2),
+                        new DiscardSelectedCardsEffect(),
+                        new SelectCardsFromDeckEffect(1, card => card.IsPokemonCard()),
+                        new TakeSelectionToHandEffect(),
+                        new DiscardCardEffect(),
+                    },
+                    conditions: new List<IUseCondition>
+                    {
+                        new HasAtLeastCardsInHand(3),
+                        new HasCardsInDeck(),
+                    }
+                )
+            },
+            {
                 "TWM128",
                 new PokemonCardData(
                     id: "TWM128",
@@ -72,9 +92,10 @@ namespace gamecore.card
                         new List<IUseCondition> { new HasCardsInDeck(), new AbilityNotUsed() },
                         new List<IEffect>
                         {
-                            new PutRemainingCardsUnderDeckEffect(),
-                            new TakeSelectionToHandEffect(1),
                             new RevealCardsFromDeckEffect(2),
+                            new SelectFromRevealedCardsEffect(1),
+                            new TakeSelectionToHandEffect(),
+                            new PutRemainingCardsUnderDeckEffect(),
                         }
                     )
                 )

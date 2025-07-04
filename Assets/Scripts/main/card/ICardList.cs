@@ -84,4 +84,18 @@ namespace gamecore.card
 
         void OnCardCountChanged();
     }
+
+    class CardListLogic : ICardListLogic
+    {
+        public List<ICardLogic> Cards { get; }
+
+        public CardListLogic(List<ICardLogic> cards)
+        {
+            Cards = cards;
+        }
+
+        public event Action CardCountChanged;
+
+        public void OnCardCountChanged() { }
+    }
 }

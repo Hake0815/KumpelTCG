@@ -55,6 +55,10 @@ namespace gameview
         [SerializeField]
         private FloatingSelectionView _floatingSelectionViewPrefab;
         private FloatingSelectionView _floatingSelectionView;
+
+        [SerializeField]
+        private DeckSearchView _deckSearchViewPrefab;
+        private DeckSearchView _deckSearchView;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
         private readonly Dictionary<IPlayer, PrizeView> _playerPrizeViews = new();
@@ -73,6 +77,7 @@ namespace gameview
             Instantiate(_cardViewCreatorPrefab);
             Instantiate(_inputHandlerPrefab);
             _floatingSelectionView = Instantiate(_floatingSelectionViewPrefab);
+            _deckSearchView = Instantiate(_deckSearchViewPrefab);
 
             new GameRemoteService(this);
         }
@@ -322,7 +327,7 @@ namespace gameview
             return _mulliganSelectorView;
         }
 
-        internal void EnableDoneButton(Action gameControllerMethod, Action onInteract)
+        internal Button EnableDoneButton(Action gameControllerMethod, Action onInteract)
         {
             _button.gameObject.SetActive(true);
             _buttonText.text = "Done";
@@ -332,6 +337,7 @@ namespace gameview
                 onInteract();
                 gameControllerMethod();
             });
+            return _button;
         }
 
         internal void ShowGameOver(IPlayer winner)
@@ -348,6 +354,16 @@ namespace gameview
         internal void DisableFloatingSelection()
         {
             _floatingSelectionView.Clear();
+        }
+
+        internal void ActivateDeckSearchView(IDeck deck)
+        {
+            _deckSearchView.DisplayCards(deck);
+        }
+
+        internal void DisableDeckSearchView()
+        {
+            _deckSearchView.Clear();
         }
     }
 }

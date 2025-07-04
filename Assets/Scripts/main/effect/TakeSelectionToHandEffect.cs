@@ -9,27 +9,23 @@ namespace gamecore.effect
 {
     class TakeSelectionToHandEffect : IEffect
     {
-        public int Amount { get; }
-
-        public TakeSelectionToHandEffect(int amount)
-        {
-            Amount = amount;
-        }
-
         public void Perform(ICardLogic card)
         {
-            new EffectSubscriber<RevealCardsFromDeckGA>(
+            new EffectSubscriber<SelectCardsGA>(
                 action => Reaction(action, card),
                 ReactionTiming.POST
             );
         }
 
-        private RevealCardsFromDeckGA Reaction(RevealCardsFromDeckGA action, ICardLogic card)
+        private static bool Reaction(SelectCardsGA action, ICardLogic card)
         {
+            if (action.WasReactedTo)
+                return false;
             ActionSystem.INSTANCE.AddReaction(
-                new TakeSelectionToHandGA(action.RevealedCards, card.Owner, Amount)
+                new TakeSelectionToHandGA(action.SelectedCards, card.Owner, action.RemainingCards)
             );
-            return action;
+            action.WasReactedTo = true;
+            return true;
         }
     }
 }
