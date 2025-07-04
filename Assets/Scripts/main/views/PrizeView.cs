@@ -54,12 +54,12 @@ namespace gameview
             }
         }
 
-        public void UpdateView()
+        private void UpdateView(List<ICard> cards)
         {
             UIQueue.INSTANCE.Queue(
                 (OnUICompleted) =>
                 {
-                    _countText.text = _prizes.CardCount.ToString();
+                    _countText.text = cards.Count.ToString();
                     var horizontalSpacing = _rectTransform.rect.width / 3f;
                     var verticalSpacing = _rectTransform.rect.height / 2f;
                     var relativeRight = _rectTransform.rotation * Vector3.right;
@@ -69,7 +69,7 @@ namespace gameview
                         + horizontalSpacing / 2f * relativeRight
                         + verticalSpacing / 2f * relativeDown;
                     int i = 0;
-                    foreach (var prizeCard in _prizes)
+                    foreach (var prizeCard in cards)
                     {
                         var cardView = CardViewRegistry.INSTANCE.Get(prizeCard);
                         if (i < 3)
@@ -93,6 +93,11 @@ namespace gameview
                     OnUICompleted.Invoke();
                 }
             );
+        }
+
+        public void UpdateView()
+        {
+            UpdateView(_prizes.Cards);
         }
     }
 }

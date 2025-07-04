@@ -62,30 +62,22 @@ namespace gamecore.card
 
         public int GetNumberOfTargets() => 1;
 
-        public bool IsEnergyCard()
-        {
-            return true;
-        }
-
-        public bool IsPlayable()
-        {
-            return false;
-        }
+        public bool IsPlayable() => false;
 
         public bool IsPlayableWithTargets()
         {
             return !Owner.PerformedOncePerTurnActions.Contains(ATTACHED_ENERGY_FOR_TURN);
         }
 
-        public bool IsPokemonCard()
-        {
-            return false;
-        }
+        public bool IsPokemonCard() => false;
 
-        public bool IsTrainerCard()
-        {
-            return false;
-        }
+        public bool IsTrainerCard() => false;
+
+        public bool IsSupporterCard() => false;
+
+        public bool IsItemCard() => false;
+
+        public bool IsEnergyCard() => true;
 
         public void Play()
         {

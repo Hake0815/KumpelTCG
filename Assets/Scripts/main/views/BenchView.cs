@@ -53,7 +53,7 @@ namespace gameview
             return false;
         }
 
-        public void UpdateBenchedPokemonPositions()
+        private void UpdateBenchedPokemonPositions(List<ICard> cards)
         {
             UIQueue.INSTANCE.Queue(
                 (callback) =>
@@ -67,7 +67,7 @@ namespace gameview
                         + Vector3.back;
 
                     int i = 0;
-                    foreach (var pokemon in benchedPokemon)
+                    foreach (var pokemon in cards)
                     {
                         var pokemonView = CardViewRegistry.INSTANCE.Get(pokemon);
                         pokemonView.transform.DOMove(
@@ -83,6 +83,11 @@ namespace gameview
                     callback.Invoke();
                 }
             );
+        }
+
+        public void UpdateBenchedPokemonPositions()
+        {
+            UpdateBenchedPokemonPositions(_player.Bench.Cards);
         }
     }
 }

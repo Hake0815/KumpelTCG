@@ -12,7 +12,7 @@ namespace gamecore.card
         {
             get => Cards.Count;
         }
-        event Action CardCountChanged;
+        event Action<List<ICard>> CardCountChanged;
 
         IEnumerator<ICard> IEnumerable<ICard>.GetEnumerator()
         {
@@ -94,7 +94,7 @@ namespace gamecore.card
             Cards = cards;
         }
 
-        public event Action CardCountChanged;
+        public event Action<List<ICard>> CardCountChanged;
 
         public void OnCardCountChanged() { }
     }

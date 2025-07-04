@@ -13,11 +13,11 @@ namespace gamecore.card
     {
         public List<ICardLogic> Cards { get; } = new();
 
-        public event Action CardCountChanged;
+        public event Action<List<ICard>> CardCountChanged;
 
         public void OnCardCountChanged()
         {
-            CardCountChanged?.Invoke();
+            CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
     }
 }

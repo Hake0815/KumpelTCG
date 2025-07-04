@@ -16,9 +16,13 @@ namespace gamecore.card
             }
 
             var cardData = CardDatabase.cardDataDict[id];
-            if (cardData is ITrainerCardData trainerCardData)
+            if (cardData is SupporterCardData supporterCardData)
             {
-                return new TrainerCard(trainerCardData, owner, deckId);
+                return new SupporterCard(supporterCardData, owner, deckId);
+            }
+            if (cardData is ItemCardData itemCardData)
+            {
+                return new ItemCard(itemCardData, owner, deckId);
             }
             else if (cardData is IPokemonCardData pokemonCardData)
             {

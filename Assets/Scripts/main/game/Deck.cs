@@ -28,7 +28,7 @@ namespace gamecore.game
             get => Cards.Count;
         }
 
-        public event Action CardCountChanged;
+        public event Action<List<ICard>> CardCountChanged;
         public event Action<List<ICard>> CardsDrawn;
         public event Action<List<ICard>> CardsDrawnFaceDown;
         public event Action<List<ICard>> CardsAdded;
@@ -90,7 +90,7 @@ namespace gamecore.game
 
         public void OnCardCountChanged()
         {
-            CardCountChanged?.Invoke();
+            CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
 
         public void OnCardsDrawn(List<ICardLogic> cards)

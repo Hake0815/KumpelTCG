@@ -15,7 +15,7 @@ namespace gamecore.game
     class DiscardPile : IDiscardPileLogic
     {
         public List<ICardLogic> Cards { get; } = new();
-        public event Action CardCountChanged;
+        public event Action<List<ICard>> CardCountChanged;
 
         public int CardCount
         {
@@ -29,7 +29,7 @@ namespace gamecore.game
 
         public void OnCardCountChanged()
         {
-            CardCountChanged?.Invoke();
+            CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
     }
 }

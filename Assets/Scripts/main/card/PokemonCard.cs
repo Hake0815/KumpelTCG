@@ -225,15 +225,15 @@ namespace gamecore.card
             return true;
         }
 
-        public bool IsPokemonCard()
-        {
-            return true;
-        }
+        public bool IsPokemonCard() => true;
 
-        public bool IsTrainerCard()
-        {
-            return false;
-        }
+        public bool IsTrainerCard() => false;
+
+        public bool IsSupporterCard() => false;
+
+        public bool IsItemCard() => false;
+
+        public bool IsEnergyCard() => false;
 
         public bool IsPlayable()
         {
@@ -299,11 +299,6 @@ namespace gamecore.card
         }
 
         public int GetNumberOfTargets() => 1;
-
-        public bool IsEnergyCard()
-        {
-            return false;
-        }
 
         public void AttachEnergyCards(List<IEnergyCardLogic> energyCards)
         {
