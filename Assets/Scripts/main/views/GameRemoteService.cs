@@ -65,10 +65,10 @@ namespace gameview
         {
             return new Dictionary<string, int>
             {
-                { "bill", 16 },
+                { "bill", 8 },
                 { "TWM128", 8 },
                 { "TWM129", 8 },
-                { "ultraBall", 8 },
+                { "ultraBall", 16 },
                 { "FireNRG", 10 },
                 { "PsychicNRG", 10 },
             };
