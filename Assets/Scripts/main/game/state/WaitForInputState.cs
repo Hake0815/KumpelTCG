@@ -49,6 +49,10 @@ namespace gamecore.game.state
 
         private List<GameInteraction> CreateSelectCardsInteraction()
         {
+            var selectFromData =
+                _selectFrom == SelectFrom.Deck
+                    ? new SelectFromData(_selectFrom, _player.Deck)
+                    : new SelectFromData(_selectFrom);
             return new()
             {
                 new GameInteraction(
@@ -61,7 +65,7 @@ namespace gamecore.game.state
                             _options.Cast<ICard>().ToList(),
                             _isQuickSelection
                         ),
-                        new SelectFromData(_selectFrom),
+                        selectFromData,
                     }
                 ),
             };

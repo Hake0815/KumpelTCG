@@ -20,6 +20,7 @@ namespace gamecore.game.action
 
         public List<ICardLogic> SelectedCards { get; } = new();
         public List<ICardLogic> RemainingCards { get; } = new();
+        public bool WasReactedTo { get; set; } = false;
 
         internal enum SelectedCardsOrigin
         {

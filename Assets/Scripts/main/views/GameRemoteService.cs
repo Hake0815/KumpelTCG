@@ -5,6 +5,7 @@ using System.Linq;
 using gamecore.card;
 using gamecore.game;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace gameview
 {
@@ -151,7 +152,8 @@ namespace gameview
         {
             var targetData =
                 interaction.Data[typeof(ConditionalTargetData)] as ConditionalTargetData;
-            switch ((interaction.Data[typeof(SelectFromData)] as SelectFromData).SelectFrom)
+            var selectFromData = interaction.Data[typeof(SelectFromData)] as SelectFromData;
+            switch (selectFromData.SelectFrom)
             {
                 case SelectFrom.InPlay:
                     // Nothing to do here
@@ -160,7 +162,7 @@ namespace gameview
                     PrepareFloatingSelection(targetData.PossibleTargets);
                     break;
                 case SelectFrom.Deck:
-                    // PrepareFloatingSelection(interaction.);
+                    PrepareDeckSearch(selectFromData.Deck);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -177,6 +179,11 @@ namespace gameview
         private void PrepareFloatingSelection(List<ICard> possibleTargets)
         {
             _gameManager.ActivateFloatingSelectionView(possibleTargets);
+        }
+
+        private void PrepareDeckSearch(IDeck deck)
+        {
+            _gameManager.ActivateDeckSearchView(deck);
         }
 
         private static void SimpleProceed(GameInteraction interaction)
@@ -301,6 +308,26 @@ namespace gameview
             bool isQuickSelection
         )
         {
+            ClearSelectedCards();
+            Button button = null;
+            if (!isQuickSelection)
+            {
+                button = _gameManager.EnableDoneButton(
+                    () =>
+                    {
+                        gameControllerMethodWithTargets.Invoke(_selectedCards);
+                        ClearSelectedCards();
+                    },
+                    () =>
+                    {
+                        OnInteract();
+                        _gameManager.DisableDeckSearchView();
+                    }
+                );
+                button.interactable = conditionOnSelection(_selectedCards);
+            }
+
+            Debug.Log($"Setting up selection for {possibleTargets.Count} possible targets");
             foreach (var possibleTarget in possibleTargets)
             {
                 _playableCards.Add(possibleTarget);
@@ -313,7 +340,7 @@ namespace gameview
                                 cardView,
                                 conditionOnSelection,
                                 gameControllerMethodWithTargets,
-                                isQuickSelection
+                                button
                             )
                     )
                 );
@@ -324,23 +351,55 @@ namespace gameview
             CardView cardView,
             Predicate<List<ICard>> conditionOnSelection,
             Action<List<ICard>> gameControllerMethodWithTargets,
-            bool isQuickSelection
+            Button confirmButton
         )
         {
             if (cardView.Selected)
             {
-                cardView.Selected = false;
-                _selectedCards.Remove(cardView.Card);
+                UnselectCardView(cardView);
+                UpdateConfirmButton(conditionOnSelection, confirmButton);
                 return;
             }
+            SelectCardView(cardView);
+
+            if (confirmButton != null)
+            {
+                if (confirmButton.interactable && !conditionOnSelection(_selectedCards))
+                    UnselectCardView(cardView);
+                confirmButton.interactable = conditionOnSelection(_selectedCards);
+            }
+            else
+            {
+                if (conditionOnSelection(_selectedCards))
+                {
+                    OnInteract();
+                    gameControllerMethodWithTargets.Invoke(_selectedCards);
+                    ClearSelectedCards();
+                }
+            }
+        }
+
+        private void UpdateConfirmButton(
+            Predicate<List<ICard>> conditionOnSelection,
+            Button confirmButton
+        )
+        {
+            if (confirmButton != null)
+            {
+                confirmButton.interactable = conditionOnSelection(_selectedCards);
+            }
+        }
+
+        private void SelectCardView(CardView cardView)
+        {
             cardView.Selected = true;
             _selectedCards.Add(cardView.Card);
-            if (conditionOnSelection(_selectedCards))
-            {
-                OnInteract();
-                gameControllerMethodWithTargets.Invoke(_selectedCards);
-                ClearSelectedCards();
-            }
+        }
+
+        private void UnselectCardView(CardView cardView)
+        {
+            cardView.Selected = false;
+            _selectedCards.Remove(cardView.Card);
         }
 
         private void HandleSelectActivePokemon(GameInteraction interaction)

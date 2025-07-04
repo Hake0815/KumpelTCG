@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.state;
+using UnityEngine;
 using static gamecore.game.action.SelectCardsGA;
 
 namespace gamecore.game.action
@@ -12,7 +13,6 @@ namespace gamecore.game.action
     class CardSystem
         : IActionPerformer<DrawCardGA>,
             IActionPerformer<DrawMulliganCardsGA>,
-            IActionPerformer<DiscardCardsFromHandGA>,
             IActionPerformer<AttachEnergyFromHandGA>,
             IActionPerformer<AttachEnergyFromHandForTurnGA>,
             IActionPerformer<DiscardAttachedEnergyCardsGA>,
@@ -27,6 +27,7 @@ namespace gamecore.game.action
             IActionPerformer<SelectExactCardsGA>,
             IActionPerformer<SelectUpToCardsGA>,
             IActionPerformer<DiscardCardsGA>,
+            IActionPerformer<RemoveCardFromHandGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -51,7 +52,6 @@ namespace gamecore.game.action
         {
             _actionSystem.AttachPerformer<DrawCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<DrawMulliganCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
@@ -66,6 +66,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<SelectExactCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<SelectUpToCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RemoveCardFromHandGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -74,7 +75,6 @@ namespace gamecore.game.action
         {
             _actionSystem.DetachPerformer<DrawCardGA>();
             _actionSystem.DetachPerformer<DrawMulliganCardsGA>();
-            _actionSystem.DetachPerformer<DiscardCardsFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
@@ -88,6 +88,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<SelectExactCardsGA>();
             _actionSystem.DetachPerformer<SelectUpToCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsGA>();
+            _actionSystem.DetachPerformer<RemoveCardFromHandGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -124,33 +125,6 @@ namespace gamecore.game.action
         {
             _game.GameState = new SelectBenchPokemonState();
             return Task.FromResult(drawCardGA);
-        }
-
-        public Task<DiscardCardsFromHandGA> Perform(DiscardCardsFromHandGA action)
-        {
-            foreach (var card in action.Cards)
-            {
-                DiscardCardFromHand(card);
-            }
-            return Task.FromResult(action);
-        }
-
-        public Task<DiscardCardsFromHandGA> Reperform(DiscardCardsFromHandGA action)
-        {
-            foreach (var card in action.Cards)
-            {
-                var cardReference = _game
-                    .GetPlayerByName(card.Owner.Name)
-                    .DeckList.GetCardByDeckId(card.DeckId);
-                DiscardCardFromHand(cardReference);
-            }
-            return Task.FromResult(action);
-        }
-
-        private static void DiscardCardFromHand(ICardLogic card)
-        {
-            card.Discard();
-            card.Owner.Hand.RemoveCards(new() { card });
         }
 
         public Task<AttachEnergyFromHandGA> Perform(AttachEnergyFromHandGA action)
@@ -432,6 +406,9 @@ namespace gamecore.game.action
         public async Task<SelectUpToCardsGA> Perform(SelectUpToCardsGA action)
         {
             var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            Debug.Log(
+                $"Found {options.Count} options out of {action.CardOptions.Cards.Count} total cards"
+            );
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
@@ -507,6 +484,20 @@ namespace gamecore.game.action
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        public Task<RemoveCardFromHandGA> Perform(RemoveCardFromHandGA action)
+        {
+            action.card.Owner.Hand.RemoveCard(action.card);
+            return Task.FromResult(action);
+        }
+
+        public Task<RemoveCardFromHandGA> Reperform(RemoveCardFromHandGA action)
+        {
+            var player = _game.GetPlayerByName(action.card.Owner.Name);
+            var card = player.DeckList.GetCardByDeckId(action.card.DeckId);
+            player.Hand.RemoveCard(card);
+            return Task.FromResult(action);
         }
     }
 }

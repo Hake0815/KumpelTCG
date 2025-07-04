@@ -17,12 +17,15 @@ namespace gamecore.effect
             );
         }
 
-        private static SelectCardsGA Reaction(SelectCardsGA action, ICardLogic card)
+        private static bool Reaction(SelectCardsGA action, ICardLogic card)
         {
+            if (action.WasReactedTo)
+                return false;
             ActionSystem.INSTANCE.AddReaction(
                 new TakeSelectionToHandGA(action.SelectedCards, card.Owner, action.RemainingCards)
             );
-            return action;
+            action.WasReactedTo = true;
+            return true;
         }
     }
 }

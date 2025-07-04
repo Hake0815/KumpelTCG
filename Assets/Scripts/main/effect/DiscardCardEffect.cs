@@ -11,9 +11,7 @@ namespace gamecore.effect
     {
         public void Perform(ICardLogic card)
         {
-            ActionSystem.INSTANCE.AddReaction(
-                new DiscardCardsFromHandGA(new List<ICardLogic> { card })
-            );
+            ActionSystem.INSTANCE.AddReaction(new DiscardCardsGA(new List<ICardLogic> { card }));
         }
     }
 }

@@ -148,6 +148,13 @@ namespace gamecore.game
     public record SelectFromData : IGameInteractionData
     {
         public SelectFrom SelectFrom { get; }
+        public IDeck Deck { get; }
+
+        public SelectFromData(SelectFrom selectFrom, IDeck deck)
+        {
+            SelectFrom = selectFrom;
+            Deck = deck;
+        }
 
         public SelectFromData(SelectFrom selectFrom)
         {
