@@ -14,6 +14,8 @@ namespace gamecore.card
         string Name { get; }
         string Id { get; }
         bool IsTrainerCard();
+        bool IsSupporterCard();
+        bool IsItemCard();
         bool IsPokemonCard();
         bool IsEnergyCard();
         int CompareTo(ICard other, Predicate<ICard> _cardCondition)

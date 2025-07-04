@@ -21,7 +21,7 @@ namespace gamecore.card
         List<IUseCondition> Conditions { get; }
     }
 
-    class TrainerCard : ITrainerCardLogic
+    abstract class TrainerCard : ITrainerCardLogic
     {
         private readonly ITrainerCardData _trainerCardData;
         public string Name => _trainerCardData.Name;
@@ -29,14 +29,13 @@ namespace gamecore.card
         public IPlayerLogic Owner { get; }
         public List<IEffect> Effects { get; }
         public List<IUseCondition> Conditions { get; }
-
         IPlayer ICard.Owner => Owner;
 
         public int DeckId { get; }
 
         public event Action CardDiscarded;
 
-        public TrainerCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
+        protected TrainerCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
         {
             _trainerCardData = cardData;
             Owner = owner;
@@ -46,7 +45,7 @@ namespace gamecore.card
         }
 
         [JsonConstructor]
-        public TrainerCard(string name, string id, int deckId, IPlayerLogic owner)
+        protected TrainerCard(string name, string id, int deckId, IPlayerLogic owner)
         {
             DeckId = deckId;
             Owner = owner;
@@ -84,30 +83,21 @@ namespace gamecore.card
             CardDiscarded?.Invoke();
         }
 
-        public bool IsTrainerCard()
-        {
-            return true;
-        }
+        public bool IsTrainerCard() => true;
 
-        public bool IsPokemonCard()
-        {
-            return false;
-        }
+        public abstract bool IsSupporterCard();
+        public abstract bool IsItemCard();
+
+        public bool IsPokemonCard() => false;
 
         public void PlayWithTargets(List<ICardLogic> targets)
         {
             throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }
 
-        public bool IsPlayableWithTargets()
-        {
-            return false;
-        }
+        public bool IsPlayableWithTargets() => false;
 
-        public bool IsEnergyCard()
-        {
-            return false;
-        }
+        public bool IsEnergyCard() => false;
 
         public List<ICardLogic> GetPossibleTargets()
         {
