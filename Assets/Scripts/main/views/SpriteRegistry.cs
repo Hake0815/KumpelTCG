@@ -14,7 +14,7 @@ namespace gameview
 
         private readonly Dictionary<string, Sprite> _sprites = new()
         {
-            { "bill", Resources.Load<Sprite>("Images/Cards/bill") },
+            { "professorsResearch", Resources.Load<Sprite>("Images/Cards/JTG_155_R_EN_LG") },
             { "ultraBall", Resources.Load<Sprite>("Images/Cards/SVI_196_R_EN_LG") },
             { "TWM128", Resources.Load<Sprite>("Images/Cards/TWM_128_R_EN_LG") },
             { "TWM129", Resources.Load<Sprite>("Images/Cards/TWM_129_R_EN_LG") },

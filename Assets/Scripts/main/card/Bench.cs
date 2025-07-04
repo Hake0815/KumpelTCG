@@ -29,11 +29,11 @@ namespace gamecore.card
         public List<ICardLogic> Cards { get; } = new();
         public int MaxBenchSpots { get; set; } = 5;
 
-        public event Action CardCountChanged;
+        public event Action<List<ICard>> CardCountChanged;
 
         public void OnCardCountChanged()
         {
-            CardCountChanged?.Invoke();
+            CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
 
         public void ReplaceInPlace(IPokemonCardLogic oldPokemon, IPokemonCardLogic newPokemon)
