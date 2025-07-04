@@ -99,6 +99,7 @@ namespace gameview
                 _displayedCards.Add(cardView);
                 _cardViewColliders.Add(cardView.GetComponent<Collider2D>());
             }
+            _displayedCards.Sort(CardViewComparer.Create());
             _totalCardCount = _displayedCards.Count;
             UpdateView();
             SetUpHide();
@@ -129,7 +130,6 @@ namespace gameview
             _increaseCurrentIdButton.interactable = _currentCardFocusIndex < _totalCardCount - 1;
             _decreaseCurrentIdButton.interactable = _currentCardFocusIndex > 0;
             ArangeCards();
-            // ArangeCardsAfterCurrentIndex();
         }
 
         private void ArangeCards()
@@ -173,7 +173,6 @@ namespace gameview
 
         private void HideThis(Collider2D clickedCollider)
         {
-            Debug.Log($"Clicked on ${EventSystem.current.currentSelectedGameObject}");
             if (
                 _cardViewColliders.Contains(clickedCollider)
                 || EventSystem.current.currentSelectedGameObject == _toggleCardsButton.gameObject

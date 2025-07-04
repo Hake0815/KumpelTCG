@@ -373,6 +373,8 @@ namespace gamecore.game.action
                 _selectFromMap[action.Origin]
             );
             action.CardOptions.RemoveCards(selectedCards);
+            if (action.Origin == SelectedCardsOrigin.Deck)
+                action.Player.Deck.Shuffle();
 
             action.SelectedCards.AddRange(selectedCards);
             action.RemainingCards.AddRange(options.Except(selectedCards));
@@ -415,6 +417,8 @@ namespace gamecore.game.action
                 _selectFromMap[action.Origin]
             );
             action.CardOptions.RemoveCards(selectedCards);
+            if (action.Origin == SelectedCardsOrigin.Deck)
+                action.Player.Deck.Shuffle();
 
             action.SelectedCards.AddRange(selectedCards);
             action.RemainingCards.AddRange(options.Except(selectedCards));
@@ -464,21 +468,21 @@ namespace gamecore.game.action
         private static void RemoveSelectedCardsFromOrigin(
             IPlayerLogic player,
             List<ICardLogic> selectedCards,
-            SelectExactCardsGA.SelectedCardsOrigin origin
+            SelectedCardsOrigin origin
         )
         {
             switch (origin)
             {
-                case SelectExactCardsGA.SelectedCardsOrigin.Hand:
+                case SelectedCardsOrigin.Hand:
                     player.Hand.RemoveCards(selectedCards);
                     break;
-                case SelectExactCardsGA.SelectedCardsOrigin.Deck:
+                case SelectedCardsOrigin.Deck:
                     player.Deck.RemoveCards(selectedCards);
                     break;
-                case SelectExactCardsGA.SelectedCardsOrigin.DiscardPile:
+                case SelectedCardsOrigin.DiscardPile:
                     player.DiscardPile.RemoveCards(selectedCards);
                     break;
-                case SelectExactCardsGA.SelectedCardsOrigin.Other:
+                case SelectedCardsOrigin.Other:
                     // No removal needed for 'Other' origin
                     break;
                 default:
