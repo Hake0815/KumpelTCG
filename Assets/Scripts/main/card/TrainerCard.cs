@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.effect;
 using gamecore.game;
+using gamecore.game.action;
 using Newtonsoft.Json;
 
 namespace gamecore.card
@@ -52,6 +54,7 @@ namespace gamecore.card
 
         public void Play()
         {
+            ActionSystem.INSTANCE.AddReaction(new RemoveCardFromHandGA(this));
             PerformEffects();
         }
 

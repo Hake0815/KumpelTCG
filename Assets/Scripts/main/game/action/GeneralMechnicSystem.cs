@@ -161,7 +161,8 @@ namespace gamecore.action
             var selection = await _game.AwaitSelection(
                 player,
                 player.Bench.Cards,
-                1,
+                list => list.Count == 1,
+                true,
                 SelectFrom.InPlay
             );
             return selection[0] as IPokemonCardLogic;

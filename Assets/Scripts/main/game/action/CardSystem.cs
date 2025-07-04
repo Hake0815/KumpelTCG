@@ -6,13 +6,13 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.state;
 using UnityEngine;
+using static gamecore.game.action.SelectCardsGA;
 
 namespace gamecore.game.action
 {
     class CardSystem
         : IActionPerformer<DrawCardGA>,
             IActionPerformer<DrawMulliganCardsGA>,
-            IActionPerformer<DiscardCardsFromHandGA>,
             IActionPerformer<AttachEnergyFromHandGA>,
             IActionPerformer<AttachEnergyFromHandForTurnGA>,
             IActionPerformer<DiscardAttachedEnergyCardsGA>,
@@ -24,6 +24,10 @@ namespace gamecore.game.action
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
             IActionPerformer<PlayCardGA>,
             IActionPerformer<SetActivePokemonGA>,
+            IActionPerformer<SelectExactCardsGA>,
+            IActionPerformer<SelectUpToCardsGA>,
+            IActionPerformer<DiscardCardsGA>,
+            IActionPerformer<RemoveCardFromHandGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -34,13 +38,20 @@ namespace gamecore.game.action
         protected static readonly System.Random _rng = new();
 
         private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        private static readonly Dictionary<SelectedCardsOrigin, SelectFrom> _selectFromMap = new()
+        {
+            { SelectedCardsOrigin.Hand, SelectFrom.InPlay },
+            { SelectedCardsOrigin.Other, SelectFrom.Floating },
+            { SelectedCardsOrigin.Deck, SelectFrom.Deck },
+            { SelectedCardsOrigin.DiscardPile, SelectFrom.DiscardPile },
+        };
+
         private Game _game;
 
         public void Enable(Game game)
         {
             _actionSystem.AttachPerformer<DrawCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<DrawMulliganCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<DiscardCardsFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
@@ -52,6 +63,10 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
+            _actionSystem.AttachPerformer<SelectExactCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<SelectUpToCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RemoveCardFromHandGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -60,7 +75,6 @@ namespace gamecore.game.action
         {
             _actionSystem.DetachPerformer<DrawCardGA>();
             _actionSystem.DetachPerformer<DrawMulliganCardsGA>();
-            _actionSystem.DetachPerformer<DiscardCardsFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandGA>();
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
@@ -71,6 +85,10 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
             _actionSystem.DetachPerformer<PlayCardGA>();
             _actionSystem.DetachPerformer<SetActivePokemonGA>();
+            _actionSystem.DetachPerformer<SelectExactCardsGA>();
+            _actionSystem.DetachPerformer<SelectUpToCardsGA>();
+            _actionSystem.DetachPerformer<DiscardCardsGA>();
+            _actionSystem.DetachPerformer<RemoveCardFromHandGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -107,33 +125,6 @@ namespace gamecore.game.action
         {
             _game.GameState = new SelectBenchPokemonState();
             return Task.FromResult(drawCardGA);
-        }
-
-        public Task<DiscardCardsFromHandGA> Perform(DiscardCardsFromHandGA action)
-        {
-            foreach (var card in action.Cards)
-            {
-                DiscardCardFromHand(card);
-            }
-            return Task.FromResult(action);
-        }
-
-        public Task<DiscardCardsFromHandGA> Reperform(DiscardCardsFromHandGA action)
-        {
-            foreach (var card in action.Cards)
-            {
-                var cardReference = _game
-                    .GetPlayerByName(card.Owner.Name)
-                    .DeckList.GetCardByDeckId(card.DeckId);
-                DiscardCardFromHand(cardReference);
-            }
-            return Task.FromResult(action);
-        }
-
-        private static void DiscardCardFromHand(ICardLogic card)
-        {
-            card.Discard();
-            card.Owner.Hand.RemoveCards(new() { card });
         }
 
         public Task<AttachEnergyFromHandGA> Perform(AttachEnergyFromHandGA action)
@@ -272,27 +263,16 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        public async Task<TakeSelectionToHandGA> Perform(TakeSelectionToHandGA action)
+        public Task<TakeSelectionToHandGA> Perform(TakeSelectionToHandGA action)
         {
-            var selectedCards = await _game.AwaitSelection(
-                action.Player,
-                action.Options,
-                action.Amount,
-                SelectFrom.Floating
-            );
-            action.Player.Hand.AddCards(selectedCards);
-            action.RemainingCards.AddRange(action.Options.Except(selectedCards));
-            return action;
+            action.Player.Hand.AddCards(action.SelectedCards);
+            return Task.FromResult(action);
         }
 
         public Task<TakeSelectionToHandGA> Reperform(TakeSelectionToHandGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
-            var selectedStubs = action.Options;
-            selectedStubs.RemoveAll(card =>
-                action.RemainingCards.Select(card => card.DeckId).Contains(card.DeckId)
-            );
-            var selectedCards = player.DeckList.GetCardsByDeckIds(selectedStubs);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
             player.Hand.AddCards(selectedCards);
             return Task.FromResult(action);
         }
@@ -364,6 +344,164 @@ namespace gamecore.game.action
             {
                 throw new Exception("There is already an active pokemon");
             }
+        }
+
+        public Task<DiscardCardsGA> Perform(DiscardCardsGA action)
+        {
+            foreach (var card in action.Cards)
+            {
+                card.Discard();
+            }
+            return Task.FromResult(action);
+        }
+
+        public Task<DiscardCardsGA> Reperform(DiscardCardsGA action)
+        {
+            foreach (var card in _game.FindCardsAnywhere(action.Cards))
+            {
+                card.Discard();
+            }
+            return Task.FromResult(action);
+        }
+
+        public async Task<SelectExactCardsGA> Perform(SelectExactCardsGA action)
+        {
+            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            var selectedCards = await GetSelectedCards(
+                action,
+                options,
+                _selectFromMap[action.Origin]
+            );
+            action.CardOptions.RemoveCards(selectedCards);
+            if (action.Origin == SelectedCardsOrigin.Deck)
+                action.Player.Deck.Shuffle();
+
+            action.SelectedCards.AddRange(selectedCards);
+            action.RemainingCards.AddRange(options.Except(selectedCards));
+
+            return action;
+        }
+
+        private async Task<List<ICardLogic>> GetSelectedCards(
+            SelectExactCardsGA action,
+            List<ICardLogic> options,
+            SelectFrom selectFrom
+        )
+        {
+            return await _game.AwaitSelection(
+                action.Player,
+                options,
+                list => list.Count == action.NumberOfCards,
+                true,
+                selectFrom
+            );
+        }
+
+        public Task<SelectExactCardsGA> Reperform(SelectExactCardsGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
+            RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
+            return Task.FromResult(action);
+        }
+
+        public async Task<SelectUpToCardsGA> Perform(SelectUpToCardsGA action)
+        {
+            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            Debug.Log(
+                $"Found {options.Count} options out of {action.CardOptions.Cards.Count} total cards"
+            );
+            var selectedCards = await GetSelectedCards(
+                action,
+                options,
+                _selectFromMap[action.Origin]
+            );
+            action.CardOptions.RemoveCards(selectedCards);
+            if (action.Origin == SelectedCardsOrigin.Deck)
+                action.Player.Deck.Shuffle();
+
+            action.SelectedCards.AddRange(selectedCards);
+            action.RemainingCards.AddRange(options.Except(selectedCards));
+
+            return action;
+        }
+
+        private async Task<List<ICardLogic>> GetSelectedCards(
+            SelectUpToCardsGA action,
+            List<ICardLogic> options,
+            SelectFrom selectFrom
+        )
+        {
+            return await _game.AwaitSelection(
+                action.Player,
+                options,
+                list => list.Count <= action.Amount,
+                false,
+                selectFrom
+            );
+        }
+
+        private static List<ICardLogic> GetOptions(
+            List<ICardLogic> availableCards,
+            Predicate<ICardLogic> cardCondition
+        )
+        {
+            if (cardCondition is null)
+                return availableCards;
+            var options = new List<ICardLogic>();
+            foreach (var card in availableCards)
+            {
+                if (cardCondition(card))
+                    options.Add(card);
+            }
+            return options;
+        }
+
+        public Task<SelectUpToCardsGA> Reperform(SelectUpToCardsGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
+            RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
+            return Task.FromResult(action);
+        }
+
+        private static void RemoveSelectedCardsFromOrigin(
+            IPlayerLogic player,
+            List<ICardLogic> selectedCards,
+            SelectedCardsOrigin origin
+        )
+        {
+            switch (origin)
+            {
+                case SelectedCardsOrigin.Hand:
+                    player.Hand.RemoveCards(selectedCards);
+                    break;
+                case SelectedCardsOrigin.Deck:
+                    player.Deck.RemoveCards(selectedCards);
+                    break;
+                case SelectedCardsOrigin.DiscardPile:
+                    player.DiscardPile.RemoveCards(selectedCards);
+                    break;
+                case SelectedCardsOrigin.Other:
+                    // No removal needed for 'Other' origin
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public Task<RemoveCardFromHandGA> Perform(RemoveCardFromHandGA action)
+        {
+            action.card.Owner.Hand.RemoveCard(action.card);
+            return Task.FromResult(action);
+        }
+
+        public Task<RemoveCardFromHandGA> Reperform(RemoveCardFromHandGA action)
+        {
+            var player = _game.GetPlayerByName(action.card.Owner.Name);
+            var card = player.DeckList.GetCardByDeckId(action.card.DeckId);
+            player.Hand.RemoveCard(card);
+            return Task.FromResult(action);
         }
     }
 }

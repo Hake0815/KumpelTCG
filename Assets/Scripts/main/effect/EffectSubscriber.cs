@@ -10,27 +10,29 @@ namespace gamecore.effect
     class EffectSubscriber<T> : IActionSubscriber<T>, IActionPerformer<RemoveEffectSubscriberGA<T>>
         where T : GameAction
     {
-        public Func<T, T> Reaction { get; }
-        public ReactionTiming Timing { get; }
+        private readonly Func<T, bool> _reaction;
+        private readonly ReactionTiming _timing;
 
-        public EffectSubscriber(Func<T, T> reaction, ReactionTiming timing)
+        public EffectSubscriber(Func<T, bool> reaction, ReactionTiming timing)
         {
-            Reaction = reaction;
-            Timing = timing;
+            _reaction = reaction;
+            _timing = timing;
             ActionSystem.INSTANCE.SubscribeToGameAction<T>(this, timing);
-            ActionSystem.INSTANCE.AttachPerformer<RemoveEffectSubscriberGA<T>>(this);
         }
 
         public T React(T action)
         {
-            action = Reaction(action);
-            ActionSystem.INSTANCE.AddReaction(new RemoveEffectSubscriberGA<T>());
+            if (_reaction(action))
+            {
+                ActionSystem.INSTANCE.AttachPerformer<RemoveEffectSubscriberGA<T>>(this);
+                ActionSystem.INSTANCE.AddReaction(new RemoveEffectSubscriberGA<T>());
+            }
             return action;
         }
 
         public Task<RemoveEffectSubscriberGA<T>> Perform(RemoveEffectSubscriberGA<T> action)
         {
-            ActionSystem.INSTANCE.UnsubscribeFromGameAction<T>(this, Timing);
+            ActionSystem.INSTANCE.UnsubscribeFromGameAction<T>(this, _timing);
             ActionSystem.INSTANCE.DetachPerformer<RemoveEffectSubscriberGA<T>>();
             return Task.FromResult(action);
         }

@@ -16,6 +16,28 @@ namespace gamecore.card
         bool IsTrainerCard();
         bool IsPokemonCard();
         bool IsEnergyCard();
+        int CompareTo(ICard other, Predicate<ICard> _cardCondition)
+        {
+            if (_cardCondition is not null && _cardCondition(this) && !_cardCondition(other))
+                return 1;
+            if (_cardCondition is not null && !_cardCondition(this) && _cardCondition(other))
+                return -1;
+            if (GetType() == other.GetType())
+                return Name.CompareTo(other.Name);
+            if (IsPokemonCard() && !other.IsPokemonCard())
+                return 1;
+            if (!IsPokemonCard() && other.IsPokemonCard())
+                return -1;
+            if (IsTrainerCard() && !other.IsTrainerCard())
+                return 1;
+            if (!IsTrainerCard() && other.IsTrainerCard())
+                return -1;
+            return 0;
+        }
+        int CompareTo(ICard other)
+        {
+            return CompareTo(other, null);
+        }
     }
 
     internal interface ICardLogic : ICard

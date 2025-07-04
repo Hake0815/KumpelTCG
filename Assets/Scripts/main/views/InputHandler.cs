@@ -9,6 +9,8 @@ namespace gameview
 
         public event Action<Collider2D> OnMouseLeftClick;
         public event Action OnEsc;
+        public event Action<float> OnMouseWheel;
+        private bool _skipFrame = false;
 
         protected virtual void Awake()
         {
@@ -28,17 +30,31 @@ namespace gameview
 
         public void Update()
         {
+            if (_skipFrame)
+            {
+                _skipFrame = false;
+                return;
+            }
             if (Input.GetMouseButtonDown(0))
+            {
                 OnMouseLeftClick?.Invoke(Physics2D.OverlapPoint(GetMousePosition()));
+            }
             if (Input.GetKeyDown(KeyCode.Escape))
                 OnEsc?.Invoke();
+            if (Input.GetAxis("Mouse ScrollWheel") != 0f)
+                OnMouseWheel?.Invoke(Input.GetAxis("Mouse ScrollWheel"));
         }
 
-        private Vector3 GetMousePosition()
+        private static Vector3 GetMousePosition()
         {
             var p = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             p.z = 0f;
             return p;
+        }
+
+        public void SkipOneFrame()
+        {
+            _skipFrame = true;
         }
     }
 }
