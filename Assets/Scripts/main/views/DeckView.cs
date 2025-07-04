@@ -57,13 +57,18 @@ namespace gameview
             }
         }
 
-        public void UpdateView()
+        private void UpdateView(List<ICard> cards)
         {
-            _text.text = Deck.CardCount.ToString();
+            _text.text = cards.Count.ToString();
             if (Deck.CardCount == 0)
                 _image.sprite = _emptySprite;
             else
                 _image.sprite = _sprite;
+        }
+
+        public void UpdateView()
+        {
+            UpdateView(Deck.Cards);
         }
 
         private void OnCardsDrawn(List<ICard> drawnCards)

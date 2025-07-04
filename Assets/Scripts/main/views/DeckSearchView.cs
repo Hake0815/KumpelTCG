@@ -187,7 +187,6 @@ namespace gameview
 
         public void Clear()
         {
-            Debug.Log("Clearing cards");
             foreach (var cardView in _displayedCards)
             {
                 CardViewRegistry.INSTANCE.Unregister(cardView.Card);

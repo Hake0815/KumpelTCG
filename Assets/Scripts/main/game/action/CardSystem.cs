@@ -27,7 +27,7 @@ namespace gamecore.game.action
             IActionPerformer<SelectExactCardsGA>,
             IActionPerformer<SelectUpToCardsGA>,
             IActionPerformer<DiscardCardsGA>,
-            IActionPerformer<RemoveCardFromHandGA>,
+            IActionPerformer<RemoveCardsFromHandGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -66,7 +66,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<SelectExactCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<SelectUpToCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<RemoveCardFromHandGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RemoveCardsFromHandGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -88,7 +88,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<SelectExactCardsGA>();
             _actionSystem.DetachPerformer<SelectUpToCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsGA>();
-            _actionSystem.DetachPerformer<RemoveCardFromHandGA>();
+            _actionSystem.DetachPerformer<RemoveCardsFromHandGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -408,9 +408,6 @@ namespace gamecore.game.action
         public async Task<SelectUpToCardsGA> Perform(SelectUpToCardsGA action)
         {
             var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
-            Debug.Log(
-                $"Found {options.Count} options out of {action.CardOptions.Cards.Count} total cards"
-            );
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
@@ -490,17 +487,17 @@ namespace gamecore.game.action
             }
         }
 
-        public Task<RemoveCardFromHandGA> Perform(RemoveCardFromHandGA action)
+        public Task<RemoveCardsFromHandGA> Perform(RemoveCardsFromHandGA action)
         {
-            action.card.Owner.Hand.RemoveCard(action.card);
+            action.Player.Hand.RemoveCards(action.Cards);
             return Task.FromResult(action);
         }
 
-        public Task<RemoveCardFromHandGA> Reperform(RemoveCardFromHandGA action)
+        public Task<RemoveCardsFromHandGA> Reperform(RemoveCardsFromHandGA action)
         {
-            var player = _game.GetPlayerByName(action.card.Owner.Name);
-            var card = player.DeckList.GetCardByDeckId(action.card.DeckId);
-            player.Hand.RemoveCard(card);
+            var player = _game.GetPlayerByName(action.Player.Name);
+            var cards = player.DeckList.GetCardsByDeckIds(action.Cards);
+            player.Hand.RemoveCards(cards);
             return Task.FromResult(action);
         }
     }

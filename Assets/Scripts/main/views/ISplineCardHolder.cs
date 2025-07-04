@@ -17,7 +17,10 @@ namespace gameview
             {
                 var cardViews = CardViewRegistry.INSTANCE.GetAll(cards);
                 if (cardViews.Count == 0)
+                {
+                    CallbackOnDone.Invoke();
                     return;
+                }
                 cardViews.Sort(CardViewComparer.Create());
                 var spacing = Math.Min(1f / cardViews.Count, 0.05f);
                 var firstCardPosition = -(cardViews.Count - 1) * spacing / 2 + 0.5f;

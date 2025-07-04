@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using gamecore.card;
 using gamecore.game;
@@ -30,6 +31,11 @@ namespace gameview
             }
         }
 
+        private void HandleCardCountChanged(List<ICard> cards)
+        {
+            ((ISplineCardHolder)this).UpdateCardPosition(cards, transform.rotation);
+        }
+
         private void OnDisable()
         {
             if (hand != null)
@@ -40,7 +46,7 @@ namespace gameview
 
         public void HandleCardCountChanged()
         {
-            ((ISplineCardHolder)this).UpdateCardPosition(hand.Cards, transform.rotation);
+            HandleCardCountChanged(hand.Cards);
         }
     }
 }
