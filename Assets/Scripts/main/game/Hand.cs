@@ -7,10 +7,7 @@ namespace gamecore.card
 {
     public interface IHand : ICardList { }
 
-    internal interface IHandLogic : IHand, ICardListLogic
-    {
-        new List<ICardLogic> Cards { get; }
-    }
+    internal interface IHandLogic : IHand, ICardListLogic { }
 
     class Hand : IHandLogic
     {

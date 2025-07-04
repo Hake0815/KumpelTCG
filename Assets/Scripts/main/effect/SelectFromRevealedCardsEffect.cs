@@ -23,7 +23,7 @@ namespace gamecore.effect
             );
         }
 
-        private RevealCardsFromDeckGA Reaction(RevealCardsFromDeckGA action, ICardLogic card)
+        private bool Reaction(RevealCardsFromDeckGA action, ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
                 new SelectExactCardsGA(
@@ -33,7 +33,7 @@ namespace gamecore.effect
                     SelectCardsGA.SelectedCardsOrigin.Other
                 )
             );
-            return action;
+            return true;
         }
     }
 }

@@ -17,12 +17,12 @@ namespace gamecore.effect
             );
         }
 
-        private static DoOnSelectionGA Reaction(DoOnSelectionGA action, ICardLogic card)
+        private static bool Reaction(DoOnSelectionGA action, ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
                 new PutRemainingCardsUnderDeckGA(card.Owner, action.RemainingCards)
             );
-            return action;
+            return true;
         }
     }
 }

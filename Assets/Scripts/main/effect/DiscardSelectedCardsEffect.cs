@@ -12,10 +12,14 @@ namespace gamecore.effect
             new EffectSubscriber<SelectCardsGA>(action => Reaction(action), ReactionTiming.POST);
         }
 
-        private SelectCardsGA Reaction(SelectCardsGA action)
+        private static bool Reaction(SelectCardsGA action)
         {
+            if (action.WasReactedTo)
+                return false;
+
             ActionSystem.INSTANCE.AddReaction(new DiscardCardsGA(action.SelectedCards));
-            return action;
+            action.WasReactedTo = true;
+            return true;
         }
     }
 }

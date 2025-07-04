@@ -20,18 +20,6 @@ namespace gamecore.game.action
             CardCondition = cardCondition;
         }
 
-        public SelectUpToCardsGA(
-            IPlayerLogic player,
-            int amount,
-            ICardListLogic cardOptions,
-            SelectedCardsOrigin origin
-        )
-            : base(player, origin)
-        {
-            Amount = amount;
-            CardOptions = cardOptions;
-        }
-
         [JsonConstructor]
         public SelectUpToCardsGA(IPlayerLogic player, int amount, SelectedCardsOrigin origin)
             : base(player, origin)
