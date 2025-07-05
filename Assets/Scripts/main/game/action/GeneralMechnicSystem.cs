@@ -18,6 +18,7 @@ namespace gamecore.action
             IActionPerformer<RetreatGA>,
             IActionPerformer<PerformAbilityGA>,
             IActionPerformer<PlaySupporterGA>,
+            IActionPerformer<RemovePlayerEffectGA>,
             IActionPerformer<EvolveGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
@@ -40,6 +41,7 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<PerformAbilityGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlaySupporterGA>(INSTANCE);
             _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RemovePlayerEffectGA>(INSTANCE);
             _game = game;
         }
 
@@ -53,6 +55,7 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<PerformAbilityGA>();
             _actionSystem.DetachPerformer<PlaySupporterGA>();
             _actionSystem.DetachPerformer<EvolveGA>();
+            _actionSystem.DetachPerformer<RemovePlayerEffectGA>();
         }
 
         public Task<AttackGA> Perform(AttackGA action)
@@ -278,6 +281,20 @@ namespace gamecore.action
             _game
                 .GetPlayerByName(action.Player.Name)
                 .PerformedOncePerTurnActions.Add(SupporterCard.PLAYED_SUPPORTER_THIS_TURN);
+            return Task.FromResult(action);
+        }
+
+        public Task<RemovePlayerEffectGA> Perform(RemovePlayerEffectGA action)
+        {
+            action.Player.RemoveEffect(action.Effect);
+            return Task.FromResult(action);
+        }
+
+        public Task<RemovePlayerEffectGA> Reperform(RemovePlayerEffectGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            player.RemoveEffect(action.Effect);
+
             return Task.FromResult(action);
         }
     }

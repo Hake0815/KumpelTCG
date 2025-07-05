@@ -1,4 +1,5 @@
 using gamecore.actionsystem;
+using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
 using Newtonsoft.Json;
@@ -28,7 +29,10 @@ namespace gamecore.card
 
         public override bool IsPlayable()
         {
-            if (Owner.PerformedOncePerTurnActions.Contains(PLAYED_SUPPORTER_THIS_TURN))
+            if (
+                Owner.PerformedOncePerTurnActions.Contains(PLAYED_SUPPORTER_THIS_TURN)
+                || Owner.HasEffect<FirstTurnOfGameEffect>()
+            )
                 return false;
             return base.IsPlayable();
         }
