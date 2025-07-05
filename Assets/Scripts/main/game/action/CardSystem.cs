@@ -18,7 +18,6 @@ namespace gamecore.game.action
             IActionPerformer<DiscardAttachedEnergyCardsGA>,
             IActionPerformer<BenchPokemonGA>,
             IActionPerformer<MovePokemonToBenchGA>,
-            IActionPerformer<ResetPokemonTurnStateGA>,
             IActionPerformer<RevealCardsFromDeckGA>,
             IActionPerformer<TakeSelectionToHandGA>,
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
@@ -57,7 +56,6 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
             _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
-            _actionSystem.AttachPerformer<ResetPokemonTurnStateGA>(INSTANCE);
             _actionSystem.AttachPerformer<RevealCardsFromDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<TakeSelectionToHandGA>(INSTANCE);
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
@@ -79,7 +77,6 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<AttachEnergyFromHandForTurnGA>();
             _actionSystem.DetachPerformer<DiscardAttachedEnergyCardsGA>();
             _actionSystem.DetachPerformer<BenchPokemonGA>();
-            _actionSystem.DetachPerformer<ResetPokemonTurnStateGA>();
             _actionSystem.DetachPerformer<RevealCardsFromDeckGA>();
             _actionSystem.DetachPerformer<TakeSelectionToHandGA>();
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
@@ -222,29 +219,6 @@ namespace gamecore.game.action
             var player = _game.GetPlayerByName(action.Pokemon.Owner.Name);
             var pokemon = player.DeckList.GetCardByDeckId(action.Pokemon.DeckId);
             player.Bench.AddCards(new() { pokemon });
-            return Task.FromResult(action);
-        }
-
-        public Task<ResetPokemonTurnStateGA> Perform(ResetPokemonTurnStateGA action)
-        {
-            action.PokemonToReset.PutIntoPlayThisTurn = false;
-            action.PokemonToReset.AbilityUsedThisTurn = false;
-            ActionSystem.INSTANCE.UnsubscribeFromGameAction<EndTurnGA>(
-                action.PokemonToReset,
-                ReactionTiming.PRE
-            );
-            return Task.FromResult(action);
-        }
-
-        public Task<ResetPokemonTurnStateGA> Reperform(ResetPokemonTurnStateGA action)
-        {
-            var pokemonToReset = _game.FindCardAnywhere(action.PokemonToReset) as IPokemonCardLogic;
-            pokemonToReset.PutIntoPlayThisTurn = false;
-            pokemonToReset.AbilityUsedThisTurn = false;
-            ActionSystem.INSTANCE.UnsubscribeFromGameAction<EndTurnGA>(
-                pokemonToReset,
-                ReactionTiming.PRE
-            );
             return Task.FromResult(action);
         }
 
