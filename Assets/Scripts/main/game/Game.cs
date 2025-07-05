@@ -169,6 +169,10 @@ namespace gamecore.game
 
         private void StartTurnForPlayer(IPlayerLogic nextPlayer)
         {
+            if (nextPlayer.Deck.Cards.Count == 0)
+            {
+                EndGame(nextPlayer.Opponent);
+            }
             nextPlayer.IsActive = true;
             nextPlayer.TurnCounter++;
             TurnCounter++;
