@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
-using gamecore.effect;
+using gamecore.instruction;
 
 namespace gamecore.card
 {
     internal interface ITrainerCardData : ICardData
     {
-        List<IEffect> Effects { get; }
+        List<IInstruction> Instructions { get; }
         List<IUseCondition> Conditions { get; }
     }
 
@@ -14,19 +14,19 @@ namespace gamecore.card
     {
         public string Name { get; }
         public string Id { get; }
-        public List<IEffect> Effects { get; }
+        public List<IInstruction> Instructions { get; }
         public List<IUseCondition> Conditions { get; }
 
         protected TrainerCardData(
             string name,
             string id,
-            List<IEffect> effects,
+            List<IInstruction> instructions,
             List<IUseCondition> conditions
         )
         {
             Name = name;
             Id = id;
-            Effects = effects;
+            Instructions = instructions;
             Conditions = conditions;
         }
     }
