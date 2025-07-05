@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
-using gamecore.effect;
+using gamecore.instruction;
 
 namespace gamecore.card
 {

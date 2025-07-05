@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.effect;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Android;
@@ -18,6 +19,7 @@ namespace gamecore.game
         IPrizes Prizes { get; }
         bool IsActive { get; }
         IPokemonCard ActivePokemon { get; }
+        Dictionary<Type, IPlayerEffect> PlayerEffects { get; }
         event Action<IPokemonCard> ActivePokemonSet;
     }
 
@@ -69,6 +71,10 @@ namespace gamecore.game
         void SetPrizeCards();
         void ResetOncePerTurnActions();
         void Promote(IPokemonCardLogic pokemon);
+        bool HasEffect<T>()
+            where T : IPlayerEffect;
+        void AddEffect(IPlayerEffect effect);
+        void RemoveEffect(IPlayerEffect effect);
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -108,6 +114,7 @@ namespace gamecore.game
         public HashSet<string> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
         public int TurnCounter { get; set; } = 0;
+        public Dictionary<Type, IPlayerEffect> PlayerEffects { get; } = new();
 
         public event Action<IPokemonCard> ActivePokemonSet;
 
@@ -136,6 +143,22 @@ namespace gamecore.game
         {
             var prizeCards = Deck.DrawFaceDown(6);
             Prizes.AddCards(prizeCards);
+        }
+
+        public bool HasEffect<T>()
+            where T : IPlayerEffect
+        {
+            return PlayerEffects.ContainsKey(typeof(T));
+        }
+
+        public void AddEffect(IPlayerEffect effect)
+        {
+            PlayerEffects[effect.GetType()] = effect;
+        }
+
+        public void RemoveEffect(IPlayerEffect effect)
+        {
+            PlayerEffects.Remove(effect.GetType());
         }
     }
 }

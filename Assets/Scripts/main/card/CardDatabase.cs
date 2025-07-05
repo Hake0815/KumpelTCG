@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using gamecore.action;
 using gamecore.actionsystem;
-using gamecore.effect;
+using gamecore.instruction;
 
 namespace gamecore.card
 {
@@ -14,7 +14,11 @@ namespace gamecore.card
                 new SupporterCardData(
                     "Professor's Research",
                     "professorsResearch",
-                    new List<IEffect> { new DiscardHandEffect(), new DrawCardsEffect(7) },
+                    new List<IInstruction>
+                    {
+                        new DiscardHandInstruction(),
+                        new DrawCardsInstruction(7),
+                    },
                     new List<IUseCondition> { new HasCardsInDeck() }
                 )
             },
@@ -23,13 +27,13 @@ namespace gamecore.card
                 new ItemCardData(
                     name: "Ultra Ball",
                     id: "ultraBall",
-                    effects: new List<IEffect>
+                    instructions: new List<IInstruction>
                     {
-                        new SelectCardsFromHandEffect(2),
-                        new DiscardSelectedCardsEffect(),
-                        new SelectCardsFromDeckEffect(1, card => card.IsPokemonCard()),
-                        new TakeSelectionToHandEffect(),
-                        new DiscardCardEffect(),
+                        new SelectCardsFromHandInstruction(2),
+                        new DiscardSelectedCardsInstruction(),
+                        new SelectCardsFromDeckInstruction(1, card => card.IsPokemonCard()),
+                        new TakeSelectionToHandInstruction(),
+                        new DiscardCardInstruction(),
                     },
                     conditions: new List<IUseCondition>
                     {
@@ -55,12 +59,12 @@ namespace gamecore.card
                         new Attack(
                             "Petty Grudge",
                             new() { PokemonType.Psychic },
-                            new() { new DealDamageToDefendingPokemonEffect(10) }
+                            new() { new DealDamageToDefendingPokemonInstruction(10) }
                         ),
                         new Attack(
                             "Bite",
                             new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
-                            new() { new DealDamageToDefendingPokemonEffect(40) }
+                            new() { new DealDamageToDefendingPokemonInstruction(40) }
                         ),
                     },
                     numberOfPrizeCardsOnKnockout: 1
@@ -83,19 +87,19 @@ namespace gamecore.card
                         new Attack(
                             "Dragon Headbutt",
                             new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
-                            new() { new DealDamageToDefendingPokemonEffect(70) }
+                            new() { new DealDamageToDefendingPokemonInstruction(70) }
                         ),
                     },
                     numberOfPrizeCardsOnKnockout: 1,
                     ability: new Ability(
                         "Recon Directive",
                         new List<IUseCondition> { new HasCardsInDeck(), new AbilityNotUsed() },
-                        new List<IEffect>
+                        new List<IInstruction>
                         {
-                            new RevealCardsFromDeckEffect(2),
-                            new SelectFromRevealedCardsEffect(1),
-                            new TakeSelectionToHandEffect(),
-                            new PutRemainingCardsUnderDeckEffect(),
+                            new RevealCardsFromDeckInstruction(2),
+                            new SelectFromRevealedCardsInstruction(1),
+                            new TakeSelectionToHandInstruction(),
+                            new PutRemainingCardsUnderDeckInstruction(),
                         }
                     )
                 )

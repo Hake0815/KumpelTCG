@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
+using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
 using Newtonsoft.Json;
@@ -34,9 +35,6 @@ namespace gamecore.card
         IAbility Ability { get; }
 
         [JsonIgnore]
-        bool AbilityUsedThisTurn { get; }
-
-        [JsonIgnore]
         int Damage { get; }
 
         [JsonIgnore]
@@ -44,12 +42,15 @@ namespace gamecore.card
 
         [JsonIgnore]
         int RetreatCost { get; }
+
+        [JsonIgnore]
+        Dictionary<Type, IPokemonEffect> PokemonEffects { get; }
         event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         event Action DamageModified;
         event Action Evolved;
     }
 
-    internal interface IPokemonCardLogic : ICardLogic, IPokemonCard, IActionSubscriber<EndTurnGA>
+    internal interface IPokemonCardLogic : ICardLogic, IPokemonCard
     {
         [JsonIgnore]
         PokemonType Type { get; set; }
@@ -72,14 +73,8 @@ namespace gamecore.card
         List<IAttackLogic> GetUsableAttacks();
 
         [JsonIgnore]
-        bool PutIntoPlayThisTurn { get; set; }
-
-        [JsonIgnore]
         new IAbilityLogic Ability { get; }
         bool HasUsableAbility();
-
-        [JsonIgnore]
-        new bool AbilityUsedThisTurn { get; set; }
         bool IsActive();
         bool IsKnockedOut();
         void TakeDamage(int damage);
@@ -87,6 +82,10 @@ namespace gamecore.card
         void DiscardEnergy(List<IEnergyCardLogic> energyCardsToDiscard);
         void WasEvolved();
         void SetPutInPlay();
+        bool HasEffect<T>()
+            where T : IPokemonEffect;
+        void AddEffect(IPokemonEffect effect);
+        void RemoveEffect(IPokemonEffect effect);
     }
 
     class PokemonCard : IPokemonCardLogic
@@ -112,8 +111,7 @@ namespace gamecore.card
         public int MaxHP { get; private set; }
         public int RetreatCost { get; private set; }
         public int NumberOfPrizeCardsOnKnockout { get; set; }
-        public bool AbilityUsedThisTurn { get; set; } = false;
-
+        public Dictionary<Type, IPokemonEffect> PokemonEffects { get; } = new();
         private int _damage = 0;
         public int Damage
         {
@@ -139,7 +137,6 @@ namespace gamecore.card
 
         public string EvolvesFrom => _pokemonCardData.EvolvesFrom;
         public List<IPokemonCard> PreEvolutions { get; } = new();
-        public bool PutIntoPlayThisTurn { get; set; }
 
         public IAbilityLogic Ability { get; }
 
@@ -257,13 +254,16 @@ namespace gamecore.card
         {
             if (Owner.TurnCounter < 2)
                 return false;
-            if (Owner.ActivePokemon.Name == EvolvesFrom && !Owner.ActivePokemon.PutIntoPlayThisTurn)
+            if (
+                Owner.ActivePokemon.Name == EvolvesFrom
+                && !Owner.ActivePokemon.HasEffect<PutIntoPlayThisTurnEffect>()
+            )
                 return true;
             foreach (var benchPokemon in Owner.Bench.Cards)
             {
                 if (
                     benchPokemon.Name == EvolvesFrom
-                    && !(benchPokemon as IPokemonCardLogic).PutIntoPlayThisTurn
+                    && !(benchPokemon as IPokemonCardLogic).HasEffect<PutIntoPlayThisTurnEffect>()
                 )
                     return true;
             }
@@ -277,11 +277,14 @@ namespace gamecore.card
             {
                 if (
                     benchPokemon.Name == EvolvesFrom
-                    && !(benchPokemon as IPokemonCardLogic).PutIntoPlayThisTurn
+                    && !(benchPokemon as IPokemonCardLogic).HasEffect<PutIntoPlayThisTurnEffect>()
                 )
                     targets.Add(benchPokemon);
             }
-            if (Owner.ActivePokemon.Name == EvolvesFrom && !Owner.ActivePokemon.PutIntoPlayThisTurn)
+            if (
+                Owner.ActivePokemon.Name == EvolvesFrom
+                && !Owner.ActivePokemon.HasEffect<PutIntoPlayThisTurnEffect>()
+            )
                 targets.Add(Owner.ActivePokemon);
 
             return targets;
@@ -294,8 +297,7 @@ namespace gamecore.card
 
         public void SetPutInPlay()
         {
-            PutIntoPlayThisTurn = true;
-            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(this, ReactionTiming.PRE);
+            ((IPokemonEffect)new PutIntoPlayThisTurnEffect()).Apply(this);
         }
 
         public int GetNumberOfTargets() => 1;
@@ -342,12 +344,6 @@ namespace gamecore.card
             Evolved?.Invoke();
         }
 
-        public EndTurnGA React(EndTurnGA action)
-        {
-            ActionSystem.INSTANCE.AddReaction(new ResetPokemonTurnStateGA(this));
-            return action;
-        }
-
         public bool HasUsableAbility()
         {
             if (Ability == null)
@@ -358,6 +354,22 @@ namespace gamecore.card
                     return false;
             }
             return true;
+        }
+
+        public bool HasEffect<T>()
+            where T : IPokemonEffect
+        {
+            return PokemonEffects.ContainsKey(typeof(T));
+        }
+
+        public void AddEffect(IPokemonEffect effect)
+        {
+            PokemonEffects[effect.GetType()] = effect;
+        }
+
+        public void RemoveEffect(IPokemonEffect effect)
+        {
+            PokemonEffects.Remove(effect.GetType());
         }
     }
 }

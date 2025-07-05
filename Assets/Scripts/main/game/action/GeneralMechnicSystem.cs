@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
+using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
 using gamecore.gamegame.action;
@@ -18,6 +19,8 @@ namespace gamecore.action
             IActionPerformer<RetreatGA>,
             IActionPerformer<PerformAbilityGA>,
             IActionPerformer<PlaySupporterGA>,
+            IActionPerformer<RemovePlayerEffectGA>,
+            IActionPerformer<RemovePokemonEffectGA>,
             IActionPerformer<EvolveGA>
     {
         private static readonly Lazy<GeneralMechnicSystem> lazy = new(
@@ -40,6 +43,8 @@ namespace gamecore.action
             _actionSystem.AttachPerformer<PerformAbilityGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlaySupporterGA>(INSTANCE);
             _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RemovePlayerEffectGA>(INSTANCE);
+            _actionSystem.AttachPerformer<RemovePokemonEffectGA>(INSTANCE);
             _game = game;
         }
 
@@ -53,13 +58,15 @@ namespace gamecore.action
             _actionSystem.DetachPerformer<PerformAbilityGA>();
             _actionSystem.DetachPerformer<PlaySupporterGA>();
             _actionSystem.DetachPerformer<EvolveGA>();
+            _actionSystem.DetachPerformer<RemovePlayerEffectGA>();
+            _actionSystem.DetachPerformer<RemovePokemonEffectGA>();
         }
 
         public Task<AttackGA> Perform(AttackGA action)
         {
-            foreach (var effect in action.Attack.Effects)
+            foreach (var instruction in action.Attack.Instructions)
             {
-                effect.Perform(action.Attacker);
+                instruction.Perform(action.Attacker);
             }
             return Task.FromResult(action);
         }
@@ -205,23 +212,18 @@ namespace gamecore.action
 
         public Task<PerformAbilityGA> Perform(PerformAbilityGA action)
         {
-            foreach (var effect in action.Pokemon.Ability.Effects)
+            foreach (var instruction in action.Pokemon.Ability.Instructions)
             {
-                effect.Perform(action.Pokemon);
+                instruction.Perform(action.Pokemon);
             }
-            action.Pokemon.AbilityUsedThisTurn = true;
-            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(
-                action.Pokemon,
-                ReactionTiming.PRE
-            );
+            ((IPokemonEffect)new AbilityUsedThisTurnEffect()).Apply(action.Pokemon);
             return Task.FromResult(action);
         }
 
         public Task<PerformAbilityGA> Reperform(PerformAbilityGA action)
         {
             var pokemon = (IPokemonCardLogic)_game.FindCardAnywhere(action.Pokemon);
-            pokemon.AbilityUsedThisTurn = true;
-            ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(pokemon, ReactionTiming.PRE);
+            ((IPokemonEffect)new AbilityUsedThisTurnEffect()).Apply(pokemon);
             return Task.FromResult(action);
         }
 
@@ -278,6 +280,33 @@ namespace gamecore.action
             _game
                 .GetPlayerByName(action.Player.Name)
                 .PerformedOncePerTurnActions.Add(SupporterCard.PLAYED_SUPPORTER_THIS_TURN);
+            return Task.FromResult(action);
+        }
+
+        public Task<RemovePlayerEffectGA> Perform(RemovePlayerEffectGA action)
+        {
+            action.Player.RemoveEffect(action.Effect);
+            return Task.FromResult(action);
+        }
+
+        public Task<RemovePlayerEffectGA> Reperform(RemovePlayerEffectGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            player.RemoveEffect(action.Effect);
+
+            return Task.FromResult(action);
+        }
+
+        public Task<RemovePokemonEffectGA> Perform(RemovePokemonEffectGA action)
+        {
+            action.Pokemon.RemoveEffect(action.Effect);
+            return Task.FromResult(action);
+        }
+
+        public Task<RemovePokemonEffectGA> Reperform(RemovePokemonEffectGA action)
+        {
+            var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
+            pokemon.RemoveEffect(action.Effect);
             return Task.FromResult(action);
         }
     }
