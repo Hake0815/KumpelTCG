@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
-using gamecore.effect;
+using gamecore.instruction;
 
 namespace gamecore.card
 {
@@ -11,22 +11,22 @@ namespace gamecore.card
 
     internal interface IAbilityLogic : IAbility
     {
-        List<IEffect> Effects { get; }
+        List<IInstruction> Instructions { get; }
         List<IUseCondition> Conditions { get; }
     }
 
     class Ability : IAbilityLogic
     {
         public List<IUseCondition> Conditions { get; }
-        public List<IEffect> Effects { get; }
+        public List<IInstruction> Instructions { get; }
 
         public string Name { get; }
 
-        public Ability(string name, List<IUseCondition> conditions, List<IEffect> effects)
+        public Ability(string name, List<IUseCondition> conditions, List<IInstruction> instructions)
         {
             Name = name;
             Conditions = conditions;
-            Effects = effects;
+            Instructions = instructions;
         }
     }
 }

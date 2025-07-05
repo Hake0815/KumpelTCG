@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using gamecore.effect;
+using gamecore.instruction;
 
 namespace gamecore.card
 {
@@ -8,9 +8,9 @@ namespace gamecore.card
         public SupporterCardData(
             string name,
             string id,
-            List<IEffect> effects,
+            List<IInstruction> instructions,
             List<IUseCondition> conditions
         )
-            : base(name, id, effects, conditions) { }
+            : base(name, id, instructions, conditions) { }
     }
 }
