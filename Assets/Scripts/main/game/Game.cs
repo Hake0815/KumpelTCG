@@ -6,6 +6,7 @@ using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
+using gamecore.effect;
 using gamecore.game.action;
 using gamecore.game.state;
 using UnityEngine;
@@ -137,13 +138,14 @@ namespace gamecore.game
             if (Player1.IsActive)
             {
                 Player1.IsActive = false;
-                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player2));
+                endTurnGA.NextPlayer = Player2;
             }
             else
             {
                 Player2.IsActive = false;
-                ActionSystem.INSTANCE.AddReaction(new StartTurnGA(Player1));
+                endTurnGA.NextPlayer = Player1;
             }
+            ActionSystem.INSTANCE.AddReaction(new StartTurnGA(endTurnGA.NextPlayer));
             return Task.FromResult(endTurnGA);
         }
 
@@ -176,6 +178,8 @@ namespace gamecore.game
             nextPlayer.IsActive = true;
             nextPlayer.TurnCounter++;
             TurnCounter++;
+            if (TurnCounter == 1)
+                nextPlayer.AddEffect(FirstTurnOfGameEffect.Create());
         }
 
         public Task<SetupGA> Perform(SetupGA action)
