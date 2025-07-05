@@ -1,4 +1,5 @@
 using gamecore.card;
+using gamecore.effect;
 
 namespace gamecore.instruction
 {
@@ -6,7 +7,7 @@ namespace gamecore.instruction
     {
         public bool IsMet(ICardLogic card)
         {
-            return !(card as IPokemonCard).AbilityUsedThisTurn;
+            return !(card as IPokemonCardLogic).HasEffect<AbilityUsedThisTurnEffect>();
         }
     }
 }
