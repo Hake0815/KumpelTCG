@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.common;
-using gamecore.effect;
+using gamecore.instruction;
 
 namespace gamecore.card
 {
@@ -15,7 +15,7 @@ namespace gamecore.card
 
     internal interface IAttackLogic : IAttack, IClonable<IAttackLogic>
     {
-        List<IEffect> Effects { get; }
+        List<IInstruction> Instructions { get; }
     }
 
     class Attack : IAttackLogic
@@ -26,28 +26,32 @@ namespace gamecore.card
 
         private int GetDamageToActivePokemon()
         {
-            foreach (var effect in Effects)
+            foreach (var instruction in Instructions)
             {
-                if (effect.GetType().IsAssignableFrom(typeof(DealDamageToDefendingPokemonEffect)))
+                if (
+                    instruction
+                        .GetType()
+                        .IsAssignableFrom(typeof(DealDamageToDefendingPokemonInstruction))
+                )
                 {
-                    return (effect as DealDamageToDefendingPokemonEffect).Damage;
+                    return (instruction as DealDamageToDefendingPokemonInstruction).Damage;
                 }
             }
             return 0;
         }
 
-        public List<IEffect> Effects { get; }
+        public List<IInstruction> Instructions { get; }
 
-        public Attack(string name, List<PokemonType> cost, List<IEffect> effects)
+        public Attack(string name, List<PokemonType> cost, List<IInstruction> instructions)
         {
             Name = name;
             Cost = cost;
-            Effects = effects;
+            Instructions = instructions;
         }
 
         public IAttackLogic Clone()
         {
-            return new Attack(Name, new(Cost), new(Effects));
+            return new Attack(Name, new(Cost), new(Instructions));
         }
     }
 }

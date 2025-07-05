@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.common;
-using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
+using gamecore.instruction;
 using Newtonsoft.Json;
 
 namespace gamecore.card
@@ -15,7 +15,7 @@ namespace gamecore.card
     internal interface ITrainerCardLogic : ITrainerCard, ICardLogic
     {
         [JsonIgnore]
-        List<IEffect> Effects { get; }
+        List<IInstruction> Instructions { get; }
 
         [JsonIgnore]
         List<IUseCondition> Conditions { get; }
@@ -27,7 +27,7 @@ namespace gamecore.card
         public string Name => _trainerCardData.Name;
         public string Id => _trainerCardData.Id;
         public IPlayerLogic Owner { get; }
-        public List<IEffect> Effects { get; }
+        public List<IInstruction> Instructions { get; }
         public List<IUseCondition> Conditions { get; }
         IPlayer ICard.Owner => Owner;
 
@@ -39,7 +39,7 @@ namespace gamecore.card
         {
             _trainerCardData = cardData;
             Owner = owner;
-            Effects = cardData.Effects;
+            Instructions = cardData.Instructions;
             Conditions = cardData.Conditions;
             DeckId = deckId;
         }
@@ -54,7 +54,7 @@ namespace gamecore.card
         public virtual void Play()
         {
             ActionSystem.INSTANCE.AddReaction(new RemoveCardsFromHandGA(new() { this }, Owner));
-            PerformEffects();
+            PerformInstructions();
         }
 
         public virtual bool IsPlayable()
@@ -69,11 +69,11 @@ namespace gamecore.card
             return true;
         }
 
-        private void PerformEffects() // During effect performing the card is still in the player's hand, might be a problem later
+        private void PerformInstructions() // During instruction performing the card is still in the player's hand, might be a problem later
         {
-            foreach (var effect in Effects)
+            foreach (var instruction in Instructions)
             {
-                effect.Perform(this);
+                instruction.Perform(this);
             }
         }
 

@@ -57,9 +57,9 @@ namespace gamecore.action
 
         public Task<AttackGA> Perform(AttackGA action)
         {
-            foreach (var effect in action.Attack.Effects)
+            foreach (var instruction in action.Attack.Instructions)
             {
-                effect.Perform(action.Attacker);
+                instruction.Perform(action.Attacker);
             }
             return Task.FromResult(action);
         }
@@ -205,9 +205,9 @@ namespace gamecore.action
 
         public Task<PerformAbilityGA> Perform(PerformAbilityGA action)
         {
-            foreach (var effect in action.Pokemon.Ability.Effects)
+            foreach (var instruction in action.Pokemon.Ability.Instructions)
             {
-                effect.Perform(action.Pokemon);
+                instruction.Perform(action.Pokemon);
             }
             action.Pokemon.AbilityUsedThisTurn = true;
             ActionSystem.INSTANCE.SubscribeToGameAction<EndTurnGA>(
