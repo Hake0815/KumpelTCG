@@ -90,14 +90,16 @@ namespace gamecore.card
 
         public bool IsPokemonCard() => false;
 
+        public bool IsEnergyCard() => false;
+
+        public bool IsBasicEnergyCard() => false;
+
         public void PlayWithTargets(List<ICardLogic> targets)
         {
             throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }
 
         public bool IsPlayableWithTargets() => false;
-
-        public bool IsEnergyCard() => false;
 
         public List<ICardLogic> GetPossibleTargets()
         {
