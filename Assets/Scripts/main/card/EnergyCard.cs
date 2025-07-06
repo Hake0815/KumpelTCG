@@ -17,18 +17,17 @@ namespace gamecore.card
         PokemonType ProvidedEnergyType { get; }
     }
 
-    class EnergyCard : IEnergyCardLogic
+    abstract class EnergyCard : IEnergyCardLogic
     {
         public static string ATTACHED_ENERGY_FOR_TURN = "attachedEnergyForTurn";
 
-        [JsonConstructor]
-        public EnergyCard(string name, string id, int deckId, IPlayerLogic owner)
+        protected EnergyCard(string name, string id, int deckId, IPlayerLogic owner)
         {
             DeckId = deckId;
             Owner = owner;
         }
 
-        public EnergyCard(IEnergyCardData energyCardData, IPlayerLogic owner, int deckId)
+        protected EnergyCard(IEnergyCardData energyCardData, IPlayerLogic owner, int deckId)
         {
             _energyCardData = energyCardData;
             Owner = owner;
@@ -78,6 +77,8 @@ namespace gamecore.card
         public bool IsItemCard() => false;
 
         public bool IsEnergyCard() => true;
+
+        public abstract bool IsBasicEnergyCard();
 
         public void Play()
         {

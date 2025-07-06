@@ -18,6 +18,7 @@ namespace gamecore.card
         bool IsItemCard();
         bool IsPokemonCard();
         bool IsEnergyCard();
+        bool IsBasicEnergyCard();
         int CompareTo(ICard other, Predicate<ICard> _cardCondition)
         {
             if (_cardCondition is not null && _cardCondition(this) && !_cardCondition(other))

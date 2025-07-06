@@ -28,9 +28,9 @@ namespace gamecore.card
             {
                 return new PokemonCard(pokemonCardData, owner, deckId);
             }
-            else if (cardData is IEnergyCardData energyCardData)
+            else if (cardData is BasicEnergyCardData basicEnergyCardData)
             {
-                return new EnergyCard(energyCardData, owner, deckId);
+                return new BasicEnergyCard(basicEnergyCardData, owner, deckId);
             }
             Debug.LogError(
                 $"Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"

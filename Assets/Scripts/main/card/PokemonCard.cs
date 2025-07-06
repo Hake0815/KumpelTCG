@@ -232,6 +232,8 @@ namespace gamecore.card
 
         public bool IsEnergyCard() => false;
 
+        public bool IsBasicEnergyCard() => false;
+
         public bool IsPlayable()
         {
             return Stage == Stage.Basic && !Owner.Bench.Full;
