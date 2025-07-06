@@ -57,8 +57,8 @@ namespace gameview
         private FloatingSelectionView _floatingSelectionView;
 
         [SerializeField]
-        private DeckSearchView _deckSearchViewPrefab;
-        private DeckSearchView _deckSearchView;
+        private SearchView _searchViewPrefab;
+        private SearchView _searchView;
         private readonly Dictionary<IPlayer, HandView> _playerHandViews = new();
         private readonly Dictionary<IPlayer, DeckView> _playerDeckViews = new();
         private readonly Dictionary<IPlayer, PrizeView> _playerPrizeViews = new();
@@ -77,7 +77,7 @@ namespace gameview
             Instantiate(_cardViewCreatorPrefab);
             Instantiate(_inputHandlerPrefab);
             _floatingSelectionView = Instantiate(_floatingSelectionViewPrefab);
-            _deckSearchView = Instantiate(_deckSearchViewPrefab);
+            _searchView = Instantiate(_searchViewPrefab);
 
             new GameRemoteService(this);
         }
@@ -356,14 +356,14 @@ namespace gameview
             _floatingSelectionView.Clear();
         }
 
-        internal void ActivateDeckSearchView(IDeck deck)
+        internal void ActivateSearchView(List<ICard> cards)
         {
-            _deckSearchView.DisplayCards(deck);
+            _searchView.DisplayCards(cards);
         }
 
-        internal void DisableDeckSearchView()
+        internal void DisableSearchView()
         {
-            _deckSearchView.Clear();
+            _searchView.Clear();
         }
     }
 }
