@@ -12,20 +12,27 @@ namespace gameview
 {
     public class DiscardPileView : MonoBehaviour
     {
+        [SerializeField]
+        private DiscardedCardsView _discardedCardsViewPrefab;
+        private DiscardedCardsView _discardedCardsView;
+        private Collider2D _collider;
         private IDiscardPile _discardPile;
         private Image _image;
-        public TMP_Text Text { get; private set; }
+        public TMP_Text _text;
 
         private void Awake()
         {
             _image = transform.Find("Sprite").GetComponent<Image>();
-            Text = GetComponentInChildren<TMP_Text>();
+            _text = GetComponentInChildren<TMP_Text>();
+            _collider = GetComponent<Collider2D>();
         }
 
         public void SetUp(IDiscardPile discardPile)
         {
             _discardPile = discardPile;
-            OnEnable();
+            _discardedCardsView = Instantiate(_discardedCardsViewPrefab);
+            _discardedCardsView.gameObject.SetActive(false);
+            RegisterOnDiscardPileEvents();
         }
 
         public void UpdateView()
@@ -34,6 +41,13 @@ namespace gameview
         }
 
         private void OnEnable()
+        {
+            RegisterOnDiscardPileEvents();
+            Debug.Log("Register show discarded cards");
+            InputHandler.INSTANCE.OnMouseLeftClick += ShowDiscardedCards;
+        }
+
+        private void RegisterOnDiscardPileEvents()
         {
             if (_discardPile != null)
             {
@@ -51,6 +65,11 @@ namespace gameview
                 _discardPile.CardsAdded -= DiscardCards;
                 _discardPile.CardsRemoved -= CreateCards;
             }
+            if (InputHandler.INSTANCE is not null)
+            {
+                Debug.Log("Unregister show discarded cards");
+                InputHandler.INSTANCE.OnMouseLeftClick -= ShowDiscardedCards;
+            }
         }
 
         private void UpdateView(List<ICard> cards)
@@ -66,7 +85,7 @@ namespace gameview
                 _image.sprite = null;
                 _image.color = new Color(1, 1, 1, 0f);
             }
-            Text.text = cards.Count.ToString();
+            _text.text = cards.Count.ToString();
         }
 
         private void DiscardCards(List<ICard> cards)
@@ -109,6 +128,12 @@ namespace gameview
                 }
                 CallbackOnDone.Invoke();
             });
+        }
+
+        private void ShowDiscardedCards(Collider2D d)
+        {
+            if (_discardPile.Cards.Count > 0 && _collider.Equals(d))
+                _discardedCardsView.ShowCards(_discardPile.Cards);
         }
     }
 }
