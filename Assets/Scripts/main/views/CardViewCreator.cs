@@ -26,9 +26,7 @@ namespace gameview
         }
 
         [SerializeField]
-        private CardView cardPrefab;
-
-        public Dictionary<IPlayer, DiscardPileView> DiscardPileViews { get; } = new();
+        private CardView _cardPrefab;
 
         public CardView CreateAtFaceDown(ICard card, Vector3 position, Quaternion rotation)
         {
@@ -39,9 +37,8 @@ namespace gameview
 
         public CardView CreateAt(ICard card, Vector3 position, Quaternion rotation)
         {
-            var newCardView = Instantiate(cardPrefab, position, rotation);
+            var newCardView = Instantiate(_cardPrefab, position, rotation);
             newCardView.SetUp(
-                DiscardPileViews[card.Owner].transform,
                 card,
                 SpriteRegistry.INSTANCE.GetSprite(card.Id),
                 SpriteRegistry.INSTANCE.GetIconSprite(card.Id)
@@ -52,9 +49,8 @@ namespace gameview
 
         public CardView CreateIn(ICard card, Transform parent)
         {
-            var newCardView = Instantiate(cardPrefab, parent);
+            var newCardView = Instantiate(_cardPrefab, parent);
             newCardView.SetUp(
-                DiscardPileViews[card.Owner].transform,
                 card,
                 SpriteRegistry.INSTANCE.GetSprite(card.Id),
                 SpriteRegistry.INSTANCE.GetIconSprite(card.Id)

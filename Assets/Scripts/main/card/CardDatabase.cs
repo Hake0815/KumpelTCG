@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using gamecore.action;
 using gamecore.actionsystem;
+using gamecore.game;
 using gamecore.instruction;
 
 namespace gamecore.card
@@ -31,7 +32,10 @@ namespace gamecore.card
                     {
                         new SelectCardsFromHandInstruction(2),
                         new DiscardSelectedCardsInstruction(),
-                        new SelectCardsFromDeckInstruction(1, card => card.IsPokemonCard()),
+                        new SelectCardsFromDeckInstruction(
+                            numberOfCards => numberOfCards <= 1,
+                            card => card.IsPokemonCard()
+                        ),
                         new TakeSelectionToHandInstruction(),
                         new DiscardCardInstruction(),
                     },
@@ -49,16 +53,19 @@ namespace gamecore.card
                     id: "nightStretcher",
                     instructions: new List<IInstruction>
                     {
-                        new SelectCardsFromHandInstruction(2),
-                        new DiscardSelectedCardsInstruction(),
-                        new SelectCardsFromDeckInstruction(1, card => card.IsPokemonCard()),
+                        new SelectCardsFromDiscardPileInstruction(
+                            numberOfCards => numberOfCards == 1,
+                            card => card.IsPokemonCard() || card.IsBasicEnergyCard()
+                        ),
                         new TakeSelectionToHandInstruction(),
                         new DiscardCardInstruction(),
                     },
                     conditions: new List<IUseCondition>
                     {
-                        new HasAtLeastCardsInHand(3),
-                        new HasCardsInDeck(),
+                        new HasAtLeastCardsOfTypeInDiscardPile(
+                            1,
+                            card => card.IsPokemonCard() || card.IsBasicEnergyCard()
+                        ),
                     }
                 )
             },

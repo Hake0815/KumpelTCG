@@ -26,7 +26,7 @@ namespace gamecore.instruction
         private bool Reaction(RevealCardsFromDeckGA action, ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
-                new SelectExactCardsGA(
+                new QuickSelectCardsGA(
                     card.Owner,
                     Amount,
                     new CardListLogic(action.RevealedCards),

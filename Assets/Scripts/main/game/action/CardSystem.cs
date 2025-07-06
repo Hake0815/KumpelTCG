@@ -23,8 +23,8 @@ namespace gamecore.game.action
             IActionPerformer<PutRemainingCardsUnderDeckGA>,
             IActionPerformer<PlayCardGA>,
             IActionPerformer<SetActivePokemonGA>,
-            IActionPerformer<SelectExactCardsGA>,
-            IActionPerformer<SelectUpToCardsGA>,
+            IActionPerformer<QuickSelectCardsGA>,
+            IActionPerformer<ConfirmSelectCardsGA>,
             IActionPerformer<DiscardCardsGA>,
             IActionPerformer<RemoveCardsFromHandGA>,
             IActionSubscriber<StartTurnGA>
@@ -61,8 +61,8 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
             _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
             _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
-            _actionSystem.AttachPerformer<SelectExactCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<SelectUpToCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<QuickSelectCardsGA>(INSTANCE);
+            _actionSystem.AttachPerformer<ConfirmSelectCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<RemoveCardsFromHandGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
@@ -82,8 +82,8 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<PutRemainingCardsUnderDeckGA>();
             _actionSystem.DetachPerformer<PlayCardGA>();
             _actionSystem.DetachPerformer<SetActivePokemonGA>();
-            _actionSystem.DetachPerformer<SelectExactCardsGA>();
-            _actionSystem.DetachPerformer<SelectUpToCardsGA>();
+            _actionSystem.DetachPerformer<QuickSelectCardsGA>();
+            _actionSystem.DetachPerformer<ConfirmSelectCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsGA>();
             _actionSystem.DetachPerformer<RemoveCardsFromHandGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
@@ -338,7 +338,7 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        public async Task<SelectExactCardsGA> Perform(SelectExactCardsGA action)
+        public async Task<QuickSelectCardsGA> Perform(QuickSelectCardsGA action)
         {
             var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
             var selectedCards = await GetSelectedCards(
@@ -357,7 +357,7 @@ namespace gamecore.game.action
         }
 
         private async Task<List<ICardLogic>> GetSelectedCards(
-            SelectExactCardsGA action,
+            QuickSelectCardsGA action,
             List<ICardLogic> options,
             SelectFrom selectFrom
         )
@@ -371,7 +371,7 @@ namespace gamecore.game.action
             );
         }
 
-        public Task<SelectExactCardsGA> Reperform(SelectExactCardsGA action)
+        public Task<QuickSelectCardsGA> Reperform(QuickSelectCardsGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
             var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
@@ -379,7 +379,7 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        public async Task<SelectUpToCardsGA> Perform(SelectUpToCardsGA action)
+        public async Task<ConfirmSelectCardsGA> Perform(ConfirmSelectCardsGA action)
         {
             var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
             var selectedCards = await GetSelectedCards(
@@ -398,7 +398,7 @@ namespace gamecore.game.action
         }
 
         private async Task<List<ICardLogic>> GetSelectedCards(
-            SelectUpToCardsGA action,
+            ConfirmSelectCardsGA action,
             List<ICardLogic> options,
             SelectFrom selectFrom
         )
@@ -406,7 +406,7 @@ namespace gamecore.game.action
             return await _game.AwaitSelection(
                 action.Player,
                 options,
-                list => list.Count <= action.Amount,
+                list => action.NumberOfCardsCondition(list.Count),
                 false,
                 selectFrom
             );
@@ -428,7 +428,7 @@ namespace gamecore.game.action
             return options;
         }
 
-        public Task<SelectUpToCardsGA> Reperform(SelectUpToCardsGA action)
+        public Task<ConfirmSelectCardsGA> Reperform(ConfirmSelectCardsGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
             var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);

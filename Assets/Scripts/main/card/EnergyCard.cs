@@ -43,12 +43,9 @@ namespace gamecore.card
 
         public PokemonType ProvidedEnergyType => _energyCardData.Type;
 
-        public event Action CardDiscarded;
-
         public void Discard()
         {
             Owner.DiscardPile.AddCards(new() { this });
-            CardDiscarded?.Invoke();
         }
 
         public List<ICardLogic> GetPossibleTargets()
