@@ -33,7 +33,6 @@ namespace gameview
         private Image _image;
         private Material _imageMaterial;
         private protected Collider2D _col;
-        private protected Transform _discardPilePosition;
         public RectTransform RectTransform { get; set; }
 
         public ICard Card { get; private set; }
@@ -100,20 +99,14 @@ namespace gameview
 
         private CardViewBehaviour _cardViewBehaviour;
 
-        public void SetUp(Transform discardPilePosition, ICard card, Sprite frontSideSprite)
+        public void SetUp(ICard card, Sprite frontSideSprite)
         {
-            SetUp(discardPilePosition, card, frontSideSprite, null);
+            SetUp(card, frontSideSprite, null);
         }
 
-        public void SetUp(
-            Transform discardPilePosition,
-            ICard card,
-            Sprite frontSideSprite,
-            Sprite attached
-        )
+        public void SetUp(ICard card, Sprite frontSideSprite, Sprite attached)
         {
             _frontSideSprite = frontSideSprite;
-            _discardPilePosition = discardPilePosition;
             _col = GetComponent<Collider2D>();
             _attachedSprite = attached;
             Card = card;
@@ -135,30 +128,22 @@ namespace gameview
 
         private void OnEnable()
         {
-            if (Card != null)
+            if (Card is IPokemonCard pokemonCard)
             {
-                Card.CardDiscarded += Discard;
-                if (Card is IPokemonCard pokemonCard)
-                {
-                    pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
-                    pokemonCard.DamageModified += UpdateDamage;
-                    pokemonCard.Evolved += OnEvolved;
-                    UpdateDamage();
-                }
+                pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
+                pokemonCard.DamageModified += UpdateDamage;
+                pokemonCard.Evolved += OnEvolved;
+                UpdateDamage();
             }
         }
 
         private void OnDisable()
         {
-            if (Card != null)
+            if (Card is IPokemonCard pokemonCard)
             {
-                Card.CardDiscarded -= Discard;
-                if (Card is IPokemonCard pokemonCard)
-                {
-                    pokemonCard.OnAttachedEnergyChanged -= AttachEnergy;
-                    pokemonCard.DamageModified -= UpdateDamage;
-                    pokemonCard.Evolved -= OnEvolved;
-                }
+                pokemonCard.OnAttachedEnergyChanged -= AttachEnergy;
+                pokemonCard.DamageModified -= UpdateDamage;
+                pokemonCard.Evolved -= OnEvolved;
             }
         }
 
@@ -171,12 +156,6 @@ namespace gameview
                     callback.Invoke();
                 }
             );
-        }
-
-        private void Discard()
-        {
-            CardViewRegistry.INSTANCE.Unregister(Card);
-            MoveToDiscardPile();
         }
 
         public void AttachEnergy(List<IEnergyCard> cards)
@@ -253,25 +232,6 @@ namespace gameview
                 _damageIcon.gameObject.SetActive(true);
                 _damageText.text = currentDamage.ToString();
             }
-        }
-
-        private void MoveToDiscardPile()
-        {
-            DOTween
-                .Sequence()
-                .Append(
-                    transform.DOMove(
-                        _discardPilePosition.position,
-                        AnimationSpeedHolder.AnimationSpeed
-                    )
-                )
-                .Join(
-                    transform.DORotateQuaternion(
-                        _discardPilePosition.rotation,
-                        AnimationSpeedHolder.AnimationSpeed
-                    )
-                )
-                .OnComplete(() => Destroy(gameObject));
         }
 
         private void OnMouseDown()

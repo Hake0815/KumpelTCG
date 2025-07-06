@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using gamecore.action;
 using gamecore.actionsystem;
+using gamecore.game;
 using gamecore.instruction;
 
 namespace gamecore.card
@@ -31,7 +32,10 @@ namespace gamecore.card
                     {
                         new SelectCardsFromHandInstruction(2),
                         new DiscardSelectedCardsInstruction(),
-                        new SelectCardsFromDeckInstruction(1, card => card.IsPokemonCard()),
+                        new SelectCardsFromDeckInstruction(
+                            numberOfCards => numberOfCards <= 1,
+                            card => card.IsPokemonCard()
+                        ),
                         new TakeSelectionToHandInstruction(),
                         new DiscardCardInstruction(),
                     },
@@ -39,6 +43,29 @@ namespace gamecore.card
                     {
                         new HasAtLeastCardsInHand(3),
                         new HasCardsInDeck(),
+                    }
+                )
+            },
+            {
+                "nightStretcher",
+                new ItemCardData(
+                    name: "Night Stretcher",
+                    id: "nightStretcher",
+                    instructions: new List<IInstruction>
+                    {
+                        new SelectCardsFromDiscardPileInstruction(
+                            numberOfCards => numberOfCards == 1,
+                            card => card.IsPokemonCard() || card.IsBasicEnergyCard()
+                        ),
+                        new TakeSelectionToHandInstruction(),
+                        new DiscardCardInstruction(),
+                    },
+                    conditions: new List<IUseCondition>
+                    {
+                        new HasAtLeastCardsOfTypeInDiscardPile(
+                            1,
+                            card => card.IsPokemonCard() || card.IsBasicEnergyCard()
+                        ),
                     }
                 )
             },
@@ -107,7 +134,7 @@ namespace gamecore.card
             // EnergyCard Cards
             {
                 "FireNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "FireNRG",
                     name: "Fire Energy",
                     type: PokemonType.Fire,
@@ -116,7 +143,7 @@ namespace gamecore.card
             },
             {
                 "FightingNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "FightingNRG",
                     name: "Fighting Energy",
                     type: PokemonType.Fighting,
@@ -125,7 +152,7 @@ namespace gamecore.card
             },
             {
                 "LightningNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "LightningNRG",
                     name: "Lightning Energy",
                     type: PokemonType.Lightning,
@@ -134,7 +161,7 @@ namespace gamecore.card
             },
             {
                 "WaterNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "WaterNRG",
                     name: "Water Energy",
                     type: PokemonType.Water,
@@ -143,7 +170,7 @@ namespace gamecore.card
             },
             {
                 "DarknessNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "DarknessNRG",
                     name: "Darkness Energy",
                     type: PokemonType.Darkness,
@@ -152,7 +179,7 @@ namespace gamecore.card
             },
             {
                 "MetalNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "MetalNRG",
                     name: "Metal Energy",
                     type: PokemonType.Metal,
@@ -161,7 +188,7 @@ namespace gamecore.card
             },
             {
                 "GrassNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "GrassNRG",
                     name: "Grass Energy",
                     type: PokemonType.Grass,
@@ -170,7 +197,7 @@ namespace gamecore.card
             },
             {
                 "PsychicNRG",
-                new EnergyCardData(
+                new BasicEnergyCardData(
                     id: "PsychicNRG",
                     name: "Psychic Energy",
                     type: PokemonType.Psychic,
