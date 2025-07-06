@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
-    class SelectExactCardsGA : SelectCardsGA
+    class QuickSelectCardsGA : SelectCardsGA
     {
-        public SelectExactCardsGA(
+        public QuickSelectCardsGA(
             IPlayerLogic player,
             int numberOfCards,
             ICardListLogic cardOptions,
@@ -20,7 +20,7 @@ namespace gamecore.game.action
             CardCondition = cardCondition;
         }
 
-        public SelectExactCardsGA(
+        public QuickSelectCardsGA(
             IPlayerLogic player,
             int numberOfCards,
             ICardListLogic cardOptions,
@@ -33,7 +33,7 @@ namespace gamecore.game.action
         }
 
         [JsonConstructor]
-        public SelectExactCardsGA(
+        public QuickSelectCardsGA(
             IPlayerLogic player,
             int numberOfCards,
             SelectedCardsOrigin origin

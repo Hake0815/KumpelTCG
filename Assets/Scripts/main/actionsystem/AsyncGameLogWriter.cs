@@ -80,7 +80,9 @@ namespace gamecore.actionsystem
             }
             catch (JsonSerializationException ex)
             {
-                Debug.LogError($"Deserialization error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                Debug.LogError(
+                    $"Deserialization error when processing line: {line}\nMessage: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                );
             }
             catch (JsonReaderException ex)
             {

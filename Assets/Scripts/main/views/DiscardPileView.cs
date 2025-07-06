@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
 using TMPro;
@@ -23,20 +24,33 @@ namespace gameview
 
         public void SetUp(IDiscardPile discardPile)
         {
-            this._discardPile = discardPile;
+            _discardPile = discardPile;
             OnEnable();
+        }
+
+        public void UpdateView()
+        {
+            UpdateView(_discardPile.Cards);
         }
 
         private void OnEnable()
         {
             if (_discardPile != null)
+            {
                 _discardPile.CardCountChanged += UpdateView;
+                _discardPile.CardsAdded += DiscardCards;
+                _discardPile.CardsRemoved += CreateCards;
+            }
         }
 
         private void OnDisable()
         {
             if (_discardPile != null)
+            {
                 _discardPile.CardCountChanged -= UpdateView;
+                _discardPile.CardsAdded -= DiscardCards;
+                _discardPile.CardsRemoved -= CreateCards;
+            }
         }
 
         private void UpdateView(List<ICard> cards)
@@ -55,9 +69,46 @@ namespace gameview
             Text.text = cards.Count.ToString();
         }
 
-        public void UpdateView()
+        private void DiscardCards(List<ICard> cards)
         {
-            UpdateView(_discardPile.Cards);
+            var cardViews = CardViewRegistry.INSTANCE.GetAll(cards);
+            foreach (var cardView in cardViews)
+            {
+                CardViewRegistry.INSTANCE.Unregister(cardView.Card);
+                var cardViewTransform = cardView.GetComponent<Transform>();
+                DOTween
+                    .Sequence()
+                    .Append(
+                        cardViewTransform.DOMove(
+                            transform.position,
+                            AnimationSpeedHolder.AnimationSpeed
+                        )
+                    )
+                    .Join(
+                        cardViewTransform.DORotateQuaternion(
+                            transform.rotation,
+                            AnimationSpeedHolder.AnimationSpeed
+                        )
+                    )
+                    .OnComplete(() => Destroy(cardView.gameObject));
+            }
+        }
+
+        private void CreateCards(List<ICard> cards)
+        {
+            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            {
+                foreach (var card in cards)
+                {
+                    var cardView = CardViewCreator.INSTANCE.CreateAt(
+                        card,
+                        transform.position,
+                        transform.rotation
+                    );
+                    cardView.Canvas.sortingOrder = card.Owner.Hand.Cards.Count + 1;
+                }
+                CallbackOnDone.Invoke();
+            });
         }
     }
 }

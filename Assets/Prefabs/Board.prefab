@@ -235,7 +235,7 @@ MonoBehaviour:
   _endGameViewPrefab: {fileID: 6396609790705163310, guid: 29783d7a1be2b37018ef092124571ce4, type: 3}
   _prizeViewPrefab: {fileID: -1075074118211069088, guid: 114930ba31c2c92f3bb0874a741d6195, type: 3}
   _floatingSelectionViewPrefab: {fileID: 7865903316988029907, guid: d2d011f0c81d43c488e4956cbe644730, type: 3}
-  _deckSearchViewPrefab: {fileID: 8413671836241859361, guid: bb689ed3082de910c877659f4ee64eb2, type: 3}
+  _searchViewPrefab: {fileID: 8413671836241859361, guid: bb689ed3082de910c877659f4ee64eb2, type: 3}
 --- !u!1 &3427014774801563546
 GameObject:
   m_ObjectHideFlags: 0

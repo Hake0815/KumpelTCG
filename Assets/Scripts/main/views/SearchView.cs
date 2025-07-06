@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace gameview
 {
-    public class DeckSearchView : MonoBehaviour
+    public class SearchView : MonoBehaviour
     {
         private static readonly string SHOW_CARDS_TEXT = "Show cards";
         private static readonly string HIDE_CARDS_TEXT = "Hide cards";
@@ -83,11 +83,11 @@ namespace gameview
             }
         }
 
-        public void DisplayCards(IDeck deck)
+        public void DisplayCards(List<ICard> cards, List<ICard> possibleTargets)
         {
             gameObject.SetActive(true);
             _currentCardFocusIndex = 0;
-            foreach (var card in deck.Cards)
+            foreach (var card in cards)
             {
                 var cardView = CardViewCreator.INSTANCE.CreateAt(
                     card,
@@ -99,7 +99,7 @@ namespace gameview
                 _displayedCards.Add(cardView);
                 _cardViewColliders.Add(cardView.GetComponent<Collider2D>());
             }
-            _displayedCards.Sort(CardViewComparer.Create());
+            _displayedCards.Sort(CardViewComparer.Create(c => possibleTargets.Contains(c)));
             _totalCardCount = _displayedCards.Count;
             UpdateView();
             SetUpHide();

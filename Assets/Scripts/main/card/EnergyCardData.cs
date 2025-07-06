@@ -6,9 +6,9 @@ namespace gamecore.card
         public EnergyCardType EnergyCardType { get; }
     }
 
-    class EnergyCardData : IEnergyCardData
+    abstract class EnergyCardData : IEnergyCardData
     {
-        public EnergyCardData(
+        protected EnergyCardData(
             string id,
             string name,
             PokemonType type,

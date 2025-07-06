@@ -5,19 +5,19 @@ using gamecore.game.action;
 
 namespace gamecore.instruction
 {
-    class SelectCardsFromDeckInstruction : IInstruction
+    class SelectCardsFromDiscardPileInstruction : IInstruction
     {
-        public Predicate<int> NumberOfCardsCondition { get; }
-        public Predicate<ICardLogic> CardCondition { get; }
-
-        public SelectCardsFromDeckInstruction(
-            Predicate<int> numberofcardscondition,
+        public SelectCardsFromDiscardPileInstruction(
+            Predicate<int> numberOfCardsCondition,
             Predicate<ICardLogic> cardCondition
         )
         {
-            NumberOfCardsCondition = numberofcardscondition;
+            NumberOfCardsCondition = numberOfCardsCondition;
             CardCondition = cardCondition;
         }
+
+        public Predicate<int> NumberOfCardsCondition { get; }
+        public Predicate<ICardLogic> CardCondition { get; }
 
         public void Perform(ICardLogic card)
         {
@@ -25,9 +25,9 @@ namespace gamecore.instruction
                 new ConfirmSelectCardsGA(
                     card.Owner,
                     NumberOfCardsCondition,
-                    card.Owner.Deck,
+                    card.Owner.DiscardPile,
                     CardCondition,
-                    SelectCardsGA.SelectedCardsOrigin.Deck
+                    SelectCardsGA.SelectedCardsOrigin.DiscardPile
                 )
             );
         }

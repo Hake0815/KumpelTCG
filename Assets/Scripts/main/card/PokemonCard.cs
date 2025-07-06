@@ -143,7 +143,6 @@ namespace gamecore.card
         IAbility IPokemonCard.Ability => Ability;
 
         public int DeckId { get; }
-        public event Action CardDiscarded;
         public event Action DamageModified;
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         public event Action Evolved;
@@ -174,7 +173,6 @@ namespace gamecore.card
         {
             Owner.DiscardPile.AddCards(new() { this });
             Damage = 0;
-            CardDiscarded?.Invoke();
         }
 
         public List<IAttackLogic> GetUsableAttacks()
@@ -231,6 +229,8 @@ namespace gamecore.card
         public bool IsItemCard() => false;
 
         public bool IsEnergyCard() => false;
+
+        public bool IsBasicEnergyCard() => false;
 
         public bool IsPlayable()
         {

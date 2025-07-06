@@ -16,6 +16,7 @@ namespace gameview
         {
             { "professorsResearch", Resources.Load<Sprite>("Images/Cards/JTG_155_R_EN_LG") },
             { "ultraBall", Resources.Load<Sprite>("Images/Cards/SVI_196_R_EN_LG") },
+            { "nightStretcher", Resources.Load<Sprite>("Images/Cards/SFA_061_R_EN_LG") },
             { "TWM128", Resources.Load<Sprite>("Images/Cards/TWM_128_R_EN_LG") },
             { "TWM129", Resources.Load<Sprite>("Images/Cards/TWM_129_R_EN_LG") },
             { "GrassNRG", Resources.Load<Sprite>("Images/Cards/Energy/SVE_001_R_EN_LG") },

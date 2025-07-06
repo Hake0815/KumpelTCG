@@ -68,9 +68,10 @@ namespace gameview
                 { "professorsResearch", 8 },
                 { "TWM128", 8 },
                 { "TWM129", 8 },
-                { "ultraBall", 16 },
-                { "FireNRG", 10 },
-                { "PsychicNRG", 10 },
+                { "ultraBall", 12 },
+                { "nightStretcher", 10 },
+                { "FireNRG", 7 },
+                { "PsychicNRG", 7 },
             };
         }
 
@@ -174,7 +175,10 @@ namespace gameview
                     PrepareFloatingSelection(targetData.PossibleTargets);
                     break;
                 case SelectFrom.Deck:
-                    PrepareDeckSearch(selectFromData.Deck);
+                    PrepareSearch(selectFromData.SelectionSource, targetData.PossibleTargets);
+                    break;
+                case SelectFrom.DiscardPile:
+                    PrepareSearch(selectFromData.SelectionSource, targetData.PossibleTargets);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -193,9 +197,9 @@ namespace gameview
             _gameManager.ActivateFloatingSelectionView(possibleTargets);
         }
 
-        private void PrepareDeckSearch(IDeck deck)
+        private void PrepareSearch(List<ICard> cards, List<ICard> possibleTargets)
         {
-            _gameManager.ActivateDeckSearchView(deck);
+            _gameManager.ActivateSearchView(cards, possibleTargets);
         }
 
         private static void SimpleProceed(GameInteraction interaction)
@@ -333,7 +337,7 @@ namespace gameview
                     () =>
                     {
                         OnInteract();
-                        _gameManager.DisableDeckSearchView();
+                        _gameManager.DisableSearchView();
                     }
                 );
                 button.interactable = conditionOnSelection(_selectedCards);
