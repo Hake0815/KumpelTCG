@@ -33,8 +33,6 @@ namespace gamecore.card
 
         public int DeckId { get; }
 
-        public event Action CardDiscarded;
-
         protected TrainerCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
         {
             _trainerCardData = cardData;
@@ -69,7 +67,7 @@ namespace gamecore.card
             return true;
         }
 
-        private void PerformInstructions() // During instruction performing the card is still in the player's hand, might be a problem later
+        private void PerformInstructions()
         {
             foreach (var instruction in Instructions)
             {
@@ -80,7 +78,6 @@ namespace gamecore.card
         public void Discard()
         {
             Owner.DiscardPile.AddCards(new() { this });
-            CardDiscarded?.Invoke();
         }
 
         public bool IsTrainerCard() => true;

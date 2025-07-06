@@ -83,7 +83,7 @@ namespace gameview
             }
         }
 
-        public void DisplayCards(List<ICard> cards)
+        public void DisplayCards(List<ICard> cards, List<ICard> possibleTargets)
         {
             gameObject.SetActive(true);
             _currentCardFocusIndex = 0;
@@ -99,7 +99,7 @@ namespace gameview
                 _displayedCards.Add(cardView);
                 _cardViewColliders.Add(cardView.GetComponent<Collider2D>());
             }
-            _displayedCards.Sort(CardViewComparer.Create());
+            _displayedCards.Sort(CardViewComparer.Create(c => possibleTargets.Contains(c)));
             _totalCardCount = _displayedCards.Count;
             UpdateView();
             SetUpHide();

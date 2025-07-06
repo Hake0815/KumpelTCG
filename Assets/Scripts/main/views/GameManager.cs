@@ -132,7 +132,6 @@ namespace gameview
                 rotation
             );
             discardPileView.SetUp(player.DiscardPile);
-            CardViewCreator.INSTANCE.DiscardPileViews.Add(player, discardPileView);
             _playerDiscardPileViews.Add(player, discardPileView);
         }
 
@@ -356,9 +355,9 @@ namespace gameview
             _floatingSelectionView.Clear();
         }
 
-        internal void ActivateSearchView(List<ICard> cards)
+        internal void ActivateSearchView(List<ICard> cards, List<ICard> possibleTargets)
         {
-            _searchView.DisplayCards(cards);
+            _searchView.DisplayCards(cards, possibleTargets);
         }
 
         internal void DisableSearchView()

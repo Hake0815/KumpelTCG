@@ -49,10 +49,18 @@ namespace gamecore.game.state
 
         private List<GameInteraction> CreateSelectCardsInteraction()
         {
-            var selectFromData =
-                _selectFrom == SelectFrom.Deck
-                    ? new SelectFromData(_selectFrom, _player.Deck)
-                    : new SelectFromData(_selectFrom);
+            var selectFromData = _selectFrom switch
+            {
+                SelectFrom.Deck => new SelectFromData(
+                    _selectFrom,
+                    _player.Deck.Cards.Cast<ICard>().ToList()
+                ),
+                SelectFrom.DiscardPile => new SelectFromData(
+                    _selectFrom,
+                    _player.DiscardPile.Cards.Cast<ICard>().ToList()
+                ),
+                _ => new SelectFromData(_selectFrom),
+            };
             return new()
             {
                 new GameInteraction(

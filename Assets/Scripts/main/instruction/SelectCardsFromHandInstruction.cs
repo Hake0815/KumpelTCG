@@ -16,7 +16,7 @@ namespace gamecore.instruction
         public void Perform(ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
-                new SelectExactCardsGA(
+                new QuickSelectCardsGA(
                     card.Owner,
                     Amount,
                     card.Owner.Hand,

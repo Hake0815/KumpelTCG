@@ -8,7 +8,6 @@ namespace gamecore.card
     public interface ICard
     {
         int DeckId { get; }
-        event Action CardDiscarded;
         IPlayer Owner { get; }
 
         string Name { get; }
