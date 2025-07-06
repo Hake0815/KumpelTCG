@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 6596939706381504730}
   - component: {fileID: 8413671836241859361}
   m_Layer: 0
-  m_Name: DeckSearchView
+  m_Name: SearchView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

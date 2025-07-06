@@ -195,7 +195,7 @@ namespace gameview
 
         private void PrepareDeckSearch(IDeck deck)
         {
-            _gameManager.ActivateDeckSearchView(deck);
+            _gameManager.ActivateSearchView(deck.Cards);
         }
 
         private static void SimpleProceed(GameInteraction interaction)
@@ -333,7 +333,7 @@ namespace gameview
                     () =>
                     {
                         OnInteract();
-                        _gameManager.DisableDeckSearchView();
+                        _gameManager.DisableSearchView();
                     }
                 );
                 button.interactable = conditionOnSelection(_selectedCards);
