@@ -9,22 +9,19 @@ namespace gameview
     {
         private readonly Predicate<ICard> _cardCondition;
 
-        private CardViewComparer(
-            Predicate<ICard> cardCondition,
-            Predicate<CardView> cardViewCondition
-        )
+        private CardViewComparer(Predicate<ICard> cardCondition)
         {
             _cardCondition = cardCondition;
         }
 
         public static CardViewComparer Create()
         {
-            return new CardViewComparer(null, null);
+            return new CardViewComparer(null);
         }
 
         public static CardViewComparer Create(Predicate<ICard> cardCondition)
         {
-            return new CardViewComparer(cardCondition, null);
+            return new CardViewComparer(cardCondition);
         }
 
         public int Compare(CardView x, CardView y)
