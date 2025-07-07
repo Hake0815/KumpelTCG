@@ -17,6 +17,7 @@ namespace gameview
         private const float WIDTH = 6f;
         private const float HEIGHT = 2.5f;
         private const float CARD_SPACING = 1f;
+        private const float SCALE_FACTOR = 2f;
         private readonly Vector3 MIDDLE_POSITION = new(0.0f, HEIGHT, -10.0f);
 
         [SerializeField]
@@ -33,7 +34,6 @@ namespace gameview
 
         [SerializeField]
         private TMP_Text _buttonText;
-        private static readonly float SCALE_FACTOR = 2f;
         private readonly List<CardView> _displayedCards = new();
         private readonly List<Collider2D> _cardViewColliders = new();
         private int _currentCardFocusIndex = 0;
@@ -144,24 +144,6 @@ namespace gameview
                         AnimationSpeedHolder.AnimationSpeed
                     );
                 _displayedCards[i].Canvas.sortingOrder = 160 - zoff;
-            }
-        }
-
-        private void ArangeCardsAfterCurrentIndex()
-        {
-            for (int i = _currentCardFocusIndex; i < _totalCardCount; i++)
-            {
-                var xpos =
-                    (float)
-                        Math.Log(
-                            i - _currentCardFocusIndex + 1,
-                            _totalCardCount - _currentCardFocusIndex + 1
-                        ) * WIDTH;
-                _displayedCards[i]
-                    .transform.DOMove(
-                        MIDDLE_POSITION + Vector3.right * xpos,
-                        AnimationSpeedHolder.AnimationSpeed
-                    );
             }
         }
 
