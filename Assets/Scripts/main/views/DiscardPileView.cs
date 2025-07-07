@@ -43,7 +43,6 @@ namespace gameview
         private void OnEnable()
         {
             RegisterOnDiscardPileEvents();
-            Debug.Log("Register show discarded cards");
             InputHandler.INSTANCE.OnMouseLeftClick += ShowDiscardedCards;
         }
 
@@ -67,7 +66,6 @@ namespace gameview
             }
             if (InputHandler.INSTANCE is not null)
             {
-                Debug.Log("Unregister show discarded cards");
                 InputHandler.INSTANCE.OnMouseLeftClick -= ShowDiscardedCards;
             }
         }
