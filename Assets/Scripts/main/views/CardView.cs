@@ -35,6 +35,9 @@ namespace gameview
         private protected Collider2D _col;
         public RectTransform RectTransform { get; set; }
 
+        [SerializeField]
+        public CardDetailView _cardDetailViewPrefab;
+
         public ICard Card { get; private set; }
         public Canvas Canvas { get; private set; }
         private bool _attached = false;
@@ -112,6 +115,40 @@ namespace gameview
             Card = card;
             OnEnable();
             SetImageSprite();
+            InputHandler.INSTANCE.OnMouseRightClick += OnRightClick;
+        }
+
+        private void OnDestroy()
+        {
+            UnregisterCardDetailView();
+        }
+
+        public void UnregisterCardDetailView()
+        {
+            if (InputHandler.INSTANCE is not null)
+                InputHandler.INSTANCE.OnMouseRightClick -= OnRightClick;
+        }
+
+        private void OnRightClick(Collider2D d)
+        {
+            if (_col.Equals(d))
+            {
+                ShowCardDetail();
+            }
+        }
+
+        public void ShowCardDetail()
+        {
+            if (!FaceUp)
+                return;
+            var detailView = Instantiate(_cardDetailViewPrefab);
+            detailView.DisplayCard(Card);
+        }
+
+        public void ShowCardDetail(Vector3 middlePosition)
+        {
+            var detailView = Instantiate(_cardDetailViewPrefab);
+            detailView.DisplayCard(Card, middlePosition);
         }
 
         public void Awake()
