@@ -409,6 +409,7 @@ MonoBehaviour:
   _damageIcon: {fileID: 203603192966745337}
   _damageText: {fileID: 1112427015880156359}
   _backSideSprite: {fileID: 2444483277926139015, guid: 668405f19aa23a15094453dca0f65bae, type: 3}
+  _cardDetailViewPrefab: {fileID: -396706488550406428, guid: 2f5e18f639e0f44baa1018bf1da290c9, type: 3}
 --- !u!61 &5423485942658554684
 BoxCollider2D:
   m_ObjectHideFlags: 0

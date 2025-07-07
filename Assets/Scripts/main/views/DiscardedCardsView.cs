@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace gameview
 {
@@ -13,9 +15,10 @@ namespace gameview
         [SerializeField]
         private RectTransform _scrollView;
 
+        private readonly List<CardView> _cardViews = new();
+
         public void ShowCards(List<ICard> cards)
         {
-            Debug.Log($"Showing {cards.Count} cards");
             gameObject.SetActive(true);
             int numberOfRows = Mathf.CeilToInt((float)cards.Count / 5);
             var rectTransform = _scrollParent.GetComponent<RectTransform>();
@@ -26,9 +29,24 @@ namespace gameview
             );
             foreach (var card in cards)
             {
-                CardViewCreator.INSTANCE.CreateIn(card, _scrollParent);
+                var cardView = CardViewCreator.INSTANCE.CreateIn(card, _scrollParent);
+                _cardViews.Add(cardView);
             }
             InputHandler.INSTANCE.OnMouseLeftClick += HideThis;
+            InputHandler.INSTANCE.OnMouseRightClick += SetUpCardDetail;
+        }
+
+        private void SetUpCardDetail(Collider2D d)
+        {
+            var mousePos = Input.mousePosition;
+            var cardView = _cardViews.FirstOrDefault(cardView =>
+                RectTransformUtility.RectangleContainsScreenPoint(
+                    cardView.GetComponent<RectTransform>(),
+                    mousePos,
+                    null
+                )
+            );
+            cardView?.ShowCardDetail(new(-3f, 0f, -10.0f));
         }
 
         private void HideThis(Collider2D d)
@@ -37,11 +55,12 @@ namespace gameview
             {
                 ClearOldCards();
                 InputHandler.INSTANCE.OnMouseLeftClick -= HideThis;
+                InputHandler.INSTANCE.OnMouseRightClick -= SetUpCardDetail;
                 gameObject.SetActive(false);
             }
         }
 
-        bool IsPointerOverUIObject(RectTransform rect)
+        private static bool IsPointerOverUIObject(RectTransform rect)
         {
             var mousePos = Input.mousePosition;
             return RectTransformUtility.RectangleContainsScreenPoint(rect, mousePos, null);
@@ -49,10 +68,11 @@ namespace gameview
 
         private void ClearOldCards()
         {
-            foreach (Transform child in _scrollParent)
+            foreach (var cardView in _cardViews)
             {
-                Destroy(child.gameObject);
+                Destroy(cardView.gameObject);
             }
+            _cardViews.Clear();
         }
     }
 }
