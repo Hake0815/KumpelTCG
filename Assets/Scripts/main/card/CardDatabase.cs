@@ -17,7 +17,7 @@ namespace gamecore.card
                     "professorsResearch",
                     new List<IInstruction>
                     {
-                        new DiscardHandInstruction(),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Hand),
                         new DrawCardsInstruction(7),
                     },
                     new List<IUseCondition> { new HasCardsInDeck() }
@@ -31,13 +31,13 @@ namespace gamecore.card
                     instructions: new List<IInstruction>
                     {
                         new SelectCardsFromHandInstruction(2),
-                        new DiscardSelectedCardsInstruction(),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Selection),
                         new SelectCardsFromDeckInstruction(
                             numberOfCards => numberOfCards <= 1,
                             card => card.IsPokemonCard()
                         ),
                         new TakeSelectionToHandInstruction(),
-                        new DiscardCardInstruction(),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Self, 1),
                     },
                     conditions: new List<IUseCondition>
                     {
@@ -58,7 +58,7 @@ namespace gamecore.card
                             card => card.IsPokemonCard() || card.IsBasicEnergyCard()
                         ),
                         new TakeSelectionToHandInstruction(),
-                        new DiscardCardInstruction(),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Self, 1),
                     },
                     conditions: new List<IUseCondition>
                     {
