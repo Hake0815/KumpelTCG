@@ -10,6 +10,8 @@ namespace gamecore.card
     {
         public const string PLAYED_SUPPORTER_THIS_TURN = "playedSupporterThisTurn";
 
+        public override CardSubtype CardSubtype => CardSubtype.Supporter;
+
         public SupporterCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
             : base(cardData, owner, deckId) { }
 

@@ -51,9 +51,9 @@ namespace gamecore.action
 
         private static void ApplyWeaknessResistance(DealDamgeGA action)
         {
-            if (action.Target.Weakness == action.Attacker.Type)
+            if (action.Target.Weakness == action.Attacker.PokemonType)
                 action.Damage *= 2;
-            else if (action.Target.Resistance == action.Attacker.Type)
+            else if (action.Target.Resistance == action.Attacker.PokemonType)
                 action.Damage -= 30;
         }
 

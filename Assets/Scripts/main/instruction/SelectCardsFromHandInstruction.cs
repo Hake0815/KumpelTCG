@@ -1,26 +1,23 @@
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.instruction.filter;
 
 namespace gamecore.instruction
 {
-    class SelectCardsFromHandInstruction : IInstruction
+    class SelectCardsFromHandInstruction : SelectCardsInstruction
     {
-        public int Amount { get; }
+        public SelectCardsFromHandInstruction(IntRange countRange, FilterNode filter)
+            : base(countRange, filter) { }
 
-        public SelectCardsFromHandInstruction(int amount)
-        {
-            Amount = amount;
-        }
-
-        public void Perform(ICardLogic card)
+        public override void Perform(ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
                 new QuickSelectCardsGA(
                     card.Owner,
-                    Amount,
+                    CountRange.Contains,
                     card.Owner.Hand,
-                    c => c != card,
+                    c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.Hand
                 )
             );

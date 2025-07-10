@@ -5,6 +5,8 @@ namespace gamecore.card
 {
     class ItemCard : TrainerCard
     {
+        public override CardSubtype CardSubtype => CardSubtype.Item;
+
         public ItemCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
             : base(cardData, owner, deckId) { }
 
