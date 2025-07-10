@@ -2,31 +2,23 @@ using System;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.instruction.filter;
 
 namespace gamecore.instruction
 {
-    class SelectCardsFromDiscardPileInstruction : IInstruction
+    class SelectCardsFromDiscardPileInstruction : SelectCardsInstruction
     {
-        public SelectCardsFromDiscardPileInstruction(
-            Predicate<int> numberOfCardsCondition,
-            Predicate<ICardLogic> cardCondition
-        )
-        {
-            NumberOfCardsCondition = numberOfCardsCondition;
-            CardCondition = cardCondition;
-        }
+        public SelectCardsFromDiscardPileInstruction(IntRange countRange, FilterNode filter)
+            : base(countRange, filter) { }
 
-        public Predicate<int> NumberOfCardsCondition { get; }
-        public Predicate<ICardLogic> CardCondition { get; }
-
-        public void Perform(ICardLogic card)
+        public override void Perform(ICardLogic card)
         {
             ActionSystem.INSTANCE.AddReaction(
                 new ConfirmSelectCardsGA(
                     card.Owner,
-                    NumberOfCardsCondition,
+                    CountRange.Contains,
                     card.Owner.DiscardPile,
-                    CardCondition,
+                    c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.DiscardPile
                 )
             );

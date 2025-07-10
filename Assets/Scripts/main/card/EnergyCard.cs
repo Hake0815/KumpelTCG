@@ -43,6 +43,10 @@ namespace gamecore.card
 
         public PokemonType ProvidedEnergyType => _energyCardData.Type;
 
+        public CardType CardType => CardType.Energy;
+
+        public abstract CardSubtype CardSubtype { get; }
+
         public void Discard()
         {
             Owner.DiscardPile.AddCards(new() { this });

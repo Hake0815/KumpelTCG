@@ -53,7 +53,7 @@ namespace gamecore.card
     internal interface IPokemonCardLogic : ICardLogic, IPokemonCard
     {
         [JsonIgnore]
-        PokemonType Type { get; set; }
+        PokemonType PokemonType { get; set; }
 
         [JsonIgnore]
         PokemonType Weakness { get; set; }
@@ -105,7 +105,7 @@ namespace gamecore.card
             AttachedEnergyCards.Cast<IEnergyCard>().ToList();
 
         List<IAttack> IPokemonCard.Attacks => Attacks.Cast<IAttack>().ToList();
-        public PokemonType Type { get; set; }
+        public PokemonType PokemonType { get; set; }
         public PokemonType Weakness { get; set; }
         public PokemonType Resistance { get; set; }
         public int MaxHP { get; private set; }
@@ -143,6 +143,18 @@ namespace gamecore.card
         IAbility IPokemonCard.Ability => Ability;
 
         public int DeckId { get; }
+
+        public CardType CardType => CardType.Pokemon;
+
+        public CardSubtype CardSubtype =>
+            Stage switch
+            {
+                Stage.Basic => CardSubtype.BasicPokemon,
+                Stage.Stage1 => CardSubtype.Stage1Pokemon,
+                Stage.Stage2 => CardSubtype.Stage2Pokemon,
+                _ => throw new NotImplementedException(),
+            };
+
         public event Action DamageModified;
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         public event Action Evolved;
@@ -161,7 +173,7 @@ namespace gamecore.card
             Attacks = cardData.Attacks.ConvertAll(attack => attack.Clone());
             Weakness = cardData.Weakness;
             Resistance = cardData.Resistance;
-            Type = cardData.Type;
+            PokemonType = cardData.Type;
             MaxHP = cardData.MaxHP;
             NumberOfPrizeCardsOnKnockout = cardData.NumberOfPrizeCardsOnKnockout;
             RetreatCost = cardData.RetreatCost;

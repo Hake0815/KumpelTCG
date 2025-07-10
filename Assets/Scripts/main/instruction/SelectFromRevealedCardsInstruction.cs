@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.instruction.filter;
 
 namespace gamecore.instruction
 {
-    class SelectFromRevealedCardsInstruction : IInstruction
+    class SelectFromRevealedCardsInstruction : SelectCardsInstruction
     {
-        public int Amount { get; }
+        public SelectFromRevealedCardsInstruction(IntRange countRange, FilterNode filter)
+            : base(countRange, filter) { }
 
-        public SelectFromRevealedCardsInstruction(int amount)
-        {
-            Amount = amount;
-        }
-
-        public void Perform(ICardLogic card)
+        public override void Perform(ICardLogic card)
         {
             new InstructionSubscriber<RevealCardsFromDeckGA>(
                 action => Reaction(action, card),
@@ -28,8 +25,9 @@ namespace gamecore.instruction
             ActionSystem.INSTANCE.AddReaction(
                 new QuickSelectCardsGA(
                     card.Owner,
-                    Amount,
+                    CountRange.Contains,
                     new CardListLogic(action.RevealedCards),
+                    c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.Other
                 )
             );
