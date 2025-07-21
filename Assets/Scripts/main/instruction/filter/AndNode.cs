@@ -15,5 +15,14 @@ namespace gamecore.instruction.filter
 
         public override bool Matches(ICardLogic card, ICardLogic sourceCard) =>
             Operands.All(o => o.Matches(card, sourceCard));
+
+        public override object ToSerializable()
+        {
+            return new Dictionary<string, object>
+            {
+                { "op", "and" },
+                { "operands", Operands.ConvertAll(o => o.ToSerializable()) },
+            };
+        }
     }
 }

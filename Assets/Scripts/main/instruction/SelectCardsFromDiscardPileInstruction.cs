@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
@@ -21,6 +22,26 @@ namespace gamecore.instruction
                     c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.DiscardPile
                 )
+            );
+        }
+
+        public override InstructionJson ToSerializable()
+        {
+            return new InstructionJson(
+                instructionType: "select_cards",
+                data: new Dictionary<string, object>
+                {
+                    { "from", "discard_pile" },
+                    {
+                        "count",
+                        new Dictionary<string, object>
+                        {
+                            { "min", CountRange.Min },
+                            { "max", CountRange.Max },
+                        }
+                    },
+                    { "filter", Filter.ToSerializable() },
+                }
             );
         }
     }

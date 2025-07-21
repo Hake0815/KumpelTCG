@@ -5,15 +5,13 @@ namespace gamecore.instruction
     [System.Serializable]
     public class InstructionJson
     {
-        public string instruction_type;
-        public Dictionary<string, object> args;
+        public string InstructionType { get; }
+        public Dictionary<string, object> Data { get; }
 
-        public InstructionJson() { }
-
-        public InstructionJson(string instructionType, Dictionary<string, object> arguments)
+        public InstructionJson(string instructionType, Dictionary<string, object> data)
         {
-            instruction_type = instructionType;
-            args = arguments;
+            InstructionType = instructionType;
+            Data = data;
         }
     }
 }

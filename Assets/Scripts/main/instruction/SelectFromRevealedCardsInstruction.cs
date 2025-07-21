@@ -33,5 +33,25 @@ namespace gamecore.instruction
             );
             return true;
         }
+
+        public override InstructionJson ToSerializable()
+        {
+            return new InstructionJson(
+                instructionType: "select_cards",
+                data: new Dictionary<string, object>
+                {
+                    { "from", "revealed" },
+                    {
+                        "count",
+                        new Dictionary<string, object>
+                        {
+                            { "min", CountRange.Min },
+                            { "max", CountRange.Max },
+                        }
+                    },
+                    { "filter", Filter.ToSerializable() },
+                }
+            );
+        }
     }
 }

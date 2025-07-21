@@ -19,5 +19,13 @@ namespace gamecore.instruction
         {
             ActionSystem.INSTANCE.AddReaction(new RevealCardsFromDeckGA(card.Owner, Count));
         }
+
+        public InstructionJson ToSerializable()
+        {
+            return new InstructionJson(
+                instructionType: "reveal_cards",
+                data: new() { { "count", Count }, { "from", "deck" } }
+            );
+        }
     }
 }
