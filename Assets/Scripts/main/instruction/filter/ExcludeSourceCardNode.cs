@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using gamecore.card;
 
 namespace gamecore.instruction.filter
@@ -7,6 +8,11 @@ namespace gamecore.instruction.filter
         public override bool Matches(ICardLogic card, ICardLogic sourceCard)
         {
             return card != sourceCard;
+        }
+
+        public override object ToSerializable()
+        {
+            return new Dictionary<string, object> { { "op", "exclude_source" } };
         }
     }
 }

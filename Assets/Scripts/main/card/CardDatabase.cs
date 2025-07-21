@@ -41,7 +41,7 @@ namespace gamecore.card
                             FilterUtils.CreatePokemonFilter()
                         ),
                         new TakeSelectionToHandInstruction(),
-                        new DiscardInstruction(DiscardInstruction.TargetSource.Self, 1),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
                     {
@@ -62,7 +62,7 @@ namespace gamecore.card
                             FilterUtils.CreatePokemonOrBasicEnergyFilter()
                         ),
                         new TakeSelectionToHandInstruction(),
-                        new DiscardInstruction(DiscardInstruction.TargetSource.Self, 1),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
                     {

@@ -15,5 +15,7 @@ namespace gamecore.instruction
         public FilterNode Filter { get; }
 
         public abstract void Perform(ICardLogic card);
+
+        public abstract InstructionJson ToSerializable();
     }
 }

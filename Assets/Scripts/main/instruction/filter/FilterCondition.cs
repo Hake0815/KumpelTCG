@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
 using gamecore.card;
 
@@ -43,6 +44,23 @@ namespace gamecore.instruction.filter
                 FilterOperation.LessThanOrEqual => cmp <= 0,
                 FilterOperation.GreaterThanOrEqual => cmp >= 0,
                 _ => false,
+            };
+        }
+
+        public override object ToSerializable()
+        {
+            return new Dictionary<string, object>
+            {
+                { "op", "condition" },
+                {
+                    "condition",
+                    new Dictionary<string, object>
+                    {
+                        { "field", Field.ToString() },
+                        { "op", Operation.ToString() },
+                        { "value", Value.ToString() },
+                    }
+                },
             };
         }
     }

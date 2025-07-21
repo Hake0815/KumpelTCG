@@ -24,5 +24,13 @@ namespace gamecore.instruction
             );
             return true;
         }
+
+        public InstructionJson ToSerializable()
+        {
+            return new InstructionJson(
+                instructionType: "put_cards_in_deck",
+                data: new() { { "return_type", "under" }, { "from", "selection_remainder" } }
+            );
+        }
     }
 }

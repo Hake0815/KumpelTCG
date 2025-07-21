@@ -27,5 +27,13 @@ namespace gamecore.instruction
             action.WasReactedTo = true;
             return true;
         }
+
+        public InstructionJson ToSerializable()
+        {
+            return new InstructionJson(
+                instructionType: "take_cards_to_hand",
+                data: new() { { "count", "all" }, { "from", "selection" } }
+            );
+        }
     }
 }

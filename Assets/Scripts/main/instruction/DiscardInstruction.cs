@@ -16,7 +16,7 @@ namespace gamecore.instruction
 
         public TargetSource Target { get; }
 
-        public DiscardInstruction(TargetSource target, int? count = null)
+        public DiscardInstruction(TargetSource target)
         {
             Target = target;
         }
@@ -58,11 +58,10 @@ namespace gamecore.instruction
 
         public InstructionJson ToSerializable()
         {
-            return new InstructionJson
-            {
-                instruction_type = "discard",
-                args = new Dictionary<string, object> { { "target", Target.ToString().ToLower() } },
-            };
+            return new InstructionJson(
+                instructionType: "discard",
+                data: new Dictionary<string, object> { { "target", Target.ToString().ToLower() } }
+            );
         }
     }
 }
