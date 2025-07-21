@@ -71,5 +71,7 @@ namespace gamecore.card
         List<ICardLogic> GetPossibleTargets();
         int GetNumberOfTargets();
         void Discard();
+        CardType CardType { get; }
+        CardSubtype CardSubtype { get; }
     }
 }

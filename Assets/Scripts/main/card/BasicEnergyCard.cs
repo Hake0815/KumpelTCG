@@ -12,6 +12,8 @@ namespace gamecore.card
         public BasicEnergyCard(string name, string id, int deckId, IPlayerLogic owner)
             : base(name, id, deckId, owner) { }
 
+        public override CardSubtype CardSubtype => CardSubtype.BasicEnergy;
+
         public override bool IsBasicEnergyCard() => true;
     }
 }

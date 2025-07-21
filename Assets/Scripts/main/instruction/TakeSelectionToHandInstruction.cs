@@ -1,9 +1,6 @@
-using System;
-using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
-using UnityEngine;
 
 namespace gamecore.instruction
 {
@@ -26,6 +23,14 @@ namespace gamecore.instruction
             );
             action.WasReactedTo = true;
             return true;
+        }
+
+        public InstructionJson ToSerializable()
+        {
+            return new InstructionJson(
+                instructionType: "take_cards_to_hand",
+                data: new() { { "count", "all" }, { "from", "selection" } }
+            );
         }
     }
 }

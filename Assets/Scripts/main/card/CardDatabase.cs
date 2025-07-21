@@ -3,6 +3,7 @@ using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.game;
 using gamecore.instruction;
+using gamecore.instruction.filter;
 
 namespace gamecore.card
 {
@@ -17,7 +18,7 @@ namespace gamecore.card
                     "professorsResearch",
                     new List<IInstruction>
                     {
-                        new DiscardHandInstruction(),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Hand),
                         new DrawCardsInstruction(7),
                     },
                     new List<IUseCondition> { new HasCardsInDeck() }
@@ -30,14 +31,17 @@ namespace gamecore.card
                     id: "ultraBall",
                     instructions: new List<IInstruction>
                     {
-                        new SelectCardsFromHandInstruction(2),
-                        new DiscardSelectedCardsInstruction(),
+                        new SelectCardsFromHandInstruction(
+                            new IntRange(2, 2),
+                            new ExcludeSourceCardNode()
+                        ),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Selection),
                         new SelectCardsFromDeckInstruction(
-                            numberOfCards => numberOfCards <= 1,
-                            card => card.IsPokemonCard()
+                            new IntRange(0, 1),
+                            FilterUtils.CreatePokemonFilter()
                         ),
                         new TakeSelectionToHandInstruction(),
-                        new DiscardCardInstruction(),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
                     {
@@ -54,17 +58,17 @@ namespace gamecore.card
                     instructions: new List<IInstruction>
                     {
                         new SelectCardsFromDiscardPileInstruction(
-                            numberOfCards => numberOfCards == 1,
-                            card => card.IsPokemonCard() || card.IsBasicEnergyCard()
+                            new IntRange(1, 1),
+                            FilterUtils.CreatePokemonOrBasicEnergyFilter()
                         ),
                         new TakeSelectionToHandInstruction(),
-                        new DiscardCardInstruction(),
+                        new DiscardInstruction(DiscardInstruction.TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
                     {
                         new HasAtLeastCardsOfTypeInDiscardPile(
                             1,
-                            card => card.IsPokemonCard() || card.IsBasicEnergyCard()
+                            FilterUtils.CreatePokemonOrBasicEnergyFilter()
                         ),
                     }
                 )
@@ -124,7 +128,10 @@ namespace gamecore.card
                         new List<IInstruction>
                         {
                             new RevealCardsFromDeckInstruction(2),
-                            new SelectFromRevealedCardsInstruction(1),
+                            new SelectFromRevealedCardsInstruction(
+                                new IntRange(1, 1),
+                                new TrueNode()
+                            ),
                             new TakeSelectionToHandInstruction(),
                             new PutRemainingCardsUnderDeckInstruction(),
                         }
