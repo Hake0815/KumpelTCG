@@ -15,5 +15,13 @@ namespace gamecore.instruction
         {
             return card.Owner.Hand.CardCount >= Count;
         }
+
+        public ConditionJson ToSerializable()
+        {
+            return new ConditionJson(
+                conditionType: "has_cards",
+                new() { { "count", Count }, { "in", "hand" } }
+            );
+        }
     }
 }

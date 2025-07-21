@@ -68,7 +68,7 @@ namespace gamecore.card
                     {
                         new HasAtLeastCardsOfTypeInDiscardPile(
                             1,
-                            card => card.IsPokemonCard() || card.IsBasicEnergyCard()
+                            FilterUtils.CreatePokemonOrBasicEnergyFilter()
                         ),
                     }
                 )
