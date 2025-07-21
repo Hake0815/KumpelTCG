@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using gamecore.action;
@@ -29,6 +30,18 @@ namespace gamecore.instruction
                     card as IPokemonCardLogic,
                     card.Owner.Opponent.ActivePokemon
                 )
+            );
+        }
+
+        public InstructionJson ToSerializable()
+        {
+            return new InstructionJson(
+                instructionType: "deal_damage",
+                data: new Dictionary<string, object>
+                {
+                    { "target", "defending" },
+                    { "amount", Damage },
+                }
             );
         }
     }

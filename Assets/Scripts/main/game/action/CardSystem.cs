@@ -365,7 +365,7 @@ namespace gamecore.game.action
             return await _game.AwaitSelection(
                 action.Player,
                 options,
-                list => list.Count == action.NumberOfCards,
+                list => action.NumberOfCardsCondition(list.Count),
                 true,
                 selectFrom
             );

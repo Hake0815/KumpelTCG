@@ -33,6 +33,10 @@ namespace gamecore.card
 
         public int DeckId { get; }
 
+        public CardType CardType => CardType.Trainer;
+
+        public abstract CardSubtype CardSubtype { get; }
+
         protected TrainerCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
         {
             _trainerCardData = cardData;
