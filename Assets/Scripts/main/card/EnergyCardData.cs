@@ -2,7 +2,7 @@ namespace gamecore.card
 {
     internal interface IEnergyCardData : ICardData
     {
-        public PokemonType Type { get; }
+        public EnergyType Type { get; }
         public EnergyCardType EnergyCardType { get; }
     }
 
@@ -11,7 +11,7 @@ namespace gamecore.card
         protected EnergyCardData(
             string id,
             string name,
-            PokemonType type,
+            EnergyType type,
             EnergyCardType energyCardType
         )
         {
@@ -21,7 +21,7 @@ namespace gamecore.card
             Id = id;
         }
 
-        public PokemonType Type { get; }
+        public EnergyType Type { get; }
         public EnergyCardType EnergyCardType { get; }
 
         public string Name { get; }
