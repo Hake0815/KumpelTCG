@@ -80,21 +80,21 @@ namespace gamecore.card
                     name: "Dreepy",
                     stage: Stage.Basic,
                     evolvesFrom: null,
-                    type: PokemonType.Dragon,
-                    weakness: PokemonType.None,
-                    resistance: PokemonType.None,
+                    type: EnergyType.Dragon,
+                    weakness: EnergyType.None,
+                    resistance: EnergyType.None,
                     retreatCost: 1,
                     maxHP: 70,
                     attacks: new List<IAttackLogic>
                     {
                         new Attack(
                             "Petty Grudge",
-                            new() { PokemonType.Psychic },
+                            new() { EnergyType.Psychic },
                             new() { new DealDamageToDefendingPokemonInstruction(10) }
                         ),
                         new Attack(
                             "Bite",
-                            new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
+                            new List<EnergyType> { EnergyType.Fire, EnergyType.Psychic },
                             new() { new DealDamageToDefendingPokemonInstruction(40) }
                         ),
                     },
@@ -108,16 +108,16 @@ namespace gamecore.card
                     name: "Drakloak",
                     stage: Stage.Stage1,
                     evolvesFrom: "Dreepy",
-                    type: PokemonType.Dragon,
-                    weakness: PokemonType.None,
-                    resistance: PokemonType.None,
+                    type: EnergyType.Dragon,
+                    weakness: EnergyType.None,
+                    resistance: EnergyType.None,
                     retreatCost: 1,
                     maxHP: 90,
                     attacks: new List<IAttackLogic>
                     {
                         new Attack(
                             "Dragon Headbutt",
-                            new List<PokemonType> { PokemonType.Fire, PokemonType.Psychic },
+                            new List<EnergyType> { EnergyType.Fire, EnergyType.Psychic },
                             new() { new DealDamageToDefendingPokemonInstruction(70) }
                         ),
                     },
@@ -144,7 +144,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "FireNRG",
                     name: "Fire Energy",
-                    type: PokemonType.Fire,
+                    type: EnergyType.Fire,
                     energyCardType: EnergyCardType.Basic
                 )
             },
@@ -153,7 +153,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "FightingNRG",
                     name: "Fighting Energy",
-                    type: PokemonType.Fighting,
+                    type: EnergyType.Fighting,
                     energyCardType: EnergyCardType.Basic
                 )
             },
@@ -162,7 +162,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "LightningNRG",
                     name: "Lightning Energy",
-                    type: PokemonType.Lightning,
+                    type: EnergyType.Lightning,
                     energyCardType: EnergyCardType.Basic
                 )
             },
@@ -171,7 +171,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "WaterNRG",
                     name: "Water Energy",
-                    type: PokemonType.Water,
+                    type: EnergyType.Water,
                     energyCardType: EnergyCardType.Basic
                 )
             },
@@ -180,7 +180,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "DarknessNRG",
                     name: "Darkness Energy",
-                    type: PokemonType.Darkness,
+                    type: EnergyType.Darkness,
                     energyCardType: EnergyCardType.Basic
                 )
             },
@@ -189,7 +189,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "MetalNRG",
                     name: "Metal Energy",
-                    type: PokemonType.Metal,
+                    type: EnergyType.Metal,
                     energyCardType: EnergyCardType.Basic
                 )
             },
@@ -198,7 +198,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "GrassNRG",
                     name: "Grass Energy",
-                    type: PokemonType.Grass,
+                    type: EnergyType.Grass,
                     energyCardType: EnergyCardType.Basic
                 )
             },
@@ -207,7 +207,7 @@ namespace gamecore.card
                 new BasicEnergyCardData(
                     id: "PsychicNRG",
                     name: "Psychic Energy",
-                    type: PokemonType.Psychic,
+                    type: EnergyType.Psychic,
                     energyCardType: EnergyCardType.Basic
                 )
             },

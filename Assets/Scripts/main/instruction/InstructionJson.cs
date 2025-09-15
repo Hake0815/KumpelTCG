@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace gamecore.instruction
 {
-    [System.Serializable]
+    [Serializable]
     public class InstructionJson
     {
         public string InstructionType { get; }

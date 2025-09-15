@@ -6,9 +6,9 @@ namespace gamecore.card
     {
         Stage Stage { get; }
         string EvolvesFrom { get; }
-        PokemonType Type { get; }
-        PokemonType Weakness { get; }
-        PokemonType Resistance { get; }
+        EnergyType Type { get; }
+        EnergyType Weakness { get; }
+        EnergyType Resistance { get; }
         int RetreatCost { get; }
         int MaxHP { get; }
         List<IAttackLogic> Attacks { get; }
@@ -22,9 +22,9 @@ namespace gamecore.card
         public string Name { get; }
         public Stage Stage { get; }
         public string EvolvesFrom { get; }
-        public PokemonType Type { get; }
-        public PokemonType Weakness { get; }
-        public PokemonType Resistance { get; }
+        public EnergyType Type { get; }
+        public EnergyType Weakness { get; }
+        public EnergyType Resistance { get; }
         public int RetreatCost { get; }
         public int MaxHP { get; }
         public List<IAttackLogic> Attacks { get; }
@@ -36,9 +36,9 @@ namespace gamecore.card
             string name,
             Stage stage,
             string evolvesFrom,
-            PokemonType type,
-            PokemonType weakness,
-            PokemonType resistance,
+            EnergyType type,
+            EnergyType weakness,
+            EnergyType resistance,
             int retreatCost,
             int maxHP,
             List<IAttackLogic> attacks,

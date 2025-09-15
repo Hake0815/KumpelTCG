@@ -26,7 +26,7 @@ namespace gamecore.card
         List<IEnergyCard> AttachedEnergyCards { get; }
 
         [JsonIgnore]
-        List<PokemonType> AttachedEnergy { get; }
+        List<EnergyType> AttachedEnergy { get; }
 
         [JsonIgnore]
         List<IPokemonCard> PreEvolutions { get; }
@@ -53,13 +53,13 @@ namespace gamecore.card
     internal interface IPokemonCardLogic : ICardLogic, IPokemonCard
     {
         [JsonIgnore]
-        PokemonType PokemonType { get; set; }
+        EnergyType PokemonType { get; set; }
 
         [JsonIgnore]
-        PokemonType Weakness { get; set; }
+        EnergyType Weakness { get; set; }
 
         [JsonIgnore]
-        PokemonType Resistance { get; set; }
+        EnergyType Resistance { get; set; }
 
         [JsonIgnore]
         int NumberOfPrizeCardsOnKnockout { get; set; }
@@ -105,9 +105,9 @@ namespace gamecore.card
             AttachedEnergyCards.Cast<IEnergyCard>().ToList();
 
         List<IAttack> IPokemonCard.Attacks => Attacks.Cast<IAttack>().ToList();
-        public PokemonType PokemonType { get; set; }
-        public PokemonType Weakness { get; set; }
-        public PokemonType Resistance { get; set; }
+        public EnergyType PokemonType { get; set; }
+        public EnergyType Weakness { get; set; }
+        public EnergyType Resistance { get; set; }
         public int MaxHP { get; private set; }
         public int RetreatCost { get; private set; }
         public int NumberOfPrizeCardsOnKnockout { get; set; }
@@ -122,11 +122,11 @@ namespace gamecore.card
                 DamageModified?.Invoke();
             }
         }
-        public List<PokemonType> AttachedEnergy
+        public List<EnergyType> AttachedEnergy
         {
             get
             {
-                var providedEnergy = new List<PokemonType>();
+                var providedEnergy = new List<EnergyType>();
                 foreach (var energy in AttachedEnergyCards)
                 {
                     providedEnergy.Add(energy.ProvidedEnergyType);
@@ -199,9 +199,9 @@ namespace gamecore.card
             return usableAttacks;
         }
 
-        private List<PokemonType> GetAvailableEnergyTypes()
+        private List<EnergyType> GetAvailableEnergyTypes()
         {
-            var availableEnergyTypes = new List<PokemonType>();
+            var availableEnergyTypes = new List<EnergyType>();
             foreach (var energy in AttachedEnergyCards)
             {
                 availableEnergyTypes.Add(energy.ProvidedEnergyType);
@@ -212,12 +212,12 @@ namespace gamecore.card
 
         private static bool IsAttackUsable(
             IAttackLogic attack,
-            List<PokemonType> availableEnergyTypes
+            List<EnergyType> availableEnergyTypes
         )
         {
             foreach (var attackCost in attack.Cost)
             {
-                if (attackCost != PokemonType.Colorless)
+                if (attackCost != EnergyType.Colorless)
                 {
                     if (!availableEnergyTypes.Remove(attackCost))
                         return false;

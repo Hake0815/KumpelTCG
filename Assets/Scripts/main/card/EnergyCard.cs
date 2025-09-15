@@ -14,7 +14,7 @@ namespace gamecore.card
     internal interface IEnergyCardLogic : IEnergyCard, ICardLogic
     {
         [JsonIgnore]
-        PokemonType ProvidedEnergyType { get; }
+        EnergyType ProvidedEnergyType { get; }
     }
 
     abstract class EnergyCard : IEnergyCardLogic
@@ -41,7 +41,7 @@ namespace gamecore.card
 
         public int DeckId { get; }
 
-        public PokemonType ProvidedEnergyType => _energyCardData.Type;
+        public EnergyType ProvidedEnergyType => _energyCardData.Type;
 
         public CardType CardType => CardType.Energy;
 
