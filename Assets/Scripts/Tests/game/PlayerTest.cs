@@ -7,7 +7,7 @@ namespace gamecore.game
 {
     public class PlayerTest
     {
-        private readonly Mock<IDeckLogic> deck = new();
+        private readonly Mock<DeckLogicAbstract> deck = new();
 
         private readonly ICardLogic card = Mock.Of<ICardLogic>();
 
