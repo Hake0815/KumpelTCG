@@ -1,14 +1,15 @@
+using System;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
 
 namespace gamecore.instruction
 {
-    class TakeSelectionToHandInstruction : IInstruction
+    class ShowSelectedCardsInstruction : IInstruction
     {
         private readonly string _selectionId;
 
-        public TakeSelectionToHandInstruction(string selectionId)
+        public ShowSelectedCardsInstruction(string selectionId)
         {
             _selectionId = selectionId;
         }
@@ -25,18 +26,13 @@ namespace gamecore.instruction
         {
             if (action.SelectionId != _selectionId)
                 return false;
-            ActionSystem.INSTANCE.AddReaction(
-                new TakeSelectionToHandGA(action.SelectedCards, card.Owner, action.RemainingCards)
-            );
+            ActionSystem.INSTANCE.AddReaction(new ShowCardsGA(action.SelectedCards));
             return true;
         }
 
         public InstructionJson ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: "take_cards_to_hand",
-                data: new() { { "count", "all" }, { "from", "selection" } }
-            );
+            return new InstructionJson(instructionType: "show_cards");
         }
     }
 }

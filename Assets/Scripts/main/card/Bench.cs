@@ -1,42 +1,57 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using gamecore.actionsystem;
-using gamecore.game.action;
 
 namespace gamecore.card
 {
     public interface IBench : ICardList
     {
         int MaxBenchSpots { get; }
-        bool Full
+        bool Full { get; }
+    }
+
+    internal abstract class BenchLogicAbstract : CardListLogicAbstract, IBench
+    {
+        protected BenchLogicAbstract()
+            : base(new()) { }
+
+        public int MaxBenchSpots { get; set; } = 5;
+        int IBench.MaxBenchSpots => MaxBenchSpots;
+        public abstract void ReplaceInPlace(
+            IPokemonCardLogic oldPokemon,
+            IPokemonCardLogic newPokemon
+        );
+        public bool Full
         {
             get => CardCount >= MaxBenchSpots;
         }
     }
 
-    internal interface IBenchLogic : IBench, ICardListLogic
+    class Bench : BenchLogicAbstract
     {
-        new int MaxBenchSpots { get; set; }
-        int IBench.MaxBenchSpots => MaxBenchSpots;
-        void ReplaceInPlace(IPokemonCardLogic oldPokemon, IPokemonCardLogic newPokemon);
-    }
+        public Bench()
+            : base() { }
 
-    class Bench : IBenchLogic
-    {
-        public List<ICardLogic> Cards { get; } = new();
-        public int MaxBenchSpots { get; set; } = 5;
+        public override event Action<List<ICard>> CardCountChanged;
 
-        public event Action<List<ICard>> CardCountChanged;
-
-        public void OnCardCountChanged()
+        public override void OnCardCountChanged()
         {
             CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
 
-        public void ReplaceInPlace(IPokemonCardLogic oldPokemon, IPokemonCardLogic newPokemon)
+        public override void AddCards(List<ICardLogic> cards)
+        {
+            foreach (var card in cards)
+            {
+                card.OwnerPositionKnowledge = PositionKnowledge.Known;
+                card.OpponentPositionKnowledge = PositionKnowledge.Known;
+            }
+            base.AddCards(cards);
+        }
+
+        public override void ReplaceInPlace(
+            IPokemonCardLogic oldPokemon,
+            IPokemonCardLogic newPokemon
+        )
         {
             var index = Cards.IndexOf(oldPokemon);
             Cards[index] = newPokemon;

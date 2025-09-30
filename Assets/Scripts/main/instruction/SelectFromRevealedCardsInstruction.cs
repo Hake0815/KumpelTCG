@@ -9,8 +9,12 @@ namespace gamecore.instruction
 {
     class SelectFromRevealedCardsInstruction : SelectCardsInstruction
     {
-        public SelectFromRevealedCardsInstruction(IntRange countRange, FilterNode filter)
-            : base(countRange, filter) { }
+        public SelectFromRevealedCardsInstruction(
+            IntRange countRange,
+            FilterNode filter,
+            string selectionId
+        )
+            : base(countRange, filter, selectionId) { }
 
         public override void Perform(ICardLogic card)
         {
@@ -28,7 +32,8 @@ namespace gamecore.instruction
                     CountRange.Contains,
                     new CardListLogic(action.RevealedCards),
                     c => Filter.Matches(c, card),
-                    SelectCardsGA.SelectedCardsOrigin.Other
+                    SelectCardsGA.SelectedCardsOrigin.Other,
+                    SelectionId
                 )
             );
             return true;

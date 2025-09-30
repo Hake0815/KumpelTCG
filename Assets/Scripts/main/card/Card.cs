@@ -12,20 +12,15 @@ namespace gamecore.card
 
         string Name { get; }
         string Id { get; }
+        PositionKnowledge OwnerPositionKnowledge { get; }
+        PositionKnowledge OpponentPositionKnowledge { get; }
+        int TopDeckPositionIndex { get; }
         bool IsTrainerCard();
         bool IsSupporterCard();
         bool IsItemCard();
         bool IsPokemonCard();
         bool IsEnergyCard();
         bool IsBasicEnergyCard();
-        int CompareTo(ICard other, Predicate<ICard> _cardCondition)
-        {
-            if (_cardCondition is not null && _cardCondition(this) && !_cardCondition(other))
-                return 1;
-            if (_cardCondition is not null && !_cardCondition(this) && _cardCondition(other))
-                return -1;
-            return CompareToCardByType(other);
-        }
 
         int CompareToCardByType(ICard other)
         {
@@ -53,6 +48,14 @@ namespace gamecore.card
                 return DeckId.CompareTo(other.DeckId);
             return result;
         }
+        int CompareTo(ICard other, Predicate<ICard> _cardCondition)
+        {
+            if (_cardCondition is not null && _cardCondition(this) && !_cardCondition(other))
+                return 1;
+            if (_cardCondition is not null && !_cardCondition(this) && _cardCondition(other))
+                return -1;
+            return CompareToCardByType(other);
+        }
 
         int CompareTo(ICard other)
         {
@@ -64,6 +67,10 @@ namespace gamecore.card
     {
         new IPlayerLogic Owner { get; }
         IPlayer ICard.Owner => Owner;
+
+        new PositionKnowledge OwnerPositionKnowledge { get; set; }
+        new PositionKnowledge OpponentPositionKnowledge { get; set; }
+        new int TopDeckPositionIndex { get; set; }
         void Play();
         bool IsPlayable();
         void PlayWithTargets(List<ICardLogic> targets);

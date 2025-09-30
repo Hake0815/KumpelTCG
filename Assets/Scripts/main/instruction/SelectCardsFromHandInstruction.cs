@@ -8,8 +8,12 @@ namespace gamecore.instruction
 {
     class SelectCardsFromHandInstruction : SelectCardsInstruction
     {
-        public SelectCardsFromHandInstruction(IntRange countRange, FilterNode filter)
-            : base(countRange, filter) { }
+        public SelectCardsFromHandInstruction(
+            IntRange countRange,
+            FilterNode filter,
+            string selectionId
+        )
+            : base(countRange, filter, selectionId) { }
 
         public override void Perform(ICardLogic card)
         {
@@ -19,7 +23,8 @@ namespace gamecore.instruction
                     CountRange.Contains,
                     card.Owner.Hand,
                     c => Filter.Matches(c, card),
-                    SelectCardsGA.SelectedCardsOrigin.Hand
+                    SelectCardsGA.SelectedCardsOrigin.Hand,
+                    SelectionId
                 )
             );
         }

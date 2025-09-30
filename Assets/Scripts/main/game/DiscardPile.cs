@@ -12,57 +12,60 @@ namespace gamecore.game
         event Action<List<ICard>> CardsRemoved;
     }
 
-    internal interface IDiscardPileLogic : IDiscardPile, ICardListLogic { }
-
-    class DiscardPile : IDiscardPileLogic
+    internal abstract class DiscardPileLogicAbstract : CardListLogicAbstract, IDiscardPile
     {
-        public List<ICardLogic> Cards { get; } = new();
-        public event Action<List<ICard>> CardCountChanged;
-        public event Action<List<ICard>> CardsAdded;
-        public event Action<List<ICard>> CardsRemoved;
+        protected DiscardPileLogicAbstract()
+            : base(new()) { }
 
-        public int CardCount
-        {
-            get => Cards.Count;
-        }
+        public ICard LastCard => Cards.LastOrDefault();
 
-        public ICard LastCard
-        {
-            get => Cards.LastOrDefault();
-        }
+        public abstract event Action<List<ICard>> CardsAdded;
+        public abstract event Action<List<ICard>> CardsRemoved;
+    }
 
-        public void AddCards(List<ICardLogic> cards)
+    class DiscardPile : DiscardPileLogicAbstract
+    {
+        public override event Action<List<ICard>> CardCountChanged;
+        public override event Action<List<ICard>> CardsAdded;
+        public override event Action<List<ICard>> CardsRemoved;
+
+        public DiscardPile()
+            : base() { }
+
+        public override void AddCards(List<ICardLogic> cards)
         {
-            Cards.AddRange(cards);
+            foreach (var card in cards)
+            {
+                card.OwnerPositionKnowledge = PositionKnowledge.Known;
+                card.OpponentPositionKnowledge = PositionKnowledge.Known;
+            }
+            base.AddCards(cards);
             OnCardsAdded(cards);
-            OnCardCountChanged();
         }
 
-        public void RemoveCards(List<ICardLogic> cards)
+        public override void RemoveCards(List<ICardLogic> cards)
         {
-            Cards.RemoveAll(cards.Contains);
+            base.RemoveCards(cards);
             OnCardsRemoved(cards);
-            OnCardCountChanged();
         }
 
-        public void RemoveCard(ICardLogic card)
+        public override void RemoveCard(ICardLogic card)
         {
-            Cards.Remove(card);
+            base.RemoveCard(card);
             OnCardsRemoved(new() { card });
-            OnCardCountChanged();
         }
 
-        public void OnCardCountChanged()
+        public override void OnCardCountChanged()
         {
             CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
 
-        public void OnCardsAdded(List<ICardLogic> cards)
+        private void OnCardsAdded(List<ICardLogic> cards)
         {
             CardsAdded?.Invoke(cards.Cast<ICard>().ToList());
         }
 
-        public void OnCardsRemoved(List<ICardLogic> cards)
+        private void OnCardsRemoved(List<ICardLogic> cards)
         {
             CardsRemoved?.Invoke(cards.Cast<ICard>().ToList());
         }

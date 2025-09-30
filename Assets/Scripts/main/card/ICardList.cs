@@ -8,10 +8,7 @@ namespace gamecore.card
     public interface ICardList : IEnumerable<ICard>
     {
         List<ICard> Cards { get; }
-        int CardCount
-        {
-            get => Cards.Count;
-        }
+        int CardCount { get; }
         event Action<List<ICard>> CardCountChanged;
 
         IEnumerator<ICard> IEnumerable<ICard>.GetEnumerator()
@@ -20,13 +17,24 @@ namespace gamecore.card
         }
     }
 
-    internal interface ICardListLogic : ICardList, IEnumerable<ICardLogic>
+    internal abstract class CardListLogicAbstract : ICardList, IEnumerable<ICardLogic>
     {
-        new List<ICardLogic> Cards { get; }
+        protected CardListLogicAbstract(List<ICardLogic> cards)
+        {
+            Cards = cards;
+        }
+
+        public List<ICardLogic> Cards { get; }
+        public int CardCount
+        {
+            get => Cards.Count;
+        }
         List<ICard> ICardList.Cards => Cards.Cast<ICard>().ToList();
         protected static readonly Random rng = new();
 
-        void Shuffle()
+        public abstract event Action<List<ICard>> CardCountChanged;
+
+        public virtual void Shuffle()
         {
             var n = CardCount;
             while (n > 1)
@@ -36,30 +44,32 @@ namespace gamecore.card
                 (Cards[n], Cards[k]) = (Cards[k], Cards[n]);
             }
         }
-        void AddCards(List<ICardLogic> cards)
+
+        public virtual void AddCards(List<ICardLogic> cards)
         {
             Cards.AddRange(cards);
             OnCardCountChanged();
         }
 
-        void RemoveCards(List<ICardLogic> cards)
+        public virtual void RemoveCards(List<ICardLogic> cards)
         {
             Cards.RemoveAll(cards.Contains);
             OnCardCountChanged();
         }
 
-        void RemoveCard(ICardLogic card)
+        public virtual void RemoveCard(ICardLogic card)
         {
             Cards.Remove(card);
             OnCardCountChanged();
         }
 
-        void Clear()
+        public virtual void Clear()
         {
             Cards.Clear();
             OnCardCountChanged();
         }
-        List<IPokemonCardLogic> GetBasicPokemon()
+
+        public List<IPokemonCardLogic> GetBasicPokemon()
         {
             var basicPokemon = new List<IPokemonCardLogic>();
             foreach (var card in Cards)
@@ -82,20 +92,16 @@ namespace gamecore.card
             return Cards.GetEnumerator();
         }
 
-        void OnCardCountChanged();
+        public abstract void OnCardCountChanged();
     }
 
-    class CardListLogic : ICardListLogic
+    class CardListLogic : CardListLogicAbstract
     {
-        public List<ICardLogic> Cards { get; }
-
         public CardListLogic(List<ICardLogic> cards)
-        {
-            Cards = cards;
-        }
+            : base(cards) { }
 
-        public event Action<List<ICard>> CardCountChanged;
+        public override event Action<List<ICard>> CardCountChanged;
 
-        public void OnCardCountChanged() { }
+        public override void OnCardCountChanged() { }
     }
 }
