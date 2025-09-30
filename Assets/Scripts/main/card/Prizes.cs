@@ -9,24 +9,32 @@ namespace gamecore.card
         event Action<List<ICard>> PrizesTaken;
     }
 
-    internal interface IPrizesLogic : IPrizes, ICardListLogic
+    internal abstract class PrizesLogicAbstract : CardListLogicAbstract, IPrizes
     {
-        List<ICardLogic> TakePrizes(int amount);
+        protected PrizesLogicAbstract()
+            : base(new()) { }
+
+        public abstract event Action<List<ICard>> PrizesTaken;
+
+        public abstract List<ICardLogic> TakePrizes(int amount);
+
+        public abstract void DeckSearched();
     }
 
-    class Prizes : IPrizesLogic
+    class Prizes : PrizesLogicAbstract
     {
-        public List<ICardLogic> Cards { get; } = new();
+        public override event Action<List<ICard>> CardCountChanged;
+        public override event Action<List<ICard>> PrizesTaken;
 
-        public event Action<List<ICard>> CardCountChanged;
-        public event Action<List<ICard>> PrizesTaken;
+        public Prizes()
+            : base() { }
 
-        public void OnCardCountChanged()
+        public override void OnCardCountChanged()
         {
             CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
 
-        public List<ICardLogic> TakePrizes(int amount)
+        public override List<ICardLogic> TakePrizes(int amount)
         {
             var amountToTake = Math.Min(amount, Cards.Count);
             var prizes = Cards.GetRange(Cards.Count - amountToTake, amountToTake);
@@ -34,6 +42,14 @@ namespace gamecore.card
             OnCardCountChanged();
             PrizesTaken?.Invoke(prizes.Cast<ICard>().ToList());
             return prizes;
+        }
+
+        public override void DeckSearched()
+        {
+            foreach (var card in Cards)
+            {
+                card.OwnerPositionKnowledge = PositionKnowledge.Known;
+            }
         }
     }
 }
