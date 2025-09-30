@@ -37,29 +37,29 @@ namespace gamecore.game
         IPokemonCard IPlayer.ActivePokemon => ActivePokemon;
 
         [JsonIgnore]
-        new IDeckLogic Deck { get; set; }
+        new DeckLogicAbstract Deck { get; set; }
         IDeck IPlayer.Deck => Deck;
 
         [JsonIgnore]
         IDeckList DeckList { get; }
 
         [JsonIgnore]
-        new IHandLogic Hand { get; }
+        new HandLogicAbstract Hand { get; }
         IHand IPlayer.Hand => Hand;
 
         [JsonIgnore]
-        new IBenchLogic Bench { get; }
+        new BenchLogicAbstract Bench { get; }
         IBench IPlayer.Bench => Bench;
 
         [JsonIgnore]
-        new IPrizesLogic Prizes { get; }
+        new PrizesLogicAbstract Prizes { get; }
         IPrizes IPlayer.Prizes => Prizes;
 
         [JsonIgnore]
         HashSet<string> PerformedOncePerTurnActions { get; }
 
         [JsonIgnore]
-        new IDiscardPileLogic DiscardPile { get; }
+        new DiscardPileLogicAbstract DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
 
         [JsonIgnore]
@@ -102,15 +102,19 @@ namespace gamecore.game
             {
                 _activePokemon = value;
                 if (value != null)
+                {
+                    _activePokemon.OwnerPositionKnowledge = PositionKnowledge.Known;
+                    _activePokemon.OpponentPositionKnowledge = PositionKnowledge.Known;
                     ActivePokemonSet?.Invoke(value);
+                }
             }
         }
         public IDeckList DeckList { get; set; }
-        public IDeckLogic Deck { get; set; }
-        public IHandLogic Hand { get; } = new Hand();
-        public IBenchLogic Bench { get; } = new Bench();
-        public IDiscardPileLogic DiscardPile { get; } = new DiscardPile();
-        public IPrizesLogic Prizes { get; } = new Prizes();
+        public DeckLogicAbstract Deck { get; set; }
+        public HandLogicAbstract Hand { get; } = new Hand();
+        public BenchLogicAbstract Bench { get; } = new Bench();
+        public DiscardPileLogicAbstract DiscardPile { get; } = new DiscardPile();
+        public PrizesLogicAbstract Prizes { get; } = new Prizes();
         public HashSet<string> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
         public int TurnCounter { get; set; } = 0;
