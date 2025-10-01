@@ -9,8 +9,12 @@ namespace gamecore.instruction
 {
     class SelectCardsFromDiscardPileInstruction : SelectCardsInstruction
     {
-        public SelectCardsFromDiscardPileInstruction(IntRange countRange, FilterNode filter)
-            : base(countRange, filter) { }
+        public SelectCardsFromDiscardPileInstruction(
+            IntRange countRange,
+            FilterNode filter,
+            string selectionId
+        )
+            : base(countRange, filter, selectionId) { }
 
         public override void Perform(ICardLogic card)
         {
@@ -20,7 +24,8 @@ namespace gamecore.instruction
                     CountRange.Contains,
                     card.Owner.DiscardPile,
                     c => Filter.Matches(c, card),
-                    SelectCardsGA.SelectedCardsOrigin.DiscardPile
+                    SelectCardsGA.SelectedCardsOrigin.DiscardPile,
+                    SelectionId
                 )
             );
         }

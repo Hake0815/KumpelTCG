@@ -33,14 +33,21 @@ namespace gamecore.card
                     {
                         new SelectCardsFromHandInstruction(
                             new IntRange(2, 2),
-                            new ExcludeSourceCardNode()
+                            new ExcludeSourceCardNode(),
+                            "discardSelection"
                         ),
-                        new DiscardInstruction(DiscardInstruction.TargetSource.Selection),
+                        new DiscardInstruction(
+                            DiscardInstruction.TargetSource.Selection,
+                            "discardSelection"
+                        ),
                         new SelectCardsFromDeckInstruction(
                             new IntRange(0, 1),
-                            FilterUtils.CreatePokemonFilter()
+                            FilterUtils.CreatePokemonFilter(),
+                            "deckSelection"
                         ),
-                        new TakeSelectionToHandInstruction(),
+                        new ShowSelectedCardsInstruction("deckSelection"),
+                        new TakeSelectionToHandInstruction("deckSelection"),
+                        new ShuffleDeckInstruction(),
                         new DiscardInstruction(DiscardInstruction.TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
@@ -59,9 +66,11 @@ namespace gamecore.card
                     {
                         new SelectCardsFromDiscardPileInstruction(
                             new IntRange(1, 1),
-                            FilterUtils.CreatePokemonOrBasicEnergyFilter()
+                            FilterUtils.CreatePokemonOrBasicEnergyFilter(),
+                            "discardSelection"
                         ),
-                        new TakeSelectionToHandInstruction(),
+                        new ShowSelectedCardsInstruction("discardSelection"),
+                        new TakeSelectionToHandInstruction("discardSelection"),
                         new DiscardInstruction(DiscardInstruction.TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
@@ -130,9 +139,10 @@ namespace gamecore.card
                             new RevealCardsFromDeckInstruction(2),
                             new SelectFromRevealedCardsInstruction(
                                 new IntRange(1, 1),
-                                new TrueNode()
+                                new TrueNode(),
+                                "revealedSelection"
                             ),
-                            new TakeSelectionToHandInstruction(),
+                            new TakeSelectionToHandInstruction("revealedSelection"),
                             new PutRemainingCardsUnderDeckInstruction(),
                         }
                     )

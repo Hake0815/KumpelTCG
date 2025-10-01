@@ -46,6 +46,9 @@ namespace gamecore.card
         public CardType CardType => CardType.Energy;
 
         public abstract CardSubtype CardSubtype { get; }
+        public PositionKnowledge OwnerPositionKnowledge { get; set; }
+        public PositionKnowledge OpponentPositionKnowledge { get; set; }
+        public int TopDeckPositionIndex { get; set; }
 
         public void Discard()
         {

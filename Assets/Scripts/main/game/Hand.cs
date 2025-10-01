@@ -7,17 +7,31 @@ namespace gamecore.card
 {
     public interface IHand : ICardList { }
 
-    internal interface IHandLogic : IHand, ICardListLogic { }
-
-    class Hand : IHandLogic
+    internal abstract class HandLogicAbstract : CardListLogicAbstract, IHand
     {
-        public List<ICardLogic> Cards { get; } = new();
+        protected HandLogicAbstract()
+            : base(new()) { }
+    }
 
-        public event Action<List<ICard>> CardCountChanged;
+    class Hand : HandLogicAbstract
+    {
+        public Hand()
+            : base() { }
 
-        public void OnCardCountChanged()
+        public override event Action<List<ICard>> CardCountChanged;
+
+        public override void OnCardCountChanged()
         {
             CardCountChanged?.Invoke(((ICardList)this).Cards);
+        }
+
+        public override void AddCards(List<ICardLogic> cards)
+        {
+            foreach (var card in cards)
+            {
+                card.OwnerPositionKnowledge = PositionKnowledge.Known;
+            }
+            base.AddCards(cards);
         }
     }
 }

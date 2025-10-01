@@ -9,11 +9,12 @@ namespace gamecore.game.action
         public QuickSelectCardsGA(
             IPlayerLogic player,
             Predicate<int> numberofcardscondition,
-            ICardListLogic cardOptions,
+            CardListLogicAbstract cardOptions,
             Predicate<ICardLogic> cardCondition,
-            SelectedCardsOrigin origin
+            SelectedCardsOrigin origin,
+            string selectionId
         )
-            : base(player, origin)
+            : base(player, origin, selectionId)
         {
             NumberOfCardsCondition = numberofcardscondition;
             CardOptions = cardOptions;
@@ -21,14 +22,18 @@ namespace gamecore.game.action
         }
 
         [JsonConstructor]
-        public QuickSelectCardsGA(IPlayerLogic player, SelectedCardsOrigin origin)
-            : base(player, origin) { }
+        public QuickSelectCardsGA(
+            IPlayerLogic player,
+            SelectedCardsOrigin origin,
+            string selectionId
+        )
+            : base(player, origin, selectionId) { }
 
         [JsonIgnore]
         public Predicate<int> NumberOfCardsCondition { get; }
 
         [JsonIgnore]
-        public ICardListLogic CardOptions { get; }
+        public CardListLogicAbstract CardOptions { get; }
 
         [JsonIgnore]
         public Predicate<ICardLogic> CardCondition { get; }
