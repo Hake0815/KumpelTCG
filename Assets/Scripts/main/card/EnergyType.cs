@@ -1,6 +1,6 @@
 namespace gamecore.card
 {
-    public enum PokemonType
+    public enum EnergyType
     {
         None,
         Grass,

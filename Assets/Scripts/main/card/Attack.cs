@@ -10,7 +10,8 @@ namespace gamecore.card
     {
         string Name { get; }
         int Damage { get; }
-        List<PokemonType> Cost { get; }
+        List<EnergyType> Cost { get; }
+        AttackJson ToSerializable();
     }
 
     internal interface IAttackLogic : IAttack, IClonable<IAttackLogic>
@@ -22,7 +23,7 @@ namespace gamecore.card
     {
         public string Name { get; }
         public int Damage => GetDamageToActivePokemon();
-        public List<PokemonType> Cost { get; }
+        public List<EnergyType> Cost { get; }
 
         private int GetDamageToActivePokemon()
         {
@@ -42,7 +43,7 @@ namespace gamecore.card
 
         public List<IInstruction> Instructions { get; }
 
-        public Attack(string name, List<PokemonType> cost, List<IInstruction> instructions)
+        public Attack(string name, List<EnergyType> cost, List<IInstruction> instructions)
         {
             Name = name;
             Cost = cost;
@@ -52,6 +53,11 @@ namespace gamecore.card
         public IAttackLogic Clone()
         {
             return new Attack(Name, new(Cost), new(Instructions));
+        }
+
+        public AttackJson ToSerializable()
+        {
+            return new AttackJson(Name, Damage, new(Cost));
         }
     }
 }
