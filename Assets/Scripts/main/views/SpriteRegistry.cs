@@ -62,19 +62,19 @@ namespace gameview
             return null;
         }
 
-        public Sprite GetTypeIcon(PokemonType type)
+        public Sprite GetTypeIcon(EnergyType type)
         {
             return type switch
             {
-                PokemonType.Grass => _iconSprite["GrassNRG"],
-                PokemonType.Fire => _iconSprite["FireNRG"],
-                PokemonType.Water => _iconSprite["WaterNRG"],
-                PokemonType.Lightning => _iconSprite["LightningNRG"],
-                PokemonType.Psychic => _iconSprite["PsychicNRG"],
-                PokemonType.Fighting => _iconSprite["FightingNRG"],
-                PokemonType.Darkness => _iconSprite["DarknessNRG"],
-                PokemonType.Metal => _iconSprite["MetalNRG"],
-                PokemonType.Colorless => _iconSprite["ColorlessNRG"],
+                EnergyType.Grass => _iconSprite["GrassNRG"],
+                EnergyType.Fire => _iconSprite["FireNRG"],
+                EnergyType.Water => _iconSprite["WaterNRG"],
+                EnergyType.Lightning => _iconSprite["LightningNRG"],
+                EnergyType.Psychic => _iconSprite["PsychicNRG"],
+                EnergyType.Fighting => _iconSprite["FightingNRG"],
+                EnergyType.Darkness => _iconSprite["DarknessNRG"],
+                EnergyType.Metal => _iconSprite["MetalNRG"],
+                EnergyType.Colorless => _iconSprite["ColorlessNRG"],
                 _ => null,
             };
         }

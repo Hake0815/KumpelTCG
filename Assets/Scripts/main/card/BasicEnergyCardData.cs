@@ -5,7 +5,7 @@ namespace gamecore.card
         public BasicEnergyCardData(
             string id,
             string name,
-            PokemonType type,
+            EnergyType type,
             EnergyCardType energyCardType
         )
             : base(id, name, type, energyCardType) { }

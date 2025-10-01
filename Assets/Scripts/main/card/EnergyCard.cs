@@ -14,7 +14,7 @@ namespace gamecore.card
     internal interface IEnergyCardLogic : IEnergyCard, ICardLogic
     {
         [JsonIgnore]
-        PokemonType ProvidedEnergyType { get; }
+        EnergyType ProvidedEnergyType { get; }
     }
 
     abstract class EnergyCard : IEnergyCardLogic
@@ -41,7 +41,7 @@ namespace gamecore.card
 
         public int DeckId { get; }
 
-        public PokemonType ProvidedEnergyType => _energyCardData.Type;
+        public EnergyType ProvidedEnergyType => _energyCardData.Type;
 
         public CardType CardType => CardType.Energy;
 
@@ -93,6 +93,17 @@ namespace gamecore.card
         {
             ActionSystem.INSTANCE.AddReaction(
                 new AttachEnergyFromHandForTurnGA(this, targets[0] as IPokemonCardLogic)
+            );
+        }
+
+        public virtual CardJson ToSerializable()
+        {
+            return new CardJson(
+                name: Name,
+                cardType: CardType.Energy,
+                cardSubtype: CardSubtype,
+                energyType: ProvidedEnergyType,
+                deckId: DeckId
             );
         }
     }

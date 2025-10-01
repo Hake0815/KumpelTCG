@@ -111,7 +111,7 @@ namespace gameview
                     transform.rotation
                 );
                 var iconImage = typeIcon.GetComponentInChildren<Image>();
-                iconImage.sprite = SpriteRegistry.INSTANCE.GetTypeIcon(PokemonType.Colorless);
+                iconImage.sprite = SpriteRegistry.INSTANCE.GetTypeIcon(EnergyType.Colorless);
                 typeIcon.transform.SetParent(transform);
             }
         }

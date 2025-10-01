@@ -21,6 +21,7 @@ namespace gamecore.card
         bool IsPokemonCard();
         bool IsEnergyCard();
         bool IsBasicEnergyCard();
+        CardJson ToSerializable();
 
         int CompareToCardByType(ICard other)
         {
