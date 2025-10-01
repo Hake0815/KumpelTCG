@@ -95,5 +95,10 @@ namespace gamecore.card
                 new AttachEnergyFromHandForTurnGA(this, targets[0] as IPokemonCardLogic)
             );
         }
+
+        public virtual CardJson ToSerializable()
+        {
+            return new CardJson(_energyCardData.ToSerializable(), DeckId);
+        }
     }
 }

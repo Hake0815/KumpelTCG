@@ -8,5 +8,6 @@ namespace gamecore.card
     {
         string Name { get; }
         string Id { get; }
+        CardDataJson ToSerializable();
     }
 }

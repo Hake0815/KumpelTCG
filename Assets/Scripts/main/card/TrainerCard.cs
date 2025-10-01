@@ -114,5 +114,10 @@ namespace gamecore.card
         {
             throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }
+
+        public virtual CardJson ToSerializable()
+        {
+            return new CardJson(cardData: _trainerCardData.ToSerializable(), deckId: DeckId);
+        }
     }
 }

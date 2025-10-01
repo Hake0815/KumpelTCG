@@ -11,6 +11,7 @@ namespace gamecore.card
         string Name { get; }
         int Damage { get; }
         List<EnergyType> Cost { get; }
+        AttackJson ToSerializable();
     }
 
     internal interface IAttackLogic : IAttack, IClonable<IAttackLogic>
@@ -52,6 +53,11 @@ namespace gamecore.card
         public IAttackLogic Clone()
         {
             return new Attack(Name, new(Cost), new(Instructions));
+        }
+
+        public AttackJson ToSerializable()
+        {
+            return new AttackJson(Name, Damage, new(Cost));
         }
     }
 }
