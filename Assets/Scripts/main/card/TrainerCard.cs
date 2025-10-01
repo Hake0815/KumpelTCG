@@ -117,7 +117,27 @@ namespace gamecore.card
 
         public virtual CardJson ToSerializable()
         {
-            return new CardJson(cardData: _trainerCardData.ToSerializable(), deckId: DeckId);
+            var instructionJsons = new List<InstructionJson>();
+            foreach (var instruction in Instructions)
+            {
+                instructionJsons.Add(instruction.ToSerializable());
+            }
+
+            var conditionJsons = new List<ConditionJson>();
+            foreach (var condition in Conditions)
+            {
+                conditionJsons.Add(condition.ToSerializable());
+            }
+
+            return new CardJson(
+                name: Name,
+                cardType: CardType.Trainer,
+                cardSubtype: CardSubtype,
+                energyType: EnergyType.None,
+                conditions: conditionJsons,
+                instructions: instructionJsons,
+                deckId: DeckId
+            );
         }
     }
 }
