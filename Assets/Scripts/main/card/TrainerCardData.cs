@@ -29,33 +29,5 @@ namespace gamecore.card
             Instructions = instructions;
             Conditions = conditions;
         }
-
-        public virtual CardDataJson ToSerializable()
-        {
-            // Convert instructions to InstructionJson objects
-            var instructionJsons = new List<InstructionJson>();
-            foreach (var instruction in Instructions)
-            {
-                instructionJsons.Add(instruction.ToSerializable());
-            }
-
-            // Convert conditions to ConditionJson objects
-            var conditionJsons = new List<ConditionJson>();
-            foreach (var condition in Conditions)
-            {
-                conditionJsons.Add(condition.ToSerializable());
-            }
-
-            return new CardDataJson(
-                name: Name,
-                cardType: CardType.Trainer,
-                cardSubtype: GetCardSubtype(),
-                energyType: EnergyType.None,
-                instructions: instructionJsons,
-                conditions: conditionJsons
-            );
-        }
-
-        protected abstract CardSubtype GetCardSubtype();
     }
 }

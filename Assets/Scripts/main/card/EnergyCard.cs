@@ -98,7 +98,13 @@ namespace gamecore.card
 
         public virtual CardJson ToSerializable()
         {
-            return new CardJson(_energyCardData.ToSerializable(), DeckId);
+            return new CardJson(
+                name: Name,
+                cardType: CardType.Energy,
+                cardSubtype: CardSubtype,
+                energyType: ProvidedEnergyType,
+                deckId: DeckId
+            );
         }
     }
 }

@@ -59,36 +59,6 @@ namespace gamecore.card
             NumberOfPrizeCardsOnKnockout = numberOfPrizeCardsOnKnockout;
             Ability = ability;
         }
-
-        public CardDataJson ToSerializable()
-        {
-            var attackJsons = new List<AttackJson>();
-            foreach (var attack in Attacks)
-            {
-                attackJsons.Add(attack.ToSerializable());
-            }
-
-            return new CardDataJson(
-                name: Name,
-                cardType: CardType.Pokemon,
-                cardSubtype: Stage switch
-                {
-                    Stage.Basic => CardSubtype.BasicPokemon,
-                    Stage.Stage1 => CardSubtype.Stage1Pokemon,
-                    Stage.Stage2 => CardSubtype.Stage2Pokemon,
-                    _ => CardSubtype.BasicPokemon,
-                },
-                energyType: Type,
-                maxHp: MaxHP,
-                evolvesFrom: EvolvesFrom,
-                weakness: Weakness,
-                resistance: Resistance,
-                retreatCost: RetreatCost,
-                numberOfPrizeCardsOnKnockout: NumberOfPrizeCardsOnKnockout,
-                attacks: attackJsons,
-                ability: Ability?.ToSerializable()
-            );
-        }
     }
 
     public enum Stage

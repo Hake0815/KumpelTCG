@@ -390,6 +390,11 @@ namespace gamecore.card
 
         public CardJson ToSerializable()
         {
+            var attackJsons = new List<AttackJson>();
+            foreach (var attack in Attacks)
+            {
+                attackJsons.Add(attack.ToSerializable());
+            }
             var preEvolutionIds = new List<int>();
             foreach (var preEvolution in PreEvolutions)
             {
@@ -402,7 +407,18 @@ namespace gamecore.card
             }
 
             return new CardJson(
-                cardData: _pokemonCardData.ToSerializable(),
+                name: Name,
+                cardType: CardType.Pokemon,
+                cardSubtype: CardSubtype,
+                energyType: PokemonType,
+                maxHp: MaxHP,
+                evolvesFrom: EvolvesFrom,
+                weakness: Weakness,
+                resistance: Resistance,
+                retreatCost: RetreatCost,
+                numberOfPrizeCardsOnKnockout: NumberOfPrizeCardsOnKnockout,
+                attacks: attackJsons,
+                ability: Ability?.ToSerializable(),
                 deckId: DeckId,
                 currentDamage: Damage,
                 attachedEnergy: attachedEnergy,

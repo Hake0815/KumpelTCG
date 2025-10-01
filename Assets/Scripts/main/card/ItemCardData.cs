@@ -12,10 +12,5 @@ namespace gamecore.card
             List<IUseCondition> conditions
         )
             : base(name, id, instructions, conditions) { }
-
-        protected override CardSubtype GetCardSubtype()
-        {
-            return CardSubtype.Item;
-        }
     }
 }

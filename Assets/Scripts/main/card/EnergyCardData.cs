@@ -27,18 +27,6 @@ namespace gamecore.card
         public string Name { get; }
 
         public string Id { get; }
-
-        public virtual CardDataJson ToSerializable()
-        {
-            return new CardDataJson(
-                name: Name,
-                cardType: CardType.Energy,
-                cardSubtype: EnergyCardType == EnergyCardType.Basic
-                    ? CardSubtype.BasicEnergy
-                    : CardSubtype.SpecialEnergy,
-                energyType: Type
-            );
-        }
     }
 
     public enum EnergyCardType
