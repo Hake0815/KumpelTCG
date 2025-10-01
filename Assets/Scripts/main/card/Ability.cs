@@ -7,6 +7,7 @@ namespace gamecore.card
     public interface IAbility
     {
         string Name { get; }
+        AbilityJson ToSerializable();
     }
 
     internal interface IAbilityLogic : IAbility
@@ -27,6 +28,25 @@ namespace gamecore.card
             Name = name;
             Conditions = conditions;
             Instructions = instructions;
+        }
+
+        public AbilityJson ToSerializable()
+        {
+            // Convert instructions to InstructionJson objects
+            var instructionJsons = new List<InstructionJson>();
+            foreach (var instruction in Instructions)
+            {
+                instructionJsons.Add(instruction.ToSerializable());
+            }
+
+            // Convert conditions to ConditionJson objects
+            var conditionJsons = new List<ConditionJson>();
+            foreach (var condition in Conditions)
+            {
+                conditionJsons.Add(condition.ToSerializable());
+            }
+
+            return new AbilityJson(Name, instructionJsons, conditionJsons);
         }
     }
 }

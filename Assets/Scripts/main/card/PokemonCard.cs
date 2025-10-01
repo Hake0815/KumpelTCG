@@ -387,5 +387,27 @@ namespace gamecore.card
         {
             PokemonEffects.Remove(effect.GetType());
         }
+
+        public CardJson ToSerializable()
+        {
+            var preEvolutionIds = new List<int>();
+            foreach (var preEvolution in PreEvolutions)
+            {
+                preEvolutionIds.Add(preEvolution.DeckId);
+            }
+            var attachedEnergy = new List<int>();
+            foreach (var energy in AttachedEnergyCards)
+            {
+                attachedEnergy.Add(energy.DeckId);
+            }
+
+            return new CardJson(
+                cardData: _pokemonCardData.ToSerializable(),
+                deckId: DeckId,
+                currentDamage: Damage,
+                attachedEnergy: attachedEnergy,
+                preEvolutionIds: preEvolutionIds
+            );
+        }
     }
 }

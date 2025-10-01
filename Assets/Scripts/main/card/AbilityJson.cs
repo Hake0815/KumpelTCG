@@ -5,24 +5,21 @@ using gamecore.instruction;
 namespace gamecore.card
 {
     [Serializable]
-    public class AttackJson
+    public class AbilityJson
     {
         public string Name { get; }
-        public int Damage { get; }
-        public List<EnergyType> EnergyCost { get; }
         public List<InstructionJson> Instructions { get; }
+        public List<ConditionJson> Conditions { get; }
 
-        public AttackJson(
+        public AbilityJson(
             string name,
-            int damage,
-            List<EnergyType> energyCost = null,
-            List<InstructionJson> instructions = null
+            List<InstructionJson> instructions = null,
+            List<ConditionJson> conditions = null
         )
         {
             Name = name;
-            Damage = damage;
-            EnergyCost = energyCost ?? new List<EnergyType>();
             Instructions = instructions ?? new List<InstructionJson>();
+            Conditions = conditions ?? new List<ConditionJson>();
         }
     }
 }
