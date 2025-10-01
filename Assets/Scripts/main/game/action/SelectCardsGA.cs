@@ -8,19 +8,19 @@ namespace gamecore.game.action
 {
     abstract class SelectCardsGA : GameAction
     {
-        protected SelectCardsGA(IPlayerLogic player, SelectedCardsOrigin origin)
+        protected SelectCardsGA(IPlayerLogic player, SelectedCardsOrigin origin, String selectionId)
         {
             Player = player;
             Origin = origin;
+            SelectionId = selectionId;
         }
 
         public IPlayerLogic Player { get; }
 
         public SelectedCardsOrigin Origin { get; }
-
+        public string SelectionId { get; }
         public List<ICardLogic> SelectedCards { get; } = new();
         public List<ICardLogic> RemainingCards { get; } = new();
-        public bool WasReactedTo { get; set; } = false;
 
         internal enum SelectedCardsOrigin
         {

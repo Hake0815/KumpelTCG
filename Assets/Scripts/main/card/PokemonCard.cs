@@ -155,6 +155,10 @@ namespace gamecore.card
                 _ => throw new NotImplementedException(),
             };
 
+        public PositionKnowledge OwnerPositionKnowledge { get; set; }
+        public PositionKnowledge OpponentPositionKnowledge { get; set; }
+        public int TopDeckPositionIndex { get; set; }
+
         public event Action DamageModified;
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         public event Action Evolved;

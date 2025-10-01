@@ -27,6 +27,8 @@ namespace gamecore.game.action
             IActionPerformer<ConfirmSelectCardsGA>,
             IActionPerformer<DiscardCardsGA>,
             IActionPerformer<RemoveCardsFromHandGA>,
+            IActionPerformer<ShuffleDeckGA>,
+            IActionPerformer<ShowCardsGA>,
             IActionSubscriber<StartTurnGA>
     {
         private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
@@ -65,6 +67,8 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<ConfirmSelectCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
             _actionSystem.AttachPerformer<RemoveCardsFromHandGA>(INSTANCE);
+            _actionSystem.AttachPerformer<ShuffleDeckGA>(INSTANCE);
+            _actionSystem.AttachPerformer<ShowCardsGA>(INSTANCE);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
             _game = game;
         }
@@ -86,6 +90,8 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<ConfirmSelectCardsGA>();
             _actionSystem.DetachPerformer<DiscardCardsGA>();
             _actionSystem.DetachPerformer<RemoveCardsFromHandGA>();
+            _actionSystem.DetachPerformer<ShuffleDeckGA>();
+            _actionSystem.DetachPerformer<ShowCardsGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
         }
 
@@ -348,7 +354,7 @@ namespace gamecore.game.action
             );
             action.CardOptions.RemoveCards(selectedCards);
             if (action.Origin == SelectedCardsOrigin.Deck)
-                action.Player.Deck.Shuffle();
+                action.Player.Prizes.DeckSearched();
 
             action.SelectedCards.AddRange(selectedCards);
             action.RemainingCards.AddRange(options.Except(selectedCards));
@@ -376,6 +382,8 @@ namespace gamecore.game.action
             var player = _game.GetPlayerByName(action.Player.Name);
             var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
             RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
+            if (action.Origin == SelectedCardsOrigin.Deck)
+                player.Prizes.DeckSearched();
             return Task.FromResult(action);
         }
 
@@ -389,7 +397,7 @@ namespace gamecore.game.action
             );
             action.CardOptions.RemoveCards(selectedCards);
             if (action.Origin == SelectedCardsOrigin.Deck)
-                action.Player.Deck.Shuffle();
+                action.Player.Prizes.DeckSearched();
 
             action.SelectedCards.AddRange(selectedCards);
             action.RemainingCards.AddRange(options.Except(selectedCards));
@@ -433,6 +441,8 @@ namespace gamecore.game.action
             var player = _game.GetPlayerByName(action.Player.Name);
             var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
             RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
+            if (action.Origin == SelectedCardsOrigin.Deck)
+                player.Prizes.DeckSearched();
             return Task.FromResult(action);
         }
 
@@ -472,6 +482,39 @@ namespace gamecore.game.action
             var player = _game.GetPlayerByName(action.Player.Name);
             var cards = player.DeckList.GetCardsByDeckIds(action.Cards);
             player.Hand.RemoveCards(cards);
+            return Task.FromResult(action);
+        }
+
+        public Task<ShuffleDeckGA> Perform(ShuffleDeckGA action)
+        {
+            action.Player.Deck.Shuffle();
+            return Task.FromResult(action);
+        }
+
+        public Task<ShuffleDeckGA> Reperform(ShuffleDeckGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            player.Deck.Shuffle();
+            return Task.FromResult(action);
+        }
+
+        public Task<ShowCardsGA> Perform(ShowCardsGA action)
+        {
+            foreach (var card in action.Cards)
+            {
+                card.OwnerPositionKnowledge = PositionKnowledge.Known;
+                card.OpponentPositionKnowledge = PositionKnowledge.Known;
+            }
+            return Task.FromResult(action);
+        }
+
+        public Task<ShowCardsGA> Reperform(ShowCardsGA action)
+        {
+            foreach (var card in _game.FindCardsAnywhere(action.Cards))
+            {
+                card.OwnerPositionKnowledge = PositionKnowledge.Known;
+                card.OpponentPositionKnowledge = PositionKnowledge.Known;
+            }
             return Task.FromResult(action);
         }
     }

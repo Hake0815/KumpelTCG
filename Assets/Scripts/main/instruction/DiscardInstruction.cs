@@ -16,9 +16,15 @@ namespace gamecore.instruction
 
         public TargetSource Target { get; }
 
+        private readonly string _selectionId;
+
         public DiscardInstruction(TargetSource target)
+            : this(target, null) { }
+
+        public DiscardInstruction(TargetSource target, string selectionId)
         {
             Target = target;
+            _selectionId = selectionId;
         }
 
         public void Perform(ICardLogic card)
@@ -46,13 +52,12 @@ namespace gamecore.instruction
             }
         }
 
-        private static bool Reaction(SelectCardsGA action)
+        private bool Reaction(SelectCardsGA action)
         {
-            if (action.WasReactedTo)
+            if (action.SelectionId != _selectionId)
                 return false;
 
             ActionSystem.INSTANCE.AddReaction(new DiscardCardsGA(action.SelectedCards));
-            action.WasReactedTo = true;
             return true;
         }
 
@@ -60,7 +65,7 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: "discard",
-                data: new Dictionary<string, object> { { "target", Target.ToString().ToLower() } }
+                data: new() { { "target", Target.ToString().ToLower() } }
             );
         }
     }

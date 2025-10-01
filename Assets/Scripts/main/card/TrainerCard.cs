@@ -36,6 +36,9 @@ namespace gamecore.card
         public CardType CardType => CardType.Trainer;
 
         public abstract CardSubtype CardSubtype { get; }
+        public PositionKnowledge OwnerPositionKnowledge { get; set; }
+        public PositionKnowledge OpponentPositionKnowledge { get; set; }
+        public int TopDeckPositionIndex { get; set; }
 
         protected TrainerCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
         {
