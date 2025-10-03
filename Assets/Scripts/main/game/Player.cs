@@ -75,6 +75,7 @@ namespace gamecore.game
             where T : IPlayerEffect;
         void AddEffect(IPlayerEffect effect);
         void RemoveEffect(IPlayerEffect effect);
+        PlayerStateJson ToSerializable();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -163,6 +164,26 @@ namespace gamecore.game
         public void RemoveEffect(IPlayerEffect effect)
         {
             PlayerEffects.Remove(effect.GetType());
+        }
+
+        public PlayerStateJson ToSerializable()
+        {
+            var playerEffects = new List<PlayerEffectJson>();
+            foreach (var effect in PlayerEffects.Values)
+            {
+                playerEffects.Add(effect.ToSerializable());
+            }
+            return new PlayerStateJson(
+                isActive: IsActive,
+                handCount: Hand.CardCount,
+                deckCount: Deck.CardCount,
+                prizesCount: Prizes.CardCount,
+                benchCount: Bench.CardCount,
+                discardPileCount: DiscardPile.CardCount,
+                performedOncePerTurnActions: new List<string>(PerformedOncePerTurnActions),
+                turnCounter: TurnCounter,
+                playerEffects: playerEffects
+            );
         }
     }
 }
