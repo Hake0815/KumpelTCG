@@ -5,5 +5,6 @@ namespace gamecore.card
         Pokemon,
         Trainer,
         Energy,
+        Unknown,
     }
 }

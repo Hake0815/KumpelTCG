@@ -15,12 +15,12 @@ namespace gamecore.card
         public EnergyType EnergyType { get; }
 
         // Pokemon-specific static properties
-        public int MaxHp { get; }
+        public int? MaxHp { get; }
         public string EvolvesFrom { get; }
         public EnergyType Weakness { get; }
         public EnergyType Resistance { get; }
-        public int RetreatCost { get; }
-        public int NumberOfPrizeCardsOnKnockout { get; }
+        public int? RetreatCost { get; }
+        public int? NumberOfPrizeCardsOnKnockout { get; }
         public List<AttackJson> Attacks { get; }
         public AbilityJson Ability { get; }
         public List<PokemonEffectJson> PokemonEffects { get; }
@@ -30,10 +30,10 @@ namespace gamecore.card
         public List<ConditionJson> Conditions { get; }
 
         // Current state properties
-        public int DeckId { get; }
+        public int? DeckId { get; }
 
         // Pokemon-specific current state
-        public int CurrentDamage { get; }
+        public int? CurrentDamage { get; }
         public List<int> AttachedEnergy { get; }
         public List<int> PreEvolutionIds { get; }
 
@@ -43,19 +43,19 @@ namespace gamecore.card
             CardType cardType,
             CardSubtype cardSubtype,
             EnergyType energyType,
-            int maxHp = 0,
+            int? maxHp = null,
             string evolvesFrom = null,
             EnergyType weakness = EnergyType.None,
             EnergyType resistance = EnergyType.None,
-            int retreatCost = 0,
-            int numberOfPrizeCardsOnKnockout = 0,
+            int? retreatCost = null,
+            int? numberOfPrizeCardsOnKnockout = null,
             List<AttackJson> attacks = null,
             AbilityJson ability = null,
             List<InstructionJson> instructions = null,
             List<ConditionJson> conditions = null,
             // Current state parameters
-            int deckId = 0,
-            int currentDamage = 0,
+            int? deckId = null,
+            int? currentDamage = null,
             List<int> attachedEnergy = null,
             List<int> preEvolutionIds = null,
             List<PokemonEffectJson> pokemonEffects = null
@@ -71,16 +71,26 @@ namespace gamecore.card
             Resistance = resistance;
             RetreatCost = retreatCost;
             NumberOfPrizeCardsOnKnockout = numberOfPrizeCardsOnKnockout;
-            Attacks = attacks ?? new List<AttackJson>();
+            Attacks = attacks;
             Ability = ability;
-            Instructions = instructions ?? new List<InstructionJson>();
-            Conditions = conditions ?? new List<ConditionJson>();
-            PokemonEffects = pokemonEffects ?? new List<PokemonEffectJson>();
+            Instructions = instructions;
+            Conditions = conditions;
+            PokemonEffects = pokemonEffects;
             // Current state
             DeckId = deckId;
             CurrentDamage = currentDamage;
-            AttachedEnergy = attachedEnergy ?? new List<int>();
-            PreEvolutionIds = preEvolutionIds ?? new List<int>();
+            AttachedEnergy = attachedEnergy;
+            PreEvolutionIds = preEvolutionIds;
+        }
+
+        public static CardJson CreateUnknownCard()
+        {
+            return new CardJson(
+                name: "Unknown",
+                cardType: CardType.Unknown,
+                cardSubtype: CardSubtype.Unknown,
+                energyType: EnergyType.None
+            );
         }
     }
 }

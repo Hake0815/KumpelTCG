@@ -1,4 +1,7 @@
 namespace gamecore.effect
 {
-    public interface IPlayerEffect { }
+    public interface IPlayerEffect
+    {
+        PlayerEffectJson ToSerializable();
+    }
 }

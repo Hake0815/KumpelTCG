@@ -20,5 +20,10 @@ namespace gamecore.effect
             ActionSystem.INSTANCE.SubscribeToGameAction(effect, ReactionTiming.POST);
             return effect;
         }
+
+        public PlayerEffectJson ToSerializable()
+        {
+            return new PlayerEffectJson("first_turn_of_game");
+        }
     }
 }
