@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.common;
+using gamecore.effect;
 using gamecore.game.action;
 using UnityEngine;
 
@@ -28,6 +30,7 @@ namespace gamecore.game
         );
         Task RecreateGameFromLog(string logFilePath);
         void StartGame();
+        GameStateJson ExportGameState(IPlayer player);
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -200,6 +203,32 @@ namespace gamecore.game
         {
             await _actionSystem.Perform(new StartTurnGA(_game.Player1));
             _game.AdvanceGameState();
+        }
+
+        public GameStateJson ExportGameState(IPlayer player)
+        {
+            if (_game == null)
+                throw new InvalidOperationException("Game has not been created yet.");
+
+            PlayerStateJson selfState;
+            PlayerStateJson opponentState;
+            if (player == _game.Player1)
+            {
+                selfState = _game.Player1.ToSerializable();
+                opponentState = _game.Player2.ToSerializable();
+            }
+            else
+            {
+                selfState = _game.Player2.ToSerializable();
+                opponentState = _game.Player1.ToSerializable();
+            }
+            var cardStates = CardStateCreator.CreateCardStates(player as IPlayerLogic);
+            if (cardStates.Count != 120)
+            {
+                throw new IlleagalStateException("Card states count is not 120");
+            }
+
+            return new GameStateJson(selfState, opponentState, cardStates);
         }
     }
 }
