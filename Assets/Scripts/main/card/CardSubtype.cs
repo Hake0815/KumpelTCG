@@ -11,5 +11,6 @@ namespace gamecore.card
         Stadium,
         BasicEnergy,
         SpecialEnergy,
+        Unknown,
     }
 }
