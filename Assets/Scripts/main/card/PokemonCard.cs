@@ -405,6 +405,11 @@ namespace gamecore.card
             {
                 attachedEnergy.Add(energy.DeckId);
             }
+            var pokemonEffects = new List<PokemonEffectJson>();
+            foreach (var effect in PokemonEffects.Values)
+            {
+                pokemonEffects.Add(effect.ToSerializable());
+            }
 
             return new CardJson(
                 name: Name,
@@ -422,7 +427,8 @@ namespace gamecore.card
                 deckId: DeckId,
                 currentDamage: Damage,
                 attachedEnergy: attachedEnergy,
-                preEvolutionIds: preEvolutionIds
+                preEvolutionIds: preEvolutionIds,
+                pokemonEffects: pokemonEffects
             );
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using gamecore.effect;
 using gamecore.instruction;
 
 namespace gamecore.card
@@ -22,6 +23,7 @@ namespace gamecore.card
         public int NumberOfPrizeCardsOnKnockout { get; }
         public List<AttackJson> Attacks { get; }
         public AbilityJson Ability { get; }
+        public List<PokemonEffectJson> PokemonEffects { get; }
 
         // Trainer-specific static properties
         public List<InstructionJson> Instructions { get; }
@@ -55,7 +57,8 @@ namespace gamecore.card
             int deckId = 0,
             int currentDamage = 0,
             List<int> attachedEnergy = null,
-            List<int> preEvolutionIds = null
+            List<int> preEvolutionIds = null,
+            List<PokemonEffectJson> pokemonEffects = null
         )
         {
             Name = name;
@@ -72,7 +75,7 @@ namespace gamecore.card
             Ability = ability;
             Instructions = instructions ?? new List<InstructionJson>();
             Conditions = conditions ?? new List<ConditionJson>();
-
+            PokemonEffects = pokemonEffects ?? new List<PokemonEffectJson>();
             // Current state
             DeckId = deckId;
             CurrentDamage = currentDamage;
