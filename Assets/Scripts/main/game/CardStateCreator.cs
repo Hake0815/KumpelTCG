@@ -41,7 +41,7 @@ namespace gamecore.game
 
         private static void AddBenchedPokemonAs(
             IPlayer player,
-            Owner self,
+            Owner owner,
             List<CardStateJson> cardStates
         )
         {
@@ -50,10 +50,10 @@ namespace gamecore.game
                 cardStates.Add(
                     new CardStateJson(
                         card.ToSerializable(),
-                        new PositionJson(self, new() { "bench" })
+                        new PositionJson(owner, new() { "bench" })
                     )
                 );
-                AddAttachedCards(card as IPokemonCard, self, cardStates);
+                AddAttachedCards(card as IPokemonCard, owner, cardStates);
             }
         }
 
