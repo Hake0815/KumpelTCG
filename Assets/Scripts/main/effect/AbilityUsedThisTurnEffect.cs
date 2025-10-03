@@ -8,6 +8,11 @@ namespace gamecore.effect
     {
         private IPokemonCardLogic _pokemon;
 
+        public PokemonEffectJson ToSerializable()
+        {
+            return new PokemonEffectJson("ability_used_this_turn");
+        }
+
         void IPokemonEffect.Apply(IPokemonCardLogic pokemon)
         {
             _pokemon = pokemon;
