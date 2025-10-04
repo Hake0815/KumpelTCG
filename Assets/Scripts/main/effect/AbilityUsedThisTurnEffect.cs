@@ -4,25 +4,25 @@ using gamecore.game.action;
 
 namespace gamecore.effect
 {
-    public class AbilityUsedThisTurnEffect : IPokemonEffect, IActionSubscriber<EndTurnGA>
+    class AbilityUsedThisTurnEffect : PokemonEffectAbstract, IActionSubscriber<EndTurnGA>
     {
-        private IPokemonCardLogic _pokemon;
+        public AbilityUsedThisTurnEffect(ActionSystem actionSystem, IPokemonCardLogic pokemon)
+            : base(actionSystem, pokemon) { }
 
-        public PokemonEffectJson ToSerializable()
+        public override PokemonEffectJson ToSerializable()
         {
             return new PokemonEffectJson("ability_used_this_turn");
         }
 
-        void IPokemonEffect.Apply(IPokemonCardLogic pokemon)
+        internal override void Apply()
         {
-            _pokemon = pokemon;
-            pokemon.AddEffect(this);
-            ActionSystem.INSTANCE.SubscribeToGameAction(this, ReactionTiming.POST);
+            _pokemon.AddEffect(this);
+            _actionSystem.SubscribeToGameAction(this, ReactionTiming.POST);
         }
 
         EndTurnGA IActionSubscriber<EndTurnGA>.React(EndTurnGA action)
         {
-            ActionSystem.INSTANCE.AddReaction(new RemovePokemonEffectGA(_pokemon, this));
+            _actionSystem.AddReaction(new RemovePokemonEffectGA(_pokemon, this));
             return action;
         }
     }

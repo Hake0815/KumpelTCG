@@ -18,13 +18,13 @@ namespace gamecore.instruction
             Damage = damage;
         }
 
-        public void Perform(ICardLogic card)
+        public void Perform(ICardLogic card, ActionSystem actionSystem)
         {
-            if (!ActionSystem.INSTANCE.IsPerforming)
+            if (!actionSystem.IsPerforming)
                 throw new IlleagalStateException(
                     "Action system should be performing Attack game action."
                 );
-            ActionSystem.INSTANCE.AddReaction(
+            actionSystem.AddReaction(
                 new DealDamgeGA(
                     Damage,
                     card as IPokemonCardLogic,

@@ -15,20 +15,21 @@ namespace gamecore.action
             IActionPerformer<KnockOutCheckGA>,
             IActionPerformer<KnockOutGA>
     {
-        private static readonly Lazy<DamageSystem> lazy = new(() => new DamageSystem());
-        public static DamageSystem INSTANCE => lazy.Value;
-
-        private DamageSystem() { }
-
-        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
-        private Game _game;
-
-        public void Enable(Game game)
+        public DamageSystem(ActionSystem actionSystem, Game game)
         {
-            _actionSystem.AttachPerformer<DealDamgeGA>(INSTANCE);
-            _actionSystem.AttachPerformer<KnockOutCheckGA>(INSTANCE);
-            _actionSystem.AttachPerformer<KnockOutGA>(INSTANCE);
+            _actionSystem = actionSystem;
             _game = game;
+            Enable();
+        }
+
+        private readonly ActionSystem _actionSystem;
+        private readonly Game _game;
+
+        public void Enable()
+        {
+            _actionSystem.AttachPerformer<DealDamgeGA>(this);
+            _actionSystem.AttachPerformer<KnockOutCheckGA>(this);
+            _actionSystem.AttachPerformer<KnockOutGA>(this);
         }
 
         public void Disable()

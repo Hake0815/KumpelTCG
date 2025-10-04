@@ -31,14 +31,17 @@ namespace gamecore.game.action
             IActionPerformer<ShowCardsGA>,
             IActionSubscriber<StartTurnGA>
     {
-        private static readonly Lazy<CardSystem> lazy = new(() => new CardSystem());
-        public static CardSystem INSTANCE => lazy.Value;
-
-        private CardSystem() { }
+        public CardSystem(ActionSystem actionSystem, Game game)
+        {
+            _actionSystem = actionSystem;
+            _game = game;
+            Enable();
+        }
 
         protected static readonly System.Random _rng = new();
 
-        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        private readonly ActionSystem _actionSystem;
+        private readonly Game _game;
         private static readonly Dictionary<SelectedCardsOrigin, SelectFrom> _selectFromMap = new()
         {
             { SelectedCardsOrigin.Hand, SelectFrom.InPlay },
@@ -47,30 +50,27 @@ namespace gamecore.game.action
             { SelectedCardsOrigin.DiscardPile, SelectFrom.DiscardPile },
         };
 
-        private Game _game;
-
-        public void Enable(Game game)
+        public void Enable()
         {
-            _actionSystem.AttachPerformer<DrawCardGA>(INSTANCE);
-            _actionSystem.AttachPerformer<DrawMulliganCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(INSTANCE);
-            _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(INSTANCE);
-            _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<BenchPokemonGA>(INSTANCE);
-            _actionSystem.AttachPerformer<MovePokemonToBenchGA>(INSTANCE);
-            _actionSystem.AttachPerformer<RevealCardsFromDeckGA>(INSTANCE);
-            _actionSystem.AttachPerformer<TakeSelectionToHandGA>(INSTANCE);
-            _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(INSTANCE);
-            _actionSystem.AttachPerformer<PlayCardGA>(INSTANCE);
-            _actionSystem.AttachPerformer<SetActivePokemonGA>(INSTANCE);
-            _actionSystem.AttachPerformer<QuickSelectCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<ConfirmSelectCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<DiscardCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<RemoveCardsFromHandGA>(INSTANCE);
-            _actionSystem.AttachPerformer<ShuffleDeckGA>(INSTANCE);
-            _actionSystem.AttachPerformer<ShowCardsGA>(INSTANCE);
-            _actionSystem.SubscribeToGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
-            _game = game;
+            _actionSystem.AttachPerformer<DrawCardGA>(this);
+            _actionSystem.AttachPerformer<DrawMulliganCardsGA>(this);
+            _actionSystem.AttachPerformer<AttachEnergyFromHandGA>(this);
+            _actionSystem.AttachPerformer<AttachEnergyFromHandForTurnGA>(this);
+            _actionSystem.AttachPerformer<DiscardAttachedEnergyCardsGA>(this);
+            _actionSystem.AttachPerformer<BenchPokemonGA>(this);
+            _actionSystem.AttachPerformer<MovePokemonToBenchGA>(this);
+            _actionSystem.AttachPerformer<RevealCardsFromDeckGA>(this);
+            _actionSystem.AttachPerformer<TakeSelectionToHandGA>(this);
+            _actionSystem.AttachPerformer<PutRemainingCardsUnderDeckGA>(this);
+            _actionSystem.AttachPerformer<PlayCardGA>(this);
+            _actionSystem.AttachPerformer<SetActivePokemonGA>(this);
+            _actionSystem.AttachPerformer<QuickSelectCardsGA>(this);
+            _actionSystem.AttachPerformer<ConfirmSelectCardsGA>(this);
+            _actionSystem.AttachPerformer<DiscardCardsGA>(this);
+            _actionSystem.AttachPerformer<RemoveCardsFromHandGA>(this);
+            _actionSystem.AttachPerformer<ShuffleDeckGA>(this);
+            _actionSystem.AttachPerformer<ShowCardsGA>(this);
+            _actionSystem.SubscribeToGameAction<StartTurnGA>(this, ReactionTiming.POST);
         }
 
         public void Disable()
@@ -92,7 +92,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<RemoveCardsFromHandGA>();
             _actionSystem.DetachPerformer<ShuffleDeckGA>();
             _actionSystem.DetachPerformer<ShowCardsGA>();
-            _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(INSTANCE, ReactionTiming.POST);
+            _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(this, ReactionTiming.POST);
         }
 
         public StartTurnGA React(StartTurnGA startTurnGA)
@@ -206,11 +206,11 @@ namespace gamecore.game.action
             return Task.FromResult(action);
         }
 
-        private static void BenchPokemon(IPokemonCardLogic pokemon)
+        private void BenchPokemon(IPokemonCardLogic pokemon)
         {
             pokemon.Owner.Bench.AddCards(new() { pokemon });
             pokemon.Owner.Hand.RemoveCard(pokemon);
-            pokemon.SetPutInPlay();
+            pokemon.SetPutInPlay(_actionSystem);
         }
 
         public Task<MovePokemonToBenchGA> Perform(MovePokemonToBenchGA action)
@@ -286,9 +286,9 @@ namespace gamecore.game.action
         public Task<PlayCardGA> Perform(PlayCardGA action)
         {
             if (action.Targets != null)
-                action.Card.PlayWithTargets(action.Targets);
+                action.Card.PlayWithTargets(action.Targets, _actionSystem);
             else
-                action.Card.Play();
+                action.Card.Play(_actionSystem);
             return Task.FromResult(action);
         }
 

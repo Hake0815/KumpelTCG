@@ -13,19 +13,20 @@ namespace gamecore.instruction
             _selectionId = selectionId;
         }
 
-        public void Perform(ICardLogic card)
+        public void Perform(ICardLogic card, ActionSystem actionSystem)
         {
             new InstructionSubscriber<SelectCardsGA>(
-                action => Reaction(action, card),
-                ReactionTiming.POST
+                action => Reaction(action, card, actionSystem),
+                ReactionTiming.POST,
+                actionSystem
             );
         }
 
-        private bool Reaction(SelectCardsGA action, ICardLogic card)
+        private bool Reaction(SelectCardsGA action, ICardLogic card, ActionSystem actionSystem)
         {
             if (action.SelectionId != _selectionId)
                 return false;
-            ActionSystem.INSTANCE.AddReaction(
+            actionSystem.AddReaction(
                 new TakeSelectionToHandGA(action.SelectedCards, card.Owner, action.RemainingCards)
             );
             return true;

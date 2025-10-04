@@ -9,32 +9,32 @@ namespace gamecore.actionsystem
 {
     public class ActionSystem
     {
-        private static readonly Lazy<ActionSystem> lazy = new(() => new ActionSystem());
-        public static ActionSystem INSTANCE => lazy.Value;
+        public ActionSystem(string logFilePath)
+        {
+            _logWriter = new AsyncGameLogWriter(logFilePath);
+        }
 
-        private ActionSystem() { }
-
-        private AsyncGameLogWriter _logWriter;
+        private readonly AsyncGameLogWriter _logWriter;
         private List<GameAction> reactions = null;
         public bool IsPerforming { get; private set; } = false;
-        private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> preSubs = new();
-        private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> postSubs = new();
-        private readonly Dictionary<Type, IActionPerformer<GameAction>> performers = new();
+        private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> _preSubs = new();
+        private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> _postSubs = new();
+        private readonly Dictionary<Type, IActionPerformer<GameAction>> _performers = new();
 
         public void AttachPerformer<T>(IActionPerformer<T> performer)
             where T : GameAction
         {
             var type = typeof(T);
             var wrappedPerformer = new ActionPerformerWrapper<T>(performer);
-            performers[type] = wrappedPerformer;
+            _performers[type] = wrappedPerformer;
         }
 
         public void DetachPerformer<T>()
             where T : GameAction
         {
             var type = typeof(T);
-            if (performers.ContainsKey(type))
-                performers.Remove(type);
+            if (_performers.ContainsKey(type))
+                _performers.Remove(type);
         }
 
         public void SubscribeToGameAction<T>(IActionSubscriber<T> subscriber, ReactionTiming timing)
@@ -76,7 +76,7 @@ namespace gamecore.actionsystem
             ReactionTiming timing
         )
         {
-            return timing == ReactionTiming.PRE ? preSubs : postSubs;
+            return timing == ReactionTiming.PRE ? _preSubs : _postSubs;
         }
 
         public async Task Perform(GameAction action, Action OnPerformFinished = null)
@@ -104,7 +104,7 @@ namespace gamecore.actionsystem
         )
         {
             reactions = action.PreReactions;
-            action = NotifySubscribers(action, preSubs);
+            action = NotifySubscribers(action, _preSubs);
             await PerformReactions(logEntryBuilder);
 
             reactions = action.PerformReactions;
@@ -113,7 +113,7 @@ namespace gamecore.actionsystem
             await PerformReactions(logEntryBuilder);
 
             reactions = action.PostReactions;
-            NotifySubscribers(action, postSubs);
+            NotifySubscribers(action, _postSubs);
             await PerformReactions(logEntryBuilder);
 
             OnFlowFinished?.Invoke();
@@ -161,9 +161,9 @@ namespace gamecore.actionsystem
 
             var type = action.GetType();
 
-            if (performers.ContainsKey(type))
+            if (_performers.ContainsKey(type))
             {
-                var performer = performers[type];
+                var performer = _performers[type];
                 if (performer == null)
                 {
                     Debug.LogError($"No performer found for action type: {type.Name}");
@@ -180,19 +180,13 @@ namespace gamecore.actionsystem
             reactions?.Add(gameAction);
         }
 
-        public async Task RecreateGameStateFromLog(string logFilePath)
+        public async Task RecreateGameStateFromLog()
         {
-            _logWriter = new AsyncGameLogWriter(logFilePath);
             var logEntries = _logWriter.LoadExistingLog();
             foreach (var logEntry in logEntries)
             {
                 await Reperform(logEntry);
             }
-        }
-
-        public void SetupLogFile(string logFilePath)
-        {
-            _logWriter = new AsyncGameLogWriter(logFilePath);
         }
 
         private async Task Reperform(GameActionLogEntry logEntry)
@@ -227,9 +221,9 @@ namespace gamecore.actionsystem
             )
                 return;
 
-            if (performers.ContainsKey(type))
+            if (_performers.ContainsKey(type))
             {
-                var performer = performers[type];
+                var performer = _performers[type];
                 if (performer == null)
                     Debug.LogError($"No reperformer found for action type: {type.Name}");
                 else

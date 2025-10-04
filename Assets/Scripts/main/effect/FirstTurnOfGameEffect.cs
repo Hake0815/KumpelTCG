@@ -4,24 +4,25 @@ using gamecore.game.action;
 
 namespace gamecore.effect
 {
-    public class FirstTurnOfGameEffect : IPlayerEffect, IActionSubscriber<EndTurnGA>
+    public class FirstTurnOfGameEffect : PlayerEffectAbstract, IActionSubscriber<EndTurnGA>
     {
+        public FirstTurnOfGameEffect(ActionSystem actionSystem)
+            : base(actionSystem) { }
+
         EndTurnGA IActionSubscriber<EndTurnGA>.React(EndTurnGA action)
         {
-            ActionSystem.INSTANCE.AddReaction(
-                new RemovePlayerEffectGA(action.NextPlayer.Opponent, this)
-            );
+            _actionSystem.AddReaction(new RemovePlayerEffectGA(action.NextPlayer.Opponent, this));
             return action;
         }
 
-        public static FirstTurnOfGameEffect Create()
+        public static FirstTurnOfGameEffect Create(ActionSystem actionSystem)
         {
-            var effect = new FirstTurnOfGameEffect();
-            ActionSystem.INSTANCE.SubscribeToGameAction(effect, ReactionTiming.POST);
+            var effect = new FirstTurnOfGameEffect(actionSystem);
+            actionSystem.SubscribeToGameAction(effect, ReactionTiming.POST);
             return effect;
         }
 
-        public PlayerEffectJson ToSerializable()
+        public override PlayerEffectJson ToSerializable()
         {
             return new PlayerEffectJson("first_turn_of_game");
         }

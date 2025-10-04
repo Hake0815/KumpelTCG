@@ -56,10 +56,10 @@ namespace gamecore.card
             Owner = owner;
         }
 
-        public virtual void Play()
+        public virtual void Play(ActionSystem actionSystem)
         {
-            ActionSystem.INSTANCE.AddReaction(new RemoveCardsFromHandGA(new() { this }, Owner));
-            PerformInstructions();
+            actionSystem.AddReaction(new RemoveCardsFromHandGA(new() { this }, Owner));
+            PerformInstructions(actionSystem);
         }
 
         public virtual bool IsPlayable()
@@ -74,11 +74,11 @@ namespace gamecore.card
             return true;
         }
 
-        private void PerformInstructions()
+        private void PerformInstructions(ActionSystem actionSystem)
         {
             foreach (var instruction in Instructions)
             {
-                instruction.Perform(this);
+                instruction.Perform(this, actionSystem);
             }
         }
 
@@ -98,7 +98,7 @@ namespace gamecore.card
 
         public bool IsBasicEnergyCard() => false;
 
-        public void PlayWithTargets(List<ICardLogic> targets)
+        public void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem)
         {
             throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
         }
