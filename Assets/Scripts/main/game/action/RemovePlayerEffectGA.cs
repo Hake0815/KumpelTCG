@@ -5,13 +5,13 @@ namespace gamecore.game.action
 {
     class RemovePlayerEffectGA : GameAction
     {
-        public RemovePlayerEffectGA(IPlayerLogic player, IPlayerEffect effect)
+        public RemovePlayerEffectGA(IPlayerLogic player, PlayerEffectAbstract effect)
         {
             Player = player;
             Effect = effect;
         }
 
         public IPlayerLogic Player { get; }
-        public IPlayerEffect Effect { get; }
+        public PlayerEffectAbstract Effect { get; }
     }
 }

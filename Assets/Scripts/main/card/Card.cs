@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using gamecore.actionsystem;
 using gamecore.game;
 using Newtonsoft.Json;
 
@@ -72,9 +73,9 @@ namespace gamecore.card
         new PositionKnowledge OwnerPositionKnowledge { get; set; }
         new PositionKnowledge OpponentPositionKnowledge { get; set; }
         new int TopDeckPositionIndex { get; set; }
-        void Play();
+        void Play(ActionSystem actionSystem);
         bool IsPlayable();
-        void PlayWithTargets(List<ICardLogic> targets);
+        void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem);
         bool IsPlayableWithTargets();
         List<ICardLogic> GetPossibleTargets();
         int GetNumberOfTargets();

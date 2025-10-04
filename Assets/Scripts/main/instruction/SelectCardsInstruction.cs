@@ -1,3 +1,4 @@
+using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.instruction.filter;
 
@@ -16,7 +17,7 @@ namespace gamecore.instruction
         public FilterNode Filter { get; }
         public string SelectionId { get; }
 
-        public abstract void Perform(ICardLogic card);
+        public abstract void Perform(ICardLogic card, ActionSystem actionSystem);
 
         public abstract InstructionJson ToSerializable();
     }

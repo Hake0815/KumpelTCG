@@ -15,20 +15,26 @@ namespace gamecore.instruction
         private readonly Func<T, bool> _reaction;
         private readonly ReactionTiming _timing;
         private readonly Guid _guid = Guid.NewGuid();
+        private readonly ActionSystem _actionSystem;
 
-        public InstructionSubscriber(Func<T, bool> reaction, ReactionTiming timing)
+        public InstructionSubscriber(
+            Func<T, bool> reaction,
+            ReactionTiming timing,
+            ActionSystem actionSystem
+        )
         {
             _reaction = reaction;
             _timing = timing;
-            ActionSystem.INSTANCE.SubscribeToGameAction<T>(this, timing);
+            _actionSystem = actionSystem;
+            _actionSystem.SubscribeToGameAction<T>(this, timing);
         }
 
         public T React(T action)
         {
             if (_reaction(action))
             {
-                ActionSystem.INSTANCE.AttachPerformer<RemoveInstructionSubscriberGA<T>>(this);
-                ActionSystem.INSTANCE.AddReaction(new RemoveInstructionSubscriberGA<T>(_guid));
+                _actionSystem.AttachPerformer<RemoveInstructionSubscriberGA<T>>(this);
+                _actionSystem.AddReaction(new RemoveInstructionSubscriberGA<T>(_guid));
             }
             return action;
         }
@@ -39,8 +45,8 @@ namespace gamecore.instruction
         {
             if (action.Guid != _guid)
                 return Task.FromResult(action);
-            ActionSystem.INSTANCE.UnsubscribeFromGameAction<T>(this, _timing);
-            ActionSystem.INSTANCE.DetachPerformer<RemoveInstructionSubscriberGA<T>>();
+            _actionSystem.UnsubscribeFromGameAction<T>(this, _timing);
+            _actionSystem.DetachPerformer<RemoveInstructionSubscriberGA<T>>();
             return Task.FromResult(action);
         }
 

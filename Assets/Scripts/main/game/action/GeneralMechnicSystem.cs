@@ -23,29 +23,28 @@ namespace gamecore.action
             IActionPerformer<RemovePokemonEffectGA>,
             IActionPerformer<EvolveGA>
     {
-        private static readonly Lazy<GeneralMechnicSystem> lazy = new(
-            () => new GeneralMechnicSystem()
-        );
-        public static GeneralMechnicSystem INSTANCE => lazy.Value;
-
-        private GeneralMechnicSystem() { }
-
-        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
-        private Game _game;
-
-        public void Enable(Game game)
+        public GeneralMechnicSystem(ActionSystem actionSystem, Game game)
         {
-            _actionSystem.AttachPerformer<AttackGA>(INSTANCE);
-            _actionSystem.AttachPerformer<DrawPrizeCardsGA>(INSTANCE);
-            _actionSystem.AttachPerformer<CheckWinConditionGA>(INSTANCE);
-            _actionSystem.AttachPerformer<PromoteGA>(INSTANCE);
-            _actionSystem.AttachPerformer<RetreatGA>(INSTANCE);
-            _actionSystem.AttachPerformer<PerformAbilityGA>(INSTANCE);
-            _actionSystem.AttachPerformer<PlaySupporterGA>(INSTANCE);
-            _actionSystem.AttachPerformer<EvolveGA>(INSTANCE);
-            _actionSystem.AttachPerformer<RemovePlayerEffectGA>(INSTANCE);
-            _actionSystem.AttachPerformer<RemovePokemonEffectGA>(INSTANCE);
+            _actionSystem = actionSystem;
             _game = game;
+            Enable();
+        }
+
+        private readonly ActionSystem _actionSystem;
+        private readonly Game _game;
+
+        public void Enable()
+        {
+            _actionSystem.AttachPerformer<AttackGA>(this);
+            _actionSystem.AttachPerformer<DrawPrizeCardsGA>(this);
+            _actionSystem.AttachPerformer<CheckWinConditionGA>(this);
+            _actionSystem.AttachPerformer<PromoteGA>(this);
+            _actionSystem.AttachPerformer<RetreatGA>(this);
+            _actionSystem.AttachPerformer<PerformAbilityGA>(this);
+            _actionSystem.AttachPerformer<PlaySupporterGA>(this);
+            _actionSystem.AttachPerformer<EvolveGA>(this);
+            _actionSystem.AttachPerformer<RemovePlayerEffectGA>(this);
+            _actionSystem.AttachPerformer<RemovePokemonEffectGA>(this);
         }
 
         public void Disable()
@@ -66,7 +65,7 @@ namespace gamecore.action
         {
             foreach (var instruction in action.Attack.Instructions)
             {
-                instruction.Perform(action.Attacker);
+                instruction.Perform(action.Attacker, _actionSystem);
             }
             return Task.FromResult(action);
         }
@@ -214,16 +213,18 @@ namespace gamecore.action
         {
             foreach (var instruction in action.Pokemon.Ability.Instructions)
             {
-                instruction.Perform(action.Pokemon);
+                instruction.Perform(action.Pokemon, _actionSystem);
             }
-            ((IPokemonEffect)new AbilityUsedThisTurnEffect()).Apply(action.Pokemon);
+            (
+                (PokemonEffectAbstract)new AbilityUsedThisTurnEffect(_actionSystem, action.Pokemon)
+            ).Apply();
             return Task.FromResult(action);
         }
 
         public Task<PerformAbilityGA> Reperform(PerformAbilityGA action)
         {
             var pokemon = (IPokemonCardLogic)_game.FindCardAnywhere(action.Pokemon);
-            ((IPokemonEffect)new AbilityUsedThisTurnEffect()).Apply(pokemon);
+            ((PokemonEffectAbstract)new AbilityUsedThisTurnEffect(_actionSystem, pokemon)).Apply();
             return Task.FromResult(action);
         }
 
@@ -241,10 +242,7 @@ namespace gamecore.action
             return Task.FromResult(action);
         }
 
-        private static void EvolvePokemon(
-            IPokemonCardLogic newPokemon,
-            IPokemonCardLogic targetPokemon
-        )
+        private void EvolvePokemon(IPokemonCardLogic newPokemon, IPokemonCardLogic targetPokemon)
         {
             newPokemon.Owner.Hand.RemoveCard(newPokemon);
             newPokemon.PreEvolutions.Add(targetPokemon);
@@ -266,7 +264,7 @@ namespace gamecore.action
             targetPokemon.PreEvolutions.Clear();
 
             targetPokemon.WasEvolved();
-            targetPokemon.SetPutInPlay();
+            targetPokemon.SetPutInPlay(_actionSystem);
         }
 
         public Task<PlaySupporterGA> Perform(PlaySupporterGA action)

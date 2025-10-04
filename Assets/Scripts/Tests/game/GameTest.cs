@@ -1,4 +1,6 @@
+using System.IO;
 using System.Threading.Tasks;
+using gamecore.actionsystem;
 using gamecore.game.action;
 using Moq;
 using NUnit.Framework;
@@ -16,7 +18,11 @@ namespace gamecore.game
         {
             player1 = new();
             player2 = new();
-            game = new Game(player1.Object, player2.Object);
+            game = new Game(
+                player1.Object,
+                player2.Object,
+                new ActionSystem(Path.GetTempFileName())
+            );
         }
 
         [Test]

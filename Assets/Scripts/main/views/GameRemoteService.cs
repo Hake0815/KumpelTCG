@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using gamecore.card;
 using gamecore.game;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace gameview
@@ -24,14 +23,14 @@ namespace gameview
 
         private void InitializeGame()
         {
-            _gameController = IGameController.Create();
+            var gameLogFile = "action_log.json";
+            _gameController = IGameController.Create(gameLogFile);
             _gameController.NotifyPlayer1 += HandlePlayer1Interactions;
             _gameController.NotifyPlayer2 += HandlePlayer2Interactions;
             _gameController.NotifyGeneral += HandleGeneralInteractions;
-            var gameLogFile = "action_log.json";
             if (File.Exists(gameLogFile) && File.ReadAllText(gameLogFile).Length > 0)
             {
-                _gameController.RecreateGameFromLog(gameLogFile);
+                _gameController.RecreateGameFromLog();
             }
             else
             {
@@ -39,8 +38,7 @@ namespace gameview
                     CreateDeckList(),
                     CreateDeckList(),
                     "Player 1",
-                    "Player 2",
-                    gameLogFile
+                    "Player 2"
                 );
             }
             _gameManager.SetUpPlayerViews(
