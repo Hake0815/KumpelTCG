@@ -3,7 +3,7 @@ using gamecore.card;
 
 namespace gamecore.game
 {
-    class CardStateCreator
+    static class CardStateCreator
     {
         public static List<CardStateJson> CreateCardStates(IPlayerLogic player)
         {
