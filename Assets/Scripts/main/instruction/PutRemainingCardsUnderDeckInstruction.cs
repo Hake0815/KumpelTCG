@@ -9,17 +9,22 @@ namespace gamecore.instruction
 {
     class PutRemainingCardsUnderDeckInstruction : IInstruction
     {
-        public void Perform(ICardLogic card)
+        public void Perform(ICardLogic card, ActionSystem actionSystem)
         {
             new InstructionSubscriber<DoOnSelectionGA>(
-                action => Reaction(action, card),
-                ReactionTiming.POST
+                action => Reaction(action, card, actionSystem),
+                ReactionTiming.POST,
+                actionSystem
             );
         }
 
-        private static bool Reaction(DoOnSelectionGA action, ICardLogic card)
+        private static bool Reaction(
+            DoOnSelectionGA action,
+            ICardLogic card,
+            ActionSystem actionSystem
+        )
         {
-            ActionSystem.INSTANCE.AddReaction(
+            actionSystem.AddReaction(
                 new PutRemainingCardsUnderDeckGA(card.Owner, action.RemainingCards)
             );
             return true;

@@ -15,9 +15,9 @@ namespace gamecore.instruction
             Count = count;
         }
 
-        public void Perform(ICardLogic card)
+        public void Perform(ICardLogic card, ActionSystem actionSystem)
         {
-            ActionSystem.INSTANCE.AddReaction(new DrawCardGA(Count, card.Owner));
+            actionSystem.AddReaction(new DrawCardGA(Count, card.Owner));
         }
 
         public InstructionJson ToSerializable()

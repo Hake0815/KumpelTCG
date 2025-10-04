@@ -61,19 +61,23 @@ namespace gamecore.game
         public int TurnCounter { get; private set; } = 0;
         public event Action AwaitInteractionEvent;
         public event Action AwaitGeneralInteractionEvent;
-        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        private readonly ActionSystem _actionSystem;
+        private readonly CardSystem _cardSystem;
+        private readonly DamageSystem _damageSystem;
+        private readonly GeneralMechnicSystem _generalMechnicSystem;
 
-        public Game(IPlayerLogic player1, IPlayerLogic player2)
+        public Game(IPlayerLogic player1, IPlayerLogic player2, ActionSystem actionSystem)
         {
             Player1 = player1;
             Player2 = player2;
+            _actionSystem = actionSystem;
             _actionSystem.AttachPerformer<EndTurnGA>(this);
             _actionSystem.AttachPerformer<StartTurnGA>(this);
             _actionSystem.AttachPerformer<SetupGA>(this);
             _actionSystem.AttachPerformer<SetPrizeCardsGA>(this);
-            CardSystem.INSTANCE.Enable(this);
-            DamageSystem.INSTANCE.Enable(this);
-            GeneralMechnicSystem.INSTANCE.Enable(this);
+            _cardSystem = new CardSystem(_actionSystem, this);
+            _damageSystem = new DamageSystem(_actionSystem, this);
+            _generalMechnicSystem = new GeneralMechnicSystem(_actionSystem, this);
             _players.Add(player1);
             _players.Add(player2);
         }
@@ -84,9 +88,9 @@ namespace gamecore.game
             _actionSystem.DetachPerformer<StartTurnGA>();
             _actionSystem.DetachPerformer<SetupGA>();
             _actionSystem.DetachPerformer<SetPrizeCardsGA>();
-            CardSystem.INSTANCE.Disable();
-            DamageSystem.INSTANCE.Disable();
-            GeneralMechnicSystem.INSTANCE.Disable();
+            _cardSystem.Disable();
+            _damageSystem.Disable();
+            _generalMechnicSystem.Disable();
             GameState = new GameOverState(winner);
             AwaitGeneralInteraction();
         }
@@ -145,7 +149,7 @@ namespace gamecore.game
                 Player2.IsActive = false;
                 endTurnGA.NextPlayer = Player1;
             }
-            ActionSystem.INSTANCE.AddReaction(new StartTurnGA(endTurnGA.NextPlayer));
+            _actionSystem.AddReaction(new StartTurnGA(endTurnGA.NextPlayer));
             return Task.FromResult(endTurnGA);
         }
 
@@ -179,7 +183,7 @@ namespace gamecore.game
             nextPlayer.TurnCounter++;
             TurnCounter++;
             if (TurnCounter == 1)
-                nextPlayer.AddEffect(FirstTurnOfGameEffect.Create());
+                nextPlayer.AddEffect(FirstTurnOfGameEffect.Create(_actionSystem));
         }
 
         public Task<SetupGA> Perform(SetupGA action)

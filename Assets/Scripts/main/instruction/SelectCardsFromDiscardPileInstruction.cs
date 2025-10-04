@@ -16,9 +16,9 @@ namespace gamecore.instruction
         )
             : base(countRange, filter, selectionId) { }
 
-        public override void Perform(ICardLogic card)
+        public override void Perform(ICardLogic card, ActionSystem actionSystem)
         {
-            ActionSystem.INSTANCE.AddReaction(
+            actionSystem.AddReaction(
                 new ConfirmSelectCardsGA(
                     card.Owner,
                     CountRange.Contains,

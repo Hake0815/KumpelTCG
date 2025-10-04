@@ -16,17 +16,22 @@ namespace gamecore.instruction
         )
             : base(countRange, filter, selectionId) { }
 
-        public override void Perform(ICardLogic card)
+        public override void Perform(ICardLogic card, ActionSystem actionSystem)
         {
             new InstructionSubscriber<RevealCardsFromDeckGA>(
-                action => Reaction(action, card),
-                ReactionTiming.POST
+                action => Reaction(action, card, actionSystem),
+                ReactionTiming.POST,
+                actionSystem
             );
         }
 
-        private bool Reaction(RevealCardsFromDeckGA action, ICardLogic card)
+        private bool Reaction(
+            RevealCardsFromDeckGA action,
+            ICardLogic card,
+            ActionSystem actionSystem
+        )
         {
-            ActionSystem.INSTANCE.AddReaction(
+            actionSystem.AddReaction(
                 new QuickSelectCardsGA(
                     card.Owner,
                     CountRange.Contains,

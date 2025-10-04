@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using gamecore.actionsystem;
 using gamecore.card;
 
 namespace gamecore.game
@@ -8,6 +9,7 @@ namespace gamecore.game
     {
         private readonly Player _player1 = new() { Name = "Player1" };
         private readonly Player _player2 = new() { Name = "Player2" };
+        private ActionSystem _actionSystem;
 
         public GameBuilder WithPlayer1(string playerName1)
         {
@@ -37,6 +39,12 @@ namespace gamecore.game
             return this;
         }
 
+        public GameBuilder WithActionSystem(ActionSystem actionSystem)
+        {
+            _actionSystem = actionSystem;
+            return this;
+        }
+
         private static List<ICardLogic> CreateDeckFromDecklist(
             Dictionary<string, int> decklist,
             Player player
@@ -56,7 +64,7 @@ namespace gamecore.game
         {
             _player1.Opponent = _player2;
             _player2.Opponent = _player1;
-            return new Game(_player1, _player2);
+            return new Game(_player1, _player2, _actionSystem);
         }
     }
 }

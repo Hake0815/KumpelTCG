@@ -19,7 +19,7 @@ namespace gamecore.game
         IPrizes Prizes { get; }
         bool IsActive { get; }
         IPokemonCard ActivePokemon { get; }
-        Dictionary<Type, IPlayerEffect> PlayerEffects { get; }
+        Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; }
         event Action<IPokemonCard> ActivePokemonSet;
     }
 
@@ -72,9 +72,9 @@ namespace gamecore.game
         void ResetOncePerTurnActions();
         void Promote(IPokemonCardLogic pokemon);
         bool HasEffect<T>()
-            where T : IPlayerEffect;
-        void AddEffect(IPlayerEffect effect);
-        void RemoveEffect(IPlayerEffect effect);
+            where T : PlayerEffectAbstract;
+        void AddEffect(PlayerEffectAbstract effect);
+        void RemoveEffect(PlayerEffectAbstract effect);
         PlayerStateJson ToSerializable();
     }
 
@@ -119,7 +119,7 @@ namespace gamecore.game
         public HashSet<string> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
         public int TurnCounter { get; set; } = 0;
-        public Dictionary<Type, IPlayerEffect> PlayerEffects { get; } = new();
+        public Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; } = new();
 
         public event Action<IPokemonCard> ActivePokemonSet;
 
@@ -151,17 +151,17 @@ namespace gamecore.game
         }
 
         public bool HasEffect<T>()
-            where T : IPlayerEffect
+            where T : PlayerEffectAbstract
         {
             return PlayerEffects.ContainsKey(typeof(T));
         }
 
-        public void AddEffect(IPlayerEffect effect)
+        public void AddEffect(PlayerEffectAbstract effect)
         {
             PlayerEffects[effect.GetType()] = effect;
         }
 
-        public void RemoveEffect(IPlayerEffect effect)
+        public void RemoveEffect(PlayerEffectAbstract effect)
         {
             PlayerEffects.Remove(effect.GetType());
         }

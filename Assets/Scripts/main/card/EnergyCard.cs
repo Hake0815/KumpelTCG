@@ -84,14 +84,14 @@ namespace gamecore.card
 
         public abstract bool IsBasicEnergyCard();
 
-        public void Play()
+        public void Play(ActionSystem actionSystem)
         {
             throw new IlleagalActionException("Energy cards can only be played with a target");
         }
 
-        public void PlayWithTargets(List<ICardLogic> targets)
+        public void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem)
         {
-            ActionSystem.INSTANCE.AddReaction(
+            actionSystem.AddReaction(
                 new AttachEnergyFromHandForTurnGA(this, targets[0] as IPokemonCardLogic)
             );
         }
