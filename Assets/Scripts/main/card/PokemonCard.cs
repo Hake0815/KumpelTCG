@@ -44,7 +44,7 @@ namespace gamecore.card
         int RetreatCost { get; }
 
         [JsonIgnore]
-        Dictionary<Type, IPokemonEffect> PokemonEffects { get; }
+        Dictionary<Type, PokemonEffectAbstract> PokemonEffects { get; }
         event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         event Action DamageModified;
         event Action Evolved;
@@ -81,11 +81,11 @@ namespace gamecore.card
         bool CanPayRetreatCost();
         void DiscardEnergy(List<IEnergyCardLogic> energyCardsToDiscard);
         void WasEvolved();
-        void SetPutInPlay();
+        void SetPutInPlay(ActionSystem actionSystem);
         bool HasEffect<T>()
-            where T : IPokemonEffect;
-        void AddEffect(IPokemonEffect effect);
-        void RemoveEffect(IPokemonEffect effect);
+            where T : PokemonEffectAbstract;
+        void AddEffect(PokemonEffectAbstract effect);
+        void RemoveEffect(PokemonEffectAbstract effect);
     }
 
     class PokemonCard : IPokemonCardLogic
@@ -111,7 +111,7 @@ namespace gamecore.card
         public int MaxHP { get; private set; }
         public int RetreatCost { get; private set; }
         public int NumberOfPrizeCardsOnKnockout { get; set; }
-        public Dictionary<Type, IPokemonEffect> PokemonEffects { get; } = new();
+        public Dictionary<Type, PokemonEffectAbstract> PokemonEffects { get; } = new();
         private int _damage = 0;
         public int Damage
         {
@@ -253,11 +253,11 @@ namespace gamecore.card
             return Stage == Stage.Basic && !Owner.Bench.Full;
         }
 
-        public void Play()
+        public void Play(ActionSystem actionSystem)
         {
             if (!Owner.Bench.Full)
             {
-                ActionSystem.INSTANCE.AddReaction(new BenchPokemonGA(this));
+                actionSystem.AddReaction(new BenchPokemonGA(this));
                 Damage = 0;
             }
             else
@@ -306,14 +306,14 @@ namespace gamecore.card
             return targets;
         }
 
-        public void PlayWithTargets(List<ICardLogic> targets)
+        public void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem)
         {
-            ActionSystem.INSTANCE.AddReaction(new EvolveGA(targets[0] as IPokemonCardLogic, this));
+            actionSystem.AddReaction(new EvolveGA(targets[0] as IPokemonCardLogic, this));
         }
 
-        public void SetPutInPlay()
+        public void SetPutInPlay(ActionSystem actionSystem)
         {
-            ((IPokemonEffect)new PutIntoPlayThisTurnEffect()).Apply(this);
+            ((PokemonEffectAbstract)new PutIntoPlayThisTurnEffect(actionSystem, this)).Apply();
         }
 
         public int GetNumberOfTargets() => 1;
@@ -373,17 +373,17 @@ namespace gamecore.card
         }
 
         public bool HasEffect<T>()
-            where T : IPokemonEffect
+            where T : PokemonEffectAbstract
         {
             return PokemonEffects.ContainsKey(typeof(T));
         }
 
-        public void AddEffect(IPokemonEffect effect)
+        public void AddEffect(PokemonEffectAbstract effect)
         {
             PokemonEffects[effect.GetType()] = effect;
         }
 
-        public void RemoveEffect(IPokemonEffect effect)
+        public void RemoveEffect(PokemonEffectAbstract effect)
         {
             PokemonEffects.Remove(effect.GetType());
         }

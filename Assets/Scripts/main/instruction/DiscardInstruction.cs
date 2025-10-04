@@ -27,37 +27,38 @@ namespace gamecore.instruction
             _selectionId = selectionId;
         }
 
-        public void Perform(ICardLogic card)
+        public void Perform(ICardLogic card, ActionSystem actionSystem)
         {
             List<ICardLogic> cardsToDiscard = new();
             switch (Target)
             {
                 case TargetSource.Hand:
                     cardsToDiscard.AddRange(card.Owner.Hand.Cards);
-                    ActionSystem.INSTANCE.AddReaction(
+                    actionSystem.AddReaction(
                         new RemoveCardsFromHandGA(new(cardsToDiscard), card.Owner)
                     );
-                    ActionSystem.INSTANCE.AddReaction(new DiscardCardsGA(new(cardsToDiscard)));
+                    actionSystem.AddReaction(new DiscardCardsGA(new(cardsToDiscard)));
                     break;
                 case TargetSource.Self:
                     cardsToDiscard.Add(card);
-                    ActionSystem.INSTANCE.AddReaction(new DiscardCardsGA(new(cardsToDiscard)));
+                    actionSystem.AddReaction(new DiscardCardsGA(new(cardsToDiscard)));
                     break;
                 case TargetSource.Selection:
                     new InstructionSubscriber<SelectCardsGA>(
-                        action => Reaction(action),
-                        ReactionTiming.POST
+                        action => Reaction(action, actionSystem),
+                        ReactionTiming.POST,
+                        actionSystem
                     );
                     break;
             }
         }
 
-        private bool Reaction(SelectCardsGA action)
+        private bool Reaction(SelectCardsGA action, ActionSystem actionSystem)
         {
             if (action.SelectionId != _selectionId)
                 return false;
 
-            ActionSystem.INSTANCE.AddReaction(new DiscardCardsGA(action.SelectedCards));
+            actionSystem.AddReaction(new DiscardCardsGA(action.SelectedCards));
             return true;
         }
 

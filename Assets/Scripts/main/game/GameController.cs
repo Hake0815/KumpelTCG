@@ -6,7 +6,6 @@ using gamecore.card;
 using gamecore.common;
 using gamecore.effect;
 using gamecore.game.action;
-using UnityEngine;
 
 namespace gamecore.game
 {
@@ -16,19 +15,18 @@ namespace gamecore.game
         event EventHandler<List<GameInteraction>> NotifyPlayer1;
         event EventHandler<List<GameInteraction>> NotifyPlayer2;
         event EventHandler<List<GameInteraction>> NotifyGeneral;
-        static IGameController Create()
+        static IGameController Create(string logFilePath)
         {
-            return new GameController();
+            return new GameController(logFilePath);
         }
 
         Task CreateGame(
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
-            string player2Name,
-            string logFilePath
+            string player2Name
         );
-        Task RecreateGameFromLog(string logFilePath);
+        Task RecreateGameFromLog();
         void StartGame();
         GameStateJson ExportGameState(IPlayer player);
     }
@@ -40,22 +38,13 @@ namespace gamecore.game
         public event EventHandler<List<GameInteraction>> NotifyPlayer1;
         public event EventHandler<List<GameInteraction>> NotifyPlayer2;
         public event EventHandler<List<GameInteraction>> NotifyGeneral;
-        private readonly ActionSystem _actionSystem = ActionSystem.INSTANCE;
+        private readonly ActionSystem _actionSystem;
 
-        public IGame Game
-        {
-            get { return _game; }
-        }
+        public IGame Game => _game;
 
-        public GameController(Game game)
+        public GameController(string logFilePath)
         {
-            _game = game;
-            _game.AwaitInteractionEvent += NotifyPlayers;
-            _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
-        }
-
-        public GameController()
-        {
+            _actionSystem = new ActionSystem(logFilePath);
             _actionSystem.AttachPerformer<CreateGameGA>(this);
         }
 
@@ -94,19 +83,17 @@ namespace gamecore.game
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
-            string player2Name,
-            string logFilePath
+            string player2Name
         )
         {
-            _actionSystem.SetupLogFile(logFilePath);
             await _actionSystem.Perform(
                 new CreateGameGA(deckList1, deckList2, player1Name, player2Name)
             );
         }
 
-        public async Task RecreateGameFromLog(string logFilePath)
+        public async Task RecreateGameFromLog()
         {
-            await _actionSystem.RecreateGameStateFromLog(logFilePath);
+            await _actionSystem.RecreateGameStateFromLog();
         }
 
         public void StartGame()
@@ -187,6 +174,7 @@ namespace gamecore.game
                 .WithPlayer2(action.Player2Name)
                 .WithPlayer1Decklist(action.DeckList1)
                 .WithPlayer2Decklist(action.DeckList2)
+                .WithActionSystem(_actionSystem)
                 .Build();
             _game.AwaitInteractionEvent += NotifyPlayers;
             _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;

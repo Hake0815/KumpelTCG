@@ -23,10 +23,10 @@ namespace gamecore.card
 
         public override bool IsItemCard() => false;
 
-        public override void Play()
+        public override void Play(ActionSystem actionSystem)
         {
-            ActionSystem.INSTANCE.AddReaction(new PlaySupporterGA(Owner));
-            base.Play();
+            actionSystem.AddReaction(new PlaySupporterGA(Owner));
+            base.Play(actionSystem);
         }
 
         public override bool IsPlayable()

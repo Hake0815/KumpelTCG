@@ -1,7 +1,17 @@
+using gamecore.actionsystem;
+using gamecore.game;
+
 namespace gamecore.effect
 {
-    public interface IPlayerEffect
+    public abstract class PlayerEffectAbstract
     {
-        PlayerEffectJson ToSerializable();
+        private protected ActionSystem _actionSystem;
+
+        private protected PlayerEffectAbstract(ActionSystem actionSystem)
+        {
+            _actionSystem = actionSystem;
+        }
+
+        public abstract PlayerEffectJson ToSerializable();
     }
 }

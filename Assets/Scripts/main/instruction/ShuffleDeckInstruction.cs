@@ -6,9 +6,9 @@ namespace gamecore.instruction
 {
     class ShuffleDeckInstruction : IInstruction
     {
-        public void Perform(ICardLogic card)
+        public void Perform(ICardLogic card, ActionSystem actionSystem)
         {
-            ActionSystem.INSTANCE.AddReaction(new ShuffleDeckGA(card.Owner));
+            actionSystem.AddReaction(new ShuffleDeckGA(card.Owner));
         }
 
         public InstructionJson ToSerializable()

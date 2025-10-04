@@ -7,9 +7,9 @@ namespace gamecore.game.action
     class RemovePokemonEffectGA : GameAction
     {
         public IPokemonCardLogic Pokemon { get; }
-        public IPokemonEffect Effect { get; }
+        public PokemonEffectAbstract Effect { get; }
 
-        public RemovePokemonEffectGA(IPokemonCardLogic pokemon, IPokemonEffect effect)
+        public RemovePokemonEffectGA(IPokemonCardLogic pokemon, PokemonEffectAbstract effect)
         {
             Pokemon = pokemon;
             Effect = effect;
