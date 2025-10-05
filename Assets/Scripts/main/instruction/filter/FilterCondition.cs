@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Castle.Components.DictionaryAdapter;
 using gamecore.card;
 
 namespace gamecore.instruction.filter

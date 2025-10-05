@@ -76,3 +76,4 @@ mono_crash.mem.*blob
 
 # GameLog
 action_log.json
+GameLogicTraining/*
