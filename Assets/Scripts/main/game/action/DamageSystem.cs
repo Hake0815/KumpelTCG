@@ -5,8 +5,6 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
 using gamecore.game.action;
-using gamecore.gamegame.action;
-using UnityEngine.Animations;
 
 namespace gamecore.action
 {
