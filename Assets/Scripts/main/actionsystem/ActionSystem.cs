@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using gamecore.game.action;
-using UnityEngine;
 
 namespace gamecore.actionsystem
 {
@@ -154,7 +154,7 @@ namespace gamecore.actionsystem
         {
             if (action == null)
             {
-                Debug.LogError("Attempted to perform null action");
+                Debug.WriteLine("ERROR: Attempted to perform null action");
                 return null;
             }
 
@@ -165,12 +165,12 @@ namespace gamecore.actionsystem
                 var performer = _performers[type];
                 if (performer == null)
                 {
-                    Debug.LogError($"No performer found for action type: {type.Name}");
+                    Debug.WriteLine($"ERROR: No performer found for action type: {type.Name}");
                     return action;
                 }
                 return await performer.Perform(action);
             }
-            Debug.LogWarning($"No performer registered for action type: {type.Name}");
+            Debug.WriteLine($"WARNING: No performer registered for action type: {type.Name}");
             return action;
         }
 
@@ -209,7 +209,7 @@ namespace gamecore.actionsystem
         {
             if (action == null)
             {
-                Debug.LogError("Attempted to reperform null action");
+                Debug.WriteLine("ERROR: Attempted to reperform null action");
                 return;
             }
 
@@ -224,12 +224,12 @@ namespace gamecore.actionsystem
             {
                 var performer = _performers[type];
                 if (performer == null)
-                    Debug.LogError($"No reperformer found for action type: {type.Name}");
+                    Debug.WriteLine($"ERROR: No reperformer found for action type: {type.Name}");
                 else
                     await performer.Reperform(action);
             }
             else
-                Debug.LogWarning($"No reperformer registered for action type: {type.Name}");
+                Debug.WriteLine($"WARNING: No reperformer registered for action type: {type.Name}");
         }
 
         private class ActionPerformerWrapper<T> : IActionPerformer<GameAction>
