@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.state;
-using UnityEngine;
 using static gamecore.game.action.SelectCardsGA;
 
 namespace gamecore.game.action

@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace gamecore.card
 {
