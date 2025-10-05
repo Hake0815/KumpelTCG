@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace gamecore.actionsystem
 {
@@ -43,7 +43,7 @@ namespace gamecore.actionsystem
 
             if (!File.Exists(_filePath))
             {
-                Debug.LogError($"No log file found at {_filePath}");
+                Debug.WriteLine($"ERROR: No log file found at {_filePath}");
                 return entries;
             }
 
@@ -80,18 +80,20 @@ namespace gamecore.actionsystem
             }
             catch (JsonSerializationException ex)
             {
-                Debug.LogError(
-                    $"Deserialization error when processing line: {line}\nMessage: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                Debug.WriteLine(
+                    $"ERROR: Deserialization error when processing line: {line}\nMessage: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
             catch (JsonReaderException ex)
             {
-                Debug.LogError($"JSON read error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                Debug.WriteLine(
+                    $"ERROR: JSON read error: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                );
             }
             catch (Exception ex)
             {
-                Debug.LogError(
-                    $"Unknown error during deserialization: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                Debug.WriteLine(
+                    $"ERROR: Unknown error during deserialization: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
         }
