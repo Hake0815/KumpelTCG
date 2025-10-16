@@ -28,7 +28,7 @@ namespace gamecore.game
         );
         Task RecreateGameFromLog();
         void StartGame();
-        GameStateJson ExportGameState(IPlayer player);
+        GameStateJson ExportGameState(string playerName);
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -193,11 +193,12 @@ namespace gamecore.game
             _game.AdvanceGameState();
         }
 
-        public GameStateJson ExportGameState(IPlayer player)
+        public GameStateJson ExportGameState(string playerName)
         {
             if (_game == null)
                 throw new InvalidOperationException("Game has not been created yet.");
 
+            var player = _game.GetPlayerByName(playerName);
             PlayerStateJson selfState;
             PlayerStateJson opponentState;
             if (player == _game.Player1)
@@ -210,7 +211,7 @@ namespace gamecore.game
                 selfState = _game.Player2.ToSerializable();
                 opponentState = _game.Player1.ToSerializable();
             }
-            var cardStates = CardStateCreator.CreateCardStates(player as IPlayerLogic);
+            var cardStates = CardStateCreator.CreateCardStates(player);
             if (cardStates.Count != 120)
             {
                 throw new IlleagalStateException("Card states count is not 120");
