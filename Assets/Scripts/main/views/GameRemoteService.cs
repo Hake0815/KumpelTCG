@@ -24,17 +24,18 @@ namespace gameview
 
         private void InitializeGame()
         {
-            var gameLogFile = "action_log.json";
+            var gameLogFile = GameParameters.GAME_LOG_FILE;
             _gameController = IGameController.Create(gameLogFile);
             _gameController.NotifyPlayer1 += HandlePlayer1Interactions;
             _gameController.NotifyPlayer2 += HandlePlayer2Interactions;
             _gameController.NotifyGeneral += HandleGeneralInteractions;
-            if (File.Exists(gameLogFile) && File.ReadAllText(gameLogFile).Length > 0)
+            if (GameParameters.LoadModus == LoadModus.ResumeGame)
             {
                 _gameController.RecreateGameFromLog();
             }
             else
             {
+                File.WriteAllText(gameLogFile, string.Empty);
                 _gameController.CreateGame(
                     CreateDeckList(),
                     CreateDeckList(),
@@ -76,7 +77,6 @@ namespace gameview
 
         private void HandlePlayer1Interactions(object sender, List<GameInteraction> interactions)
         {
-            Debug.Log($"Player 1 Interactions: {interactions.Count} interactions received.");
             UIQueue.INSTANCE.Queue(action =>
             {
                 HandleInteraction(interactions);
@@ -86,7 +86,6 @@ namespace gameview
 
         private void HandlePlayer2Interactions(object sender, List<GameInteraction> interactions)
         {
-            Debug.Log($"Player 2 Interactions: {interactions.Count} interactions received.");
             UIQueue.INSTANCE.Queue(action =>
             {
                 HandleInteraction(interactions);
@@ -96,7 +95,6 @@ namespace gameview
 
         private void HandleGeneralInteractions(object sender, List<GameInteraction> interactions)
         {
-            Debug.Log($"General Update {interactions[0].Type}");
             UIQueue.INSTANCE.Queue(action =>
             {
                 HandleInteraction(interactions);
@@ -108,7 +106,6 @@ namespace gameview
         {
             foreach (var interaction in interactions)
             {
-                Debug.Log($"Handle interaction: {interaction.Type}");
                 switch (interaction.Type)
                 {
                     case GameInteractionType.PlayCard:
@@ -441,12 +438,10 @@ namespace gameview
             var player = mulliganData.Player;
             if (mulligans.Count == 0)
             {
-                Debug.Log("Confirming mulligans with no mulligans.");
                 OnInteract();
                 interaction.GameControllerMethod.Invoke();
                 return;
             }
-            Debug.Log($"Showing mulligan for player: {player}");
             _gameManager.ShowMulligan(
                 player,
                 mulligans,
