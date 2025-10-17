@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using gamecore.card;
 using gamecore.effect;
 using Newtonsoft.Json;
-using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.Rendering.VirtualTexturing;
 
 namespace gamecore.game
 {

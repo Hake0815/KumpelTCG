@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using gamecore.common;
 using gamecore.game.action;
-using UnityEngine;
 
 namespace gamecore.actionsystem
 {
@@ -20,6 +20,11 @@ namespace gamecore.actionsystem
         private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> _preSubs = new();
         private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> _postSubs = new();
         private readonly Dictionary<Type, IActionPerformer<GameAction>> _performers = new();
+
+        public void WritePendingLogEntries()
+        {
+            _logWriter.ForceFlush();
+        }
 
         public void AttachPerformer<T>(IActionPerformer<T> performer)
             where T : GameAction
@@ -155,7 +160,7 @@ namespace gamecore.actionsystem
         {
             if (action == null)
             {
-                Debug.LogError("Attempted to perform null action");
+                GlobalLogger.Instance.Error("ERROR: Attempted to perform null action");
                 return null;
             }
 
@@ -166,12 +171,16 @@ namespace gamecore.actionsystem
                 var performer = _performers[type];
                 if (performer == null)
                 {
-                    Debug.LogError($"No performer found for action type: {type.Name}");
+                    GlobalLogger.Instance.Error(
+                        $"ERROR: No performer found for action type: {type.Name}"
+                    );
                     return action;
                 }
                 return await performer.Perform(action);
             }
-            Debug.LogWarning($"No performer registered for action type: {type.Name}");
+            GlobalLogger.Instance.Warning(
+                $"WARNING: No performer registered for action type: {type.Name}"
+            );
             return action;
         }
 
@@ -210,7 +219,7 @@ namespace gamecore.actionsystem
         {
             if (action == null)
             {
-                Debug.LogError("Attempted to reperform null action");
+                GlobalLogger.Instance.Error("ERROR: Attempted to reperform null action");
                 return;
             }
 
@@ -225,12 +234,16 @@ namespace gamecore.actionsystem
             {
                 var performer = _performers[type];
                 if (performer == null)
-                    Debug.LogError($"No reperformer found for action type: {type.Name}");
+                    GlobalLogger.Instance.Error(
+                        $"ERROR: No reperformer found for action type: {type.Name}"
+                    );
                 else
                     await performer.Reperform(action);
             }
             else
-                Debug.LogWarning($"No reperformer registered for action type: {type.Name}");
+                GlobalLogger.Instance.Warning(
+                    $"WARNING: No reperformer registered for action type: {type.Name}"
+                );
         }
 
         private class ActionPerformerWrapper<T> : IActionPerformer<GameAction>
