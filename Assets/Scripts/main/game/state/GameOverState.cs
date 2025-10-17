@@ -36,6 +36,9 @@ namespace gamecore.game.state
             };
         }
 
-        public void OnAdvanced(Game game) { }
+        public void OnAdvanced(Game game)
+        {
+            game.AwaitGeneralInteraction();
+        }
     }
 }

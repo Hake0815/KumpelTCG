@@ -101,7 +101,6 @@ namespace gamecore.game
             _generalMechnicSystem.Disable();
             GlobalLogger.Instance.Debug($"Ending game with winner {winner.Name}");
             GameState = new GameOverState(winner, message);
-            AwaitGeneralInteraction();
         }
 
         public void AdvanceGameState()
