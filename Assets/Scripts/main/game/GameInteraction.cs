@@ -41,8 +41,6 @@ namespace gamecore.game
 
         public GameInteraction(Action gameControllerMethod, GameInteractionType type)
             : this(gameControllerMethod, type, new()) { }
-
-        public GameInteraction() { }
     }
 
     public enum GameInteractionType
@@ -70,13 +68,15 @@ namespace gamecore.game
 
     public record MulliganData : IGameInteractionData
     {
-        public Dictionary<IPlayer, List<List<ICard>>> Mulligans { get; }
+        public List<List<ICard>> Mulligans { get; }
+        public IPlayer Player { get; }
         public const string NAME = "Mulligan";
         public string Name => NAME;
 
-        public MulliganData(Dictionary<IPlayer, List<List<ICard>>> mulligans)
+        public MulliganData(List<List<ICard>> mulligans, IPlayer player)
         {
             Mulligans = mulligans;
+            Player = player;
         }
     }
 

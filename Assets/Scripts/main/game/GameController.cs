@@ -56,6 +56,7 @@ namespace gamecore.game
 
         protected virtual void OnNotifyPlayer1()
         {
+            GlobalLogger.Instance.Debug("Notify Player 1 called.");
             var interactions = _game.GameState.GetGameInteractions(this, _game.Player1);
             if (interactions.Count > 0)
             {
@@ -65,6 +66,7 @@ namespace gamecore.game
 
         protected virtual void OnNotifyPlayer2()
         {
+            GlobalLogger.Instance.Debug("Notify Player 2 called.");
             var interactions = _game.GameState.GetGameInteractions(this, _game.Player2);
             if (interactions.Count > 0)
             {
@@ -74,6 +76,7 @@ namespace gamecore.game
 
         protected virtual void OnExpectGeneralInteraction()
         {
+            GlobalLogger.Instance.Debug("Notify General called.");
             var interactions = _game.GameState.GetGameInteractions(this, null);
             if (interactions.Count > 0)
                 NotifyGeneral?.Invoke(this, interactions);
@@ -139,6 +142,7 @@ namespace gamecore.game
 
         internal void Confirm()
         {
+            GlobalLogger.Instance.Debug("Confirm called.");
             _game.AdvanceGameState();
         }
 

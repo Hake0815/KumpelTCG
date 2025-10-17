@@ -19,23 +19,24 @@ namespace gamecore.game.state
             var mulligans = gameController.Game.Mulligans;
             var mulliganNumberToSkip = mulligans.Values.Min(m => m.Count);
 
-            var mulligansToShow = new Dictionary<IPlayer, List<List<ICard>>>();
+            var mulliganData = new MulliganData(new List<List<ICard>>(), null);
+
             foreach (var p in mulligans.Keys)
                 if (mulligans[p].Count > mulliganNumberToSkip)
-                    mulligansToShow.Add(
-                        p,
+                    mulliganData = new MulliganData(
                         mulligans[p]
                             .GetRange(
                                 mulliganNumberToSkip,
                                 mulligans[p].Count - mulliganNumberToSkip
-                            )
+                            ),
+                        p
                     );
             return new List<GameInteraction>()
             {
                 new(
                     () => gameController.Confirm(),
                     GameInteractionType.ConfirmMulligans,
-                    new() { new MulliganData(mulligansToShow) }
+                    new() { mulliganData }
                 ),
             };
         }
