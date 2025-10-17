@@ -108,7 +108,7 @@ namespace gameview
         {
             foreach (var interaction in interactions)
             {
-                Debug.Log($"Interaction: {interaction.Type}");
+                Debug.Log($"Handle interaction: {interaction.Type}");
                 switch (interaction.Type)
                 {
                     case GameInteractionType.PlayCard:
@@ -436,25 +436,26 @@ namespace gameview
 
         private void HandleConfirmMulligans(GameInteraction interaction)
         {
-            var mulligans = (interaction.Data[MulliganData.NAME] as MulliganData).Mulligans;
+            var mulliganData = interaction.Data[MulliganData.NAME] as MulliganData;
+            var mulligans = mulliganData.Mulligans;
+            var player = mulliganData.Player;
             if (mulligans.Count == 0)
             {
+                Debug.Log("Confirming mulligans with no mulligans.");
                 OnInteract();
                 interaction.GameControllerMethod.Invoke();
                 return;
             }
-            foreach (var mulliganEntry in mulligans)
-            {
-                _gameManager.ShowMulligan(
-                    mulliganEntry.Key,
-                    mulliganEntry.Value,
-                    () =>
-                    {
-                        OnInteract();
-                        interaction.GameControllerMethod.Invoke();
-                    }
-                );
-            }
+            Debug.Log($"Showing mulligan for player: {player}");
+            _gameManager.ShowMulligan(
+                player,
+                mulligans,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                }
+            );
         }
 
         private void HandleSelectMulligans(GameInteraction interaction)

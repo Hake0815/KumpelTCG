@@ -38,7 +38,16 @@ namespace gamecore.game
             get => Player2;
         }
         private readonly List<IPlayerLogic> _players = new();
-        public IGameState GameState { get; set; }
+        private IGameState _gameState;
+        public IGameState GameState
+        {
+            get => _gameState;
+            set
+            {
+                _gameState = value;
+                GlobalLogger.Instance.Debug($"GameState set to {value.GetType().Name}");
+            }
+        }
         private Dictionary<IPlayerLogic, List<List<ICardLogic>>> _mulligans;
         public Dictionary<IPlayer, List<List<ICard>>> Mulligans
         {
@@ -190,6 +199,12 @@ namespace gamecore.game
             var gameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
             gameSetupBuilder.Setup();
             _mulligans = gameSetupBuilder.Mulligans;
+            GlobalLogger.Instance.Debug(
+                $"Number of mulligans player 1: {_mulligans[Player1].Count}"
+            );
+            GlobalLogger.Instance.Debug(
+                $"Number of mulligans player 2: {_mulligans[Player2].Count}"
+            );
             action.Mulligans = new Dictionary<string, List<List<ICardLogic>>>
             {
                 { Player1.Name, gameSetupBuilder.GetMulligansForPlayer(Player1) },
