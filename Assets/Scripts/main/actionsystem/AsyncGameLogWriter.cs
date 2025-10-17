@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using gamecore.common;
 using Newtonsoft.Json;
 
 namespace gamecore.actionsystem
@@ -18,6 +19,7 @@ namespace gamecore.actionsystem
         private readonly ConcurrentQueue<GameActionLogEntry> _queue = new();
         private readonly CancellationTokenSource _cts = new();
         private readonly Task _writerTask;
+        private readonly ManualResetEventSlim _forceFlushEvent = new(false);
         private static readonly JsonSerializerSettings _serializerSettings = new()
         {
             TypeNameHandling = TypeNameHandling.Auto,
@@ -37,13 +39,21 @@ namespace gamecore.actionsystem
             _queue.Enqueue(entry);
         }
 
+        public void ForceFlush()
+        {
+            if (_disposed)
+                return;
+
+            _forceFlushEvent.Set();
+        }
+
         public List<GameActionLogEntry> LoadExistingLog()
         {
             var entries = new List<GameActionLogEntry>();
 
             if (!File.Exists(_filePath))
             {
-                Debug.WriteLine($"ERROR: No log file found at {_filePath}");
+                GlobalLogger.Instance.Error($"ERROR: No log file found at {_filePath}");
                 return entries;
             }
 
@@ -80,19 +90,19 @@ namespace gamecore.actionsystem
             }
             catch (JsonSerializationException ex)
             {
-                Debug.WriteLine(
+                GlobalLogger.Instance.Error(
                     $"ERROR: Deserialization error when processing line: {line}\nMessage: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
             catch (JsonReaderException ex)
             {
-                Debug.WriteLine(
+                GlobalLogger.Instance.Error(
                     $"ERROR: JSON read error: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(
+                GlobalLogger.Instance.Error(
                     $"ERROR: Unknown error during deserialization: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
@@ -129,11 +139,15 @@ namespace gamecore.actionsystem
 
                 buffer.Clear();
 
-                if (DateTime.UtcNow - lastFlush >= flushInterval)
+                var shouldFlush =
+                    DateTime.UtcNow - lastFlush >= flushInterval || _forceFlushEvent.IsSet;
+
+                if (shouldFlush)
                 {
                     await writer.FlushAsync();
                     stream.Flush(true);
                     lastFlush = DateTime.UtcNow;
+                    _forceFlushEvent.Reset();
                 }
 
                 await Task.Delay(FLUSH_INTERVAL_MS, _cts.Token).ContinueWith(_ => { });
@@ -160,6 +174,7 @@ namespace gamecore.actionsystem
                 _cts.Cancel();
                 _writerTask.Wait();
                 _cts.Dispose();
+                _forceFlushEvent.Dispose();
             }
 
             _disposed = true;

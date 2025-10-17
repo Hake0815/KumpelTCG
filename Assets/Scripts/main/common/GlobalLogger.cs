@@ -40,7 +40,7 @@ namespace gamecore.common
         /// <param name="minLogLevel">The minimum log level to write</param>
         public void Initialize(
             string filePath = "application.log",
-            LogLevel minLogLevel = LogLevel.Debug
+            LogLevel minLogLevel = LogLevel.Error
         )
         {
             if (_initialized)
@@ -236,7 +236,7 @@ namespace gamecore.common
         /// <summary>
         /// Formats a log entry for output
         /// </summary>
-        private string FormatLogEntry(LogEntry entry)
+        private static string FormatLogEntry(LogEntry entry)
         {
             return $"[{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff} UTC] [{entry.Level.ToString().ToUpper()}] [Thread-{entry.ThreadId}] {entry.Message}";
         }

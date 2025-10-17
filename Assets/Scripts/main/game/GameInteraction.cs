@@ -156,12 +156,14 @@ namespace gamecore.game
     public record WinnerData : IGameInteractionData
     {
         public IPlayer Winner { get; }
+        public string Message { get; }
         public const string NAME = "Winner";
         public string Name => NAME;
 
-        public WinnerData(IPlayer winner)
+        public WinnerData(IPlayer winner, string message)
         {
             Winner = winner;
+            Message = message;
         }
     }
 
