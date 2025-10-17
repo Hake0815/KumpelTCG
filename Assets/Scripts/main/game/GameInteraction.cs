@@ -9,7 +9,7 @@ namespace gamecore.game
         public Action GameControllerMethod { get; }
         public Action<List<ICard>> GameControllerMethodWithTargets { get; }
         public GameInteractionType Type { get; }
-        public Dictionary<Type, IGameInteractionData> Data { get; } = new();
+        public Dictionary<string, IGameInteractionData> Data { get; } = new();
 
         public GameInteraction(
             Action<List<ICard>> gameControllerMethodWithTargets,
@@ -21,7 +21,7 @@ namespace gamecore.game
             Type = type;
             foreach (var datum in data)
             {
-                Data.Add(datum.GetType(), datum);
+                Data.Add(datum.Name, datum);
             }
         }
 
@@ -35,14 +35,12 @@ namespace gamecore.game
             Type = type;
             foreach (var datum in data)
             {
-                Data.Add(datum.GetType(), datum);
+                Data.Add(datum.Name, datum);
             }
         }
 
         public GameInteraction(Action gameControllerMethod, GameInteractionType type)
             : this(gameControllerMethod, type, new()) { }
-
-        public GameInteraction() { }
     }
 
     public enum GameInteractionType
@@ -63,21 +61,31 @@ namespace gamecore.game
         SetPrizeCards,
     }
 
-    public interface IGameInteractionData { }
+    public interface IGameInteractionData
+    {
+        public String Name { get; }
+    }
 
     public record MulliganData : IGameInteractionData
     {
-        public Dictionary<IPlayer, List<List<ICard>>> Mulligans { get; }
+        public List<List<ICard>> Mulligans { get; }
+        public IPlayer Player { get; }
+        public const string NAME = "Mulligan";
+        public string Name => NAME;
 
-        public MulliganData(Dictionary<IPlayer, List<List<ICard>>> mulligans)
+        public MulliganData(List<List<ICard>> mulligans, IPlayer player)
         {
             Mulligans = mulligans;
+            Player = player;
         }
     }
 
     public record NumberData : IGameInteractionData
     {
         public int Number { get; }
+
+        public const string NAME = "Number";
+        public string Name => NAME;
 
         public NumberData(int number)
         {
@@ -87,6 +95,9 @@ namespace gamecore.game
 
     public record TargetData : IGameInteractionData
     {
+        public const string NAME = "Target";
+        public string Name => NAME;
+
         public TargetData(int numberOfTargets, List<ICard> possibleTargets)
         {
             NumberOfTargets = numberOfTargets;
@@ -99,6 +110,9 @@ namespace gamecore.game
 
     public record ConditionalTargetData : IGameInteractionData
     {
+        public const string NAME = "ConditionalTarget";
+        public string Name => NAME;
+
         public ConditionalTargetData(
             Predicate<List<ICard>> conditionOnSelection,
             List<ICard> possibleTargets,
@@ -118,6 +132,8 @@ namespace gamecore.game
     public record InteractionCard : IGameInteractionData
     {
         public ICard Card { get; }
+        public const string NAME = "InteractionCard";
+        public string Name => NAME;
 
         public InteractionCard(ICard card)
         {
@@ -128,6 +144,8 @@ namespace gamecore.game
     public record AttackData : IGameInteractionData
     {
         public IAttack Attack { get; }
+        public const string NAME = "Attack";
+        public string Name => NAME;
 
         public AttackData(IAttack card)
         {
@@ -138,10 +156,14 @@ namespace gamecore.game
     public record WinnerData : IGameInteractionData
     {
         public IPlayer Winner { get; }
+        public string Message { get; }
+        public const string NAME = "Winner";
+        public string Name => NAME;
 
-        public WinnerData(IPlayer winner)
+        public WinnerData(IPlayer winner, string message)
         {
             Winner = winner;
+            Message = message;
         }
     }
 
@@ -149,6 +171,8 @@ namespace gamecore.game
     {
         public SelectFrom SelectFrom { get; }
         public List<ICard> SelectionSource { get; }
+        public const string NAME = "SelectFrom";
+        public string Name => NAME;
 
         public SelectFromData(SelectFrom selectFrom, List<ICard> selectionsource)
         {

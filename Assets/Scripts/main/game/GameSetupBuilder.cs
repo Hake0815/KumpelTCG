@@ -1,11 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
-using gamecore.game.action;
-using UnityEngine;
 
 namespace gamecore
 {
@@ -39,23 +37,18 @@ namespace gamecore
         {
             Mulligans.Add(Player1, new List<List<ICardLogic>>());
             Mulligans.Add(Player2, new List<List<ICardLogic>>());
-            var numberMulligansPlayer1 = DrawUntilBasicPokemon(Player1);
-            var numberMulligansPlayer2 = DrawUntilBasicPokemon(Player2);
-            Debug.Log($"Player 1 had {numberMulligansPlayer1} mulligans.");
-            Debug.Log($"Player 2 had {numberMulligansPlayer2} mulligans.");
+            DrawUntilBasicPokemon(Player1);
+            DrawUntilBasicPokemon(Player2);
         }
 
-        private int DrawUntilBasicPokemon(IPlayerLogic player)
+        private void DrawUntilBasicPokemon(IPlayerLogic player)
         {
-            int count = 0;
             while (!DrawStartHand(player))
             {
-                count++;
                 Mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.CardCount));
                 player.Deck.AddCards(player.Hand.Cards);
                 player.Hand.Clear();
             }
-            return count;
         }
 
         private static bool DrawStartHand(IPlayerLogic player)

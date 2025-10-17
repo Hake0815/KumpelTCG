@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Castle.Components.DictionaryAdapter;
 using gamecore.instruction;
 
 namespace gamecore.card

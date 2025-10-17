@@ -9,7 +9,6 @@ using gamecore.common;
 using gamecore.effect;
 using gamecore.game.action;
 using gamecore.game.state;
-using UnityEngine;
 
 namespace gamecore.game
 {
@@ -39,7 +38,16 @@ namespace gamecore.game
             get => Player2;
         }
         private readonly List<IPlayerLogic> _players = new();
-        public IGameState GameState { get; set; }
+        private IGameState _gameState;
+        public IGameState GameState
+        {
+            get => _gameState;
+            set
+            {
+                _gameState = value;
+                GlobalLogger.Instance.Debug($"GameState set to {value.GetType().Name}");
+            }
+        }
         private Dictionary<IPlayerLogic, List<List<ICardLogic>>> _mulligans;
         public Dictionary<IPlayer, List<List<ICard>>> Mulligans
         {
@@ -82,7 +90,7 @@ namespace gamecore.game
             _players.Add(player2);
         }
 
-        public void EndGame(IPlayerLogic winner)
+        public void EndGame(IPlayerLogic winner, string message)
         {
             _actionSystem.DetachPerformer<EndTurnGA>();
             _actionSystem.DetachPerformer<StartTurnGA>();
@@ -91,8 +99,8 @@ namespace gamecore.game
             _cardSystem.Disable();
             _damageSystem.Disable();
             _generalMechnicSystem.Disable();
-            GameState = new GameOverState(winner);
-            AwaitGeneralInteraction();
+            GlobalLogger.Instance.Debug($"Ending game with winner {winner.Name}");
+            GameState = new GameOverState(winner, message);
         }
 
         public void AdvanceGameState()
@@ -177,7 +185,10 @@ namespace gamecore.game
         {
             if (nextPlayer.Deck.Cards.Count == 0)
             {
-                EndGame(nextPlayer.Opponent);
+                EndGame(
+                    nextPlayer.Opponent,
+                    "Winner is " + nextPlayer.Opponent.Name + "! Game over by deckout!"
+                );
             }
             nextPlayer.IsActive = true;
             nextPlayer.TurnCounter++;
@@ -191,6 +202,12 @@ namespace gamecore.game
             var gameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
             gameSetupBuilder.Setup();
             _mulligans = gameSetupBuilder.Mulligans;
+            GlobalLogger.Instance.Debug(
+                $"Number of mulligans player 1: {_mulligans[Player1].Count}"
+            );
+            GlobalLogger.Instance.Debug(
+                $"Number of mulligans player 2: {_mulligans[Player2].Count}"
+            );
             action.Mulligans = new Dictionary<string, List<List<ICardLogic>>>
             {
                 { Player1.Name, gameSetupBuilder.GetMulligansForPlayer(Player1) },

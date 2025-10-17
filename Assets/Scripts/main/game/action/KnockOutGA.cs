@@ -1,5 +1,3 @@
-using System;
-using System.Deployment.Internal;
 using gamecore.actionsystem;
 using gamecore.card;
 using Newtonsoft.Json;

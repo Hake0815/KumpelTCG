@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using gamecore.common;
 using gamecore.game;
-using UnityEngine;
 
 namespace gamecore.card
 {
@@ -11,7 +12,9 @@ namespace gamecore.card
         {
             if (!CardDatabase.cardDataDict.ContainsKey(id))
             {
-                Debug.LogError($"Card with ID '{id}' not found in CardDatabase");
+                GlobalLogger.Instance.Error(
+                    $"ERROR: Card with ID '{id}' not found in CardDatabase"
+                );
                 return null;
             }
 
@@ -32,8 +35,8 @@ namespace gamecore.card
             {
                 return new BasicEnergyCard(basicEnergyCardData, owner, deckId);
             }
-            Debug.LogError(
-                $"Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"
+            GlobalLogger.Instance.Error(
+                $"ERROR: Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"
             );
             return null;
         }

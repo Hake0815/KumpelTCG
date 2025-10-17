@@ -28,7 +28,7 @@ namespace gamecore.game
         );
         Task RecreateGameFromLog();
         void StartGame();
-        GameStateJson ExportGameState(IPlayer player);
+        GameStateJson ExportGameState(string playerName);
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -50,30 +50,28 @@ namespace gamecore.game
 
         private void NotifyPlayers()
         {
-            OnNotifyPlayer1();
-            OnNotifyPlayer2();
-        }
-
-        protected virtual void OnNotifyPlayer1()
-        {
             var interactions = _game.GameState.GetGameInteractions(this, _game.Player1);
             if (interactions.Count > 0)
             {
                 NotifyPlayer1?.Invoke(this, interactions);
             }
-        }
-
-        protected virtual void OnNotifyPlayer2()
-        {
-            var interactions = _game.GameState.GetGameInteractions(this, _game.Player2);
-            if (interactions.Count > 0)
+            else
             {
-                NotifyPlayer2?.Invoke(this, interactions);
+                interactions = _game.GameState.GetGameInteractions(this, _game.Player2);
+                if (interactions.Count > 0)
+                {
+                    NotifyPlayer2?.Invoke(this, interactions);
+                }
+                else
+                {
+                    throw new IlleagalStateException("No interactions found for players");
+                }
             }
         }
 
         protected virtual void OnExpectGeneralInteraction()
         {
+            GlobalLogger.Instance.Debug("Notify General called.");
             var interactions = _game.GameState.GetGameInteractions(this, null);
             if (interactions.Count > 0)
                 NotifyGeneral?.Invoke(this, interactions);
@@ -139,6 +137,7 @@ namespace gamecore.game
 
         internal void Confirm()
         {
+            GlobalLogger.Instance.Debug("Confirm called.");
             _game.AdvanceGameState();
         }
 
@@ -193,11 +192,12 @@ namespace gamecore.game
             _game.AdvanceGameState();
         }
 
-        public GameStateJson ExportGameState(IPlayer player)
+        public GameStateJson ExportGameState(string playerName)
         {
             if (_game == null)
                 throw new InvalidOperationException("Game has not been created yet.");
 
+            var player = _game.GetPlayerByName(playerName);
             PlayerStateJson selfState;
             PlayerStateJson opponentState;
             if (player == _game.Player1)
@@ -210,13 +210,18 @@ namespace gamecore.game
                 selfState = _game.Player2.ToSerializable();
                 opponentState = _game.Player1.ToSerializable();
             }
-            var cardStates = CardStateCreator.CreateCardStates(player as IPlayerLogic);
+            var cardStates = CardStateCreator.CreateCardStates(player);
             if (cardStates.Count != 120)
             {
                 throw new IlleagalStateException("Card states count is not 120");
             }
 
             return new GameStateJson(selfState, opponentState, cardStates);
+        }
+
+        internal void ConfirmGameOver()
+        {
+            _actionSystem.WritePendingLogEntries();
         }
     }
 }
