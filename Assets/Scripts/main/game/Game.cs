@@ -90,7 +90,7 @@ namespace gamecore.game
             _players.Add(player2);
         }
 
-        public void EndGame(IPlayerLogic winner)
+        public void EndGame(IPlayerLogic winner, string message)
         {
             _actionSystem.DetachPerformer<EndTurnGA>();
             _actionSystem.DetachPerformer<StartTurnGA>();
@@ -99,7 +99,8 @@ namespace gamecore.game
             _cardSystem.Disable();
             _damageSystem.Disable();
             _generalMechnicSystem.Disable();
-            GameState = new GameOverState(winner);
+            GlobalLogger.Instance.Debug($"Ending game with winner {winner.Name}");
+            GameState = new GameOverState(winner, message);
             AwaitGeneralInteraction();
         }
 
@@ -185,7 +186,10 @@ namespace gamecore.game
         {
             if (nextPlayer.Deck.Cards.Count == 0)
             {
-                EndGame(nextPlayer.Opponent);
+                EndGame(
+                    nextPlayer.Opponent,
+                    "Winner is " + nextPlayer.Opponent.Name + "! Game over by deckout!"
+                );
             }
             nextPlayer.IsActive = true;
             nextPlayer.TurnCounter++;

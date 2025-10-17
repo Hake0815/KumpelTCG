@@ -1,3 +1,4 @@
+using System.Text;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -106,18 +107,18 @@ namespace gamecore.action
                 {
                     action.GameEnded = true;
                     action.Winner = action.Players[0];
-                    _game.EndGame(action.Players[0]);
+                    _game.EndGame(action.Players[0], GetWinMessage(action.Players[0]));
                 }
                 else if (numberOfWinConditionsPlayer2 > numberOfWinConditionsPlayer1)
                 {
                     action.GameEnded = true;
                     action.Winner = action.Players[1];
-                    _game.EndGame(action.Players[1]);
+                    _game.EndGame(action.Players[1], GetWinMessage(action.Players[1]));
                 }
                 else
                 {
                     action.GameEnded = true;
-                    _game.EndGame(null);
+                    _game.EndGame(null, "Game ended in a draw!");
                 }
             }
             return Task.FromResult(action);
@@ -134,13 +135,30 @@ namespace gamecore.action
             return numberOfWinConditions;
         }
 
+        private static string GetWinMessage(IPlayerLogic winner)
+        {
+            var messageBuilder = new StringBuilder(string.Format("Winner is {0}!", winner.Name));
+            if (winner.Prizes.CardCount == 0)
+                messageBuilder.AppendLine(
+                    string.Format("Winner has {0} prize cards!", winner.Prizes.CardCount)
+                );
+            if (winner.Opponent.ActivePokemon == null && winner.Opponent.Bench.CardCount == 0)
+                messageBuilder.AppendLine("Opponent has no Pokemon left!");
+
+            return messageBuilder.ToString();
+        }
+
         public Task<CheckWinConditionGA> Reperform(CheckWinConditionGA action)
         {
             if (action.GameEnded)
             {
                 action.Winner.Let(
-                    winnerStub => _game.EndGame(_game.GetPlayerByName(winnerStub.Name)),
-                    () => _game.EndGame(null)
+                    winnerStub =>
+                        _game.EndGame(
+                            _game.GetPlayerByName(winnerStub.Name),
+                            GetWinMessage(_game.GetPlayerByName(winnerStub.Name))
+                        ),
+                    () => _game.EndGame(null, "Game ended in a draw!")
                 );
             }
             return Task.FromResult(action);
@@ -281,16 +299,28 @@ namespace gamecore.action
 
         public Task<RemovePlayerEffectGA> Perform(RemovePlayerEffectGA action)
         {
-            action.Player.RemoveEffect(action.Effect);
+            RemoveEffectFromPlayer(action.Player, action.Effect);
             return Task.FromResult(action);
         }
 
         public Task<RemovePlayerEffectGA> Reperform(RemovePlayerEffectGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
-            player.RemoveEffect(action.Effect);
+            RemoveEffectFromPlayer(player, action.Effect);
 
             return Task.FromResult(action);
+        }
+
+        private void RemoveEffectFromPlayer(IPlayerLogic player, PlayerEffectAbstract effect)
+        {
+            player.RemoveEffect(effect);
+            if (effect is FirstTurnOfGameEffect firstTurnOfGameEffect)
+            {
+                _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(
+                    firstTurnOfGameEffect,
+                    ReactionTiming.POST
+                );
+            }
         }
 
         public Task<RemovePokemonEffectGA> Perform(RemovePokemonEffectGA action)

@@ -50,27 +50,22 @@ namespace gamecore.game
 
         private void NotifyPlayers()
         {
-            OnNotifyPlayer1();
-            OnNotifyPlayer2();
-        }
-
-        protected virtual void OnNotifyPlayer1()
-        {
-            GlobalLogger.Instance.Debug("Notify Player 1 called.");
             var interactions = _game.GameState.GetGameInteractions(this, _game.Player1);
             if (interactions.Count > 0)
             {
                 NotifyPlayer1?.Invoke(this, interactions);
             }
-        }
-
-        protected virtual void OnNotifyPlayer2()
-        {
-            GlobalLogger.Instance.Debug("Notify Player 2 called.");
-            var interactions = _game.GameState.GetGameInteractions(this, _game.Player2);
-            if (interactions.Count > 0)
+            else
             {
-                NotifyPlayer2?.Invoke(this, interactions);
+                interactions = _game.GameState.GetGameInteractions(this, _game.Player2);
+                if (interactions.Count > 0)
+                {
+                    NotifyPlayer2?.Invoke(this, interactions);
+                }
+                else
+                {
+                    throw new IlleagalStateException("No interactions found for players");
+                }
             }
         }
 
@@ -222,6 +217,11 @@ namespace gamecore.game
             }
 
             return new GameStateJson(selfState, opponentState, cardStates);
+        }
+
+        internal void ConfirmGameOver()
+        {
+            _actionSystem.WritePendingLogEntries();
         }
     }
 }
