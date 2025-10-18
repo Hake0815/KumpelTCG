@@ -69,6 +69,7 @@ namespace gamecore.game
         public int TurnCounter { get; private set; } = 0;
         public event Action AwaitInteractionEvent;
         public event Action AwaitGeneralInteractionEvent;
+        public bool IsReplaying { get; set; } = false;
         private readonly ActionSystem _actionSystem;
         private readonly CardSystem _cardSystem;
         private readonly DamageSystem _damageSystem;
