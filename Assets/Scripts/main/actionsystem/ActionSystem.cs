@@ -15,11 +15,12 @@ namespace gamecore.actionsystem
         }
 
         private readonly AsyncGameLogWriter _logWriter;
-        private List<GameAction> reactions = null;
+        private List<GameAction> _reactions = null;
         public bool IsPerforming { get; private set; } = false;
         private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> _preSubs = new();
         private readonly Dictionary<Type, List<IActionSubscriber<GameAction>>> _postSubs = new();
         private readonly Dictionary<Type, IActionPerformer<GameAction>> _performers = new();
+        private int _replayedActions = 0;
 
         public void WritePendingLogEntries()
         {
@@ -108,16 +109,16 @@ namespace gamecore.actionsystem
             Action OnFlowFinished = null
         )
         {
-            reactions = action.PreReactions;
+            _reactions = action.PreReactions;
             action = NotifySubscribers(action, _preSubs);
             await PerformReactions(logEntryBuilder);
 
-            reactions = action.PerformReactions;
+            _reactions = action.PerformReactions;
             action = await PerformAction(action);
             logEntryBuilder.WithGameAction(action);
             await PerformReactions(logEntryBuilder);
 
-            reactions = action.PostReactions;
+            _reactions = action.PostReactions;
             NotifySubscribers(action, _postSubs);
             await PerformReactions(logEntryBuilder);
 
@@ -147,7 +148,7 @@ namespace gamecore.actionsystem
             GameActionLogEntry.GameActionLogEntryBuilder logEntryBuilder
         )
         {
-            foreach (var reaction in reactions)
+            foreach (var reaction in _reactions)
             {
                 var reactionLogEntry = GameActionLogEntry.Builder();
                 logEntryBuilder.WithReaction(reactionLogEntry);
@@ -186,7 +187,7 @@ namespace gamecore.actionsystem
 
         public void AddReaction(GameAction gameAction)
         {
-            reactions?.Add(gameAction);
+            _reactions?.Add(gameAction);
         }
 
         public async Task RecreateGameStateFromLog()
@@ -196,6 +197,14 @@ namespace gamecore.actionsystem
             {
                 await Reperform(logEntry);
             }
+        }
+
+        public async Task<bool> ReplayNextAction()
+        {
+            var logEntries = _logWriter.LoadExistingLog();
+            await Reperform(logEntries[_replayedActions]);
+            _replayedActions++;
+            return _replayedActions < logEntries.Count;
         }
 
         private async Task Reperform(GameActionLogEntry logEntry)

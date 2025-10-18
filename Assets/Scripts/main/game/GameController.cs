@@ -27,6 +27,7 @@ namespace gamecore.game
             string player2Name
         );
         Task RecreateGameFromLog();
+        Task StartReplay();
         void StartGame();
         GameStateJson ExportGameState(string playerName);
     }
@@ -50,6 +51,11 @@ namespace gamecore.game
 
         private void NotifyPlayers()
         {
+            if (_game.IsReplaying)
+            {
+                HandleReplayMode();
+                return;
+            }
             var interactions = _game.GameState.GetGameInteractions(this, _game.Player1);
             if (interactions.Count > 0)
             {
@@ -72,9 +78,30 @@ namespace gamecore.game
         protected virtual void OnExpectGeneralInteraction()
         {
             GlobalLogger.Instance.Debug("Notify General called.");
+            if (_game.IsReplaying)
+            {
+                HandleReplayMode();
+                return;
+            }
             var interactions = _game.GameState.GetGameInteractions(this, null);
             if (interactions.Count > 0)
                 NotifyGeneral?.Invoke(this, interactions);
+        }
+
+        private void HandleReplayMode()
+        {
+            var replayInteraction = new List<GameInteraction>()
+            {
+                new(async () => await ReplayNextAction(), GameInteractionType.ReplayNextAction),
+            };
+            NotifyGeneral?.Invoke(this, replayInteraction);
+        }
+
+        private async Task ReplayNextAction()
+        {
+            var hasMoreActions = await _actionSystem.ReplayNextAction();
+            _game.IsReplaying = hasMoreActions;
+            _game.AdvanceGameState();
         }
 
         public async Task CreateGame(
@@ -92,6 +119,12 @@ namespace gamecore.game
         public async Task RecreateGameFromLog()
         {
             await _actionSystem.RecreateGameStateFromLog();
+        }
+
+        public async Task StartReplay()
+        {
+            var hasMoreActions = await _actionSystem.ReplayNextAction();
+            _game.IsReplaying = hasMoreActions;
         }
 
         public void StartGame()

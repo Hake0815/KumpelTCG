@@ -307,6 +307,22 @@ namespace gameview
             });
         }
 
+        public void EnableButtonWithText(
+            string text,
+            Action gameControllerMethod,
+            Action onInteract
+        )
+        {
+            _button.gameObject.SetActive(true);
+            _buttonText.text = text;
+            _button.onClick.RemoveAllListeners();
+            _button.onClick.AddListener(() =>
+            {
+                onInteract();
+                gameControllerMethod();
+            });
+        }
+
         public void DisableButton()
         {
             _button.onClick.RemoveAllListeners();

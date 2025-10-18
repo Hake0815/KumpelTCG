@@ -33,6 +33,10 @@ namespace gameview
             {
                 _gameController.RecreateGameFromLog();
             }
+            else if (GameParameters.LoadModus == LoadModus.ReplayGame)
+            {
+                _gameController.StartReplay();
+            }
             else
             {
                 File.WriteAllText(gameLogFile, string.Empty);
@@ -155,10 +159,18 @@ namespace gameview
                     case GameInteractionType.SetPrizeCards:
                         SimpleProceed(interaction);
                         break;
+                    case GameInteractionType.ReplayNextAction:
+                        HandleReplayNextAction(interaction);
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
             }
+        }
+
+        private void HandleReplayNextAction(GameInteraction interaction)
+        {
+            _gameManager.EnableButtonWithText("Next", interaction.GameControllerMethod, OnInteract);
         }
 
         private void HandleSelectCards(GameInteraction interaction)

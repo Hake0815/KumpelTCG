@@ -59,6 +59,7 @@ namespace gamecore.game
         Retreat,
         PerformAbility,
         SetPrizeCards,
+        ReplayNextAction,
     }
 
     public interface IGameInteractionData
