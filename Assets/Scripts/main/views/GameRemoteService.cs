@@ -170,7 +170,15 @@ namespace gameview
 
         private void HandleReplayNextAction(GameInteraction interaction)
         {
-            _gameManager.EnableButtonWithText("Next", interaction.GameControllerMethod, OnInteract);
+            void NextAction()
+            {
+                OnInteract();
+                InputHandler.INSTANCE.OnSpace -= NextAction;
+                interaction.GameControllerMethod.Invoke();
+            }
+
+            _gameManager.EnableButtonWithText("Next", NextAction);
+            InputHandler.INSTANCE.OnSpace += NextAction;
         }
 
         private void HandleSelectCards(GameInteraction interaction)

@@ -9,6 +9,7 @@ namespace gameview
         public event Action<Collider2D> OnMouseLeftClick;
         public event Action<Collider2D> OnMouseRightClick;
         public event Action OnEsc;
+        public event Action OnSpace;
         public event Action<float> OnMouseWheel;
         private bool _skipFrame = false;
 
@@ -39,6 +40,8 @@ namespace gameview
                 OnMouseLeftClick?.Invoke(Physics2D.OverlapPoint(GetMousePosition()));
             if (Input.GetMouseButtonDown(1))
                 OnMouseRightClick?.Invoke(Physics2D.OverlapPoint(GetMousePosition()));
+            if (Input.GetKeyDown(KeyCode.Space))
+                OnSpace?.Invoke();
             if (Input.GetKeyDown(KeyCode.Escape))
                 OnEsc?.Invoke();
             if (Input.GetAxis("Mouse ScrollWheel") != 0f)
