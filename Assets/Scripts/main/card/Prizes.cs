@@ -44,6 +44,12 @@ namespace gamecore.card
             return prizes;
         }
 
+        public override void RemoveCards(List<ICardLogic> cards)
+        {
+            base.RemoveCards(cards);
+            PrizesTaken?.Invoke(cards.Cast<ICard>().ToList());
+        }
+
         public override void DeckSearched()
         {
             foreach (var card in Cards)
