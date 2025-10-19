@@ -22,9 +22,9 @@ namespace gamecore.actionsystem
         private readonly Dictionary<Type, IActionPerformer<GameAction>> _performers = new();
         private int _replayedActions = 0;
 
-        public void WritePendingLogEntries()
+        public void FinishGameLog()
         {
-            _logWriter.ForceFlush();
+            _logWriter.FinishLog();
         }
 
         public void AttachPerformer<T>(IActionPerformer<T> performer)

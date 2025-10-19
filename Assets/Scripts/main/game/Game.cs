@@ -38,16 +38,8 @@ namespace gamecore.game
             get => Player2;
         }
         private readonly List<IPlayerLogic> _players = new();
-        private IGameState _gameState;
-        public IGameState GameState
-        {
-            get => _gameState;
-            set
-            {
-                _gameState = value;
-                GlobalLogger.Instance.Debug($"GameState set to {value.GetType().Name}");
-            }
-        }
+        public IGameState GameState { get; set; }
+
         private Dictionary<IPlayerLogic, List<List<ICardLogic>>> _mulligans;
         public Dictionary<IPlayer, List<List<ICard>>> Mulligans
         {
@@ -100,8 +92,12 @@ namespace gamecore.game
             _cardSystem.Disable();
             _damageSystem.Disable();
             _generalMechnicSystem.Disable();
-            GlobalLogger.Instance.Debug($"Ending game with winner {winner.Name}");
             GameState = new GameOverState(winner, message);
+        }
+
+        public void FinishGameLog()
+        {
+            _actionSystem.FinishGameLog();
         }
 
         public void AdvanceGameState()
@@ -178,7 +174,8 @@ namespace gamecore.game
         public Task<StartTurnGA> Reperform(StartTurnGA action)
         {
             StartTurnForPlayer(GetPlayerByName(action.NextPlayer.Name));
-            GameState = new IdlePlayerTurnState();
+            if (GameState is not GameOverState)
+                GameState = new IdlePlayerTurnState();
             return Task.FromResult(action);
         }
 
@@ -203,12 +200,6 @@ namespace gamecore.game
             var gameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
             gameSetupBuilder.Setup();
             _mulligans = gameSetupBuilder.Mulligans;
-            GlobalLogger.Instance.Debug(
-                $"Number of mulligans player 1: {_mulligans[Player1].Count}"
-            );
-            GlobalLogger.Instance.Debug(
-                $"Number of mulligans player 2: {_mulligans[Player2].Count}"
-            );
             action.Mulligans = new Dictionary<string, List<List<ICardLogic>>>
             {
                 { Player1.Name, gameSetupBuilder.GetMulligansForPlayer(Player1) },

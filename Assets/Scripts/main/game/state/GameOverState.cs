@@ -26,10 +26,7 @@ namespace gamecore.game.state
             return new()
             {
                 new GameInteraction(
-                    () =>
-                    {
-                        gameController.ConfirmGameOver();
-                    },
+                    () => { },
                     GameInteractionType.GameOver,
                     new() { new WinnerData(_winner, _message) }
                 ),
@@ -38,6 +35,7 @@ namespace gamecore.game.state
 
         public void OnAdvanced(Game game)
         {
+            game.FinishGameLog();
             game.AwaitGeneralInteraction();
         }
     }

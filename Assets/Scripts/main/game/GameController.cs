@@ -77,7 +77,6 @@ namespace gamecore.game
 
         protected virtual void OnExpectGeneralInteraction()
         {
-            GlobalLogger.Instance.Debug("Notify General called.");
             if (_game.IsReplaying)
             {
                 HandleReplayMode();
@@ -170,7 +169,6 @@ namespace gamecore.game
 
         internal void Confirm()
         {
-            GlobalLogger.Instance.Debug("Confirm called.");
             _game.AdvanceGameState();
         }
 
@@ -250,11 +248,6 @@ namespace gamecore.game
             }
 
             return new GameStateJson(selfState, opponentState, cardStates);
-        }
-
-        internal void ConfirmGameOver()
-        {
-            _actionSystem.WritePendingLogEntries();
         }
     }
 }
