@@ -20,8 +20,8 @@ namespace gamecore.common
         private readonly ConcurrentQueue<LogEntry> _logQueue = new();
         private readonly CancellationTokenSource _cancellationTokenSource = new();
         private readonly Task _writerTask;
-        private readonly object _lockObject = new object();
-        private string _filePath = "Logs/application.log";
+        private readonly object _lockObject = new();
+        private readonly string _filePath = "application.log";
         private LogLevel _minLogLevel = LogLevel.Debug;
         private bool _initialized = false;
         private bool _disposed = false;
@@ -38,16 +38,10 @@ namespace gamecore.common
         /// </summary>
         /// <param name="filePath">The path to the log file</param>
         /// <param name="minLogLevel">The minimum log level to write</param>
-        public void Initialize(
-            string filePath = "application.log",
-            LogLevel minLogLevel = LogLevel.Error
-        )
+        private void Initialize()
         {
             if (_initialized)
                 return;
-
-            _filePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
-            _minLogLevel = minLogLevel;
 
             // Ensure directory exists
             var directory = Path.GetDirectoryName(_filePath);
