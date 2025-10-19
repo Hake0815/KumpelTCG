@@ -10,7 +10,7 @@ namespace gamecore.game.action
         [JsonConstructor]
         public DiscardCardsGA(List<ICardLogic> cards)
         {
-            Cards = cards;
+            Cards = new(cards);
         }
 
         public List<ICardLogic> Cards { get; }

@@ -345,13 +345,13 @@ namespace gamecore.game.action
 
         public async Task<QuickSelectCardsGA> Perform(QuickSelectCardsGA action)
         {
-            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            var options = GetOptions(action.CardOptions, action.CardCondition);
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
                 _selectFromMap[action.Origin]
             );
-            action.CardOptions.RemoveCards(selectedCards);
+            RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
                 action.Player.Prizes.DeckSearched();
 
@@ -388,13 +388,13 @@ namespace gamecore.game.action
 
         public async Task<ConfirmSelectCardsGA> Perform(ConfirmSelectCardsGA action)
         {
-            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            var options = GetOptions(action.CardOptions, action.CardCondition);
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
                 _selectFromMap[action.Origin]
             );
-            action.CardOptions.RemoveCards(selectedCards);
+            RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
                 action.Player.Prizes.DeckSearched();
 

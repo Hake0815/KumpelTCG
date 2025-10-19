@@ -14,7 +14,7 @@ namespace gamecore.game.action
         public PutRemainingCardsUnderDeckGA(IPlayerLogic player, List<ICardLogic> remainingCards)
         {
             Player = player;
-            RemainingCards = remainingCards;
+            RemainingCards = new(remainingCards);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace gamecore.game.action
         public PlayCardGA(ICardLogic card, List<ICardLogic> targets = null)
         {
             Card = card;
-            Targets = targets;
+            Targets = new(targets);
         }
     }
 }

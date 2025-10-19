@@ -35,7 +35,7 @@ namespace gamecore.instruction
                 new QuickSelectCardsGA(
                     card.Owner,
                     CountRange.Contains,
-                    new CardListLogic(action.RevealedCards),
+                    action.RevealedCards,
                     c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.Other,
                     SelectionId

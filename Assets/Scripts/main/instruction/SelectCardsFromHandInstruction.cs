@@ -21,7 +21,7 @@ namespace gamecore.instruction
                 new QuickSelectCardsGA(
                     card.Owner,
                     CountRange.Contains,
-                    card.Owner.Hand,
+                    card.Owner.Hand.Cards,
                     c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.Hand,
                     SelectionId
