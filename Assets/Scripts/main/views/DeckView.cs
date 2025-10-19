@@ -116,17 +116,21 @@ namespace gameview
 
         private void OnCardsAdded(List<ICard> cards)
         {
-            var cardViews = CardViewRegistry.INSTANCE.GetAllAvailable(cards);
-            foreach (var cardView in cardViews)
+            UIQueue.INSTANCE.Queue(CallbackOnDone =>
             {
-                cardView.FaceUp = false;
-                CardViewRegistry.INSTANCE.Unregister(cardView.Card);
-                cardView.Canvas.sortingOrder = -99;
-                cardView
-                    .GetComponent<Transform>()
-                    .DOMove(transform.position, AnimationSpeedHolder.AnimationSpeed)
-                    .OnComplete(() => Destroy(cardView.gameObject));
-            }
+                var cardViews = CardViewRegistry.INSTANCE.GetAllAvailable(cards);
+                foreach (var cardView in cardViews)
+                {
+                    cardView.FaceUp = false;
+                    CardViewRegistry.INSTANCE.Unregister(cardView.Card);
+                    cardView.Canvas.sortingOrder = -99;
+                    cardView
+                        .GetComponent<Transform>()
+                        .DOMove(transform.position, AnimationSpeedHolder.AnimationSpeed)
+                        .OnComplete(() => Destroy(cardView.gameObject));
+                }
+                CallbackOnDone.Invoke();
+            });
         }
     }
 }

@@ -64,6 +64,7 @@ namespace gamecore.game
         public bool IsReplaying { get; set; } = false;
         private readonly ActionSystem _actionSystem;
         private readonly CardSystem _cardSystem;
+        public CardSystem CardSystem => _cardSystem;
         private readonly DamageSystem _damageSystem;
         private readonly GeneralMechnicSystem _generalMechnicSystem;
 

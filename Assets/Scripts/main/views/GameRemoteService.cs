@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using gamecore.card;
 using gamecore.game;
 using UnityEngine;
@@ -55,6 +57,7 @@ namespace gameview
             var cachedSpeed = AnimationSpeedHolder.AnimationSpeed;
             AnimationSpeedHolder.AnimationSpeed = 0.0f;
             _gameManager.ShowGameState();
+            _gameController.CardsRevealed += ShowRevealedCardBriefly;
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
@@ -63,6 +66,21 @@ namespace gameview
                     callback.Invoke();
                 }
             );
+        }
+
+        private void ShowRevealedCardBriefly(List<ICard> list)
+        {
+            UIQueue.INSTANCE.Queue(action =>
+            {
+                PrepareFloatingSelection(list);
+                action.Invoke();
+            });
+            UIQueue.INSTANCE.Queue(async action =>
+            {
+                await Task.Delay(1000);
+                _gameManager.DisableFloatingSelection();
+                action.Invoke();
+            });
         }
 
         private static Dictionary<string, int> CreateDeckList()
@@ -79,7 +97,7 @@ namespace gameview
             };
         }
 
-        private void HandlePlayer1Interactions(object sender, List<GameInteraction> interactions)
+        private void HandlePlayer1Interactions(List<GameInteraction> interactions)
         {
             UIQueue.INSTANCE.Queue(action =>
             {
@@ -88,7 +106,7 @@ namespace gameview
             });
         }
 
-        private void HandlePlayer2Interactions(object sender, List<GameInteraction> interactions)
+        private void HandlePlayer2Interactions(List<GameInteraction> interactions)
         {
             UIQueue.INSTANCE.Queue(action =>
             {
@@ -97,7 +115,7 @@ namespace gameview
             });
         }
 
-        private void HandleGeneralInteractions(object sender, List<GameInteraction> interactions)
+        private void HandleGeneralInteractions(List<GameInteraction> interactions)
         {
             UIQueue.INSTANCE.Queue(action =>
             {

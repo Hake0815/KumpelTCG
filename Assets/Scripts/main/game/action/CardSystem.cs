@@ -37,6 +37,8 @@ namespace gamecore.game.action
             Enable();
         }
 
+        public event Action<List<ICardLogic>> CardsRevealed;
+
         protected static readonly System.Random _rng = new();
 
         private readonly ActionSystem _actionSystem;
@@ -239,6 +241,7 @@ namespace gamecore.game.action
             var player = _game.GetPlayerByName(action.Player.Name);
             var revealedCards = player.DeckList.GetCardsByDeckIds(action.RevealedCards);
             player.Deck.RemoveCards(revealedCards);
+            CardsRevealed?.Invoke(revealedCards);
             return Task.FromResult(action);
         }
 
@@ -509,11 +512,13 @@ namespace gamecore.game.action
 
         public Task<ShowCardsGA> Reperform(ShowCardsGA action)
         {
-            foreach (var card in _game.FindCardsAnywhere(action.Cards))
+            var cards = _game.FindCardsAnywhere(action.Cards);
+            foreach (var card in cards)
             {
                 card.OwnerPositionKnowledge = PositionKnowledge.Known;
                 card.OpponentPositionKnowledge = PositionKnowledge.Known;
             }
+            CardsRevealed?.Invoke(cards);
             return Task.FromResult(action);
         }
     }
