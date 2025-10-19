@@ -284,7 +284,7 @@ namespace gamecore.game.action
 
         public Task<PlayCardGA> Perform(PlayCardGA action)
         {
-            if (action.Targets != null)
+            if (action.Targets.Count > 0)
                 action.Card.PlayWithTargets(action.Targets, _actionSystem);
             else
                 action.Card.Play(_actionSystem);
