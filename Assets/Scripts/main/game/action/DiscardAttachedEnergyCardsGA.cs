@@ -14,7 +14,7 @@ namespace gamecore.game.action
         )
         {
             Pokemon = pokemon;
-            EnergyCards = energyCards;
+            EnergyCards = new(energyCards);
         }
 
         public IPokemonCardLogic Pokemon { get; }

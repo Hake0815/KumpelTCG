@@ -14,9 +14,9 @@ namespace gamecore.game.action
             List<ICardLogic> remainingCards
         )
         {
-            SelectedCards = selectedCards;
+            SelectedCards = new(selectedCards);
             Player = player;
-            RemainingCards = remainingCards;
+            RemainingCards = new(remainingCards);
         }
 
         public List<ICardLogic> SelectedCards { get; }

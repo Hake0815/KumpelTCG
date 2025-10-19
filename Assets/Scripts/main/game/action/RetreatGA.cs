@@ -14,7 +14,7 @@ namespace gamecore.game.action
         public RetreatGA(IPokemonCardLogic pokemon, List<IEnergyCardLogic> energyCardsToDiscard)
         {
             Pokemon = pokemon;
-            EnergyCardsToDiscard = energyCardsToDiscard;
+            EnergyCardsToDiscard = new(energyCardsToDiscard);
         }
     }
 }

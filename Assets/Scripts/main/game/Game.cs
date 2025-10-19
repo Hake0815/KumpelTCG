@@ -216,8 +216,8 @@ namespace gamecore.game
             };
             action.PlayerHands = new Dictionary<string, List<ICardLogic>>
             {
-                { Player1.Name, Player1.Hand.Cards },
-                { Player2.Name, Player2.Hand.Cards },
+                { Player1.Name, new(Player1.Hand.Cards) },
+                { Player2.Name, new(Player2.Hand.Cards) },
             };
             GameState = new SetupCompletedState();
             return Task.FromResult(action);
@@ -268,8 +268,8 @@ namespace gamecore.game
             }
             action.PrizeCards = new Dictionary<string, List<ICardLogic>>
             {
-                { Player1.Name, Player1.Prizes.Cards },
-                { Player2.Name, Player2.Prizes.Cards },
+                { Player1.Name, new(Player1.Prizes.Cards) },
+                { Player2.Name, new(Player2.Prizes.Cards) },
             };
             return Task.FromResult(action);
         }
