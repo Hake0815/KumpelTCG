@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using UnityEngine;
@@ -11,15 +12,14 @@ namespace gameview
     {
         SplineContainer SplineContainer { get; }
 
-        public void UpdateCardPosition(List<ICard> cards, Quaternion parentRotation)
+        public async Task UpdateCardPosition(List<ICard> cards, Quaternion parentRotation)
         {
-            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            await UIQueue.INSTANCE.Queue(() =>
             {
                 var cardViews = CardViewRegistry.INSTANCE.GetAll(cards);
                 if (cardViews.Count == 0)
                 {
-                    CallbackOnDone.Invoke();
-                    return;
+                    return Task.CompletedTask;
                 }
                 cardViews.Sort(CardViewComparer.Create());
                 var spacing = Math.Min(1f / cardViews.Count, 0.05f);
@@ -46,7 +46,7 @@ namespace gameview
                             AnimationSpeedHolder.AnimationSpeed
                         );
                 }
-                CallbackOnDone.Invoke();
+                return Task.CompletedTask;
             });
         }
     }

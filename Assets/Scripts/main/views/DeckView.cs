@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
@@ -71,14 +72,14 @@ namespace gameview
             UpdateView(Deck.Cards);
         }
 
-        private void OnCardsDrawn(List<ICard> drawnCards)
+        private async void OnCardsDrawn(List<ICard> drawnCards)
         {
-            CreateDrawnCards(drawnCards);
+            await CreateDrawnCards(drawnCards);
         }
 
-        public void CreateDrawnCards(List<ICard> drawnCards)
+        public async Task CreateDrawnCards(List<ICard> drawnCards)
         {
-            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            await UIQueue.INSTANCE.Queue(() =>
             {
                 foreach (var card in drawnCards)
                 {
@@ -89,18 +90,18 @@ namespace gameview
                     );
                     cardView.Canvas.sortingOrder = card.Owner.Hand.Cards.Count + 1;
                 }
-                CallbackOnDone.Invoke();
+                return Task.CompletedTask;
             });
         }
 
-        private void OnCardsDrawnFaceDown(List<ICard> drawnCards)
+        private async void OnCardsDrawnFaceDown(List<ICard> drawnCards)
         {
-            CreateDrawnCardsFaceDown(drawnCards);
+            await CreateDrawnCardsFaceDown(drawnCards);
         }
 
-        public void CreateDrawnCardsFaceDown(List<ICard> drawnCards)
+        public async Task CreateDrawnCardsFaceDown(List<ICard> drawnCards)
         {
-            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            await UIQueue.INSTANCE.Queue(() =>
             {
                 foreach (var card in drawnCards)
                 {
@@ -110,13 +111,13 @@ namespace gameview
                         transform.rotation
                     );
                 }
-                CallbackOnDone.Invoke();
+                return Task.CompletedTask;
             });
         }
 
-        private void OnCardsAdded(List<ICard> cards)
+        private async void OnCardsAdded(List<ICard> cards)
         {
-            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            await UIQueue.INSTANCE.Queue(() =>
             {
                 var cardViews = CardViewRegistry.INSTANCE.GetAllAvailable(cards);
                 foreach (var cardView in cardViews)
@@ -129,7 +130,7 @@ namespace gameview
                         .DOMove(transform.position, AnimationSpeedHolder.AnimationSpeed)
                         .OnComplete(() => Destroy(cardView.gameObject));
                 }
-                CallbackOnDone.Invoke();
+                return Task.CompletedTask;
             });
         }
     }
