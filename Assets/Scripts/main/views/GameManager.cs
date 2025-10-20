@@ -334,16 +334,12 @@ namespace gameview
             return _mulliganSelectorView;
         }
 
-        internal Button EnableDoneButton(Action gameControllerMethod, Action onInteract)
+        internal Button EnableDoneButton(Action onClicked)
         {
             _button.gameObject.SetActive(true);
             _buttonText.text = "Done";
             _button.onClick.RemoveAllListeners();
-            _button.onClick.AddListener(() =>
-            {
-                onInteract();
-                gameControllerMethod();
-            });
+            _button.onClick.AddListener(() => onClicked.Invoke());
             return _button;
         }
 

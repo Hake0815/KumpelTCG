@@ -57,7 +57,7 @@ namespace gameview
             var cachedSpeed = AnimationSpeedHolder.AnimationSpeed;
             AnimationSpeedHolder.AnimationSpeed = 0.0f;
             _gameManager.ShowGameState();
-            _gameController.CardsRevealed += ShowRevealedCardBriefly;
+            _gameController.CardsRevealed += ShowRevealedCardsUntilConfirmed;
             UIQueue.INSTANCE.Queue(
                 (callback) =>
                 {
@@ -68,8 +68,16 @@ namespace gameview
             );
         }
 
-        private void ShowRevealedCardBriefly(List<ICard> list)
+        private void ShowRevealedCardsUntilConfirmed(List<ICard> list)
         {
+            var confirmTask = new TaskCompletionSource<bool>();
+            void Confirm()
+            {
+                confirmTask.SetResult(true);
+                InputHandler.INSTANCE.OnSpace -= Confirm;
+            }
+            _gameManager.EnableDoneButton(Confirm);
+            InputHandler.INSTANCE.OnSpace += Confirm;
             UIQueue.INSTANCE.Queue(action =>
             {
                 PrepareFloatingSelection(list);
@@ -77,7 +85,7 @@ namespace gameview
             });
             UIQueue.INSTANCE.Queue(async action =>
             {
-                await Task.Delay(1000);
+                await confirmTask.Task;
                 _gameManager.DisableFloatingSelection();
                 action.Invoke();
             });
@@ -164,7 +172,11 @@ namespace gameview
                         HandleSelectMulligans(interaction);
                         break;
                     case GameInteractionType.Confirm:
-                        _gameManager.EnableDoneButton(interaction.GameControllerMethod, OnInteract);
+                        _gameManager.EnableDoneButton(() =>
+                        {
+                            OnInteract();
+                            interaction.GameControllerMethod.Invoke();
+                        });
                         break;
                     case GameInteractionType.GameOver:
                         _gameManager.ShowGameOver(
@@ -365,18 +377,13 @@ namespace gameview
             Button button = null;
             if (!isQuickSelection)
             {
-                button = _gameManager.EnableDoneButton(
-                    () =>
-                    {
-                        gameControllerMethodWithTargets.Invoke(_selectedCards);
-                        ClearSelectedCards();
-                    },
-                    () =>
-                    {
-                        OnInteract();
-                        _gameManager.DisableSearchView();
-                    }
-                );
+                button = _gameManager.EnableDoneButton(() =>
+                {
+                    OnInteract();
+                    _gameManager.DisableSearchView();
+                    gameControllerMethodWithTargets.Invoke(_selectedCards);
+                    ClearSelectedCards();
+                });
                 button.interactable = conditionOnSelection(_selectedCards);
             }
 
