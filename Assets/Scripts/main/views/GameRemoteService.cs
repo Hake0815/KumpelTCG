@@ -21,10 +21,9 @@ namespace gameview
         public GameRemoteService(GameManager gameManager)
         {
             _gameManager = gameManager;
-            InitializeGame();
         }
 
-        private void InitializeGame()
+        public async Task InitializeGame()
         {
             var gameLogFile = GameParameters.GAME_LOG_FILE;
             _gameController = IGameController.Create(gameLogFile);
@@ -33,16 +32,16 @@ namespace gameview
             _gameController.NotifyGeneral += HandleGeneralInteractions;
             if (GameParameters.LoadModus == LoadModus.ResumeGame)
             {
-                _gameController.RecreateGameFromLog();
+                await _gameController.RecreateGameFromLog();
             }
             else if (GameParameters.LoadModus == LoadModus.ReplayGame)
             {
-                _gameController.StartReplay();
+                await _gameController.StartReplay();
             }
             else
             {
-                File.WriteAllText(gameLogFile, string.Empty);
-                _gameController.CreateGame(
+                await File.WriteAllTextAsync(gameLogFile, string.Empty);
+                await _gameController.CreateGame(
                     CreateDeckList(),
                     CreateDeckList(),
                     "Player 1",
@@ -56,19 +55,17 @@ namespace gameview
             _gameManager.EnablePlayerHandViews();
             var cachedSpeed = AnimationSpeedHolder.AnimationSpeed;
             AnimationSpeedHolder.AnimationSpeed = 0.0f;
-            _gameManager.ShowGameState();
+            await _gameManager.ShowGameState();
             _gameController.CardsRevealed += ShowRevealedCardsUntilConfirmed;
-            UIQueue.INSTANCE.Queue(
-                (callback) =>
-                {
-                    AnimationSpeedHolder.AnimationSpeed = cachedSpeed;
-                    _gameController.StartGame();
-                    callback.Invoke();
-                }
-            );
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                AnimationSpeedHolder.AnimationSpeed = cachedSpeed;
+                _gameController.StartGame();
+                return Task.CompletedTask;
+            });
         }
 
-        private void ShowRevealedCardsUntilConfirmed(List<ICard> list)
+        private async void ShowRevealedCardsUntilConfirmed(List<ICard> list)
         {
             var confirmTask = new TaskCompletionSource<bool>();
             void Confirm()
@@ -78,16 +75,15 @@ namespace gameview
             }
             _gameManager.EnableDoneButton(Confirm);
             InputHandler.INSTANCE.OnSpace += Confirm;
-            UIQueue.INSTANCE.Queue(action =>
+            await UIQueue.INSTANCE.Queue(() =>
             {
                 PrepareFloatingSelection(list);
-                action.Invoke();
+                return Task.CompletedTask;
             });
-            UIQueue.INSTANCE.Queue(async action =>
+            await UIQueue.INSTANCE.Queue(async () =>
             {
                 await confirmTask.Task;
                 _gameManager.DisableFloatingSelection();
-                action.Invoke();
             });
         }
 
@@ -105,34 +101,22 @@ namespace gameview
             };
         }
 
-        private void HandlePlayer1Interactions(List<GameInteraction> interactions)
+        private async void HandlePlayer1Interactions(List<GameInteraction> interactions)
         {
-            UIQueue.INSTANCE.Queue(action =>
-            {
-                HandleInteraction(interactions);
-                action.Invoke();
-            });
+            await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }
 
-        private void HandlePlayer2Interactions(List<GameInteraction> interactions)
+        private async void HandlePlayer2Interactions(List<GameInteraction> interactions)
         {
-            UIQueue.INSTANCE.Queue(action =>
-            {
-                HandleInteraction(interactions);
-                action.Invoke();
-            });
+            await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }
 
-        private void HandleGeneralInteractions(List<GameInteraction> interactions)
+        private async void HandleGeneralInteractions(List<GameInteraction> interactions)
         {
-            UIQueue.INSTANCE.Queue(action =>
-            {
-                HandleInteraction(interactions);
-                action.Invoke();
-            });
+            await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }
 
-        private void HandleInteraction(List<GameInteraction> interactions)
+        private async Task HandleInteraction(List<GameInteraction> interactions)
         {
             foreach (var interaction in interactions)
             {
@@ -166,7 +150,7 @@ namespace gameview
                         SimpleProceed(interaction);
                         break;
                     case GameInteractionType.ConfirmMulligans:
-                        HandleConfirmMulligans(interaction);
+                        await HandleConfirmMulligans(interaction);
                         break;
                     case GameInteractionType.SelectMulligans:
                         HandleSelectMulligans(interaction);
@@ -466,17 +450,17 @@ namespace gameview
             var card = (interaction.Data[InteractionCard.NAME] as InteractionCard).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
-            var clickBehaviour = new ClickBehaviour(() =>
+            var clickBehaviour = new ClickBehaviour(async () =>
             {
                 OnInteract();
-                _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(card);
+                await _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(card);
 
                 interaction.GameControllerMethod.Invoke();
             });
             cardView.SetPlayable(true, clickBehaviour);
         }
 
-        private void HandleConfirmMulligans(GameInteraction interaction)
+        private async Task HandleConfirmMulligans(GameInteraction interaction)
         {
             var mulliganData = interaction.Data[MulliganData.NAME] as MulliganData;
             var mulligans = mulliganData.Mulligans;
@@ -487,7 +471,7 @@ namespace gameview
                 interaction.GameControllerMethod.Invoke();
                 return;
             }
-            _gameManager.ShowMulligan(
+            await _gameManager.ShowMulligan(
                 player,
                 mulligans,
                 () =>

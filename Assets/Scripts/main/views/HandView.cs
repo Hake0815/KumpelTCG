@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.card;
 using gamecore.game;
 using UnityEngine;
@@ -31,9 +32,9 @@ namespace gameview
             }
         }
 
-        private void HandleCardCountChanged(List<ICard> cards)
+        private async void HandleCardCountChanged(List<ICard> cards)
         {
-            ((ISplineCardHolder)this).UpdateCardPosition(cards, transform.rotation);
+            await ((ISplineCardHolder)this).UpdateCardPosition(cards, transform.rotation);
         }
 
         private void OnDisable()
@@ -44,9 +45,9 @@ namespace gameview
             }
         }
 
-        public void HandleCardCountChanged()
+        public async Task HandleCardCountChanged()
         {
-            HandleCardCountChanged(hand.Cards);
+            await ((ISplineCardHolder)this).UpdateCardPosition(hand.Cards, transform.rotation);
         }
     }
 }
