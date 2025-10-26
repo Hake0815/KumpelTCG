@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
@@ -53,41 +54,47 @@ namespace gameview
             return false;
         }
 
-        private void UpdateBenchedPokemonPositions(List<ICard> cards)
+        private async void UpdateBenchedPokemonPositions(List<ICard> cards)
         {
-            UIQueue.INSTANCE.Queue(
-                (callback) =>
-                {
-                    var benchedPokemon = _player.Bench;
-                    var spacing = _rectTransform.rect.width / benchedPokemon.MaxBenchSpots;
-                    var orientation = _rectTransform.rotation * Vector3.right;
-                    var firstPosition =
-                        _rectTransform.position
-                        - (_rectTransform.rect.width - spacing) / 2f * orientation
-                        + Vector3.back;
-
-                    int i = 0;
-                    foreach (var pokemon in cards)
-                    {
-                        var pokemonView = CardViewRegistry.INSTANCE.Get(pokemon);
-                        pokemonView.transform.DOMove(
-                            firstPosition + i * spacing * orientation,
-                            AnimationSpeedHolder.AnimationSpeed
-                        );
-                        pokemonView.transform.DOLocalRotateQuaternion(
-                            _rectTransform.rotation,
-                            AnimationSpeedHolder.AnimationSpeed
-                        );
-                        i++;
-                    }
-                    callback.Invoke();
-                }
-            );
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                return PerformUpdateBenchedPokemonPositions(cards);
+            });
         }
 
-        public void UpdateBenchedPokemonPositions()
+        public async Task UpdateBenchedPokemonPositions()
         {
-            UpdateBenchedPokemonPositions(_player.Bench.Cards);
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                return PerformUpdateBenchedPokemonPositions(_player.Bench.Cards);
+            });
+        }
+
+        private Task PerformUpdateBenchedPokemonPositions(List<ICard> cards)
+        {
+            var benchedPokemon = _player.Bench;
+            var spacing = _rectTransform.rect.width / benchedPokemon.MaxBenchSpots;
+            var orientation = _rectTransform.rotation * Vector3.right;
+            var firstPosition =
+                _rectTransform.position
+                - (_rectTransform.rect.width - spacing) / 2f * orientation
+                + Vector3.back;
+
+            int i = 0;
+            foreach (var pokemon in cards)
+            {
+                var pokemonView = CardViewRegistry.INSTANCE.Get(pokemon);
+                pokemonView.transform.DOMove(
+                    firstPosition + i * spacing * orientation,
+                    AnimationSpeedHolder.AnimationSpeed
+                );
+                pokemonView.transform.DOLocalRotateQuaternion(
+                    _rectTransform.rotation,
+                    AnimationSpeedHolder.AnimationSpeed
+                );
+                i++;
+            }
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using gamecore.card;
 using Newtonsoft.Json;
 
@@ -9,7 +10,7 @@ namespace gamecore.game.action
         public QuickSelectCardsGA(
             IPlayerLogic player,
             Predicate<int> numberofcardscondition,
-            CardListLogicAbstract cardOptions,
+            List<ICardLogic> cardOptions,
             Predicate<ICardLogic> cardCondition,
             SelectedCardsOrigin origin,
             string selectionId
@@ -17,7 +18,7 @@ namespace gamecore.game.action
             : base(player, origin, selectionId)
         {
             NumberOfCardsCondition = numberofcardscondition;
-            CardOptions = cardOptions;
+            CardOptions = new(cardOptions);
             CardCondition = cardCondition;
         }
 
@@ -33,7 +34,7 @@ namespace gamecore.game.action
         public Predicate<int> NumberOfCardsCondition { get; }
 
         [JsonIgnore]
-        public CardListLogicAbstract CardOptions { get; }
+        public List<ICardLogic> CardOptions { get; }
 
         [JsonIgnore]
         public Predicate<ICardLogic> CardCondition { get; }

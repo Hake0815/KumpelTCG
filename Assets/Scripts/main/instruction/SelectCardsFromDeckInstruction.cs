@@ -22,7 +22,7 @@ namespace gamecore.instruction
                 new ConfirmSelectCardsGA(
                     card.Owner,
                     CountRange.Contains,
-                    card.Owner.Deck,
+                    card.Owner.Deck.Cards,
                     c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.Deck,
                     SelectionId

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
@@ -12,9 +13,10 @@ namespace gamecore.game
     public interface IGameController
     {
         IGame Game { get; }
-        event EventHandler<List<GameInteraction>> NotifyPlayer1;
-        event EventHandler<List<GameInteraction>> NotifyPlayer2;
-        event EventHandler<List<GameInteraction>> NotifyGeneral;
+        event Action<List<GameInteraction>> NotifyPlayer1;
+        event Action<List<GameInteraction>> NotifyPlayer2;
+        event Action<List<GameInteraction>> NotifyGeneral;
+        event Action<List<ICard>> CardsRevealed;
         static IGameController Create(string logFilePath)
         {
             return new GameController(logFilePath);
@@ -27,6 +29,7 @@ namespace gamecore.game
             string player2Name
         );
         Task RecreateGameFromLog();
+        Task StartReplay();
         void StartGame();
         GameStateJson ExportGameState(string playerName);
     }
@@ -35,9 +38,10 @@ namespace gamecore.game
     {
         private Game _game;
 
-        public event EventHandler<List<GameInteraction>> NotifyPlayer1;
-        public event EventHandler<List<GameInteraction>> NotifyPlayer2;
-        public event EventHandler<List<GameInteraction>> NotifyGeneral;
+        public event Action<List<GameInteraction>> NotifyPlayer1;
+        public event Action<List<GameInteraction>> NotifyPlayer2;
+        public event Action<List<GameInteraction>> NotifyGeneral;
+        public event Action<List<ICard>> CardsRevealed;
         private readonly ActionSystem _actionSystem;
 
         public IGame Game => _game;
@@ -50,17 +54,22 @@ namespace gamecore.game
 
         private void NotifyPlayers()
         {
+            if (_game.IsReplaying)
+            {
+                HandleReplayMode();
+                return;
+            }
             var interactions = _game.GameState.GetGameInteractions(this, _game.Player1);
             if (interactions.Count > 0)
             {
-                NotifyPlayer1?.Invoke(this, interactions);
+                NotifyPlayer1?.Invoke(interactions);
             }
             else
             {
                 interactions = _game.GameState.GetGameInteractions(this, _game.Player2);
                 if (interactions.Count > 0)
                 {
-                    NotifyPlayer2?.Invoke(this, interactions);
+                    NotifyPlayer2?.Invoke(interactions);
                 }
                 else
                 {
@@ -71,10 +80,30 @@ namespace gamecore.game
 
         protected virtual void OnExpectGeneralInteraction()
         {
-            GlobalLogger.Instance.Debug("Notify General called.");
+            if (_game.IsReplaying)
+            {
+                HandleReplayMode();
+                return;
+            }
             var interactions = _game.GameState.GetGameInteractions(this, null);
             if (interactions.Count > 0)
-                NotifyGeneral?.Invoke(this, interactions);
+                NotifyGeneral?.Invoke(interactions);
+        }
+
+        private void HandleReplayMode()
+        {
+            var replayInteraction = new List<GameInteraction>()
+            {
+                new(async () => await ReplayNextAction(), GameInteractionType.ReplayNextAction),
+            };
+            NotifyGeneral?.Invoke(replayInteraction);
+        }
+
+        private async Task ReplayNextAction()
+        {
+            var hasMoreActions = await _actionSystem.ReplayNextAction();
+            _game.IsReplaying = hasMoreActions;
+            _game.AdvanceGameState();
         }
 
         public async Task CreateGame(
@@ -92,6 +121,12 @@ namespace gamecore.game
         public async Task RecreateGameFromLog()
         {
             await _actionSystem.RecreateGameStateFromLog();
+        }
+
+        public async Task StartReplay()
+        {
+            var hasMoreActions = await _actionSystem.ReplayNextAction();
+            _game.IsReplaying = hasMoreActions;
         }
 
         public void StartGame()
@@ -137,7 +172,6 @@ namespace gamecore.game
 
         internal void Confirm()
         {
-            GlobalLogger.Instance.Debug("Confirm called.");
             _game.AdvanceGameState();
         }
 
@@ -177,7 +211,13 @@ namespace gamecore.game
                 .Build();
             _game.AwaitInteractionEvent += NotifyPlayers;
             _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
+            _game.CardSystem.CardsRevealed += OnCardsRevealed;
             return Task.FromResult(action);
+        }
+
+        private void OnCardsRevealed(List<ICardLogic> cards)
+        {
+            CardsRevealed?.Invoke(cards.Cast<ICard>().ToList());
         }
 
         internal async Task SetPrizeCards()
@@ -217,11 +257,6 @@ namespace gamecore.game
             }
 
             return new GameStateJson(selfState, opponentState, cardStates);
-        }
-
-        internal void ConfirmGameOver()
-        {
-            _actionSystem.WritePendingLogEntries();
         }
     }
 }

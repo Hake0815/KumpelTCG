@@ -94,14 +94,4 @@ namespace gamecore.card
 
         public abstract void OnCardCountChanged();
     }
-
-    class CardListLogic : CardListLogicAbstract
-    {
-        public CardListLogic(List<ICardLogic> cards)
-            : base(cards) { }
-
-        public override event Action<List<ICard>> CardCountChanged;
-
-        public override void OnCardCountChanged() { }
-    }
 }
