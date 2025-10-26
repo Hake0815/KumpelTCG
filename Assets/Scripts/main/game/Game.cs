@@ -38,16 +38,8 @@ namespace gamecore.game
             get => Player2;
         }
         private readonly List<IPlayerLogic> _players = new();
-        private IGameState _gameState;
-        public IGameState GameState
-        {
-            get => _gameState;
-            set
-            {
-                _gameState = value;
-                GlobalLogger.Instance.Debug($"GameState set to {value.GetType().Name}");
-            }
-        }
+        public IGameState GameState { get; set; }
+
         private Dictionary<IPlayerLogic, List<List<ICardLogic>>> _mulligans;
         public Dictionary<IPlayer, List<List<ICard>>> Mulligans
         {
@@ -69,8 +61,10 @@ namespace gamecore.game
         public int TurnCounter { get; private set; } = 0;
         public event Action AwaitInteractionEvent;
         public event Action AwaitGeneralInteractionEvent;
+        public bool IsReplaying { get; set; } = false;
         private readonly ActionSystem _actionSystem;
         private readonly CardSystem _cardSystem;
+        public CardSystem CardSystem => _cardSystem;
         private readonly DamageSystem _damageSystem;
         private readonly GeneralMechnicSystem _generalMechnicSystem;
 
@@ -99,8 +93,12 @@ namespace gamecore.game
             _cardSystem.Disable();
             _damageSystem.Disable();
             _generalMechnicSystem.Disable();
-            GlobalLogger.Instance.Debug($"Ending game with winner {winner.Name}");
             GameState = new GameOverState(winner, message);
+        }
+
+        public void FinishGameLog()
+        {
+            _actionSystem.FinishGameLog();
         }
 
         public void AdvanceGameState()
@@ -177,7 +175,8 @@ namespace gamecore.game
         public Task<StartTurnGA> Reperform(StartTurnGA action)
         {
             StartTurnForPlayer(GetPlayerByName(action.NextPlayer.Name));
-            GameState = new IdlePlayerTurnState();
+            if (GameState is not GameOverState)
+                GameState = new IdlePlayerTurnState();
             return Task.FromResult(action);
         }
 
@@ -202,12 +201,6 @@ namespace gamecore.game
             var gameSetupBuilder = new GameSetupBuilder().WithPlayer1(Player1).WithPlayer2(Player2);
             gameSetupBuilder.Setup();
             _mulligans = gameSetupBuilder.Mulligans;
-            GlobalLogger.Instance.Debug(
-                $"Number of mulligans player 1: {_mulligans[Player1].Count}"
-            );
-            GlobalLogger.Instance.Debug(
-                $"Number of mulligans player 2: {_mulligans[Player2].Count}"
-            );
             action.Mulligans = new Dictionary<string, List<List<ICardLogic>>>
             {
                 { Player1.Name, gameSetupBuilder.GetMulligansForPlayer(Player1) },
@@ -215,8 +208,8 @@ namespace gamecore.game
             };
             action.PlayerHands = new Dictionary<string, List<ICardLogic>>
             {
-                { Player1.Name, Player1.Hand.Cards },
-                { Player2.Name, Player2.Hand.Cards },
+                { Player1.Name, new(Player1.Hand.Cards) },
+                { Player2.Name, new(Player2.Hand.Cards) },
             };
             GameState = new SetupCompletedState();
             return Task.FromResult(action);
@@ -267,8 +260,8 @@ namespace gamecore.game
             }
             action.PrizeCards = new Dictionary<string, List<ICardLogic>>
             {
-                { Player1.Name, Player1.Prizes.Cards },
-                { Player2.Name, Player2.Prizes.Cards },
+                { Player1.Name, new(Player1.Prizes.Cards) },
+                { Player2.Name, new(Player2.Prizes.Cards) },
             };
             return Task.FromResult(action);
         }

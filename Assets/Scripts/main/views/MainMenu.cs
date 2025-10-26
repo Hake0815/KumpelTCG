@@ -14,6 +14,9 @@ namespace gameview
         private Button _loadGameButton;
 
         [SerializeField]
+        private Button _replayGameButton;
+
+        [SerializeField]
         private Button _quitButton;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,25 +28,35 @@ namespace gameview
                     && File.ReadAllText(GameParameters.GAME_LOG_FILE).Length > 0
                 )
             )
+            {
                 _loadGameButton.interactable = false;
+                _replayGameButton.interactable = false;
+            }
             _newGameButton.onClick.AddListener(NewGame);
             _loadGameButton.onClick.AddListener(LoadGame);
+            _replayGameButton.onClick.AddListener(ReplayGame);
             _quitButton.onClick.AddListener(Quit);
         }
 
-        private void NewGame()
+        private static void NewGame()
         {
             GameParameters.LoadModus = LoadModus.NewGame;
             SceneManager.LoadScene("GameScene");
         }
 
-        private void LoadGame()
+        private static void LoadGame()
         {
             GameParameters.LoadModus = LoadModus.ResumeGame;
             SceneManager.LoadScene("GameScene");
         }
 
-        private void Quit()
+        private static void ReplayGame()
+        {
+            GameParameters.LoadModus = LoadModus.ReplayGame;
+            SceneManager.LoadScene("GameScene");
+        }
+
+        private static void Quit()
         {
             Application.Quit();
         }

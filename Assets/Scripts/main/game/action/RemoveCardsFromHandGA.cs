@@ -11,7 +11,7 @@ namespace gamecore.game.action
 
         public RemoveCardsFromHandGA(List<ICardLogic> cards, IPlayerLogic player)
         {
-            Cards = cards;
+            Cards = new(cards);
             Player = player;
         }
     }

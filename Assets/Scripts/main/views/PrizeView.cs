@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
@@ -54,50 +55,56 @@ namespace gameview
             }
         }
 
-        private void UpdateView(List<ICard> cards)
+        private async void UpdateView(List<ICard> cards)
         {
-            UIQueue.INSTANCE.Queue(
-                (OnUICompleted) =>
-                {
-                    _countText.text = cards.Count.ToString();
-                    var horizontalSpacing = _rectTransform.rect.width / 3f;
-                    var verticalSpacing = _rectTransform.rect.height / 2f;
-                    var relativeRight = _rectTransform.rotation * Vector3.right;
-                    var relativeDown = _rectTransform.rotation * Vector3.down;
-                    var firstPosition =
-                        _rectTransform.position
-                        + horizontalSpacing / 2f * relativeRight
-                        + verticalSpacing / 2f * relativeDown;
-                    int i = 0;
-                    foreach (var prizeCard in cards)
-                    {
-                        var cardView = CardViewRegistry.INSTANCE.Get(prizeCard);
-                        if (i < 3)
-                            cardView.transform.DOMove(
-                                firstPosition + i * horizontalSpacing * relativeRight,
-                                AnimationSpeedHolder.AnimationSpeed
-                            );
-                        else
-                            cardView.transform.DOMove(
-                                firstPosition
-                                    + (i - 3) * horizontalSpacing * relativeRight
-                                    + verticalSpacing * relativeDown,
-                                AnimationSpeedHolder.AnimationSpeed
-                            );
-                        cardView.transform.DOLocalRotateQuaternion(
-                            _rectTransform.rotation,
-                            AnimationSpeedHolder.AnimationSpeed
-                        );
-                        i++;
-                    }
-                    OnUICompleted.Invoke();
-                }
-            );
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                return PerformUpdateView(cards);
+            });
         }
 
-        public void UpdateView()
+        public async Task UpdateView()
         {
-            UpdateView(_prizes.Cards);
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                return PerformUpdateView(_prizes.Cards);
+            });
+        }
+
+        private Task PerformUpdateView(List<ICard> cards)
+        {
+            _countText.text = cards.Count.ToString();
+            var horizontalSpacing = _rectTransform.rect.width / 3f;
+            var verticalSpacing = _rectTransform.rect.height / 2f;
+            var relativeRight = _rectTransform.rotation * Vector3.right;
+            var relativeDown = _rectTransform.rotation * Vector3.down;
+            var firstPosition =
+                _rectTransform.position
+                + horizontalSpacing / 2f * relativeRight
+                + verticalSpacing / 2f * relativeDown;
+            int i = 0;
+            foreach (var prizeCard in cards)
+            {
+                var cardView = CardViewRegistry.INSTANCE.Get(prizeCard);
+                if (i < 3)
+                    cardView.transform.DOMove(
+                        firstPosition + i * horizontalSpacing * relativeRight,
+                        AnimationSpeedHolder.AnimationSpeed
+                    );
+                else
+                    cardView.transform.DOMove(
+                        firstPosition
+                            + (i - 3) * horizontalSpacing * relativeRight
+                            + verticalSpacing * relativeDown,
+                        AnimationSpeedHolder.AnimationSpeed
+                    );
+                cardView.transform.DOLocalRotateQuaternion(
+                    _rectTransform.rotation,
+                    AnimationSpeedHolder.AnimationSpeed
+                );
+                i++;
+            }
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
@@ -14,7 +15,7 @@ namespace gameview
         public void SetUp(IPlayer player)
         {
             _player = player;
-            _player.ActivePokemonSet += SetActivePokemon;
+            _player.ActivePokemonSet += OnSetActivePokemon;
         }
 
         public bool OnCardDropped(CardView cardView)
@@ -30,29 +31,32 @@ namespace gameview
             return false;
         }
 
-        public void SetActivePokemon(ICard card)
+        private async void OnSetActivePokemon(ICard card)
         {
-            UIQueue.INSTANCE.Queue(
-                (callback) =>
-                {
-                    var cardView = CardViewRegistry.INSTANCE.Get(card);
-                    DOTween
-                        .Sequence()
-                        .Join(
-                            cardView.transform.DOMove(
-                                transform.position + Vector3.back,
-                                AnimationSpeedHolder.AnimationSpeed
-                            )
+            await SetActivePokemon(card);
+        }
+
+        public async Task SetActivePokemon(ICard card)
+        {
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                var cardView = CardViewRegistry.INSTANCE.Get(card);
+                DOTween
+                    .Sequence()
+                    .Join(
+                        cardView.transform.DOMove(
+                            transform.position + Vector3.back,
+                            AnimationSpeedHolder.AnimationSpeed
                         )
-                        .Join(
-                            cardView.transform.DORotateQuaternion(
-                                transform.rotation,
-                                AnimationSpeedHolder.AnimationSpeed
-                            )
-                        );
-                    callback.Invoke();
-                }
-            );
+                    )
+                    .Join(
+                        cardView.transform.DORotateQuaternion(
+                            transform.rotation,
+                            AnimationSpeedHolder.AnimationSpeed
+                        )
+                    );
+                return Task.CompletedTask;
+            });
             _isEmpty = false;
         }
     }

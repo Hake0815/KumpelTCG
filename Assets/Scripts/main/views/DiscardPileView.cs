@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using gamecore.game;
@@ -111,9 +112,9 @@ namespace gameview
             }
         }
 
-        private void CreateCards(List<ICard> cards)
+        private async void CreateCards(List<ICard> cards)
         {
-            UIQueue.INSTANCE.Queue(CallbackOnDone =>
+            await UIQueue.INSTANCE.Queue(() =>
             {
                 foreach (var card in cards)
                 {
@@ -124,7 +125,7 @@ namespace gameview
                     );
                     cardView.Canvas.sortingOrder = card.Owner.Hand.Cards.Count + 1;
                 }
-                CallbackOnDone.Invoke();
+                return Task.CompletedTask;
             });
         }
 

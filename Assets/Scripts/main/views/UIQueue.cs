@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace gameview
@@ -12,27 +13,25 @@ namespace gameview
 
         private UIQueue() { }
 
-        private readonly Queue<Action<Action>> _actionQueue = new();
+        private readonly Queue<Func<Task>> _actionQueue = new();
 
         private bool _idle = true;
 
-        public void Queue(Action<Action> action)
+        public async Task Queue(Func<Task> action)
         {
             _actionQueue.Enqueue(action);
             if (_idle)
-                PerfromNextAction();
+                await PerfromNextAction();
         }
 
-        private void PerfromNextAction()
+        private async Task PerfromNextAction()
         {
-            if (_idle && _actionQueue.TryDequeue(out Action<Action> action))
+            if (_idle && _actionQueue.TryDequeue(out Func<Task> action))
             {
                 _idle = false;
-                action.Invoke(() =>
-                {
-                    _idle = true;
-                    PerfromNextAction();
-                });
+                await action.Invoke();
+                _idle = true;
+                await PerfromNextAction();
             }
         }
     }

@@ -37,6 +37,8 @@ namespace gamecore.game.action
             Enable();
         }
 
+        public event Action<List<ICardLogic>> CardsRevealed;
+
         protected static readonly System.Random _rng = new();
 
         private readonly ActionSystem _actionSystem;
@@ -239,6 +241,7 @@ namespace gamecore.game.action
             var player = _game.GetPlayerByName(action.Player.Name);
             var revealedCards = player.DeckList.GetCardsByDeckIds(action.RevealedCards);
             player.Deck.RemoveCards(revealedCards);
+            CardsRevealed?.Invoke(revealedCards);
             return Task.FromResult(action);
         }
 
@@ -284,7 +287,7 @@ namespace gamecore.game.action
 
         public Task<PlayCardGA> Perform(PlayCardGA action)
         {
-            if (action.Targets != null)
+            if (action.Targets.Count > 0)
                 action.Card.PlayWithTargets(action.Targets, _actionSystem);
             else
                 action.Card.Play(_actionSystem);
@@ -345,13 +348,13 @@ namespace gamecore.game.action
 
         public async Task<QuickSelectCardsGA> Perform(QuickSelectCardsGA action)
         {
-            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            var options = GetOptions(action.CardOptions, action.CardCondition);
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
                 _selectFromMap[action.Origin]
             );
-            action.CardOptions.RemoveCards(selectedCards);
+            RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
                 action.Player.Prizes.DeckSearched();
 
@@ -388,13 +391,13 @@ namespace gamecore.game.action
 
         public async Task<ConfirmSelectCardsGA> Perform(ConfirmSelectCardsGA action)
         {
-            var options = GetOptions(action.CardOptions.Cards, action.CardCondition);
+            var options = GetOptions(action.CardOptions, action.CardCondition);
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
                 _selectFromMap[action.Origin]
             );
-            action.CardOptions.RemoveCards(selectedCards);
+            RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
                 action.Player.Prizes.DeckSearched();
 
@@ -509,11 +512,13 @@ namespace gamecore.game.action
 
         public Task<ShowCardsGA> Reperform(ShowCardsGA action)
         {
-            foreach (var card in _game.FindCardsAnywhere(action.Cards))
+            var cards = _game.FindCardsAnywhere(action.Cards);
+            foreach (var card in cards)
             {
                 card.OwnerPositionKnowledge = PositionKnowledge.Known;
                 card.OpponentPositionKnowledge = PositionKnowledge.Known;
             }
+            CardsRevealed?.Invoke(cards);
             return Task.FromResult(action);
         }
     }

@@ -8,7 +8,7 @@ namespace gamecore.game.action
 {
     abstract class SelectCardsGA : GameAction
     {
-        protected SelectCardsGA(IPlayerLogic player, SelectedCardsOrigin origin, String selectionId)
+        protected SelectCardsGA(IPlayerLogic player, SelectedCardsOrigin origin, string selectionId)
         {
             Player = player;
             Origin = origin;
@@ -29,20 +29,5 @@ namespace gamecore.game.action
             DiscardPile,
             Other,
         }
-    }
-
-    class SelectCardsEntry
-    {
-        public SelectCardsEntry(
-            Predicate<ICardLogic> cardCondition,
-            Predicate<int> cardCountCondition
-        )
-        {
-            CardCondition = cardCondition;
-            CardCountCondition = cardCountCondition;
-        }
-
-        public Predicate<ICardLogic> CardCondition { get; }
-        public Predicate<int> CardCountCondition { get; }
     }
 }

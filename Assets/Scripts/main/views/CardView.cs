@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using gamecore.card;
 using TMPro;
@@ -167,7 +168,7 @@ namespace gameview
         {
             if (Card is IPokemonCard pokemonCard)
             {
-                pokemonCard.OnAttachedEnergyChanged += AttachEnergy;
+                pokemonCard.OnAttachedEnergyChanged += OnAttachEnergy;
                 pokemonCard.DamageModified += UpdateDamage;
                 pokemonCard.Evolved += OnEvolved;
                 UpdateDamage();
@@ -178,40 +179,41 @@ namespace gameview
         {
             if (Card is IPokemonCard pokemonCard)
             {
-                pokemonCard.OnAttachedEnergyChanged -= AttachEnergy;
+                pokemonCard.OnAttachedEnergyChanged -= OnAttachEnergy;
                 pokemonCard.DamageModified -= UpdateDamage;
                 pokemonCard.Evolved -= OnEvolved;
             }
         }
 
-        private void OnEvolved()
+        private async void OnEvolved()
         {
-            UIQueue.INSTANCE.Queue(
-                (callback) =>
-                {
-                    Destroy(gameObject);
-                    callback.Invoke();
-                }
-            );
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                Destroy(gameObject);
+                return Task.CompletedTask;
+            });
         }
 
-        public void AttachEnergy(List<IEnergyCard> cards)
+        private async void OnAttachEnergy(List<IEnergyCard> cards)
         {
-            UIQueue.INSTANCE.Queue(
-                (callback) =>
+            await AttachEnergy(cards);
+        }
+
+        public async Task AttachEnergy(List<IEnergyCard> cards)
+        {
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                var taskCompletionSource = new TaskCompletionSource<bool>();
+                var sequence = DOTween.Sequence();
+                foreach (var card in cards)
                 {
-                    var sequence = DOTween.Sequence();
-                    foreach (var card in cards)
-                    {
-                        if (cards != null)
-                            CardViewRegistry
-                                .INSTANCE.Get(card)
-                                .TransformToAttachedEnergyView(sequence);
-                    }
-                    UpdateAttachedEnergyCards(sequence);
-                    sequence.OnComplete(() => callback.Invoke());
+                    if (cards != null)
+                        CardViewRegistry.INSTANCE.Get(card).TransformToAttachedEnergyView(sequence);
                 }
-            );
+                UpdateAttachedEnergyCards(sequence);
+                sequence.OnComplete(() => taskCompletionSource.SetResult(true));
+                return taskCompletionSource.Task;
+            });
         }
 
         private void TransformToAttachedEnergyView(Sequence sequence)

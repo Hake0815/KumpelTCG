@@ -69,17 +69,18 @@ namespace gameview
         private Button _button;
         private TMP_Text _buttonText;
 
-        void Start()
+        async Task Start()
         {
             _button = GetComponentInChildren<Button>();
             _buttonText = _button.GetComponentInChildren<TMP_Text>();
             DisableButton();
-            Instantiate(_cardViewCreatorPrefab);
-            Instantiate(_inputHandlerPrefab);
-            _floatingSelectionView = Instantiate(_floatingSelectionViewPrefab);
-            _searchView = Instantiate(_searchViewPrefab);
+            await InstantiateAsync(_cardViewCreatorPrefab);
+            await InstantiateAsync(_inputHandlerPrefab);
+            _floatingSelectionView = (await InstantiateAsync(_floatingSelectionViewPrefab))[0];
+            _searchView = (await InstantiateAsync(_searchViewPrefab))[0];
 
-            new GameRemoteService(this);
+            var remoteService = new GameRemoteService(this);
+            await remoteService.InitializeGame();
         }
 
         public void SetUpPlayerViews(IPlayer player1, IPlayer player2)
@@ -200,94 +201,86 @@ namespace gameview
             _playerPrizeViews.Add(player, prizeView);
         }
 
-        public void ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
+        public async Task ShowMulligan(IPlayer player, List<List<ICard>> mulligans, Action onDone)
         {
             if (mulligans.Count == 0)
             {
                 onDone();
                 return;
             }
-            UIQueue.INSTANCE.Queue(
-                (OnUICompleted) => CreateMulliganView(player, mulligans, onDone, OnUICompleted)
-            );
+            await UIQueue.INSTANCE.Queue(() => CreateMulliganView(player, mulligans, onDone));
         }
 
-        private void CreateMulliganView(
-            IPlayer player,
-            List<List<ICard>> mulligans,
-            Action onDone,
-            Action OnUICompleted
-        )
+        private Task CreateMulliganView(IPlayer player, List<List<ICard>> mulligans, Action onDone)
         {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
             var mulliganView = Instantiate(_mulliganViewPrefab);
             mulliganView.SetUp(player, mulligans);
             mulliganView.AddDoneListener(() =>
             {
                 onDone();
-                OnUICompleted();
+                taskCompletionSource.SetResult(true);
             });
+            return taskCompletionSource.Task;
         }
 
-        public void ShowGameState()
+        public async Task ShowGameState()
         {
             foreach (var player in _playerHandViews.Keys)
             {
-                ShowHandCards(player);
-                player.ActivePokemon?.Let(activePokemon =>
-                    ShowActivePokemon(player, activePokemon)
+                await ShowHandCards(player);
+                player.ActivePokemon?.Let(
+                    async (activePokemon) => await ShowActivePokemon(player, activePokemon)
                 );
-                ShowPrizeCards(player);
-                ShowBenchedPokemon(player);
+                await ShowPrizeCards(player);
+                await ShowBenchedPokemon(player);
                 ShowDiscardPile(player);
                 _playerDeckViews[player].UpdateView();
             }
         }
 
-        private void ShowHandCards(IPlayer player)
+        private async Task ShowHandCards(IPlayer player)
         {
-            _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
-            _playerHandViews[player].HandleCardCountChanged();
+            await _playerDeckViews[player].CreateDrawnCards(player.Hand.Cards);
+            await _playerHandViews[player].HandleCardCountChanged();
         }
 
-        private void ShowActivePokemon(IPlayer player, IPokemonCard activePokemon)
+        private async Task ShowActivePokemon(IPlayer player, IPokemonCard activePokemon)
         {
-            _playerDeckViews[player].CreateDrawnCards(new() { activePokemon });
-            PlayerActiveSpots[player].SetActivePokemon(activePokemon);
+            await _playerDeckViews[player].CreateDrawnCards(new() { activePokemon });
+            await PlayerActiveSpots[player].SetActivePokemon(activePokemon);
             if (activePokemon.AttachedEnergyCards.Count > 0)
-                ShowAttachedEnergyCards(activePokemon);
+                await ShowAttachedEnergyCards(activePokemon);
         }
 
-        private void ShowBenchedPokemon(IPlayer player)
+        private async Task ShowBenchedPokemon(IPlayer player)
         {
-            _playerDeckViews[player].CreateDrawnCards(player.Bench.Cards);
-            _playerBenchViews[player].UpdateBenchedPokemonPositions();
+            await _playerDeckViews[player].CreateDrawnCards(player.Bench.Cards);
+            await _playerBenchViews[player].UpdateBenchedPokemonPositions();
             foreach (var pokemon in player.Bench.Cards)
             {
                 if ((pokemon as IPokemonCard).AttachedEnergyCards.Count > 0)
                 {
-                    ShowAttachedEnergyCards(pokemon as IPokemonCard);
+                    await ShowAttachedEnergyCards(pokemon as IPokemonCard);
                 }
             }
         }
 
-        private void ShowAttachedEnergyCards(IPokemonCard card)
+        private async Task ShowAttachedEnergyCards(IPokemonCard card)
         {
             var attachedEnergyCards = card.AttachedEnergyCards;
-            _playerDeckViews[card.Owner]
+            await _playerDeckViews[card.Owner]
                 .CreateDrawnCards(attachedEnergyCards.Cast<ICard>().ToList());
-            UIQueue.INSTANCE.Queue(
-                (callback) =>
-                {
-                    CardViewRegistry.INSTANCE.Get(card).AttachEnergy(attachedEnergyCards);
-                    callback.Invoke();
-                }
-            );
+            await UIQueue.INSTANCE.Queue(async () =>
+            {
+                await CardViewRegistry.INSTANCE.Get(card).AttachEnergy(attachedEnergyCards);
+            });
         }
 
-        private void ShowPrizeCards(IPlayer player)
+        private async Task ShowPrizeCards(IPlayer player)
         {
-            _playerDeckViews[player].CreateDrawnCardsFaceDown(player.Prizes.Cards);
-            _playerPrizeViews[player].UpdateView();
+            await _playerDeckViews[player].CreateDrawnCardsFaceDown(player.Prizes.Cards);
+            await _playerPrizeViews[player].UpdateView();
         }
 
         private void ShowDiscardPile(IPlayer player)
@@ -305,6 +298,14 @@ namespace gameview
                 onInteract();
                 gameControllerMethod();
             });
+        }
+
+        public void EnableButtonWithText(string text, Action onButtonClick)
+        {
+            _button.gameObject.SetActive(true);
+            _buttonText.text = text;
+            _button.onClick.RemoveAllListeners();
+            _button.onClick.AddListener(() => onButtonClick());
         }
 
         public void DisableButton()
@@ -326,16 +327,12 @@ namespace gameview
             return _mulliganSelectorView;
         }
 
-        internal Button EnableDoneButton(Action gameControllerMethod, Action onInteract)
+        internal Button EnableDoneButton(Action onClicked)
         {
             _button.gameObject.SetActive(true);
             _buttonText.text = "Done";
             _button.onClick.RemoveAllListeners();
-            _button.onClick.AddListener(() =>
-            {
-                onInteract();
-                gameControllerMethod();
-            });
+            _button.onClick.AddListener(() => onClicked.Invoke());
             return _button;
         }
 
