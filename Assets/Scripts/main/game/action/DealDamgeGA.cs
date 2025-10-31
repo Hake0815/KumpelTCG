@@ -3,7 +3,7 @@ using gamecore.actionsystem;
 using gamecore.card;
 using Newtonsoft.Json;
 
-namespace gamecore.action
+namespace gamecore.game.action
 {
     class DealDamgeGA : GameAction
     {

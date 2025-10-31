@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
+using gamecore.game.action;
 
 namespace gamecore.instruction
 {

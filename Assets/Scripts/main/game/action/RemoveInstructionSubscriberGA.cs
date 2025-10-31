@@ -1,16 +1,21 @@
 using System;
 using gamecore.actionsystem;
+using gamecore.instruction;
+using Newtonsoft.Json;
 
 namespace gamecore.game.action
 {
-    class RemoveInstructionSubscriberGA<T> : GameAction
-        where T : GameAction
+    class RemoveInstructionSubscriberGA : GameAction
     {
-        public Guid Guid { get; }
+        [JsonIgnore]
+        public Action UnsubscribeAction { get; }
 
-        public RemoveInstructionSubscriberGA(Guid guid)
+        public RemoveInstructionSubscriberGA(Action unsubscribeAction)
         {
-            Guid = guid;
+            UnsubscribeAction = unsubscribeAction;
         }
+
+        [JsonConstructor]
+        public RemoveInstructionSubscriberGA() { }
     }
 }

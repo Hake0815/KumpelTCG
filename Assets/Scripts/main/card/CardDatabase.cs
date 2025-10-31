@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using gamecore.action;
-using gamecore.actionsystem;
-using gamecore.game;
 using gamecore.game.interaction;
 using gamecore.instruction;
 using gamecore.instruction.filter;
