@@ -27,7 +27,7 @@ namespace gamecore.game.interaction
 
         public bool IsMet(List<ICard> cards)
         {
-            if (!_queries.Any())
+            if (_queries.Count == 0)
             {
                 throw new IllegalStateException("No queries provided!");
             }
