@@ -4,7 +4,7 @@ using gamecore.actionsystem;
 using gamecore.game;
 using Newtonsoft.Json;
 
-namespace gamecore.gamegame.action
+namespace gamecore.game.action
 {
     class CheckWinConditionGA : GameAction
     {

@@ -8,6 +8,7 @@ using gamecore.common;
 using gamecore.effect;
 using gamecore.game.action;
 using gamecore.game.interaction;
+using gamecore.instruction;
 
 namespace gamecore.game
 {
@@ -51,6 +52,9 @@ namespace gamecore.game
         {
             _actionSystem = new ActionSystem(logFilePath);
             _actionSystem.AttachPerformer<CreateGameGA>(this);
+            _actionSystem.AttachPerformer<RemoveInstructionSubscriberGA>(
+                new InstructionSubscriberRemover()
+            );
         }
 
         private void NotifyPlayers()

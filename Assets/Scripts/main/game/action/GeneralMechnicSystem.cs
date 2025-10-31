@@ -5,12 +5,9 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
 using gamecore.effect;
-using gamecore.game;
-using gamecore.game.action;
 using gamecore.game.interaction;
-using gamecore.gamegame.action;
 
-namespace gamecore.action
+namespace gamecore.game.action
 {
     class GeneralMechnicSystem
         : IActionPerformer<AttackGA>,
