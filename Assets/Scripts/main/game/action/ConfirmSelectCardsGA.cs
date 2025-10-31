@@ -21,7 +21,7 @@ namespace gamecore.game.action
             : base(player, origin, selectionId, targetAction, remainderAction)
         {
             NumberOfCardsCondition = numberOfCardsCondition;
-            this.CardOptionSource = new(cardOptionSource);
+            CardOptionSource = new(cardOptionSource);
             CardCondition = cardCondition;
         }
 
