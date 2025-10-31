@@ -5,9 +5,8 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game;
 using gamecore.game.action;
-using gamecore.gamegame.action;
 
-namespace gamecore.action
+namespace gamecore.game.action
 {
     class DamageSystem
         : IActionPerformer<DealDamgeGA>,

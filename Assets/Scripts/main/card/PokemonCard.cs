@@ -5,6 +5,7 @@ using gamecore.actionsystem;
 using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
+using gamecore.game.interaction;
 using Newtonsoft.Json;
 
 namespace gamecore.card
@@ -127,7 +128,7 @@ namespace gamecore.card
                 var providedEnergy = new List<EnergyType>();
                 foreach (var energy in AttachedEnergyCards)
                 {
-                    providedEnergy.Add(energy.ProvidedEnergyType);
+                    providedEnergy.AddRange(energy.ProvidedEnergy);
                 }
                 return providedEnergy;
             }
@@ -206,7 +207,7 @@ namespace gamecore.card
             var availableEnergyTypes = new List<EnergyType>();
             foreach (var energy in AttachedEnergyCards)
             {
-                availableEnergyTypes.Add(energy.ProvidedEnergyType);
+                availableEnergyTypes.AddRange(energy.ProvidedEnergy);
             }
 
             return availableEnergyTypes;
@@ -302,6 +303,11 @@ namespace gamecore.card
                 targets.Add(Owner.ActivePokemon);
 
             return targets;
+        }
+
+        public ActionOnSelection GetTargetAction()
+        {
+            return ActionOnSelection.Evolve;
         }
 
         public void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem)
@@ -427,6 +433,38 @@ namespace gamecore.card
                 attachedEnergy: attachedEnergy,
                 preEvolutionIds: preEvolutionIds,
                 pokemonEffects: pokemonEffects
+            );
+        }
+
+        public CardJson ToSerializable(IPokemonCard pokemonCard)
+        {
+            var attackJsons = new List<AttackJson>();
+            foreach (var attack in Attacks)
+            {
+                attackJsons.Add(attack.ToSerializable());
+            }
+            var pokemonEffects = new List<PokemonEffectJson>();
+            foreach (var effect in PokemonEffects.Values)
+            {
+                pokemonEffects.Add(effect.ToSerializable());
+            }
+
+            return new CardJson(
+                name: Name,
+                cardType: CardType.Pokemon,
+                cardSubtype: CardSubtype,
+                energyType: PokemonType,
+                maxHp: MaxHP,
+                evolvesFrom: EvolvesFrom,
+                weakness: Weakness,
+                resistance: Resistance,
+                retreatCost: RetreatCost,
+                numberOfPrizeCardsOnKnockout: NumberOfPrizeCardsOnKnockout,
+                attacks: attackJsons,
+                ability: Ability?.ToSerializable(),
+                deckId: DeckId,
+                currentDamage: 0,
+                evolvedInto: pokemonCard.DeckId
             );
         }
     }

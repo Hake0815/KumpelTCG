@@ -233,10 +233,7 @@ namespace gamecore.actionsystem
             }
 
             var type = action.GetType();
-            if (
-                type.IsGenericType
-                && type.GetGenericTypeDefinition() == typeof(RemoveInstructionSubscriberGA<>)
-            )
+            if (type == typeof(RemoveInstructionSubscriberGA))
                 return;
 
             if (_performers.ContainsKey(type))

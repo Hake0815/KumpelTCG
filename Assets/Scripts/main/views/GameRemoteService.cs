@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using gamecore.card;
 using gamecore.game;
+using gamecore.game.interaction;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,6 +68,8 @@ namespace gameview
 
         private async void ShowRevealedCardsUntilConfirmed(List<ICard> list)
         {
+            if (list.Count == 0)
+                return;
             var confirmTask = new TaskCompletionSource<bool>();
             void Confirm()
             {
@@ -218,7 +221,7 @@ namespace gameview
             }
 
             SetUpSelection(
-                targetData.ConditionOnSelection,
+                targetData.ConditionalTargetQuery.IsMet,
                 targetData.PossibleTargets,
                 interaction.GameControllerMethodWithTargets,
                 targetData.IsQuickSelection
@@ -331,7 +334,7 @@ namespace gameview
                 {
                     OnInteract();
                     SetUpSelection(
-                        conditionalTargetData.ConditionOnSelection,
+                        conditionalTargetData.ConditionalTargetQuery.IsMet,
                         conditionalTargetData.PossibleTargets,
                         interaction.GameControllerMethodWithTargets,
                         true

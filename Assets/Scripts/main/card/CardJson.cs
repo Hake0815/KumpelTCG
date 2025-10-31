@@ -29,6 +29,10 @@ namespace gamecore.card
         public List<InstructionJson> Instructions { get; }
         public List<ConditionJson> Conditions { get; }
 
+        // Energy-specific static properties
+        public List<EnergyType> ProvidedEnergy { get; }
+        public int? AttachedTo { get; }
+
         // Current state properties
         public int? DeckId { get; }
 
@@ -36,13 +40,16 @@ namespace gamecore.card
         public int? CurrentDamage { get; }
         public List<int> AttachedEnergy { get; }
         public List<int> PreEvolutionIds { get; }
+        public int? EvolvedInto { get; }
 
         public CardJson(
             // Static card data parameters
             string name,
             CardType cardType,
             CardSubtype cardSubtype,
-            EnergyType energyType,
+            EnergyType energyType = EnergyType.None,
+            List<EnergyType> providedEnergy = null,
+            int? attachedTo = null,
             int? maxHp = null,
             string evolvesFrom = null,
             EnergyType weakness = EnergyType.None,
@@ -58,13 +65,16 @@ namespace gamecore.card
             int? currentDamage = null,
             List<int> attachedEnergy = null,
             List<int> preEvolutionIds = null,
-            List<PokemonEffectJson> pokemonEffects = null
+            List<PokemonEffectJson> pokemonEffects = null,
+            int? evolvedInto = null
         )
         {
             Name = name;
             CardType = cardType;
             CardSubtype = cardSubtype;
             EnergyType = energyType;
+            ProvidedEnergy = providedEnergy;
+            AttachedTo = attachedTo;
             MaxHp = maxHp;
             EvolvesFrom = evolvesFrom;
             Weakness = weakness;
@@ -81,6 +91,7 @@ namespace gamecore.card
             CurrentDamage = currentDamage;
             AttachedEnergy = attachedEnergy;
             PreEvolutionIds = preEvolutionIds;
+            EvolvedInto = evolvedInto;
         }
 
         public static CardJson CreateUnknownCard()

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using gamecore.card;
+using gamecore.game.interaction;
 
 namespace gamecore.game.state
 {
@@ -74,6 +75,7 @@ namespace gamecore.game.state
             foreach (var card in playableCards)
             {
                 var targets = card.GetPossibleTargets();
+                var targetAction = card.GetTargetAction();
                 interactions.Add(
                     new GameInteraction(
                         async (selectedTargets) =>
@@ -86,8 +88,10 @@ namespace gamecore.game.state
                         {
                             new InteractionCard(card),
                             new TargetData(
-                                card.GetNumberOfTargets(),
-                                targets.Cast<ICard>().ToList()
+                                numberOfTargets: card.GetNumberOfTargets(),
+                                possibleTargets: targets.Cast<ICard>().ToList(),
+                                targetAction: targetAction,
+                                remainderAction: ActionOnSelection.Nothing
                             ),
                         }
                     )
@@ -175,8 +179,12 @@ namespace gamecore.game.state
                     {
                         new InteractionCard(player.ActivePokemon),
                         new ConditionalTargetData(
-                            selection => FulfillsRetreatCost(selection, pokemon.RetreatCost),
-                            pokemon.AttachedEnergyCards.Cast<ICard>().ToList()
+                            conditionalTargetQuery: GetFulfillsRetreatCostQuery(
+                                pokemon.RetreatCost
+                            ),
+                            possibleTargets: pokemon.AttachedEnergyCards.Cast<ICard>().ToList(),
+                            targetAction: ActionOnSelection.Discard,
+                            remainderAction: ActionOnSelection.Nothing
                         ),
                     }
                 )
@@ -209,9 +217,20 @@ namespace gamecore.game.state
             );
         }
 
-        private static bool FulfillsRetreatCost(List<ICard> selectedEnergyCards, int retreatCost)
+        private static IConditionalTargetQuery GetFulfillsRetreatCostQuery(int retreatCost)
         {
-            return selectedEnergyCards.Count >= retreatCost;
+            var lessOrEqualCardsThanRetreatCost = new ConditionalTargetQuery(
+                new NumberRange(0, retreatCost),
+                SelectionQualifier.NumberOfCards
+            );
+            var atLEastEnergyToPayRetreatCost = new ConditionalTargetQuery(
+                new NumberRange(retreatCost, 60),
+                SelectionQualifier.ProvidedEnergy
+            );
+            return new CompoundTargetQuery(
+                new() { lessOrEqualCardsThanRetreatCost, atLEastEnergyToPayRetreatCost },
+                LogicalQueryOperator.And
+            );
         }
 
         private static bool IsRetreatCostUnambiguous(IPokemonCardLogic pokemon)

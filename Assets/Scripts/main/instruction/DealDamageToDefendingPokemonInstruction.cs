@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
+using gamecore.game.action;
 
 namespace gamecore.instruction
 {
@@ -18,7 +18,7 @@ namespace gamecore.instruction
         public void Perform(ICardLogic card, ActionSystem actionSystem)
         {
             if (!actionSystem.IsPerforming)
-                throw new IlleagalStateException(
+                throw new IllegalStateException(
                     "Action system should be performing Attack game action."
                 );
             actionSystem.AddReaction(
@@ -33,7 +33,7 @@ namespace gamecore.instruction
         public InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "deal_damage",
+                instructionType: InstructionType.DealDamage,
                 data: new Dictionary<string, object>
                 {
                     { "target", "defending" },

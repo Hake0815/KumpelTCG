@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using gamecore.card;
+using gamecore.game.interaction;
 
 namespace gamecore.game.state
 {
@@ -12,8 +13,10 @@ namespace gamecore.game.state
             TaskCompletionSource<List<ICardLogic>> selectTask,
             IPlayerLogic player,
             List<ICardLogic> options,
-            Predicate<List<ICard>> selectionCondition,
+            ConditionalTargetQuery conditionalTargetQuery,
             SelectFrom selectFrom,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction,
             bool isQuickSelection
         )
         {
@@ -21,16 +24,20 @@ namespace gamecore.game.state
             _player = player;
             _options = options;
             _selectFrom = selectFrom;
-            _selectionCondition = selectionCondition;
+            _conditionalTargetQuery = conditionalTargetQuery;
             _isQuickSelection = isQuickSelection;
+            _targetAction = targetAction;
+            _remainderAction = remainderAction;
         }
 
         private readonly TaskCompletionSource<List<ICardLogic>> _selectTask;
         private readonly IPlayerLogic _player;
         private readonly List<ICardLogic> _options;
-        private readonly Predicate<List<ICard>> _selectionCondition;
+        private readonly ConditionalTargetQuery _conditionalTargetQuery;
         private readonly SelectFrom _selectFrom;
         private readonly bool _isQuickSelection;
+        private readonly ActionOnSelection _targetAction;
+        private readonly ActionOnSelection _remainderAction;
 
         public IGameState AdvanceSuccesfully()
         {
@@ -69,9 +76,11 @@ namespace gamecore.game.state
                     new()
                     {
                         new ConditionalTargetData(
-                            _selectionCondition,
-                            _options.Cast<ICard>().ToList(),
-                            _isQuickSelection
+                            conditionalTargetQuery: _conditionalTargetQuery,
+                            possibleTargets: _options.Cast<ICard>().ToList(),
+                            targetAction: _targetAction,
+                            remainderAction: _remainderAction,
+                            isQuickSelection: _isQuickSelection
                         ),
                         selectFromData,
                     }

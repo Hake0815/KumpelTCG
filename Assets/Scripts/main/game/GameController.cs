@@ -7,6 +7,8 @@ using gamecore.card;
 using gamecore.common;
 using gamecore.effect;
 using gamecore.game.action;
+using gamecore.game.interaction;
+using gamecore.instruction;
 
 namespace gamecore.game
 {
@@ -50,6 +52,9 @@ namespace gamecore.game
         {
             _actionSystem = new ActionSystem(logFilePath);
             _actionSystem.AttachPerformer<CreateGameGA>(this);
+            _actionSystem.AttachPerformer<RemoveInstructionSubscriberGA>(
+                new InstructionSubscriberRemover()
+            );
         }
 
         private void NotifyPlayers()
@@ -73,7 +78,7 @@ namespace gamecore.game
                 }
                 else
                 {
-                    throw new IlleagalStateException("No interactions found for players");
+                    throw new IllegalStateException("No interactions found for players");
                 }
             }
         }
@@ -253,7 +258,7 @@ namespace gamecore.game
             var cardStates = CardStateCreator.CreateCardStates(player);
             if (cardStates.Count != 120)
             {
-                throw new IlleagalStateException("Card states count is not 120");
+                throw new IllegalStateException("Card states count is not 120");
             }
 
             return new GameStateJson(selfState, opponentState, cardStates);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using gamecore.game.interaction;
 
 namespace gamecore.game.state
 {

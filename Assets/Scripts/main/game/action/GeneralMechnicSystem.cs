@@ -1,14 +1,13 @@
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
 using gamecore.effect;
-using gamecore.game;
-using gamecore.game.action;
-using gamecore.gamegame.action;
+using gamecore.game.interaction;
 
-namespace gamecore.action
+namespace gamecore.game.action
 {
     class GeneralMechnicSystem
         : IActionPerformer<AttackGA>,
@@ -186,9 +185,11 @@ namespace gamecore.action
             var selection = await _game.AwaitSelection(
                 player,
                 player.Bench.Cards,
-                list => list.Count == 1,
+                new ConditionalTargetQuery(new NumberRange(1, 1), SelectionQualifier.NumberOfCards),
                 true,
-                SelectFrom.InPlay
+                SelectFrom.InPlay,
+                ActionOnSelection.Promote,
+                ActionOnSelection.Nothing
             );
             return selection[0] as IPokemonCardLogic;
         }
