@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.game.interaction;
 
 namespace gamecore.game.state
 {

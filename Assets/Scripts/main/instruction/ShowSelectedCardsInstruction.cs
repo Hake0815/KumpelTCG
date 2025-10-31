@@ -33,7 +33,7 @@ namespace gamecore.instruction
 
         public InstructionJson ToSerializable()
         {
-            return new InstructionJson(instructionType: "show_cards");
+            return new InstructionJson(instructionType: InstructionType.ShowCards);
         }
     }
 }

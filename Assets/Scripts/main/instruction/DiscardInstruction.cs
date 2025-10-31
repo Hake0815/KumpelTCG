@@ -65,7 +65,7 @@ namespace gamecore.instruction
         public InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "discard",
+                instructionType: InstructionType.Discard,
                 data: new() { { "target", Target.ToString().ToLower() } }
             );
         }

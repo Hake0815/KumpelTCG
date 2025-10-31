@@ -35,7 +35,7 @@ namespace gamecore.instruction
         public InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "take_cards_to_hand",
+                instructionType: InstructionType.TakeToHand,
                 data: new() { { "count", "all" }, { "from", "selection" } }
             );
         }

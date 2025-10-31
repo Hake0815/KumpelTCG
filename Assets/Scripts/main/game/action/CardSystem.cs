@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.game.interaction;
 using gamecore.game.state;
 using static gamecore.game.action.SelectCardsGA;
 
@@ -348,11 +349,13 @@ namespace gamecore.game.action
 
         public async Task<QuickSelectCardsGA> Perform(QuickSelectCardsGA action)
         {
-            var options = GetOptions(action.CardOptions, action.CardCondition);
+            var options = GetOptions(action.CardOptionSource, action.CardCondition);
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
-                _selectFromMap[action.Origin]
+                _selectFromMap[action.Origin],
+                action.TargetAction,
+                action.RemainderAction
             );
             RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
@@ -367,15 +370,19 @@ namespace gamecore.game.action
         private async Task<List<ICardLogic>> GetSelectedCards(
             QuickSelectCardsGA action,
             List<ICardLogic> options,
-            SelectFrom selectFrom
+            SelectFrom selectFrom,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
         )
         {
             return await _game.AwaitSelection(
                 action.Player,
                 options,
-                list => action.NumberOfCardsCondition(list.Count),
+                action.NumberOfCardsCondition,
                 true,
-                selectFrom
+                selectFrom,
+                targetAction,
+                remainderAction
             );
         }
 
@@ -391,11 +398,13 @@ namespace gamecore.game.action
 
         public async Task<ConfirmSelectCardsGA> Perform(ConfirmSelectCardsGA action)
         {
-            var options = GetOptions(action.CardOptions, action.CardCondition);
+            var options = GetOptions(action.CardOptionSource, action.CardCondition);
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
-                _selectFromMap[action.Origin]
+                _selectFromMap[action.Origin],
+                action.TargetAction,
+                action.RemainderAction
             );
             RemoveSelectedCardsFromOrigin(action.Player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
@@ -410,15 +419,19 @@ namespace gamecore.game.action
         private async Task<List<ICardLogic>> GetSelectedCards(
             ConfirmSelectCardsGA action,
             List<ICardLogic> options,
-            SelectFrom selectFrom
+            SelectFrom selectFrom,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
         )
         {
             return await _game.AwaitSelection(
                 action.Player,
                 options,
-                list => action.NumberOfCardsCondition(list.Count),
+                action.NumberOfCardsCondition,
                 false,
-                selectFrom
+                selectFrom,
+                targetAction,
+                remainderAction
             );
         }
 

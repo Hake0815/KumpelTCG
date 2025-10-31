@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.game;
-using Newtonsoft.Json;
+using gamecore.game.interaction;
 
 namespace gamecore.card
 {
@@ -23,6 +23,7 @@ namespace gamecore.card
         bool IsEnergyCard();
         bool IsBasicEnergyCard();
         CardJson ToSerializable();
+        CardJson ToSerializable(IPokemonCard pokemonCard);
 
         int CompareToCardByType(ICard other)
         {
@@ -78,6 +79,7 @@ namespace gamecore.card
         void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem);
         bool IsPlayableWithTargets();
         List<ICardLogic> GetPossibleTargets();
+        ActionOnSelection GetTargetAction();
         int GetNumberOfTargets();
         void Discard();
         CardType CardType { get; }

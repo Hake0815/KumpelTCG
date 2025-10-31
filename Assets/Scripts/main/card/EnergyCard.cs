@@ -4,6 +4,7 @@ using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
+using gamecore.game.interaction;
 using Newtonsoft.Json;
 
 namespace gamecore.card
@@ -13,7 +14,7 @@ namespace gamecore.card
     internal interface IEnergyCardLogic : IEnergyCard, ICardLogic
     {
         [JsonIgnore]
-        EnergyType ProvidedEnergyType { get; }
+        List<EnergyType> ProvidedEnergy { get; }
     }
 
     abstract class EnergyCard : IEnergyCardLogic
@@ -31,6 +32,7 @@ namespace gamecore.card
             _energyCardData = energyCardData;
             Owner = owner;
             DeckId = deckId;
+            ProvidedEnergy = new(energyCardData.Types);
         }
 
         private readonly IEnergyCardData _energyCardData;
@@ -40,7 +42,7 @@ namespace gamecore.card
 
         public int DeckId { get; }
 
-        public EnergyType ProvidedEnergyType => _energyCardData.Type;
+        public List<EnergyType> ProvidedEnergy { get; }
 
         public CardType CardType => CardType.Energy;
 
@@ -85,7 +87,7 @@ namespace gamecore.card
 
         public void Play(ActionSystem actionSystem)
         {
-            throw new IlleagalActionException("Energy cards can only be played with a target");
+            throw new IllegalActionException("Energy cards can only be played with a target");
         }
 
         public void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem)
@@ -95,14 +97,28 @@ namespace gamecore.card
             );
         }
 
+        public ActionOnSelection GetTargetAction() => ActionOnSelection.AttachTo;
+
         public virtual CardJson ToSerializable()
         {
             return new CardJson(
                 name: Name,
                 cardType: CardType.Energy,
                 cardSubtype: CardSubtype,
-                energyType: ProvidedEnergyType,
+                providedEnergy: ProvidedEnergy,
                 deckId: DeckId
+            );
+        }
+
+        public virtual CardJson ToSerializable(IPokemonCard pokemonCard)
+        {
+            return new CardJson(
+                name: Name,
+                cardType: CardType.Energy,
+                cardSubtype: CardSubtype,
+                providedEnergy: ProvidedEnergy,
+                deckId: DeckId,
+                attachedTo: pokemonCard.DeckId
             );
         }
     }

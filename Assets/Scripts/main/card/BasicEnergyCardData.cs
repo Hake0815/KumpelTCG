@@ -8,6 +8,6 @@ namespace gamecore.card
             EnergyType type,
             EnergyCardType energyCardType
         )
-            : base(id, name, type, energyCardType) { }
+            : base(id, name, new() { type }, energyCardType) { }
     }
 }

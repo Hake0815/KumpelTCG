@@ -8,6 +8,7 @@ using gamecore.card;
 using gamecore.common;
 using gamecore.effect;
 using gamecore.game.action;
+using gamecore.game.interaction;
 using gamecore.game.state;
 
 namespace gamecore.game
@@ -125,9 +126,11 @@ namespace gamecore.game
         public async Task<List<ICardLogic>> AwaitSelection(
             IPlayerLogic player,
             List<ICardLogic> options,
-            Predicate<List<ICard>> selectionCondition,
+            ConditionalTargetQuery conditionalTargetQuery,
             bool isQuickSelection,
-            SelectFrom selectFrom
+            SelectFrom selectFrom,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
         )
         {
             var tcs = new TaskCompletionSource<List<ICardLogic>>();
@@ -135,8 +138,10 @@ namespace gamecore.game
                 tcs,
                 player,
                 options,
-                selectionCondition,
+                conditionalTargetQuery,
                 selectFrom,
+                targetAction,
+                remainderAction,
                 isQuickSelection
             );
             AwaitInteraction();
@@ -297,7 +302,7 @@ namespace gamecore.game
             var cardReference = owner.DeckList.GetCardByDeckId(deckId);
             if (cardReference != null)
                 return cardReference;
-            throw new IlleagalStateException($"Could not find card {card} for Player {owner}!");
+            throw new IllegalStateException($"Could not find card {card} for Player {owner}!");
         }
     }
 }

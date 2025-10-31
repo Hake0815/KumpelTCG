@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using gamecore.actionsystem;
@@ -6,6 +7,7 @@ using gamecore.common;
 using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
+using gamecore.game.interaction;
 using gamecore.gamegame.action;
 
 namespace gamecore.action
@@ -172,10 +174,10 @@ namespace gamecore.action
                 {
                     var pokemon =
                         player.Bench.CardCount == 1
-                            ? player.Bench.Cards[0] as IPokemonCardLogic
+                            ? player.Bench.Cards[0]
                             : await GetPokemonFromUserSelection(player);
-                    player.Promote(pokemon);
-                    action.PromotedPokemon.Add(player.Name, pokemon);
+                    player.Promote(pokemon as IPokemonCardLogic);
+                    action.PromotedPokemon.Add(player.Name, pokemon as IPokemonCardLogic);
                 }
             }
             return action;
@@ -185,10 +187,12 @@ namespace gamecore.action
         {
             var selection = await _game.AwaitSelection(
                 player,
-                player.Bench.Cards,
-                list => list.Count == 1,
+                player.Bench.Cards.ToList(),
+                new ConditionalTargetQuery(new NumberRange(1, 1), SelectionQualifier.NumberOfCards),
                 true,
-                SelectFrom.InPlay
+                SelectFrom.InPlay,
+                ActionOnSelection.Promote,
+                ActionOnSelection.Nothing
             );
             return selection[0] as IPokemonCardLogic;
         }
