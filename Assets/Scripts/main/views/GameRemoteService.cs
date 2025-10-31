@@ -68,6 +68,8 @@ namespace gameview
 
         private async void ShowRevealedCardsUntilConfirmed(List<ICard> list)
         {
+            if (list.Count == 0)
+                return;
             var confirmTask = new TaskCompletionSource<bool>();
             void Confirm()
             {
