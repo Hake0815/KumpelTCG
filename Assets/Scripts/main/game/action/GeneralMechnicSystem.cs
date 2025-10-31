@@ -171,10 +171,10 @@ namespace gamecore.game.action
                 {
                     var pokemon =
                         player.Bench.CardCount == 1
-                            ? player.Bench.Cards[0]
+                            ? player.Bench.Cards[0] as IPokemonCardLogic
                             : await GetPokemonFromUserSelection(player);
-                    player.Promote(pokemon as IPokemonCardLogic);
-                    action.PromotedPokemon.Add(player.Name, pokemon as IPokemonCardLogic);
+                    player.Promote(pokemon);
+                    action.PromotedPokemon.Add(player.Name, pokemon);
                 }
             }
             return action;
@@ -184,7 +184,7 @@ namespace gamecore.game.action
         {
             var selection = await _game.AwaitSelection(
                 player,
-                player.Bench.Cards.ToList(),
+                player.Bench.Cards,
                 new ConditionalTargetQuery(new NumberRange(1, 1), SelectionQualifier.NumberOfCards),
                 true,
                 SelectFrom.InPlay,
