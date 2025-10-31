@@ -53,7 +53,7 @@ namespace gamecore.instruction
             RemoveInstructionSubscriberGA<T> action
         )
         {
-            throw new IlleagalStateException(
+            throw new IllegalStateException(
                 "RemoveInstructionSubscriberGA should never be reperformed!"
             );
         }

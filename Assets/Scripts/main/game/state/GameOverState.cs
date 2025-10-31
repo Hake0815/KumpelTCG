@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using gamecore.game.interaction;
 
 namespace gamecore.game.state
 {

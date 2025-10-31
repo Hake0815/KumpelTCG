@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 namespace gamecore.card
 {
     internal interface IEnergyCardData : ICardData
     {
-        public EnergyType Type { get; }
+        public List<EnergyType> Types { get; }
         public EnergyCardType EnergyCardType { get; }
     }
 
@@ -11,17 +13,17 @@ namespace gamecore.card
         protected EnergyCardData(
             string id,
             string name,
-            EnergyType type,
+            List<EnergyType> types,
             EnergyCardType energyCardType
         )
         {
-            Type = type;
+            Types = types;
             EnergyCardType = energyCardType;
             Name = name;
             Id = id;
         }
 
-        public EnergyType Type { get; }
+        public List<EnergyType> Types { get; }
         public EnergyCardType EnergyCardType { get; }
 
         public string Name { get; }

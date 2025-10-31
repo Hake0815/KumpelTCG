@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
 
-namespace gamecore.game
+namespace gamecore.game.interaction
 {
     public record GameInteraction
     {
@@ -41,6 +42,18 @@ namespace gamecore.game
 
         public GameInteraction(Action gameControllerMethod, GameInteractionType type)
             : this(gameControllerMethod, type, new()) { }
+
+        public GameInteractionJson ToSerializable()
+        {
+            var dataJson = new Dictionary<string, IGameInteractionDataJson>();
+
+            foreach (var kvp in Data)
+            {
+                dataJson[kvp.Key] = kvp.Value.ToSerializable();
+            }
+
+            return new GameInteractionJson(Type, dataJson);
+        }
     }
 
     public enum GameInteractionType
@@ -65,6 +78,7 @@ namespace gamecore.game
     public interface IGameInteractionData
     {
         public String Name { get; }
+        public IGameInteractionDataJson ToSerializable();
     }
 
     public record MulliganData : IGameInteractionData
@@ -79,6 +93,16 @@ namespace gamecore.game
             Mulligans = mulligans;
             Player = player;
         }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new MulliganDataJson(
+                Mulligans
+                    .Select(mulligan => mulligan.Select(card => card.ToSerializable()).ToList())
+                    .ToList(),
+                ((IPlayerLogic)Player).ToSerializable()
+            );
+        }
     }
 
     public record NumberData : IGameInteractionData
@@ -92,6 +116,11 @@ namespace gamecore.game
         {
             Number = number;
         }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new NumberDataJson(Number);
+        }
     }
 
     public record TargetData : IGameInteractionData
@@ -99,14 +128,33 @@ namespace gamecore.game
         public const string NAME = "Target";
         public string Name => NAME;
 
-        public TargetData(int numberOfTargets, List<ICard> possibleTargets)
+        public TargetData(
+            int numberOfTargets,
+            List<ICard> possibleTargets,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
+        )
         {
             NumberOfTargets = numberOfTargets;
             PossibleTargets = possibleTargets;
+            TargetAction = targetAction;
+            RemainderAction = remainderAction;
         }
 
         public List<ICard> PossibleTargets { get; }
         public int NumberOfTargets { get; } = 0;
+        public ActionOnSelection TargetAction { get; }
+        public ActionOnSelection RemainderAction { get; }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new TargetDataJson(
+                NumberOfTargets,
+                PossibleTargets.Select(card => card.ToSerializable()).ToList(),
+                TargetAction,
+                RemainderAction
+            );
+        }
     }
 
     public record ConditionalTargetData : IGameInteractionData
@@ -115,19 +163,46 @@ namespace gamecore.game
         public string Name => NAME;
 
         public ConditionalTargetData(
-            Predicate<List<ICard>> conditionOnSelection,
+            IConditionalTargetQuery conditionalTargetQuery,
             List<ICard> possibleTargets,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction,
             bool isQuickSelection = true
         )
         {
-            ConditionOnSelection = conditionOnSelection;
+            ConditionalTargetQuery = conditionalTargetQuery;
             PossibleTargets = possibleTargets;
             IsQuickSelection = isQuickSelection;
+            TargetAction = targetAction;
+            RemainderAction = remainderAction;
         }
 
         public List<ICard> PossibleTargets { get; }
-        public Predicate<List<ICard>> ConditionOnSelection { get; }
+        public IConditionalTargetQuery ConditionalTargetQuery { get; }
         public bool IsQuickSelection { get; }
+        public ActionOnSelection TargetAction { get; }
+        public ActionOnSelection RemainderAction { get; }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new ConditionalTargetDataJson(
+                PossibleTargets.Select(card => card.ToSerializable()).ToList(),
+                ConditionalTargetQuery.ToSerializable(),
+                TargetAction,
+                RemainderAction
+            );
+        }
+    }
+
+    public enum ActionOnSelection
+    {
+        Discard,
+        TakeToHand,
+        Evolve,
+        AttachTo,
+        Promote,
+        Nothing,
+        PutUnderDeck,
     }
 
     public record InteractionCard : IGameInteractionData
@@ -140,6 +215,11 @@ namespace gamecore.game
         {
             Card = card;
         }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new InteractionCardDataJson(Card.ToSerializable());
+        }
     }
 
     public record AttackData : IGameInteractionData
@@ -151,6 +231,11 @@ namespace gamecore.game
         public AttackData(IAttack card)
         {
             Attack = card;
+        }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new AttackDataJson(Attack.ToSerializable());
         }
     }
 
@@ -165,6 +250,11 @@ namespace gamecore.game
         {
             Winner = winner;
             Message = message;
+        }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new WinnerDataJson(((IPlayerLogic)Winner).ToSerializable(), Message);
         }
     }
 
@@ -184,6 +274,14 @@ namespace gamecore.game
         public SelectFromData(SelectFrom selectFrom)
         {
             SelectFrom = selectFrom;
+        }
+
+        public IGameInteractionDataJson ToSerializable()
+        {
+            return new SelectFromDataJson(
+                SelectFrom,
+                SelectionSource?.Select(card => card.ToSerializable()).ToList()
+            );
         }
     }
 

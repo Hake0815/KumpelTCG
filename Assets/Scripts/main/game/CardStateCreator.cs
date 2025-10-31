@@ -67,7 +67,7 @@ namespace gamecore.game
             {
                 cardStates.Add(
                     new CardStateJson(
-                        card.ToSerializable(),
+                        card.ToSerializable(pokemonCard),
                         new PositionJson(owner, attachedToPokemonId: pokemonCard.DeckId)
                     )
                 );
@@ -76,7 +76,7 @@ namespace gamecore.game
             {
                 cardStates.Add(
                     new CardStateJson(
-                        card.ToSerializable(),
+                        card.ToSerializable(pokemonCard),
                         new PositionJson(owner, attachedToPokemonId: pokemonCard.DeckId)
                     )
                 );

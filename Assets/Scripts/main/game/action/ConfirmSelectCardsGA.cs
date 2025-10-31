@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.game.interaction;
 using Newtonsoft.Json;
 
 namespace gamecore.game.action
@@ -9,16 +10,18 @@ namespace gamecore.game.action
     {
         public ConfirmSelectCardsGA(
             IPlayerLogic player,
-            Predicate<int> numberofcardscondition,
-            List<ICardLogic> cardOptions,
+            ConditionalTargetQuery numberOfCardsCondition,
+            List<ICardLogic> cardOptionSource,
             Predicate<ICardLogic> cardCondition,
             SelectedCardsOrigin origin,
-            string selectionId
+            string selectionId,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
         )
-            : base(player, origin, selectionId)
+            : base(player, origin, selectionId, targetAction, remainderAction)
         {
-            NumberOfCardsCondition = numberofcardscondition;
-            CardOptions = new(cardOptions);
+            NumberOfCardsCondition = numberOfCardsCondition;
+            this.CardOptionSource = new(cardOptionSource);
             CardCondition = cardCondition;
         }
 
@@ -26,15 +29,17 @@ namespace gamecore.game.action
         public ConfirmSelectCardsGA(
             IPlayerLogic player,
             SelectedCardsOrigin origin,
-            string selectionId
+            string selectionId,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
         )
-            : base(player, origin, selectionId) { }
+            : base(player, origin, selectionId, targetAction, remainderAction) { }
 
         [JsonIgnore]
-        public Predicate<int> NumberOfCardsCondition { get; }
+        public ConditionalTargetQuery NumberOfCardsCondition { get; }
 
         [JsonIgnore]
-        public List<ICardLogic> CardOptions { get; }
+        public List<ICardLogic> CardOptionSource { get; }
 
         [JsonIgnore]
         public Predicate<ICardLogic> CardCondition { get; }

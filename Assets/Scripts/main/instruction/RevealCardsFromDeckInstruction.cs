@@ -21,7 +21,7 @@ namespace gamecore.instruction
         public InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "reveal_cards",
+                instructionType: InstructionType.RevealCards,
                 data: new() { { "count", Count }, { "from", "deck" } }
             );
         }

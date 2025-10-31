@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.game.interaction;
 using gamecore.instruction.filter;
 
 namespace gamecore.instruction
@@ -12,20 +13,27 @@ namespace gamecore.instruction
         public SelectCardsFromDiscardPileInstruction(
             IntRange countRange,
             FilterNode filter,
-            string selectionId
+            string selectionId,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
         )
-            : base(countRange, filter, selectionId) { }
+            : base(countRange, filter, selectionId, targetAction, remainderAction) { }
 
         public override void Perform(ICardLogic card, ActionSystem actionSystem)
         {
             actionSystem.AddReaction(
                 new ConfirmSelectCardsGA(
                     card.Owner,
-                    CountRange.Contains,
+                    new ConditionalTargetQuery(
+                        new NumberRange(CountRange.Min, CountRange.Max),
+                        SelectionQualifier.NumberOfCards
+                    ),
                     card.Owner.DiscardPile.Cards,
                     c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.DiscardPile,
-                    SelectionId
+                    SelectionId,
+                    TargetAction,
+                    RemainderAction
                 )
             );
         }
@@ -33,7 +41,7 @@ namespace gamecore.instruction
         public override InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "select_cards",
+                instructionType: InstructionType.SelectCards,
                 data: new Dictionary<string, object>
                 {
                     { "from", "discard_pile" },

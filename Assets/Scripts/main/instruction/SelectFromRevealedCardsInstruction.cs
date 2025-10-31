@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.game.interaction;
 using gamecore.instruction.filter;
 
 namespace gamecore.instruction
@@ -12,9 +13,11 @@ namespace gamecore.instruction
         public SelectFromRevealedCardsInstruction(
             IntRange countRange,
             FilterNode filter,
-            string selectionId
+            string selectionId,
+            ActionOnSelection targetAction,
+            ActionOnSelection remainderAction
         )
-            : base(countRange, filter, selectionId) { }
+            : base(countRange, filter, selectionId, targetAction, remainderAction) { }
 
         public override void Perform(ICardLogic card, ActionSystem actionSystem)
         {
@@ -34,11 +37,16 @@ namespace gamecore.instruction
             actionSystem.AddReaction(
                 new QuickSelectCardsGA(
                     card.Owner,
-                    CountRange.Contains,
+                    new ConditionalTargetQuery(
+                        new NumberRange(CountRange.Min, CountRange.Max),
+                        SelectionQualifier.NumberOfCards
+                    ),
                     action.RevealedCards,
                     c => Filter.Matches(c, card),
                     SelectCardsGA.SelectedCardsOrigin.Other,
-                    SelectionId
+                    SelectionId,
+                    TargetAction,
+                    RemainderAction
                 )
             );
             return true;
@@ -47,7 +55,7 @@ namespace gamecore.instruction
         public override InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "select_cards",
+                instructionType: InstructionType.SelectCards,
                 data: new Dictionary<string, object>
                 {
                     { "from", "revealed" },

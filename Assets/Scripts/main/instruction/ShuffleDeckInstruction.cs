@@ -14,7 +14,7 @@ namespace gamecore.instruction
         public InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "shuffle_deck",
+                instructionType: InstructionType.ShuffleDeck,
                 data: new() { { "player", "self" } }
             );
         }

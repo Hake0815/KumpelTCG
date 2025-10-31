@@ -6,13 +6,13 @@ namespace gamecore.instruction
     [Serializable]
     public class InstructionJson
     {
-        public string InstructionType { get; }
+        public InstructionType InstructionType { get; }
         public Dictionary<string, object> Data { get; }
 
-        public InstructionJson(string instructionType)
+        public InstructionJson(InstructionType instructionType)
             : this(instructionType, new()) { }
 
-        public InstructionJson(string instructionType, Dictionary<string, object> data)
+        public InstructionJson(InstructionType instructionType, Dictionary<string, object> data)
         {
             InstructionType = instructionType;
             Data = data;

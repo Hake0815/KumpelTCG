@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using gamecore.action;
 using gamecore.actionsystem;
 using gamecore.game;
+using gamecore.game.interaction;
 using gamecore.instruction;
 using gamecore.instruction.filter;
 
@@ -34,7 +35,9 @@ namespace gamecore.card
                         new SelectCardsFromHandInstruction(
                             new IntRange(2, 2),
                             new ExcludeSourceCardNode(),
-                            "discardSelection"
+                            "discardSelection",
+                            ActionOnSelection.Discard,
+                            ActionOnSelection.Nothing
                         ),
                         new DiscardInstruction(
                             DiscardInstruction.TargetSource.Selection,
@@ -43,7 +46,9 @@ namespace gamecore.card
                         new SelectCardsFromDeckInstruction(
                             new IntRange(0, 1),
                             FilterUtils.CreatePokemonFilter(),
-                            "deckSelection"
+                            "deckSelection",
+                            ActionOnSelection.TakeToHand,
+                            ActionOnSelection.Nothing
                         ),
                         new ShowSelectedCardsInstruction("deckSelection"),
                         new TakeSelectionToHandInstruction("deckSelection"),
@@ -67,7 +72,9 @@ namespace gamecore.card
                         new SelectCardsFromDiscardPileInstruction(
                             new IntRange(1, 1),
                             FilterUtils.CreatePokemonOrBasicEnergyFilter(),
-                            "discardSelection"
+                            "discardSelection",
+                            ActionOnSelection.TakeToHand,
+                            ActionOnSelection.Nothing
                         ),
                         new ShowSelectedCardsInstruction("discardSelection"),
                         new TakeSelectionToHandInstruction("discardSelection"),
@@ -140,7 +147,9 @@ namespace gamecore.card
                             new SelectFromRevealedCardsInstruction(
                                 new IntRange(1, 1),
                                 new TrueNode(),
-                                "revealedSelection"
+                                "revealedSelection",
+                                ActionOnSelection.TakeToHand,
+                                ActionOnSelection.PutUnderDeck
                             ),
                             new TakeSelectionToHandInstruction("revealedSelection"),
                             new PutRemainingCardsUnderDeckInstruction(),

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using gamecore.card;
+using gamecore.game.interaction;
 
 namespace gamecore.game.state
 {

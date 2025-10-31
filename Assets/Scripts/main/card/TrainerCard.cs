@@ -4,6 +4,7 @@ using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
+using gamecore.game.interaction;
 using gamecore.instruction;
 using Newtonsoft.Json;
 
@@ -99,19 +100,24 @@ namespace gamecore.card
 
         public void PlayWithTargets(List<ICardLogic> targets, ActionSystem actionSystem)
         {
-            throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
+            throw new IllegalActionException("Trainer cards cannot be played with a target, yet.");
         }
 
         public bool IsPlayableWithTargets() => false;
 
         public List<ICardLogic> GetPossibleTargets()
         {
-            throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
+            throw new IllegalActionException("Trainer cards cannot be played with a target, yet.");
+        }
+
+        public ActionOnSelection GetTargetAction()
+        {
+            throw new IllegalActionException("Trainer cards cannot be played with a target, yet.");
         }
 
         public int GetNumberOfTargets()
         {
-            throw new IlleagalActionException("Trainer cards cannot be played with a target, yet.");
+            throw new IllegalActionException("Trainer cards cannot be played with a target, yet.");
         }
 
         public virtual CardJson ToSerializable()
@@ -132,11 +138,15 @@ namespace gamecore.card
                 name: Name,
                 cardType: CardType.Trainer,
                 cardSubtype: CardSubtype,
-                energyType: EnergyType.None,
                 conditions: conditionJsons,
                 instructions: instructionJsons,
                 deckId: DeckId
             );
+        }
+
+        public virtual CardJson ToSerializable(IPokemonCard pokemonCard)
+        {
+            throw new IllegalActionException("Trainer cards cannot be attached to pokemon, yet.");
         }
     }
 }

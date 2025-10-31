@@ -30,7 +30,7 @@ namespace gamecore.instruction
         public InstructionJson ToSerializable()
         {
             return new InstructionJson(
-                instructionType: "put_cards_in_deck",
+                instructionType: InstructionType.PutInDeck,
                 data: new() { { "return_type", "under" }, { "from", "selection_remainder" } }
             );
         }

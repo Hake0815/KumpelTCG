@@ -24,7 +24,7 @@ namespace gamecore.card
             Cards = cards;
         }
 
-        public List<ICardLogic> Cards { get; }
+        public virtual List<ICardLogic> Cards { get; }
         public int CardCount
         {
             get => Cards.Count;
