@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.instruction.filter
 {
@@ -10,9 +11,9 @@ namespace gamecore.instruction.filter
             return card != sourceCard;
         }
 
-        public override object ToSerializable()
+        public override FilterJson ToSerializable()
         {
-            return new Dictionary<string, object> { { "op", "exclude_source" } };
+            return new FilterJson(leafType: LeafType.ExcludeSource);
         }
     }
 }

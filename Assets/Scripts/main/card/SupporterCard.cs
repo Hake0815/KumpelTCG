@@ -8,8 +8,6 @@ namespace gamecore.card
 {
     class SupporterCard : TrainerCard
     {
-        public const string PLAYED_SUPPORTER_THIS_TURN = "playedSupporterThisTurn";
-
         public override CardSubtype CardSubtype => CardSubtype.Supporter;
 
         public SupporterCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
@@ -32,8 +30,9 @@ namespace gamecore.card
         public override bool IsPlayable()
         {
             if (
-                Owner.PerformedOncePerTurnActions.Contains(PLAYED_SUPPORTER_THIS_TURN)
-                || Owner.HasEffect<FirstTurnOfGameEffect>()
+                Owner.PerformedOncePerTurnActions.Contains(
+                    OncePerTurnActionType.PlayedSupporterThisTurn
+                ) || Owner.HasEffect<FirstTurnOfGameEffect>()
             )
                 return false;
             return base.IsPlayable();

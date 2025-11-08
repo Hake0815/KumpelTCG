@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using gamecore.card;
 using gamecore.effect;
+using gamecore.serialization;
 using Newtonsoft.Json;
 
 namespace gamecore.game
@@ -21,6 +22,7 @@ namespace gamecore.game
         ICard CurrentlyPlayedCard { get; }
         List<ICard> FloatingCards { get; }
         Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; }
+        IPlayer Opponent { get; }
         event Action<IPokemonCard> ActivePokemonSet;
     }
 
@@ -64,17 +66,18 @@ namespace gamecore.game
 
         [JsonIgnore]
         new List<ICardLogic> FloatingCards { get; set; }
-        List<ICard> IPlayer.FloatingCards => FloatingCards.Cast<ICard>().ToList();
+        List<ICard> IPlayer.FloatingCards => FloatingCards?.Cast<ICard>().ToList();
 
         [JsonIgnore]
-        HashSet<string> PerformedOncePerTurnActions { get; }
+        HashSet<OncePerTurnActionType> PerformedOncePerTurnActions { get; }
 
         [JsonIgnore]
         new DiscardPileLogicAbstract DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
 
         [JsonIgnore]
-        IPlayerLogic Opponent { get; }
+        new IPlayerLogic Opponent { get; }
+        IPlayer IPlayer.Opponent => Opponent;
 
         [JsonIgnore]
         int TurnCounter { get; set; }
@@ -162,7 +165,7 @@ namespace gamecore.game
         public BenchLogicAbstract Bench { get; } = new Bench();
         public DiscardPileLogicAbstract DiscardPile { get; } = new DiscardPile();
         public PrizesLogicAbstract Prizes { get; } = new Prizes();
-        public HashSet<string> PerformedOncePerTurnActions { get; } = new();
+        public HashSet<OncePerTurnActionType> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
         public int TurnCounter { get; set; } = 0;
         public Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; } = new();
@@ -214,7 +217,7 @@ namespace gamecore.game
 
         public PlayerStateJson ToSerializable()
         {
-            var playerEffects = new List<PlayerEffectJson>();
+            var playerEffects = new List<PlayerEffectType>();
             foreach (var effect in PlayerEffects.Values)
             {
                 playerEffects.Add(effect.ToSerializable());
@@ -227,7 +230,7 @@ namespace gamecore.game
                 prizesCount: Prizes.CardCount,
                 benchCount: Bench.CardCount,
                 discardPileCount: DiscardPile.CardCount,
-                performedOncePerTurnActions: new List<string>(PerformedOncePerTurnActions),
+                performedOncePerTurnActions: new(PerformedOncePerTurnActions),
                 turnCounter: TurnCounter,
                 playerEffects: playerEffects
             );

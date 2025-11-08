@@ -9,6 +9,7 @@ using gamecore.effect;
 using gamecore.game.action;
 using gamecore.game.interaction;
 using gamecore.instruction;
+using gamecore.serialization;
 using Newtonsoft.Json;
 
 namespace gamecore.game

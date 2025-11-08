@@ -2,6 +2,7 @@ using System;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {

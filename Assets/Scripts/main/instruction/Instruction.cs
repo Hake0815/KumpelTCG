@@ -1,5 +1,6 @@
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {

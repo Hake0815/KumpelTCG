@@ -3,6 +3,7 @@ using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
 using gamecore.game.action;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -34,11 +35,7 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.DealDamage,
-                data: new Dictionary<string, object>
-                {
-                    { "target", "defending" },
-                    { "amount", Damage },
-                }
+                data: new() { new AttackInstructionDataJson(AttackTarget.DefendingPokemon, Damage) }
             );
         }
     }

@@ -1,6 +1,7 @@
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.serialization;
 
 namespace gamecore.effect
 {
@@ -9,9 +10,9 @@ namespace gamecore.effect
         public PutIntoPlayThisTurnEffect(ActionSystem actionSystem, IPokemonCardLogic pokemon)
             : base(actionSystem, pokemon) { }
 
-        public override PokemonEffectJson ToSerializable()
+        public override PokemonEffectType ToSerializable()
         {
-            return new PokemonEffectJson("put_into_play_this_turn");
+            return PokemonEffectType.PutIntoPlayThisTurn;
         }
 
         internal override void Apply()

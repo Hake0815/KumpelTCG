@@ -1,6 +1,8 @@
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.instruction.filter;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -36,7 +38,13 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.TakeToHand,
-                data: new() { { "count", "all" }, { "from", "selection" } }
+                data: new()
+                {
+                    new CardAmountInstructionDataJson(
+                        new IntRange(-1, -1),
+                        CardPosition.SelectedCards
+                    ),
+                }
             );
         }
     }

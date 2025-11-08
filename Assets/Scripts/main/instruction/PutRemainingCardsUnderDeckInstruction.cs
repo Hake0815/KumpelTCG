@@ -1,6 +1,7 @@
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -31,7 +32,13 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.PutInDeck,
-                data: new() { { "return_type", "under" }, { "from", "selection_remainder" } }
+                data: new()
+                {
+                    new ReturnToDeckTypeInstructionDataJson(
+                        ReturnToDeckType.Under,
+                        CardPosition.SelectedCardsRemainder
+                    ),
+                }
             );
         }
     }

@@ -227,7 +227,7 @@ namespace gamecore.game.action
             );
             _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
             _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
-            pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
+            pokemon.Owner.PerformedOncePerTurnActions.Add(OncePerTurnActionType.Retreated);
             return Task.FromResult(action);
         }
 
@@ -235,7 +235,7 @@ namespace gamecore.game.action
         {
             var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
             pokemon.Owner.ActivePokemon = null;
-            pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
+            pokemon.Owner.PerformedOncePerTurnActions.Add(OncePerTurnActionType.Retreated);
             return Task.FromResult(action);
         }
 
@@ -300,7 +300,9 @@ namespace gamecore.game.action
 
         public Task<PlaySupporterGA> Perform(PlaySupporterGA action)
         {
-            action.Player.PerformedOncePerTurnActions.Add(SupporterCard.PLAYED_SUPPORTER_THIS_TURN);
+            action.Player.PerformedOncePerTurnActions.Add(
+                OncePerTurnActionType.PlayedSupporterThisTurn
+            );
             return Task.FromResult(action);
         }
 
@@ -308,7 +310,7 @@ namespace gamecore.game.action
         {
             _game
                 .GetPlayerByName(action.Player.Name)
-                .PerformedOncePerTurnActions.Add(SupporterCard.PLAYED_SUPPORTER_THIS_TURN);
+                .PerformedOncePerTurnActions.Add(OncePerTurnActionType.PlayedSupporterThisTurn);
             return Task.FromResult(action);
         }
 

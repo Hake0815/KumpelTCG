@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.instruction.filter;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -23,7 +25,13 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.TakeToHand,
-                data: new Dictionary<string, object> { { "count", Count }, { "from", "deck" } }
+                data: new()
+                {
+                    new CardAmountInstructionDataJson(
+                        new IntRange(Count, Count),
+                        CardPosition.Deck
+                    ),
+                }
             );
         }
     }

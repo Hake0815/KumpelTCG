@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.instruction.filter
 {
@@ -7,9 +8,9 @@ namespace gamecore.instruction.filter
     {
         public override bool Matches(ICardLogic card, ICardLogic sourceCard) => true;
 
-        public override object ToSerializable()
+        public override FilterJson ToSerializable()
         {
-            return new Dictionary<string, object> { { "op", "true" } };
+            return new FilterJson(leafType: LeafType.True);
         }
     }
 }

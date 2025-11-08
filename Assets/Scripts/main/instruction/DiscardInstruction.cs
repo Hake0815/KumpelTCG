@@ -2,18 +2,12 @@ using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
     class DiscardInstruction : IInstruction
     {
-        public enum TargetSource
-        {
-            Hand,
-            Self,
-            Selection,
-        }
-
         public TargetSource Target { get; }
 
         private readonly string _selectionId;
@@ -66,8 +60,15 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.Discard,
-                data: new() { { "target", Target.ToString().ToLower() } }
+                data: new() { new DiscardInstructionDataJson(Target) }
             );
         }
+    }
+
+    public enum TargetSource
+    {
+        Hand,
+        Self,
+        Selection,
     }
 }

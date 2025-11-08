@@ -159,7 +159,7 @@ namespace gamecore.game.action
         {
             AttachEnergyFromHand(action.EnergyCard, action.TargetPokemon);
             action.EnergyCard.Owner.PerformedOncePerTurnActions.Add(
-                EnergyCard.ATTACHED_ENERGY_FOR_TURN
+                OncePerTurnActionType.AttachedEnergyForTurn
             );
             return Task.FromResult(action);
         }
@@ -172,7 +172,9 @@ namespace gamecore.game.action
                     .DeckList.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
             var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
             AttachEnergyFromHand(energyCard, targetPokemon);
-            energyCard.Owner.PerformedOncePerTurnActions.Add(EnergyCard.ATTACHED_ENERGY_FOR_TURN);
+            energyCard.Owner.PerformedOncePerTurnActions.Add(
+                OncePerTurnActionType.AttachedEnergyForTurn
+            );
             return Task.FromResult(action);
         }
 

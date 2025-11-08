@@ -1,5 +1,6 @@
 using gamecore.card;
 using gamecore.effect;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -12,7 +13,7 @@ namespace gamecore.instruction
 
         public ConditionJson ToSerializable()
         {
-            return new ConditionJson(conditionType: "ability_not_used", new());
+            return new ConditionJson(conditionType: ConditionType.AbilityNotUsed, new());
         }
     }
 }

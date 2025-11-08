@@ -16,7 +16,7 @@ namespace gamecore.card
                     "professorsResearch",
                     new List<IInstruction>
                     {
-                        new DiscardInstruction(DiscardInstruction.TargetSource.Hand),
+                        new DiscardInstruction(TargetSource.Hand),
                         new DrawCardsInstruction(7),
                     },
                     new List<IUseCondition> { new HasCardsInDeck() }
@@ -36,10 +36,7 @@ namespace gamecore.card
                             ActionOnSelection.Discard,
                             ActionOnSelection.Nothing
                         ),
-                        new DiscardInstruction(
-                            DiscardInstruction.TargetSource.Selection,
-                            "discardSelection"
-                        ),
+                        new DiscardInstruction(TargetSource.Selection, "discardSelection"),
                         new SelectCardsFromDeckInstruction(
                             new IntRange(0, 1),
                             FilterUtils.CreatePokemonFilter(),
@@ -50,7 +47,7 @@ namespace gamecore.card
                         new ShowSelectedCardsInstruction("deckSelection"),
                         new TakeSelectionToHandInstruction("deckSelection"),
                         new ShuffleDeckInstruction(),
-                        new DiscardInstruction(DiscardInstruction.TargetSource.Self),
+                        new DiscardInstruction(TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
                     {
@@ -75,7 +72,7 @@ namespace gamecore.card
                         ),
                         new ShowSelectedCardsInstruction("discardSelection"),
                         new TakeSelectionToHandInstruction("discardSelection"),
-                        new DiscardInstruction(DiscardInstruction.TargetSource.Self),
+                        new DiscardInstruction(TargetSource.Self),
                     },
                     conditions: new List<IUseCondition>
                     {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.instruction.filter
 {
@@ -16,13 +17,12 @@ namespace gamecore.instruction.filter
         public override bool Matches(ICardLogic card, ICardLogic sourceCard) =>
             Operands.All(o => o.Matches(card, sourceCard));
 
-        public override object ToSerializable()
+        public override FilterJson ToSerializable()
         {
-            return new Dictionary<string, object>
-            {
-                { "op", "and" },
-                { "operands", Operands.ConvertAll(o => o.ToSerializable()) },
-            };
+            return new FilterJson(
+                Operands.ConvertAll(o => o.ToSerializable()),
+                FilterLogicalOperator.And
+            );
         }
     }
 }

@@ -5,6 +5,7 @@ using gamecore.common;
 using gamecore.game;
 using gamecore.game.action;
 using gamecore.game.interaction;
+using gamecore.serialization;
 using Newtonsoft.Json;
 
 namespace gamecore.card
@@ -19,8 +20,6 @@ namespace gamecore.card
 
     abstract class EnergyCard : IEnergyCardLogic
     {
-        public static string ATTACHED_ENERGY_FOR_TURN = "attachedEnergyForTurn";
-
         protected EnergyCard(string name, string id, int deckId, IPlayerLogic owner)
         {
             DeckId = deckId;
@@ -70,7 +69,9 @@ namespace gamecore.card
 
         public bool IsPlayableWithTargets()
         {
-            return !Owner.PerformedOncePerTurnActions.Contains(ATTACHED_ENERGY_FOR_TURN);
+            return !Owner.PerformedOncePerTurnActions.Contains(
+                OncePerTurnActionType.AttachedEnergyForTurn
+            );
         }
 
         public bool IsPokemonCard() => false;

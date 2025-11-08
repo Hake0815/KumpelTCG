@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using gamecore.instruction;
+using gamecore.serialization;
 
 namespace gamecore.card
 {

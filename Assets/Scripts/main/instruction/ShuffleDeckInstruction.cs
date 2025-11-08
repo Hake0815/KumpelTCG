@@ -1,6 +1,7 @@
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.game.action;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -15,7 +16,7 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.ShuffleDeck,
-                data: new() { { "player", "self" } }
+                data: new() { new PlayerTargetInstructionDataJson(PlayerTarget.Self) }
             );
         }
     }

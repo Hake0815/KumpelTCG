@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.instruction.filter
 {
@@ -46,21 +47,12 @@ namespace gamecore.instruction.filter
             };
         }
 
-        public override object ToSerializable()
+        public override FilterJson ToSerializable()
         {
-            return new Dictionary<string, object>
-            {
-                { "op", "condition" },
-                {
-                    "condition",
-                    new Dictionary<string, object>
-                    {
-                        { "field", Field.ToString() },
-                        { "op", Operation.ToString() },
-                        { "value", Value.ToString() },
-                    }
-                },
-            };
+            return new FilterJson(
+                leafType: LeafType.Condition,
+                condition: new FilterConditionJson(this)
+            );
         }
     }
 }

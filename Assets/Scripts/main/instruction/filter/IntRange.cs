@@ -1,5 +1,8 @@
+using System;
+
 namespace gamecore.instruction.filter
 {
+    [Serializable]
     public readonly struct IntRange
     {
         public int Min { get; }
