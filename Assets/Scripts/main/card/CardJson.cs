@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 using gamecore.effect;
 using gamecore.instruction;
 
 namespace gamecore.card
 {
     [Serializable]
-    public class CardJson
+    public class CardJson : JsonStringSerializable
     {
         // Static card data properties (moved from CardDataJson)
         public string Name { get; }
@@ -94,13 +95,14 @@ namespace gamecore.card
             EvolvedInto = evolvedInto;
         }
 
-        public static CardJson CreateUnknownCard()
+        public static CardJson CreateUnknownCard(int deckId)
         {
             return new CardJson(
                 name: "Unknown",
                 cardType: CardType.Unknown,
                 cardSubtype: CardSubtype.Unknown,
-                energyType: EnergyType.None
+                energyType: EnergyType.None,
+                deckId: deckId
             );
         }
     }

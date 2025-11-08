@@ -13,7 +13,7 @@ namespace gamecore.game.action
             Attack = attack;
             Attacker = attacker;
             PostReactions.Add(CreateCheckKnockOutGA(attacker.Owner));
-            PostReactions.Add(new EndTurnGA());
+            PostReactions.Add(new AttackEndedGA(attacker));
         }
 
         private static KnockOutCheckGA CreateCheckKnockOutGA(IPlayerLogic AttackingPlayer)

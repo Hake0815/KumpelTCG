@@ -12,22 +12,21 @@ namespace gamecore.common
     /// </summary>
     public sealed class GlobalLogger : IDisposable
     {
-        private static readonly Lazy<GlobalLogger> _instance = new Lazy<GlobalLogger>(
-            () => new GlobalLogger()
-        );
+        private static readonly Lazy<GlobalLogger> _instance = new(() => new GlobalLogger());
         public static GlobalLogger Instance => _instance.Value;
 
         private readonly ConcurrentQueue<LogEntry> _logQueue = new();
         private readonly CancellationTokenSource _cancellationTokenSource = new();
         private readonly Task _writerTask;
         private readonly object _lockObject = new();
-        private readonly string _filePath = "application.log";
+        private string _filePath = "application.log";
         private LogLevel _minLogLevel = LogLevel.Debug;
         private bool _initialized = false;
         private bool _disposed = false;
 
         private GlobalLogger()
         {
+            File.WriteAllText(_filePath, string.Empty);
             // Start the background writer task
             _writerTask = Task.Run(WriteLogsAsync, _cancellationTokenSource.Token);
             Initialize();
@@ -51,6 +50,16 @@ namespace gamecore.common
             }
 
             _initialized = true;
+        }
+
+        public void SetLogFilePath(string filePath)
+        {
+            _filePath = filePath;
+            var directory = Path.GetDirectoryName(_filePath);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
         }
 
         /// <summary>

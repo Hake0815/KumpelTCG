@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 
 namespace gamecore.instruction
 {
     [Serializable]
-    public class InstructionJson
+    public class InstructionJson : JsonStringSerializable
     {
         public InstructionType InstructionType { get; }
         public Dictionary<string, object> Data { get; }

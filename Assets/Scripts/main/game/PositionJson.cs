@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 
 namespace gamecore.game
 {
     [Serializable]
-    public class PositionJson
+    public class PositionJson : JsonStringSerializable
     {
         public Owner Owner { get; }
         public List<string> PossiblePositions { get; }

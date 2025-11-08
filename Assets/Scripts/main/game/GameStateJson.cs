@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
+using Newtonsoft.Json;
 
 namespace gamecore.game
 {
     [Serializable]
-    public class GameStateJson
+    public class GameStateJson : JsonStringSerializable
     {
         public PlayerStateJson SelfState { get; }
         public PlayerStateJson OpponentState { get; }

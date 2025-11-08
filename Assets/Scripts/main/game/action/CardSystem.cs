@@ -29,6 +29,8 @@ namespace gamecore.game.action
             IActionPerformer<RemoveCardsFromHandGA>,
             IActionPerformer<ShuffleDeckGA>,
             IActionPerformer<ShowCardsGA>,
+            IActionPerformer<SetCardCurrentlyPlayedGA>,
+            IActionPerformer<UnsetCardCurrentlyPlayedGA>,
             IActionSubscriber<StartTurnGA>
     {
         public CardSystem(ActionSystem actionSystem, Game game)
@@ -47,7 +49,7 @@ namespace gamecore.game.action
         private static readonly Dictionary<SelectedCardsOrigin, SelectFrom> _selectFromMap = new()
         {
             { SelectedCardsOrigin.Hand, SelectFrom.InPlay },
-            { SelectedCardsOrigin.Other, SelectFrom.Floating },
+            { SelectedCardsOrigin.Floating, SelectFrom.Floating },
             { SelectedCardsOrigin.Deck, SelectFrom.Deck },
             { SelectedCardsOrigin.DiscardPile, SelectFrom.DiscardPile },
         };
@@ -72,6 +74,8 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<RemoveCardsFromHandGA>(this);
             _actionSystem.AttachPerformer<ShuffleDeckGA>(this);
             _actionSystem.AttachPerformer<ShowCardsGA>(this);
+            _actionSystem.AttachPerformer<SetCardCurrentlyPlayedGA>(this);
+            _actionSystem.AttachPerformer<UnsetCardCurrentlyPlayedGA>(this);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(this, ReactionTiming.POST);
         }
 
@@ -94,6 +98,8 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<RemoveCardsFromHandGA>();
             _actionSystem.DetachPerformer<ShuffleDeckGA>();
             _actionSystem.DetachPerformer<ShowCardsGA>();
+            _actionSystem.DetachPerformer<SetCardCurrentlyPlayedGA>();
+            _actionSystem.DetachPerformer<UnsetCardCurrentlyPlayedGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(this, ReactionTiming.POST);
         }
 
@@ -350,6 +356,9 @@ namespace gamecore.game.action
         public async Task<QuickSelectCardsGA> Perform(QuickSelectCardsGA action)
         {
             var options = GetOptions(action.CardOptionSource, action.CardCondition);
+            if (action.Origin == SelectedCardsOrigin.Floating)
+                action.Player.FloatingCards = options;
+
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
@@ -390,6 +399,12 @@ namespace gamecore.game.action
         {
             var player = _game.GetPlayerByName(action.Player.Name);
             var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
+            if (action.Origin == SelectedCardsOrigin.Floating)
+            {
+                var options = new List<ICardLogic>(selectedCards);
+                options.AddRange(player.DeckList.GetCardsByDeckIds(action.RemainingCards));
+                player.FloatingCards = options;
+            }
             RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
                 player.Prizes.DeckSearched();
@@ -399,6 +414,8 @@ namespace gamecore.game.action
         public async Task<ConfirmSelectCardsGA> Perform(ConfirmSelectCardsGA action)
         {
             var options = GetOptions(action.CardOptionSource, action.CardCondition);
+            if (action.Origin == SelectedCardsOrigin.Floating)
+                action.Player.FloatingCards = options;
             var selectedCards = await GetSelectedCards(
                 action,
                 options,
@@ -455,6 +472,12 @@ namespace gamecore.game.action
         {
             var player = _game.GetPlayerByName(action.Player.Name);
             var selectedCards = player.DeckList.GetCardsByDeckIds(action.SelectedCards);
+            if (action.Origin == SelectedCardsOrigin.Floating)
+            {
+                var options = new List<ICardLogic>(selectedCards);
+                options.AddRange(player.DeckList.GetCardsByDeckIds(action.RemainingCards));
+                player.FloatingCards = options;
+            }
             RemoveSelectedCardsFromOrigin(player, selectedCards, action.Origin);
             if (action.Origin == SelectedCardsOrigin.Deck)
                 player.Prizes.DeckSearched();
@@ -478,8 +501,8 @@ namespace gamecore.game.action
                 case SelectedCardsOrigin.DiscardPile:
                     player.DiscardPile.RemoveCards(selectedCards);
                     break;
-                case SelectedCardsOrigin.Other:
-                    // No removal needed for 'Other' origin
+                case SelectedCardsOrigin.Floating:
+                    player.FloatingCards = null;
                     break;
                 default:
                     throw new NotImplementedException();
@@ -532,6 +555,33 @@ namespace gamecore.game.action
                 card.OpponentPositionKnowledge = PositionKnowledge.Known;
             }
             CardsRevealed?.Invoke(cards);
+            return Task.FromResult(action);
+        }
+
+        public Task<SetCardCurrentlyPlayedGA> Perform(SetCardCurrentlyPlayedGA action)
+        {
+            action.Card.Owner.CurrentlyPlayedCard = action.Card;
+            return Task.FromResult(action);
+        }
+
+        public Task<SetCardCurrentlyPlayedGA> Reperform(SetCardCurrentlyPlayedGA action)
+        {
+            var card = _game.FindCardAnywhere(action.Card);
+            var player = _game.GetPlayerByName(card.Owner.Name);
+            player.CurrentlyPlayedCard = card;
+            return Task.FromResult(action);
+        }
+
+        public Task<UnsetCardCurrentlyPlayedGA> Perform(UnsetCardCurrentlyPlayedGA action)
+        {
+            action.Player.CurrentlyPlayedCard = null;
+            return Task.FromResult(action);
+        }
+
+        public Task<UnsetCardCurrentlyPlayedGA> Reperform(UnsetCardCurrentlyPlayedGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            player.CurrentlyPlayedCard = null;
             return Task.FromResult(action);
         }
     }

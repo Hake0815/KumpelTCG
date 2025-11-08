@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 
 namespace gamecore.game.interaction
 {
     [Serializable]
-    public class ConditionalTargetQueryJson
+    public class ConditionalTargetQueryJson : JsonStringSerializable
     {
         public List<ConditionalTargetQueryJson> NestedQueryJsons { get; }
         public LogicalQueryOperator? LogicalQueryOperator { get; }

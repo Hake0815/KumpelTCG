@@ -11,6 +11,7 @@ namespace gamecore.game.action
 {
     class GeneralMechnicSystem
         : IActionPerformer<AttackGA>,
+            IActionPerformer<AttackEndedGA>,
             IActionPerformer<DrawPrizeCardsGA>,
             IActionPerformer<CheckWinConditionGA>,
             IActionPerformer<PromoteGA>,
@@ -34,6 +35,7 @@ namespace gamecore.game.action
         public void Enable()
         {
             _actionSystem.AttachPerformer<AttackGA>(this);
+            _actionSystem.AttachPerformer<AttackEndedGA>(this);
             _actionSystem.AttachPerformer<DrawPrizeCardsGA>(this);
             _actionSystem.AttachPerformer<CheckWinConditionGA>(this);
             _actionSystem.AttachPerformer<PromoteGA>(this);
@@ -48,6 +50,7 @@ namespace gamecore.game.action
         public void Disable()
         {
             _actionSystem.DetachPerformer<AttackGA>();
+            _actionSystem.DetachPerformer<AttackEndedGA>();
             _actionSystem.DetachPerformer<DrawPrizeCardsGA>();
             _actionSystem.DetachPerformer<CheckWinConditionGA>();
             _actionSystem.DetachPerformer<PromoteGA>();
@@ -61,6 +64,7 @@ namespace gamecore.game.action
 
         public Task<AttackGA> Perform(AttackGA action)
         {
+            action.Attacker.Owner.IsAttacking = true;
             foreach (var instruction in action.Attack.Instructions)
             {
                 instruction.Perform(action.Attacker, _actionSystem);
@@ -70,6 +74,19 @@ namespace gamecore.game.action
 
         public Task<AttackGA> Reperform(AttackGA action)
         {
+            _game.FindCardAnywhere(action.Attacker).Owner.IsAttacking = true;
+            return Task.FromResult(action);
+        }
+
+        public Task<AttackEndedGA> Perform(AttackEndedGA action)
+        {
+            action.Attacker.Owner.IsAttacking = false;
+            return Task.FromResult(action);
+        }
+
+        public Task<AttackEndedGA> Reperform(AttackEndedGA action)
+        {
+            _game.FindCardAnywhere(action.Attacker).Owner.IsAttacking = false;
             return Task.FromResult(action);
         }
 
@@ -167,15 +184,12 @@ namespace gamecore.game.action
         {
             foreach (var player in action.Players)
             {
-                if (player.ActivePokemon == null)
-                {
-                    var pokemon =
-                        player.Bench.CardCount == 1
-                            ? player.Bench.Cards[0] as IPokemonCardLogic
-                            : await GetPokemonFromUserSelection(player);
-                    player.Promote(pokemon);
-                    action.PromotedPokemon.Add(player.Name, pokemon);
-                }
+                var pokemon =
+                    player.Bench.CardCount == 1
+                        ? player.Bench.Cards[0] as IPokemonCardLogic
+                        : await GetPokemonFromUserSelection(player);
+                player.Promote(pokemon);
+                action.PromotedPokemon.Add(player.Name, pokemon);
             }
             return action;
         }
@@ -211,7 +225,6 @@ namespace gamecore.game.action
             _actionSystem.AddReaction(
                 new DiscardAttachedEnergyCardsGA(pokemon, action.EnergyCardsToDiscard)
             );
-            pokemon.Owner.ActivePokemon = null;
             _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
             _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
             pokemon.Owner.PerformedOncePerTurnActions.Add(PokemonCard.RETREATED);
@@ -274,6 +287,7 @@ namespace gamecore.game.action
             newPokemon.AttachEnergyCards(targetPokemon.AttachedEnergyCards);
             targetPokemon.AttachedEnergyCards.Clear();
             newPokemon.TakeDamage(targetPokemon.Damage);
+            targetPokemon.TakeDamage(-targetPokemon.Damage);
 
             foreach (var preEvolution in targetPokemon.PreEvolutions)
                 newPokemon.PreEvolutions.Add(preEvolution);

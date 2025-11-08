@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using gamecore.common;
 using gamecore.game.action;
+using Newtonsoft.Json;
 
 namespace gamecore.actionsystem
 {
@@ -97,7 +98,9 @@ namespace gamecore.actionsystem
                 () =>
                 {
                     IsPerforming = false;
-                    _logWriter.Log(logEntryBuilder.Build());
+                    var entry = logEntryBuilder.Build();
+                    GlobalLogger.Instance.Debug(JsonConvert.SerializeObject(entry));
+                    _logWriter.Log(entry);
                     OnPerformFinished?.Invoke();
                 }
             );

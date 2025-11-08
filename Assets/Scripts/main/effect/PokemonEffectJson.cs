@@ -1,9 +1,10 @@
 using System;
+using gamecore.common;
 
 namespace gamecore.effect
 {
     [Serializable]
-    public class PokemonEffectJson
+    public class PokemonEffectJson : JsonStringSerializable
     {
         public string Name { get; }
 

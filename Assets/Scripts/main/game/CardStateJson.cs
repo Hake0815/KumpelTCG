@@ -1,10 +1,11 @@
 using System;
 using gamecore.card;
+using gamecore.common;
 
 namespace gamecore.game
 {
     [Serializable]
-    public class CardStateJson
+    public class CardStateJson : JsonStringSerializable
     {
         public CardJson Card { get; }
         public PositionJson Position { get; }

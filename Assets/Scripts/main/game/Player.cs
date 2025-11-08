@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
 using gamecore.effect;
 using Newtonsoft.Json;
@@ -15,7 +16,10 @@ namespace gamecore.game
         IDiscardPile DiscardPile { get; }
         IPrizes Prizes { get; }
         bool IsActive { get; }
+        bool IsAttacking { get; }
         IPokemonCard ActivePokemon { get; }
+        ICard CurrentlyPlayedCard { get; }
+        List<ICard> FloatingCards { get; }
         Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; }
         event Action<IPokemonCard> ActivePokemonSet;
     }
@@ -32,6 +36,12 @@ namespace gamecore.game
 
         [JsonIgnore]
         IPokemonCard IPlayer.ActivePokemon => ActivePokemon;
+
+        [JsonIgnore]
+        new ICardLogic CurrentlyPlayedCard { get; set; }
+
+        [JsonIgnore]
+        ICard IPlayer.CurrentlyPlayedCard => CurrentlyPlayedCard;
 
         [JsonIgnore]
         new DeckLogicAbstract Deck { get; set; }
@@ -53,6 +63,10 @@ namespace gamecore.game
         IPrizes IPlayer.Prizes => Prizes;
 
         [JsonIgnore]
+        new List<ICardLogic> FloatingCards { get; set; }
+        List<ICard> IPlayer.FloatingCards => FloatingCards.Cast<ICard>().ToList();
+
+        [JsonIgnore]
         HashSet<string> PerformedOncePerTurnActions { get; }
 
         [JsonIgnore]
@@ -64,6 +78,10 @@ namespace gamecore.game
 
         [JsonIgnore]
         int TurnCounter { get; set; }
+
+        [JsonIgnore]
+        new bool IsAttacking { get; set; }
+        bool IPlayer.IsAttacking => IsAttacking;
         List<ICardLogic> Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
@@ -92,6 +110,7 @@ namespace gamecore.game
                     ResetOncePerTurnActions();
             }
         }
+        public bool IsAttacking { get; set; }
         private IPokemonCardLogic _activePokemon;
         public IPokemonCardLogic ActivePokemon
         {
@@ -104,6 +123,36 @@ namespace gamecore.game
                     _activePokemon.OwnerPositionKnowledge = PositionKnowledge.Known;
                     _activePokemon.OpponentPositionKnowledge = PositionKnowledge.Known;
                     ActivePokemonSet?.Invoke(value);
+                }
+            }
+        }
+        private ICardLogic _currentlyPlayedCard;
+        public ICardLogic CurrentlyPlayedCard
+        {
+            get => _currentlyPlayedCard;
+            set
+            {
+                _currentlyPlayedCard = value;
+                if (value != null)
+                {
+                    _currentlyPlayedCard.OwnerPositionKnowledge = PositionKnowledge.Known;
+                    _currentlyPlayedCard.OpponentPositionKnowledge = PositionKnowledge.Known;
+                }
+            }
+        }
+        private List<ICardLogic> _floatingCards;
+        public List<ICardLogic> FloatingCards
+        {
+            get => _floatingCards;
+            set
+            {
+                _floatingCards = value;
+                if (value != null)
+                {
+                    foreach (var card in value)
+                    {
+                        card.OwnerPositionKnowledge = PositionKnowledge.Known;
+                    }
                 }
             }
         }
@@ -172,6 +221,7 @@ namespace gamecore.game
             }
             return new PlayerStateJson(
                 isActive: IsActive,
+                isAttacking: IsAttacking,
                 handCount: Hand.CardCount,
                 deckCount: Deck.CardCount,
                 prizesCount: Prizes.CardCount,

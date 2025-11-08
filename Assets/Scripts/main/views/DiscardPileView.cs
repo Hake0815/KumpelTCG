@@ -89,7 +89,7 @@ namespace gameview
 
         private void DiscardCards(List<ICard> cards)
         {
-            var cardViews = CardViewRegistry.INSTANCE.GetAll(cards);
+            var cardViews = CardViewRegistry.INSTANCE.GetAllAvailable(cards);
             foreach (var cardView in cardViews)
             {
                 CardViewRegistry.INSTANCE.Unregister(cardView.Card);

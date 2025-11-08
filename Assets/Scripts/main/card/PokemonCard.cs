@@ -186,6 +186,16 @@ namespace gamecore.card
 
         public void Discard()
         {
+            foreach (var energy in AttachedEnergyCards)
+            {
+                energy.Discard();
+            }
+            AttachedEnergyCards.Clear();
+            foreach (var preEvolution in PreEvolutions)
+            {
+                (preEvolution as IPokemonCardLogic).Discard();
+            }
+            PreEvolutions.Clear();
             Owner.DiscardPile.AddCards(new() { this });
             Damage = 0;
         }

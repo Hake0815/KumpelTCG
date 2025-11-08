@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 using gamecore.instruction;
 
 namespace gamecore.card
 {
     [Serializable]
-    public class AbilityJson
+    public class AbilityJson : JsonStringSerializable
     {
         public string Name { get; }
         public List<InstructionJson> Instructions { get; }

@@ -43,7 +43,7 @@ namespace gamecore.instruction
                     ),
                     action.RevealedCards,
                     c => Filter.Matches(c, card),
-                    SelectCardsGA.SelectedCardsOrigin.Other,
+                    SelectCardsGA.SelectedCardsOrigin.Floating,
                     SelectionId,
                     TargetAction,
                     RemainderAction

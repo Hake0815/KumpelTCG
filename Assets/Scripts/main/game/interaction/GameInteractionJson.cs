@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.common;
 
 namespace gamecore.game.interaction
 {
     [Serializable]
-    public class GameInteractionJson
+    public class GameInteractionJson : JsonStringSerializable
     {
         public GameInteractionType Type { get; }
         public Dictionary<string, IGameInteractionDataJson> Data { get; }

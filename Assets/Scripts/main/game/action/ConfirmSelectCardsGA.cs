@@ -31,9 +31,19 @@ namespace gamecore.game.action
             SelectedCardsOrigin origin,
             string selectionId,
             ActionOnSelection targetAction,
-            ActionOnSelection remainderAction
+            ActionOnSelection remainderAction,
+            List<ICardLogic> selectedCards,
+            List<ICardLogic> remainingCards
         )
-            : base(player, origin, selectionId, targetAction, remainderAction) { }
+            : base(
+                player,
+                origin,
+                selectionId,
+                targetAction,
+                remainderAction,
+                selectedCards,
+                remainingCards
+            ) { }
 
         [JsonIgnore]
         public ConditionalTargetQuery NumberOfCardsCondition { get; }

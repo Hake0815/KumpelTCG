@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 using gamecore.effect;
 
 namespace gamecore.game
 {
     [Serializable]
-    public class PlayerStateJson
+    public class PlayerStateJson : JsonStringSerializable
     {
         public bool IsActive { get; }
+        public bool IsAttacking { get; }
         public int HandCount { get; }
         public int DeckCount { get; }
         public int PrizesCount { get; }
@@ -19,6 +21,7 @@ namespace gamecore.game
 
         public PlayerStateJson(
             bool isActive,
+            bool isAttacking,
             int handCount,
             int deckCount,
             int prizesCount,
@@ -30,6 +33,7 @@ namespace gamecore.game
         )
         {
             IsActive = isActive;
+            IsAttacking = isAttacking;
             HandCount = handCount;
             DeckCount = deckCount;
             PrizesCount = prizesCount;

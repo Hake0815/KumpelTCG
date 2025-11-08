@@ -1,9 +1,10 @@
 using System;
+using gamecore.common;
 
 namespace gamecore.effect
 {
     [Serializable]
-    public class PlayerEffectJson
+    public class PlayerEffectJson : JsonStringSerializable
     {
         public string TypeName { get; }
 

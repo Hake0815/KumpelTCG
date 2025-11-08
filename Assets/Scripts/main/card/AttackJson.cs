@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using gamecore.common;
 using gamecore.instruction;
 
 namespace gamecore.card
 {
     [Serializable]
-    public class AttackJson
+    public class AttackJson : JsonStringSerializable
     {
         public string Name { get; }
         public int Damage { get; }
