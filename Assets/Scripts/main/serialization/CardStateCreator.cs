@@ -41,16 +41,19 @@ namespace gamecore.serialization
             AddPrizesAsOpponent(player.Opponent.Prizes, cardStates);
             AddHandAsOpponent(player.Opponent.Hand, cardStates);
             AddDeckAsOpponent(player.Opponent.Deck, cardStates);
+            cardStates = cardStates.OrderBy(cs => cs.Card.DeckId).ToList();
             if (cardStates.Count == 120)
             {
                 GlobalLogger.Instance.Debug(
-                    $"Card states are [{string.Join(", ", cardStates.OrderBy(cs => cs.Card.DeckId).Select(cs => cs.ToJsonString()))}]"
+                    () =>
+                        $"Card states are [{string.Join(", ", cardStates.Select(cs => cs.ToJsonString()))}]"
                 );
             }
             else
             {
                 GlobalLogger.Instance.Error(
-                    $"Card states count should be 120, but was {cardStates.Count}, card state were [{string.Join(", ", cardStates.OrderBy(cs => cs.Card.DeckId).Select(cs => cs.ToJsonString()))}]"
+                    () =>
+                        $"Card states count should be 120, but was {cardStates.Count}, card state were [{string.Join(", ", cardStates.Select(cs => cs.ToJsonString()))}]"
                 );
             }
             return cardStates;

@@ -99,7 +99,7 @@ namespace gamecore.actionsystem
                 {
                     IsPerforming = false;
                     var entry = logEntryBuilder.Build();
-                    GlobalLogger.Instance.Debug(JsonConvert.SerializeObject(entry));
+                    GlobalLogger.Instance.Debug(() => JsonConvert.SerializeObject(entry));
                     _logWriter.Log(entry);
                     OnPerformFinished?.Invoke();
                 }
@@ -164,7 +164,7 @@ namespace gamecore.actionsystem
         {
             if (action == null)
             {
-                GlobalLogger.Instance.Error("ERROR: Attempted to perform null action");
+                GlobalLogger.Instance.Error(() => "ERROR: Attempted to perform null action");
                 return null;
             }
 
@@ -176,14 +176,14 @@ namespace gamecore.actionsystem
                 if (performer == null)
                 {
                     GlobalLogger.Instance.Error(
-                        $"ERROR: No performer found for action type: {type.Name}"
+                        () => $"ERROR: No performer found for action type: {type.Name}"
                     );
                     return action;
                 }
                 return await performer.Perform(action);
             }
             GlobalLogger.Instance.Warning(
-                $"WARNING: No performer registered for action type: {type.Name}"
+                () => $"WARNING: No performer registered for action type: {type.Name}"
             );
             return action;
         }
@@ -231,7 +231,7 @@ namespace gamecore.actionsystem
         {
             if (action == null)
             {
-                GlobalLogger.Instance.Error("ERROR: Attempted to reperform null action");
+                GlobalLogger.Instance.Error(() => "ERROR: Attempted to reperform null action");
                 return;
             }
 
@@ -244,14 +244,14 @@ namespace gamecore.actionsystem
                 var performer = _performers[type];
                 if (performer == null)
                     GlobalLogger.Instance.Error(
-                        $"ERROR: No reperformer found for action type: {type.Name}"
+                        () => $"ERROR: No reperformer found for action type: {type.Name}"
                     );
                 else
                     await performer.Reperform(action);
             }
             else
                 GlobalLogger.Instance.Warning(
-                    $"WARNING: No reperformer registered for action type: {type.Name}"
+                    () => $"WARNING: No reperformer registered for action type: {type.Name}"
                 );
         }
 

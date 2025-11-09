@@ -65,16 +65,16 @@ namespace gamecore.common
         /// <summary>
         /// Logs a message with the specified log level
         /// </summary>
-        public void Log(LogLevel level, string message)
+        public void Log(LogLevel level, Func<string> messageSupplier)
         {
-            if (!IsEnabled(level) || string.IsNullOrEmpty(message))
+            if (!IsEnabled(level) || messageSupplier == null)
                 return;
 
             var logEntry = new LogEntry
             {
                 Timestamp = DateTime.UtcNow,
                 Level = level,
-                Message = message,
+                Message = messageSupplier(),
                 ThreadId = Thread.CurrentThread.ManagedThreadId,
             };
 
@@ -84,73 +84,73 @@ namespace gamecore.common
         /// <summary>
         /// Logs a message with the specified log level and exception
         /// </summary>
-        public void Log(LogLevel level, string message, Exception exception)
+        public void Log(LogLevel level, Func<string> messageSupplier, Exception exception)
         {
-            if (!IsEnabled(level) || string.IsNullOrEmpty(message))
+            if (!IsEnabled(level) || messageSupplier == null)
                 return;
 
             var fullMessage =
                 exception != null
-                    ? $"{message}\nException: {exception.GetType().Name}: {exception.Message}\nStack Trace: {exception.StackTrace}"
-                    : message;
+                    ? $"{messageSupplier()}\nException: {exception.GetType().Name}: {exception.Message}\nStack Trace: {exception.StackTrace}"
+                    : messageSupplier();
 
-            Log(level, fullMessage);
+            Log(level, () => fullMessage);
         }
 
         /// <summary>
         /// Logs a debug message
         /// </summary>
-        public void Debug(string message)
+        public void Debug(Func<string> messageSupplier)
         {
-            Log(LogLevel.Debug, message);
+            Log(LogLevel.Debug, messageSupplier);
         }
 
         /// <summary>
         /// Logs an info message
         /// </summary>
-        public void Info(string message)
+        public void Info(Func<string> messageSupplier)
         {
-            Log(LogLevel.Info, message);
+            Log(LogLevel.Info, messageSupplier);
         }
 
         /// <summary>
         /// Logs a warning message
         /// </summary>
-        public void Warning(string message)
+        public void Warning(Func<string> messageSupplier)
         {
-            Log(LogLevel.Warning, message);
+            Log(LogLevel.Warning, messageSupplier);
         }
 
         /// <summary>
         /// Logs an error message
         /// </summary>
-        public void Error(string message)
+        public void Error(Func<string> messageSupplier)
         {
-            Log(LogLevel.Error, message);
+            Log(LogLevel.Error, messageSupplier);
         }
 
         /// <summary>
         /// Logs an error message with exception
         /// </summary>
-        public void Error(string message, Exception exception)
+        public void Error(Func<string> messageSupplier, Exception exception)
         {
-            Log(LogLevel.Error, message, exception);
+            Log(LogLevel.Error, messageSupplier, exception);
         }
 
         /// <summary>
         /// Logs a fatal error message
         /// </summary>
-        public void Fatal(string message)
+        public void Fatal(Func<string> messageSupplier)
         {
-            Log(LogLevel.Fatal, message);
+            Log(LogLevel.Fatal, messageSupplier);
         }
 
         /// <summary>
         /// Logs a fatal error message with exception
         /// </summary>
-        public void Fatal(string message, Exception exception)
+        public void Fatal(Func<string> messageSupplier, Exception exception)
         {
-            Log(LogLevel.Fatal, message, exception);
+            Log(LogLevel.Fatal, messageSupplier, exception);
         }
 
         /// <summary>

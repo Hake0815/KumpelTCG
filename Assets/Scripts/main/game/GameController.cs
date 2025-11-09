@@ -259,7 +259,8 @@ namespace gamecore.game
                 opponentState = _game.Player1.ToSerializable();
             }
             GlobalLogger.Instance.Debug(
-                $"Creating card states for player {player.Name}, game state is {_game.GameState.GetType().Name}"
+                () =>
+                    $"Creating card states for player {player.Name}, game state is {_game.GameState.GetType().Name}"
             );
             var cardStates = CardStateCreator.CreateCardStates(player);
 

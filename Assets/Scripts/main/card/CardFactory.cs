@@ -13,7 +13,7 @@ namespace gamecore.card
             if (!CardDatabase.cardDataDict.ContainsKey(id))
             {
                 GlobalLogger.Instance.Error(
-                    $"ERROR: Card with ID '{id}' not found in CardDatabase"
+                    () => $"ERROR: Card with ID '{id}' not found in CardDatabase"
                 );
                 return null;
             }
@@ -36,7 +36,8 @@ namespace gamecore.card
                 return new BasicEnergyCard(basicEnergyCardData, owner, deckId);
             }
             GlobalLogger.Instance.Error(
-                $"ERROR: Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"
+                () =>
+                    $"ERROR: Card data for ID '{id}' is neither a TrainerCardData nor a PokemonCardData"
             );
             return null;
         }
