@@ -1,7 +1,10 @@
 namespace gamecore.instruction.filter
 {
-    public enum FilterAttribute
+    public enum FilterType
     {
+        None,
+        True,
+        ExcludeSource,
         CardType,
         CardSubtype,
         Hp,

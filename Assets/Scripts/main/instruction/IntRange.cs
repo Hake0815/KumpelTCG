@@ -1,6 +1,6 @@
 using System;
 
-namespace gamecore.instruction.filter
+namespace gamecore.instruction
 {
     [Serializable]
     public readonly struct IntRange

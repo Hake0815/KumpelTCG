@@ -31,7 +31,7 @@ namespace gamecore.card
                     {
                         new SelectCardsFromHandInstruction(
                             new IntRange(2, 2),
-                            new ExcludeSourceCardNode(),
+                            new FilterCondition(FilterType.ExcludeSource),
                             "discardSelection",
                             ActionOnSelection.Discard,
                             ActionOnSelection.Nothing
@@ -140,7 +140,7 @@ namespace gamecore.card
                             new RevealCardsFromDeckInstruction(2),
                             new SelectFromRevealedCardsInstruction(
                                 new IntRange(1, 1),
-                                new TrueNode(),
+                                new FilterCondition(FilterType.True),
                                 "revealedSelection",
                                 ActionOnSelection.TakeToHand,
                                 ActionOnSelection.PutUnderDeck

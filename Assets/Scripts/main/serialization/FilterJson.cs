@@ -9,19 +9,19 @@ namespace gamecore.serialization
     {
         public List<FilterJson> Operands { get; }
         public FilterLogicalOperator LogicalOperator { get; }
-        public LeafType LeafType { get; }
+        public bool IsLeaf { get; }
         public FilterConditionJson Condition { get; }
 
         public FilterJson(
             List<FilterJson> operands = null,
             FilterLogicalOperator logicalOperator = FilterLogicalOperator.None,
-            LeafType leafType = LeafType.None,
+            bool isLeaf = false,
             FilterConditionJson condition = null
         )
         {
             Operands = operands ?? new();
             LogicalOperator = logicalOperator;
-            LeafType = leafType;
+            IsLeaf = isLeaf;
             Condition = condition;
         }
     }
@@ -33,22 +33,14 @@ namespace gamecore.serialization
         Or,
     }
 
-    public enum LeafType
-    {
-        None,
-        True,
-        ExcludeSource,
-        Condition,
-    }
-
     [Serializable]
     public class FilterConditionJson : IJsonStringSerializable
     {
-        public FilterAttribute Field { get; }
+        public FilterType Field { get; }
         public FilterOperation Operation { get; }
         public object Value { get; }
 
-        public FilterConditionJson(FilterAttribute field, FilterOperation operation, object value)
+        public FilterConditionJson(FilterType field, FilterOperation operation, object value)
         {
             Field = field;
             Operation = operation;
