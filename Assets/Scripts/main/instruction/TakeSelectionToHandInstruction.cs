@@ -40,9 +40,12 @@ namespace gamecore.instruction
                 instructionType: InstructionType.TakeToHand,
                 data: new()
                 {
-                    new CardAmountInstructionDataJson(
-                        new IntRange(-1, -1),
-                        CardPosition.SelectedCards
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(
+                            new IntRange(-1, -1),
+                            CardPosition.SelectedCards
+                        )
                     ),
                 }
             );

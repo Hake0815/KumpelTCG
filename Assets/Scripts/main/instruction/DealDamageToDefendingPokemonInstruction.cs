@@ -35,7 +35,13 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.DealDamage,
-                data: new() { new AttackInstructionDataJson(AttackTarget.DefendingPokemon, Damage) }
+                data: new()
+                {
+                    new InstructionDataJson(
+                        InstructionDataType.AttackData,
+                        new AttackInstructionDataJson(AttackTarget.DefendingPokemon, Damage)
+                    ),
+                }
             );
         }
     }

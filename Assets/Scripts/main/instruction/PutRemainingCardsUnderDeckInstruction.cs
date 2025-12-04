@@ -34,9 +34,12 @@ namespace gamecore.instruction
                 instructionType: InstructionType.PutInDeck,
                 data: new()
                 {
-                    new ReturnToDeckTypeInstructionDataJson(
-                        ReturnToDeckType.Under,
-                        CardPosition.SelectedCardsRemainder
+                    new InstructionDataJson(
+                        InstructionDataType.ReturnToDeckTypeData,
+                        new ReturnToDeckTypeInstructionDataJson(
+                            ReturnToDeckType.Under,
+                            CardPosition.SelectedCardsRemainder
+                        )
                     ),
                 }
             );

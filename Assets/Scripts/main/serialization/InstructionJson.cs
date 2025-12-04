@@ -7,12 +7,12 @@ namespace gamecore.serialization
     public class InstructionJson : IJsonStringSerializable
     {
         public InstructionType InstructionType { get; }
-        public List<IInstructionDataJson> Data { get; }
+        public List<InstructionDataJson> Data { get; }
 
         public InstructionJson(InstructionType instructionType)
             : this(instructionType, new()) { }
 
-        public InstructionJson(InstructionType instructionType, List<IInstructionDataJson> data)
+        public InstructionJson(InstructionType instructionType, List<InstructionDataJson> data)
         {
             InstructionType = instructionType;
             Data = data;

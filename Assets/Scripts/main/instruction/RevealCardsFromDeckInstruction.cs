@@ -26,9 +26,12 @@ namespace gamecore.instruction
                 instructionType: InstructionType.RevealCards,
                 data: new()
                 {
-                    new CardAmountInstructionDataJson(
-                        new IntRange(Count, Count),
-                        CardPosition.Deck
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(
+                            new IntRange(Count, Count),
+                            CardPosition.Deck
+                        )
                     ),
                 }
             );

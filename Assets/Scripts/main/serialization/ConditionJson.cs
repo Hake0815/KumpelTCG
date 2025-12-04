@@ -6,9 +6,9 @@ namespace gamecore.serialization
     public class ConditionJson : IJsonStringSerializable
     {
         public ConditionType ConditionType { get; }
-        public List<IInstructionDataJson> Data { get; }
+        public List<InstructionDataJson> Data { get; }
 
-        public ConditionJson(ConditionType conditionType, List<IInstructionDataJson> data)
+        public ConditionJson(ConditionType conditionType, List<InstructionDataJson> data)
         {
             ConditionType = conditionType;
             Data = data;

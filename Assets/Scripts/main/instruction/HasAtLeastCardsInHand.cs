@@ -24,7 +24,13 @@ namespace gamecore.instruction
                 conditionType: ConditionType.HasCards,
                 new()
                 {
-                    new CardAmountInstructionDataJson(new IntRange(Count, 60), CardPosition.Hand),
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(
+                            new IntRange(Count, 60),
+                            CardPosition.Hand
+                        )
+                    ),
                 }
             );
         }

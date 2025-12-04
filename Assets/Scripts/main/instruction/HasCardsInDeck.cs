@@ -12,7 +12,13 @@ namespace gamecore.instruction
         {
             return new ConditionJson(
                 conditionType: ConditionType.HasCards,
-                new() { new CardAmountInstructionDataJson(new IntRange(1, 60), CardPosition.Deck) }
+                new()
+                {
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(new IntRange(1, 60), CardPosition.Deck)
+                    ),
+                }
             );
         }
     }

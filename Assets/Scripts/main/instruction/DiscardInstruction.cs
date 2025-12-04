@@ -60,7 +60,13 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.Discard,
-                data: new() { new DiscardInstructionDataJson(Target) }
+                data: new()
+                {
+                    new InstructionDataJson(
+                        InstructionDataType.DiscardData,
+                        new DiscardInstructionDataJson(Target)
+                    ),
+                }
             );
         }
     }

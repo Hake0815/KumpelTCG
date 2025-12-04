@@ -4,15 +4,27 @@ using gamecore.instruction.filter;
 
 namespace gamecore.serialization
 {
-    public interface IInstructionDataJson : IJsonStringSerializable
+    [Serializable]
+    public class InstructionDataJson : IJsonStringSerializable, IInstructionDataPayload
     {
-        InstructionDataType InstructionDataType { get; }
+        public InstructionDataType InstructionDataType { get; }
+        public IInstructionDataPayload Payload { get; }
+
+        public InstructionDataJson(
+            InstructionDataType instructionDataType,
+            IInstructionDataPayload payload
+        )
+        {
+            InstructionDataType = instructionDataType;
+            Payload = payload;
+        }
     }
 
+    public interface IInstructionDataPayload { }
+
     [Serializable]
-    public class AttackInstructionDataJson : IInstructionDataJson
+    public class AttackInstructionDataJson : IInstructionDataPayload
     {
-        public InstructionDataType InstructionDataType => InstructionDataType.AttackData;
         public AttackTarget AttackTarget { get; }
         public int Damage { get; }
 
@@ -24,9 +36,8 @@ namespace gamecore.serialization
     }
 
     [Serializable]
-    public class DiscardInstructionDataJson : IInstructionDataJson
+    public class DiscardInstructionDataJson : IInstructionDataPayload
     {
-        public InstructionDataType InstructionDataType => InstructionDataType.DiscardData;
         public TargetSource TargetSource { get; }
 
         public DiscardInstructionDataJson(TargetSource targetSource)
@@ -36,9 +47,8 @@ namespace gamecore.serialization
     }
 
     [Serializable]
-    public class CardAmountInstructionDataJson : IInstructionDataJson
+    public class CardAmountInstructionDataJson : IInstructionDataPayload
     {
-        public InstructionDataType InstructionDataType => InstructionDataType.CardAmountData;
         public IntRange Amount { get; }
         public CardPosition FromPosition { get; }
 
@@ -50,9 +60,8 @@ namespace gamecore.serialization
     }
 
     [Serializable]
-    public class ReturnToDeckTypeInstructionDataJson : IInstructionDataJson
+    public class ReturnToDeckTypeInstructionDataJson : IInstructionDataPayload
     {
-        public InstructionDataType InstructionDataType => InstructionDataType.ReturnToDeckTypeData;
         public ReturnToDeckType ReturnToDeckType { get; }
         public CardPosition FromPosition { get; }
 
@@ -67,9 +76,8 @@ namespace gamecore.serialization
     }
 
     [Serializable]
-    public class FilterInstructionDataJson : IInstructionDataJson
+    public class FilterInstructionDataJson : IInstructionDataPayload
     {
-        public InstructionDataType InstructionDataType => InstructionDataType.FilterData;
         public FilterJson Filter { get; }
 
         public FilterInstructionDataJson(FilterJson filter)
@@ -79,9 +87,8 @@ namespace gamecore.serialization
     }
 
     [Serializable]
-    public class PlayerTargetInstructionDataJson : IInstructionDataJson
+    public class PlayerTargetInstructionDataJson : IInstructionDataPayload
     {
-        public InstructionDataType InstructionDataType => InstructionDataType.PlayerTargetData;
         public PlayerTarget PlayerTarget { get; }
 
         public PlayerTargetInstructionDataJson(PlayerTarget playerTarget)

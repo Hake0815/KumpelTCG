@@ -40,18 +40,11 @@ namespace gamecore.serialization
         public FilterOperation Operation { get; }
         public object Value { get; }
 
-        public FilterConditionJson(FilterType field, FilterOperation operation, object value)
-        {
-            Field = field;
-            Operation = operation;
-            Value = value;
-        }
-
         internal FilterConditionJson(FilterCondition condition)
         {
             Field = condition.Field;
             Operation = condition.Operation;
-            Value = condition.Value;
+            Value = condition.Value ?? -1;
         }
     }
 }

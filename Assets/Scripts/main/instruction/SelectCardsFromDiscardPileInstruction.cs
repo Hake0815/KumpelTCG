@@ -45,8 +45,14 @@ namespace gamecore.instruction
                 instructionType: InstructionType.SelectCards,
                 data: new()
                 {
-                    new CardAmountInstructionDataJson(CountRange, CardPosition.DiscardPile),
-                    new FilterInstructionDataJson(Filter.ToSerializable()),
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(CountRange, CardPosition.DiscardPile)
+                    ),
+                    new InstructionDataJson(
+                        InstructionDataType.FilterData,
+                        new FilterInstructionDataJson(Filter.ToSerializable())
+                    ),
                 }
             );
         }

@@ -16,7 +16,13 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.ShuffleDeck,
-                data: new() { new PlayerTargetInstructionDataJson(PlayerTarget.Self) }
+                data: new()
+                {
+                    new InstructionDataJson(
+                        InstructionDataType.PlayerTargetData,
+                        new PlayerTargetInstructionDataJson(PlayerTarget.Self)
+                    ),
+                }
             );
         }
     }
