@@ -14,3 +14,8 @@
 - Universal RP
 - Visual Scripting (?)
 - DOTween (from Asset store)
+
+## Disclaimer
+This project is not affiliated with, endorsed by, or associated with The Pokemon Company, 
+Nintendo, or Game Freak. This is an independent implementation of a trading card game 
+engine for educational purposes.
