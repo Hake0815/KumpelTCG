@@ -74,7 +74,7 @@ namespace gamecore.serialization
             CardType = cardType;
             CardSubtype = cardSubtype;
             EnergyType = energyType;
-            ProvidedEnergy = providedEnergy;
+            ProvidedEnergy = providedEnergy ?? new();
             AttachedTo = attachedTo;
             MaxHp = maxHp;
             EvolvesFrom = evolvesFrom;
@@ -82,16 +82,16 @@ namespace gamecore.serialization
             Resistance = resistance;
             RetreatCost = retreatCost;
             NumberOfPrizeCardsOnKnockout = numberOfPrizeCardsOnKnockout;
-            Attacks = attacks;
+            Attacks = attacks ?? new();
             Ability = ability;
-            Instructions = instructions;
-            Conditions = conditions;
-            PokemonEffects = pokemonEffects;
+            Instructions = instructions ?? new();
+            Conditions = conditions ?? new();
+            PokemonEffects = pokemonEffects ?? new();
             // Current state
             DeckId = deckId;
             CurrentDamage = currentDamage;
-            AttachedEnergy = attachedEnergy;
-            PreEvolutionIds = preEvolutionIds;
+            AttachedEnergy = attachedEnergy ?? new();
+            PreEvolutionIds = preEvolutionIds ?? new();
             EvolvedInto = evolvedInto;
         }
 
