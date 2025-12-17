@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.instruction;
+using gamecore.serialization;
 
 namespace gamecore.card
 {
@@ -57,7 +58,12 @@ namespace gamecore.card
 
         public AttackJson ToSerializable()
         {
-            return new AttackJson(Name, Damage, new(Cost));
+            var instructionJsons = new List<InstructionJson>();
+            foreach (var instruction in Instructions)
+            {
+                instructionJsons.Add(instruction.ToSerializable());
+            }
+            return new AttackJson(Name, Damage, new(Cost), instructionJsons);
         }
     }
 }

@@ -14,7 +14,9 @@ namespace gamecore.game.action
             SelectedCardsOrigin origin,
             string selectionId,
             ActionOnSelection targetAction,
-            ActionOnSelection remainderAction
+            ActionOnSelection remainderAction,
+            List<ICardLogic> selectedCards = null,
+            List<ICardLogic> remainingCards = null
         )
         {
             Player = player;
@@ -22,14 +24,16 @@ namespace gamecore.game.action
             SelectionId = selectionId;
             TargetAction = targetAction;
             RemainderAction = remainderAction;
+            SelectedCards = selectedCards is null ? new() : new(selectedCards);
+            RemainingCards = remainingCards is null ? new() : new(remainingCards);
         }
 
         public IPlayerLogic Player { get; }
 
         public SelectedCardsOrigin Origin { get; }
         public string SelectionId { get; }
-        public List<ICardLogic> SelectedCards { get; } = new();
-        public List<ICardLogic> RemainingCards { get; } = new();
+        public List<ICardLogic> SelectedCards { get; }
+        public List<ICardLogic> RemainingCards { get; }
         public ActionOnSelection TargetAction { get; }
         public ActionOnSelection RemainderAction { get; }
 
@@ -38,7 +42,7 @@ namespace gamecore.game.action
             Hand,
             Deck,
             DiscardPile,
-            Other,
+            Floating,
         }
     }
 }

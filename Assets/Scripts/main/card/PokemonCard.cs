@@ -6,6 +6,7 @@ using gamecore.effect;
 using gamecore.game;
 using gamecore.game.action;
 using gamecore.game.interaction;
+using gamecore.serialization;
 using Newtonsoft.Json;
 
 namespace gamecore.card
@@ -89,8 +90,6 @@ namespace gamecore.card
 
     class PokemonCard : IPokemonCardLogic
     {
-        public static string RETREATED = "retreated";
-
         private IPokemonCardData _pokemonCardData { get; }
         public string Name => _pokemonCardData.Name;
         public string Id => _pokemonCardData.Id;
@@ -186,6 +185,16 @@ namespace gamecore.card
 
         public void Discard()
         {
+            foreach (var energy in AttachedEnergyCards)
+            {
+                energy.Discard();
+            }
+            AttachedEnergyCards.Clear();
+            foreach (var preEvolution in PreEvolutions)
+            {
+                (preEvolution as IPokemonCardLogic).Discard();
+            }
+            PreEvolutions.Clear();
             Owner.DiscardPile.AddCards(new() { this });
             Damage = 0;
         }
@@ -409,7 +418,7 @@ namespace gamecore.card
             {
                 attachedEnergy.Add(energy.DeckId);
             }
-            var pokemonEffects = new List<PokemonEffectJson>();
+            var pokemonEffects = new List<PokemonEffectType>();
             foreach (var effect in PokemonEffects.Values)
             {
                 pokemonEffects.Add(effect.ToSerializable());
@@ -443,7 +452,7 @@ namespace gamecore.card
             {
                 attackJsons.Add(attack.ToSerializable());
             }
-            var pokemonEffects = new List<PokemonEffectJson>();
+            var pokemonEffects = new List<PokemonEffectType>();
             foreach (var effect in PokemonEffects.Values)
             {
                 pokemonEffects.Add(effect.ToSerializable());

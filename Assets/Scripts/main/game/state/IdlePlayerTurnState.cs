@@ -139,7 +139,7 @@ namespace gamecore.game.state
         {
             if (
                 !player.ActivePokemon.CanPayRetreatCost()
-                || player.PerformedOncePerTurnActions.Contains(PokemonCard.RETREATED)
+                || player.PerformedOncePerTurnActions.Contains(OncePerTurnActionType.Retreated)
                 || player.Bench.CardCount == 0
             )
                 return;

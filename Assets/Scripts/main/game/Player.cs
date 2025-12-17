@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.card;
 using gamecore.effect;
+using gamecore.serialization;
 using Newtonsoft.Json;
 
 namespace gamecore.game
@@ -15,8 +17,12 @@ namespace gamecore.game
         IDiscardPile DiscardPile { get; }
         IPrizes Prizes { get; }
         bool IsActive { get; }
+        bool IsAttacking { get; }
         IPokemonCard ActivePokemon { get; }
+        ICard CurrentlyPlayedCard { get; }
+        List<ICard> FloatingCards { get; }
         Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; }
+        IPlayer Opponent { get; }
         event Action<IPokemonCard> ActivePokemonSet;
     }
 
@@ -32,6 +38,12 @@ namespace gamecore.game
 
         [JsonIgnore]
         IPokemonCard IPlayer.ActivePokemon => ActivePokemon;
+
+        [JsonIgnore]
+        new ICardLogic CurrentlyPlayedCard { get; set; }
+
+        [JsonIgnore]
+        ICard IPlayer.CurrentlyPlayedCard => CurrentlyPlayedCard;
 
         [JsonIgnore]
         new DeckLogicAbstract Deck { get; set; }
@@ -53,17 +65,26 @@ namespace gamecore.game
         IPrizes IPlayer.Prizes => Prizes;
 
         [JsonIgnore]
-        HashSet<string> PerformedOncePerTurnActions { get; }
+        new List<ICardLogic> FloatingCards { get; set; }
+        List<ICard> IPlayer.FloatingCards => FloatingCards?.Cast<ICard>().ToList();
+
+        [JsonIgnore]
+        HashSet<OncePerTurnActionType> PerformedOncePerTurnActions { get; }
 
         [JsonIgnore]
         new DiscardPileLogicAbstract DiscardPile { get; }
         IDiscardPile IPlayer.DiscardPile => DiscardPile;
 
         [JsonIgnore]
-        IPlayerLogic Opponent { get; }
+        new IPlayerLogic Opponent { get; }
+        IPlayer IPlayer.Opponent => Opponent;
 
         [JsonIgnore]
         int TurnCounter { get; set; }
+
+        [JsonIgnore]
+        new bool IsAttacking { get; set; }
+        bool IPlayer.IsAttacking => IsAttacking;
         List<ICardLogic> Draw(int amount);
         void SetPrizeCards();
         void ResetOncePerTurnActions();
@@ -92,6 +113,7 @@ namespace gamecore.game
                     ResetOncePerTurnActions();
             }
         }
+        public bool IsAttacking { get; set; }
         private IPokemonCardLogic _activePokemon;
         public IPokemonCardLogic ActivePokemon
         {
@@ -107,13 +129,43 @@ namespace gamecore.game
                 }
             }
         }
+        private ICardLogic _currentlyPlayedCard;
+        public ICardLogic CurrentlyPlayedCard
+        {
+            get => _currentlyPlayedCard;
+            set
+            {
+                _currentlyPlayedCard = value;
+                if (value != null)
+                {
+                    _currentlyPlayedCard.OwnerPositionKnowledge = PositionKnowledge.Known;
+                    _currentlyPlayedCard.OpponentPositionKnowledge = PositionKnowledge.Known;
+                }
+            }
+        }
+        private List<ICardLogic> _floatingCards;
+        public List<ICardLogic> FloatingCards
+        {
+            get => _floatingCards;
+            set
+            {
+                _floatingCards = value;
+                if (value != null)
+                {
+                    foreach (var card in value)
+                    {
+                        card.OwnerPositionKnowledge = PositionKnowledge.Known;
+                    }
+                }
+            }
+        }
         public IDeckList DeckList { get; set; }
         public DeckLogicAbstract Deck { get; set; }
         public HandLogicAbstract Hand { get; } = new Hand();
         public BenchLogicAbstract Bench { get; } = new Bench();
         public DiscardPileLogicAbstract DiscardPile { get; } = new DiscardPile();
         public PrizesLogicAbstract Prizes { get; } = new Prizes();
-        public HashSet<string> PerformedOncePerTurnActions { get; } = new();
+        public HashSet<OncePerTurnActionType> PerformedOncePerTurnActions { get; } = new();
         public IPlayerLogic Opponent { get; set; }
         public int TurnCounter { get; set; } = 0;
         public Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; } = new();
@@ -165,19 +217,20 @@ namespace gamecore.game
 
         public PlayerStateJson ToSerializable()
         {
-            var playerEffects = new List<PlayerEffectJson>();
+            var playerEffects = new List<PlayerEffectType>();
             foreach (var effect in PlayerEffects.Values)
             {
                 playerEffects.Add(effect.ToSerializable());
             }
             return new PlayerStateJson(
                 isActive: IsActive,
+                isAttacking: IsAttacking,
                 handCount: Hand.CardCount,
                 deckCount: Deck.CardCount,
                 prizesCount: Prizes.CardCount,
                 benchCount: Bench.CardCount,
                 discardPileCount: DiscardPile.CardCount,
-                performedOncePerTurnActions: new List<string>(PerformedOncePerTurnActions),
+                performedOncePerTurnActions: new(PerformedOncePerTurnActions),
                 turnCounter: TurnCounter,
                 playerEffects: playerEffects
             );

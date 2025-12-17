@@ -8,7 +8,7 @@ namespace gamecore.instruction.filter
         public static FilterNode CreatePokemonFilter()
         {
             return new FilterCondition(
-                FilterAttribute.CardType,
+                FilterType.CardType,
                 FilterOperation.Equals,
                 CardType.Pokemon
             );
@@ -22,7 +22,7 @@ namespace gamecore.instruction.filter
         public static FilterNode CreateBasicEnergyFilter()
         {
             return new FilterCondition(
-                FilterAttribute.CardSubtype,
+                FilterType.CardSubtype,
                 FilterOperation.Equals,
                 CardSubtype.BasicEnergy
             );

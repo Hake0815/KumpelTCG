@@ -167,7 +167,9 @@ namespace gameview
                         break;
                     case GameInteractionType.GameOver:
                         _gameManager.ShowGameOver(
-                            (interaction.Data[WinnerData.NAME] as WinnerData).Winner
+                            (
+                                interaction.Data[GameInteractionDataType.WinnerData] as WinnerData
+                            ).Winner
                         );
                         break;
                     case GameInteractionType.SelectCards:
@@ -200,8 +202,11 @@ namespace gameview
 
         private void HandleSelectCards(GameInteraction interaction)
         {
-            var targetData = interaction.Data[ConditionalTargetData.NAME] as ConditionalTargetData;
-            var selectFromData = interaction.Data[SelectFromData.NAME] as SelectFromData;
+            var targetData =
+                interaction.Data[GameInteractionDataType.ConditionalTargetData]
+                as ConditionalTargetData;
+            var selectFromData =
+                interaction.Data[GameInteractionDataType.SelectFromData] as SelectFromData;
             switch (selectFromData.SelectFrom)
             {
                 case SelectFrom.InPlay:
@@ -245,7 +250,9 @@ namespace gameview
 
         private void HandlePlayCard(GameInteraction interaction)
         {
-            var card = (interaction.Data[InteractionCard.NAME] as InteractionCard).Card;
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
             cardView.SetPlayable(
@@ -260,7 +267,9 @@ namespace gameview
 
         private void HandlePlayCardWithTargets(GameInteraction interaction)
         {
-            var card = (interaction.Data[InteractionCard.NAME] as InteractionCard).Card;
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
             cardView.SetPlayable(
@@ -271,7 +280,7 @@ namespace gameview
                         OnInteract();
                         interaction.GameControllerMethodWithTargets.Invoke(targets);
                     },
-                    (interaction.Data[TargetData.NAME] as TargetData)
+                    (interaction.Data[GameInteractionDataType.TargetData] as TargetData)
                         .PossibleTargets.AsEnumerable()
                         .Select(card => CardViewRegistry.INSTANCE.Get(card))
                         .ToList()
@@ -281,11 +290,13 @@ namespace gameview
 
         private void HandlePerformAttack(GameInteraction interaction)
         {
-            var card = (interaction.Data[InteractionCard.NAME] as InteractionCard).Card;
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
             cardView.AddAttack(
-                (interaction.Data[AttackData.NAME] as AttackData).Attack,
+                (interaction.Data[GameInteractionDataType.AttackData] as AttackData).Attack,
                 () =>
                 {
                     OnInteract();
@@ -298,7 +309,9 @@ namespace gameview
 
         private void HandlePerformAbility(GameInteraction interaction)
         {
-            var card = (interaction.Data[InteractionCard.NAME] as InteractionCard).Card;
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
             cardView.AddAbility(
@@ -324,10 +337,17 @@ namespace gameview
 
         private void HandleRetreat(GameInteraction interaction)
         {
-            var card = (interaction.Data[InteractionCard.NAME] as InteractionCard).Card;
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
-            if (interaction.Data.TryGetValue(ConditionalTargetData.NAME, out var targetData))
+            if (
+                interaction.Data.TryGetValue(
+                    GameInteractionDataType.ConditionalTargetData,
+                    out var targetData
+                )
+            )
             {
                 var conditionalTargetData = targetData as ConditionalTargetData;
                 cardView.AddRetreat(() =>
@@ -450,7 +470,9 @@ namespace gameview
 
         private void HandleSelectActivePokemon(GameInteraction interaction)
         {
-            var card = (interaction.Data[InteractionCard.NAME] as InteractionCard).Card;
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
             _playableCards.Add(card);
             var cardView = CardViewRegistry.INSTANCE.Get(card);
             var clickBehaviour = new ClickBehaviour(async () =>
@@ -465,7 +487,8 @@ namespace gameview
 
         private async Task HandleConfirmMulligans(GameInteraction interaction)
         {
-            var mulliganData = interaction.Data[MulliganData.NAME] as MulliganData;
+            var mulliganData =
+                interaction.Data[GameInteractionDataType.MulliganData] as MulliganData;
             var mulligans = mulliganData.Mulligans;
             var player = mulliganData.Player;
             if (mulligans.Count == 0)
@@ -488,7 +511,7 @@ namespace gameview
         private void HandleSelectMulligans(GameInteraction interaction)
         {
             _gameManager.AddOptionToMulliganSelector(
-                (interaction.Data[NumberData.NAME] as NumberData).Number,
+                (interaction.Data[GameInteractionDataType.NumberData] as NumberData).Number,
                 () =>
                 {
                     OnInteract();

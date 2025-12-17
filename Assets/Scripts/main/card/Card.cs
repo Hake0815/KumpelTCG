@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.game;
 using gamecore.game.interaction;
+using gamecore.serialization;
 
 namespace gamecore.card
 {

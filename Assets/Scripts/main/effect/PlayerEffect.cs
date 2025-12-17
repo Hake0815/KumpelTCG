@@ -1,5 +1,6 @@
 using gamecore.actionsystem;
 using gamecore.game;
+using gamecore.serialization;
 
 namespace gamecore.effect
 {
@@ -12,6 +13,6 @@ namespace gamecore.effect
             _actionSystem = actionSystem;
         }
 
-        public abstract PlayerEffectJson ToSerializable();
+        public abstract PlayerEffectType ToSerializable();
     }
 }

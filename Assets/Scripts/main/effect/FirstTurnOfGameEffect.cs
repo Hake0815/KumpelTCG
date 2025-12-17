@@ -1,6 +1,7 @@
 using System;
 using gamecore.actionsystem;
 using gamecore.game.action;
+using gamecore.serialization;
 
 namespace gamecore.effect
 {
@@ -22,9 +23,9 @@ namespace gamecore.effect
             return effect;
         }
 
-        public override PlayerEffectJson ToSerializable()
+        public override PlayerEffectType ToSerializable()
         {
-            return new PlayerEffectJson("first_turn_of_game");
+            return PlayerEffectType.FirstTurnOfGame;
         }
     }
 }

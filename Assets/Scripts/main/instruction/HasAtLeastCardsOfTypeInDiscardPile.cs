@@ -1,6 +1,7 @@
 using System;
 using gamecore.card;
 using gamecore.instruction.filter;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -31,12 +32,20 @@ namespace gamecore.instruction
         public ConditionJson ToSerializable()
         {
             return new ConditionJson(
-                conditionType: "has_cards",
+                conditionType: ConditionType.HasCards,
                 new()
                 {
-                    { "count", _count },
-                    { "in", "discard_pile" },
-                    { "filter", _filter.ToSerializable() },
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(
+                            new IntRange(_count, 60),
+                            CardPosition.DiscardPile
+                        )
+                    ),
+                    new InstructionDataJson(
+                        InstructionDataType.FilterData,
+                        new FilterInstructionDataJson(_filter.ToSerializable())
+                    ),
                 }
             );
         }

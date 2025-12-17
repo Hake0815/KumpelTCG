@@ -5,6 +5,7 @@ using gamecore.card;
 using gamecore.game.action;
 using gamecore.game.interaction;
 using gamecore.instruction.filter;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -43,7 +44,7 @@ namespace gamecore.instruction
                     ),
                     action.RevealedCards,
                     c => Filter.Matches(c, card),
-                    SelectCardsGA.SelectedCardsOrigin.Other,
+                    SelectCardsGA.SelectedCardsOrigin.Floating,
                     SelectionId,
                     TargetAction,
                     RemainderAction
@@ -56,18 +57,16 @@ namespace gamecore.instruction
         {
             return new InstructionJson(
                 instructionType: InstructionType.SelectCards,
-                data: new Dictionary<string, object>
+                data: new()
                 {
-                    { "from", "revealed" },
-                    {
-                        "count",
-                        new Dictionary<string, object>
-                        {
-                            { "min", CountRange.Min },
-                            { "max", CountRange.Max },
-                        }
-                    },
-                    { "filter", Filter.ToSerializable() },
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(CountRange, CardPosition.Floating)
+                    ),
+                    new InstructionDataJson(
+                        InstructionDataType.FilterData,
+                        new FilterInstructionDataJson(Filter.ToSerializable())
+                    ),
                 }
             );
         }

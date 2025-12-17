@@ -25,7 +25,7 @@ namespace gamecore.game
 
         public GameBuilder WithPlayer1Decklist(Dictionary<string, int> decklist)
         {
-            var cards = CreateDeckFromDecklist(decklist, _player1);
+            var cards = CreateDeckFromDecklist(decklist, _player1, 0);
             _player1.Deck = new Deck(cards);
             _player1.DeckList = new DeckList(new(cards));
             return this;
@@ -33,7 +33,7 @@ namespace gamecore.game
 
         public GameBuilder WithPlayer2Decklist(Dictionary<string, int> decklist)
         {
-            var cards = CreateDeckFromDecklist(decklist, _player2);
+            var cards = CreateDeckFromDecklist(decklist, _player2, 60);
             _player2.Deck = new Deck(cards);
             _player2.DeckList = new DeckList(new(cards));
             return this;
@@ -47,11 +47,12 @@ namespace gamecore.game
 
         private static List<ICardLogic> CreateDeckFromDecklist(
             Dictionary<string, int> decklist,
-            Player player
+            Player player,
+            int firstDeckId
         )
         {
             var cards = new List<ICardLogic>();
-            var deckId = 0;
+            var deckId = firstDeckId;
             foreach (var entry in decklist)
             {
                 cards.AddRange(CardFactory.CreateCard(entry.Key, player, entry.Value, deckId));

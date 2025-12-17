@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.game.interaction
 {
@@ -10,7 +11,7 @@ namespace gamecore.game.interaction
         public Action GameControllerMethod { get; }
         public Action<List<ICard>> GameControllerMethodWithTargets { get; }
         public GameInteractionType Type { get; }
-        public Dictionary<string, IGameInteractionData> Data { get; } = new();
+        public Dictionary<GameInteractionDataType, IGameInteractionData> Data { get; } = new();
 
         public GameInteraction(
             Action<List<ICard>> gameControllerMethodWithTargets,
@@ -22,7 +23,7 @@ namespace gamecore.game.interaction
             Type = type;
             foreach (var datum in data)
             {
-                Data.Add(datum.Name, datum);
+                Data.Add(datum.DataType, datum);
             }
         }
 
@@ -36,7 +37,7 @@ namespace gamecore.game.interaction
             Type = type;
             foreach (var datum in data)
             {
-                Data.Add(datum.Name, datum);
+                Data.Add(datum.DataType, datum);
             }
         }
 
@@ -45,11 +46,11 @@ namespace gamecore.game.interaction
 
         public GameInteractionJson ToSerializable()
         {
-            var dataJson = new Dictionary<string, IGameInteractionDataJson>();
+            var dataJson = new List<IGameInteractionDataJson>();
 
-            foreach (var kvp in Data)
+            foreach (var data in Data.Values)
             {
-                dataJson[kvp.Key] = kvp.Value.ToSerializable();
+                dataJson.Add(data.ToSerializable());
             }
 
             return new GameInteractionJson(Type, dataJson);
@@ -77,7 +78,7 @@ namespace gamecore.game.interaction
 
     public interface IGameInteractionData
     {
-        public String Name { get; }
+        public GameInteractionDataType DataType { get; }
         public IGameInteractionDataJson ToSerializable();
     }
 
@@ -85,8 +86,7 @@ namespace gamecore.game.interaction
     {
         public List<List<ICard>> Mulligans { get; }
         public IPlayer Player { get; }
-        public const string NAME = "Mulligan";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.MulliganData;
 
         public MulliganData(List<List<ICard>> mulligans, IPlayer player)
         {
@@ -109,8 +109,7 @@ namespace gamecore.game.interaction
     {
         public int Number { get; }
 
-        public const string NAME = "Number";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.NumberData;
 
         public NumberData(int number)
         {
@@ -125,8 +124,7 @@ namespace gamecore.game.interaction
 
     public record TargetData : IGameInteractionData
     {
-        public const string NAME = "Target";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.TargetData;
 
         public TargetData(
             int numberOfTargets,
@@ -159,8 +157,7 @@ namespace gamecore.game.interaction
 
     public record ConditionalTargetData : IGameInteractionData
     {
-        public const string NAME = "ConditionalTarget";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.ConditionalTargetData;
 
         public ConditionalTargetData(
             IConditionalTargetQuery conditionalTargetQuery,
@@ -208,8 +205,7 @@ namespace gamecore.game.interaction
     public record InteractionCard : IGameInteractionData
     {
         public ICard Card { get; }
-        public const string NAME = "InteractionCard";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.InteractionCardData;
 
         public InteractionCard(ICard card)
         {
@@ -225,8 +221,7 @@ namespace gamecore.game.interaction
     public record AttackData : IGameInteractionData
     {
         public IAttack Attack { get; }
-        public const string NAME = "Attack";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.AttackData;
 
         public AttackData(IAttack card)
         {
@@ -243,8 +238,7 @@ namespace gamecore.game.interaction
     {
         public IPlayer Winner { get; }
         public string Message { get; }
-        public const string NAME = "Winner";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.WinnerData;
 
         public WinnerData(IPlayer winner, string message)
         {
@@ -262,8 +256,7 @@ namespace gamecore.game.interaction
     {
         public SelectFrom SelectFrom { get; }
         public List<ICard> SelectionSource { get; }
-        public const string NAME = "SelectFrom";
-        public string Name => NAME;
+        public GameInteractionDataType DataType => GameInteractionDataType.SelectFromData;
 
         public SelectFromData(SelectFrom selectFrom, List<ICard> selectionsource)
         {
@@ -291,5 +284,17 @@ namespace gamecore.game.interaction
         Floating,
         Deck,
         DiscardPile,
+    }
+
+    public enum GameInteractionDataType
+    {
+        MulliganData,
+        NumberData,
+        TargetData,
+        ConditionalTargetData,
+        InteractionCardData,
+        AttackData,
+        WinnerData,
+        SelectFromData,
     }
 }

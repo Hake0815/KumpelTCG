@@ -6,6 +6,7 @@ using gamecore.game;
 using gamecore.game.action;
 using gamecore.game.interaction;
 using gamecore.instruction;
+using gamecore.serialization;
 using Newtonsoft.Json;
 
 namespace gamecore.card
@@ -59,7 +60,9 @@ namespace gamecore.card
         public virtual void Play(ActionSystem actionSystem)
         {
             actionSystem.AddReaction(new RemoveCardsFromHandGA(new() { this }, Owner));
+            actionSystem.AddReaction(new SetCardCurrentlyPlayedGA(this));
             PerformInstructions(actionSystem);
+            actionSystem.AddReaction(new UnsetCardCurrentlyPlayedGA(Owner));
         }
 
         public virtual bool IsPlayable()

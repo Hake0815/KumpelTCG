@@ -1,4 +1,6 @@
 using gamecore.card;
+using gamecore.instruction.filter;
+using gamecore.serialization;
 
 namespace gamecore.instruction
 {
@@ -9,8 +11,14 @@ namespace gamecore.instruction
         public ConditionJson ToSerializable()
         {
             return new ConditionJson(
-                conditionType: "has_cards",
-                new() { { "count", 1 }, { "in", "deck" } }
+                conditionType: ConditionType.HasCards,
+                new()
+                {
+                    new InstructionDataJson(
+                        InstructionDataType.CardAmountData,
+                        new CardAmountInstructionDataJson(new IntRange(1, 60), CardPosition.Deck)
+                    ),
+                }
             );
         }
     }

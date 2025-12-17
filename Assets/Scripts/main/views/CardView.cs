@@ -189,6 +189,7 @@ namespace gameview
         {
             await UIQueue.INSTANCE.Queue(() =>
             {
+                CardViewRegistry.INSTANCE.Unregister(Card);
                 Destroy(gameObject);
                 return Task.CompletedTask;
             });

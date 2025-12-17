@@ -66,26 +66,35 @@ namespace gamecore.game.action
         public Task<KnockOutCheckGA> Perform(KnockOutCheckGA action)
         {
             var numberOfPrizeCardsPerPlayer = new Dictionary<IPlayerLogic, int>();
+            var playersWithKnockedOutActivePokemon = new List<IPlayerLogic>();
             foreach (var player in action.Players)
             {
-                AddPokemonIfKnockedOut(player.ActivePokemon, numberOfPrizeCardsPerPlayer);
+                AddPrizesToDrawIfKnockedOut(player.ActivePokemon, numberOfPrizeCardsPerPlayer);
+                if (player.ActivePokemon.IsKnockedOut())
+                {
+                    playersWithKnockedOutActivePokemon.Add(player);
+                }
                 foreach (var card in player.Bench.Cards)
                 {
-                    AddPokemonIfKnockedOut(card as IPokemonCardLogic, numberOfPrizeCardsPerPlayer);
+                    AddPrizesToDrawIfKnockedOut(
+                        card as IPokemonCardLogic,
+                        numberOfPrizeCardsPerPlayer
+                    );
                 }
             }
 
             if (numberOfPrizeCardsPerPlayer.Count > 0)
             {
                 _actionSystem.AddReaction(new DrawPrizeCardsGA(numberOfPrizeCardsPerPlayer));
-                _actionSystem.AddReaction(new CheckWinConditionGA(action.Players));
-                _actionSystem.AddReaction(new PromoteGA(action.Players));
             }
+            _actionSystem.AddReaction(new CheckWinConditionGA(action.Players));
+            if (playersWithKnockedOutActivePokemon.Count > 0)
+                _actionSystem.AddReaction(new PromoteGA(playersWithKnockedOutActivePokemon));
 
             return Task.FromResult(action);
         }
 
-        void AddPokemonIfKnockedOut(
+        void AddPrizesToDrawIfKnockedOut(
             IPokemonCardLogic pokemon,
             Dictionary<IPlayerLogic, int> numberOfPrizeCardsPerPlayer
         )
@@ -123,10 +132,6 @@ namespace gamecore.game.action
         {
             pokemon.Discard();
             RemovePokemonFromPlay(pokemon);
-            foreach (var energy in pokemon.AttachedEnergyCards)
-            {
-                energy.Discard();
-            }
         }
 
         private static void RemovePokemonFromPlay(IPokemonCardLogic pokemon)

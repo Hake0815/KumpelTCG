@@ -9,6 +9,8 @@ using gamecore.effect;
 using gamecore.game.action;
 using gamecore.game.interaction;
 using gamecore.instruction;
+using gamecore.serialization;
+using Newtonsoft.Json;
 
 namespace gamecore.game
 {
@@ -34,6 +36,7 @@ namespace gamecore.game
         Task StartReplay();
         void StartGame();
         GameStateJson ExportGameState(string playerName);
+        string ExportGameStateAsJsonString(string playerName);
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -255,13 +258,18 @@ namespace gamecore.game
                 selfState = _game.Player2.ToSerializable();
                 opponentState = _game.Player1.ToSerializable();
             }
+            GlobalLogger.Instance.Debug(
+                () =>
+                    $"Creating card states for player {player.Name}, game state is {_game.GameState.GetType().Name}"
+            );
             var cardStates = CardStateCreator.CreateCardStates(player);
-            if (cardStates.Count != 120)
-            {
-                throw new IllegalStateException("Card states count is not 120");
-            }
 
             return new GameStateJson(selfState, opponentState, cardStates);
+        }
+
+        public string ExportGameStateAsJsonString(string playerName)
+        {
+            return ExportGameState(playerName).ToJsonString();
         }
     }
 }

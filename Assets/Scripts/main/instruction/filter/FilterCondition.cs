@@ -1,20 +1,30 @@
 using System;
 using System.Collections.Generic;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.instruction.filter
 {
     [Serializable]
     class FilterCondition : FilterNode
     {
-        public FilterCondition(FilterAttribute field, FilterOperation operation, object value)
+        public FilterCondition(FilterType field, FilterOperation operation, object value)
         {
             Field = field;
             Operation = operation;
             Value = value;
         }
 
-        public FilterAttribute Field { get; }
+        public FilterCondition(FilterType field)
+            : this(field, FilterOperation.None, null)
+        {
+            if (field is not FilterType.True && field is not FilterType.ExcludeSource)
+                throw new ArgumentException(
+                    $"FilterCondition of type {field} needs to have a operation and value"
+                );
+        }
+
+        public FilterType Field { get; }
         public FilterOperation Operation { get; }
         public object Value { get; }
 
@@ -22,9 +32,11 @@ namespace gamecore.instruction.filter
         {
             return Field switch
             {
-                FilterAttribute.CardType => Compare(card.CardType, Operation, Value),
-                FilterAttribute.CardSubtype => Compare(card.CardSubtype, Operation, Value),
-                FilterAttribute.Hp => card is IPokemonCardLogic pokemon
+                FilterType.True => true,
+                FilterType.ExcludeSource => card != sourceCard,
+                FilterType.CardType => Compare(card.CardType, Operation, Value),
+                FilterType.CardSubtype => Compare(card.CardSubtype, Operation, Value),
+                FilterType.Hp => card is IPokemonCardLogic pokemon
                     && Compare(pokemon.MaxHP, Operation, Value),
                 _ => false,
             };
@@ -46,21 +58,9 @@ namespace gamecore.instruction.filter
             };
         }
 
-        public override object ToSerializable()
+        public override FilterJson ToSerializable()
         {
-            return new Dictionary<string, object>
-            {
-                { "op", "condition" },
-                {
-                    "condition",
-                    new Dictionary<string, object>
-                    {
-                        { "field", Field.ToString() },
-                        { "op", Operation.ToString() },
-                        { "value", Value.ToString() },
-                    }
-                },
-            };
+            return new FilterJson(isLeaf: true, condition: new FilterConditionJson(this));
         }
     }
 }

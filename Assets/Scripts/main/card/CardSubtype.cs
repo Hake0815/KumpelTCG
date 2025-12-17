@@ -2,6 +2,7 @@ namespace gamecore.card
 {
     public enum CardSubtype
     {
+        Unknown,
         BasicPokemon,
         Stage1Pokemon,
         Stage2Pokemon,
@@ -11,6 +12,5 @@ namespace gamecore.card
         Stadium,
         BasicEnergy,
         SpecialEnergy,
-        Unknown,
     }
 }

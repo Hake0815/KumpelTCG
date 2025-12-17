@@ -54,7 +54,7 @@ namespace gamecore.actionsystem
 
             if (!File.Exists(_filePath))
             {
-                GlobalLogger.Instance.Error($"ERROR: No log file found at {_filePath}");
+                GlobalLogger.Instance.Error(() => $"ERROR: No log file found at {_filePath}");
                 return entries;
             }
 
@@ -92,19 +92,21 @@ namespace gamecore.actionsystem
             catch (JsonSerializationException ex)
             {
                 GlobalLogger.Instance.Error(
-                    $"ERROR: Deserialization error when processing line: {line}\nMessage: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                    () =>
+                        $"ERROR: Deserialization error when processing line: {line}\nMessage: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
             catch (JsonReaderException ex)
             {
                 GlobalLogger.Instance.Error(
-                    $"ERROR: JSON read error: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                    () => $"ERROR: JSON read error: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
             catch (Exception ex)
             {
                 GlobalLogger.Instance.Error(
-                    $"ERROR: Unknown error during deserialization: {ex.Message}\nStackTrace: {ex.StackTrace}"
+                    () =>
+                        $"ERROR: Unknown error during deserialization: {ex.Message}\nStackTrace: {ex.StackTrace}"
                 );
             }
         }

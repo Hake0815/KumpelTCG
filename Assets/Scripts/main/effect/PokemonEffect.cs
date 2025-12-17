@@ -1,5 +1,6 @@
 using gamecore.actionsystem;
 using gamecore.card;
+using gamecore.serialization;
 
 namespace gamecore.effect
 {
@@ -18,6 +19,6 @@ namespace gamecore.effect
         }
 
         internal abstract void Apply();
-        public abstract PokemonEffectJson ToSerializable();
+        public abstract PokemonEffectType ToSerializable();
     }
 }
