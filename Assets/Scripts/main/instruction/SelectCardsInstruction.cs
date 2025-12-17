@@ -30,6 +30,6 @@ namespace gamecore.instruction
         public ActionOnSelection RemainderAction { get; }
         public abstract void Perform(ICardLogic card, ActionSystem actionSystem);
 
-        public abstract InstructionJson ToSerializable();
+        public abstract ProtoBufInstruction ToSerializable();
     }
 }

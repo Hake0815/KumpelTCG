@@ -34,21 +34,25 @@ namespace gamecore.instruction
             return true;
         }
 
-        public InstructionJson ToSerializable()
+        public ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.TakeToHand,
-                data: new()
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeTakeToHand,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.CardAmountData,
-                        new CardAmountInstructionDataJson(
-                            new IntRange(-1, -1),
-                            CardPosition.SelectedCards
-                        )
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeCardAmountData,
+                        CardAmountData = new ProtoBufCardAmountInstructionData
+                        {
+                            Amount = new ProtoBufIntRange { Min = -1, Max = -1 },
+                            FromPosition = ProtoBufCardPosition.CardPositionSelectedCards,
+                        },
+                    },
+                },
+            };
         }
     }
 }

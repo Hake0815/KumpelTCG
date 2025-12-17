@@ -32,9 +32,12 @@ namespace gamecore.instruction
             return true;
         }
 
-        public InstructionJson ToSerializable()
+        public ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(instructionType: InstructionType.ShowCards);
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeShowCards,
+            };
         }
     }
 }

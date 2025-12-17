@@ -12,18 +12,24 @@ namespace gamecore.instruction
             actionSystem.AddReaction(new ShuffleDeckGA(card.Owner));
         }
 
-        public InstructionJson ToSerializable()
+        public ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.ShuffleDeck,
-                data: new()
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeShuffleDeck,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.PlayerTargetData,
-                        new PlayerTargetInstructionDataJson(PlayerTarget.Self)
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypePlayerTargetData,
+                        PlayerTargetData = new ProtoBufPlayerTargetInstructionData
+                        {
+                            PlayerTarget = ProtoBufPlayerTarget.PlayerTargetSelf,
+                        },
+                    },
+                },
+            };
         }
     }
 }

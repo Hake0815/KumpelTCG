@@ -31,18 +31,25 @@ namespace gamecore.instruction
             );
         }
 
-        public InstructionJson ToSerializable()
+        public ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.DealDamage,
-                data: new()
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeDealDamage,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.AttackData,
-                        new AttackInstructionDataJson(AttackTarget.DefendingPokemon, Damage)
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeAttackData,
+                        AttackData = new ProtoBufAttackInstructionData
+                        {
+                            AttackTarget = ProtoBufAttackTarget.AttackTargetDefendingPokemon,
+                            Damage = Damage,
+                        },
+                    },
+                },
+            };
         }
     }
 }

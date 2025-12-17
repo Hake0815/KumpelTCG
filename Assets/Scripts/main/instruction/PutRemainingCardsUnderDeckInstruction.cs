@@ -28,21 +28,25 @@ namespace gamecore.instruction
             return true;
         }
 
-        public InstructionJson ToSerializable()
+        public ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.PutInDeck,
-                data: new()
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypePutInDeck,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.ReturnToDeckTypeData,
-                        new ReturnToDeckTypeInstructionDataJson(
-                            ReturnToDeckType.Under,
-                            CardPosition.SelectedCardsRemainder
-                        )
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeReturnToDeckTypeData,
+                        ReturnToDeckTypeData = new ProtoBufReturnToDeckTypeInstructionData
+                        {
+                            ReturnToDeckType = ProtoBufReturnToDeckType.ReturnToDeckTypeUnder,
+                            FromPosition = ProtoBufCardPosition.CardPositionSelectedCardsRemainder,
+                        },
+                    },
+                },
+            };
         }
     }
 }

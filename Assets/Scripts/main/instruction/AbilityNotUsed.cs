@@ -11,9 +11,12 @@ namespace gamecore.instruction
             return !(card as IPokemonCardLogic).HasEffect<AbilityUsedThisTurnEffect>();
         }
 
-        public ConditionJson ToSerializable()
+        public ProtoBufCondition ToSerializable()
         {
-            return new ConditionJson(conditionType: ConditionType.AbilityNotUsed, new());
+            return new ProtoBufCondition
+            {
+                ConditionType = ProtoBufConditionType.ConditionTypeAbilityNotUsed,
+            };
         }
     }
 }

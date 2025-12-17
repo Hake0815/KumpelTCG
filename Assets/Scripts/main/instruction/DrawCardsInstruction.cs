@@ -21,21 +21,25 @@ namespace gamecore.instruction
             actionSystem.AddReaction(new DrawCardGA(Count, card.Owner));
         }
 
-        public InstructionJson ToSerializable()
+        public ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.TakeToHand,
-                data: new()
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeTakeToHand,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.CardAmountData,
-                        new CardAmountInstructionDataJson(
-                            new IntRange(Count, Count),
-                            CardPosition.Deck
-                        )
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeCardAmountData,
+                        CardAmountData = new ProtoBufCardAmountInstructionData
+                        {
+                            Amount = new ProtoBufIntRange { Min = Count, Max = Count },
+                            FromPosition = ProtoBufCardPosition.CardPositionDeck,
+                        },
+                    },
+                },
+            };
         }
     }
 }

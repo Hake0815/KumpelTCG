@@ -239,10 +239,7 @@ message ProtoBufInstruction {
 message ProtoBufFilterCondition {
   ProtoBufFilterType field = 1;
   ProtoBufFilterOperation operation = 2;
-  oneof value {
-    int32 int_value = 3;
-    string string_value = 4;
-  }
+  int32 value = 3;
 }
 
 message ProtoBufFilter {

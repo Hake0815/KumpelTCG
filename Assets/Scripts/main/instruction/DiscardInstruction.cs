@@ -56,18 +56,31 @@ namespace gamecore.instruction
             return true;
         }
 
-        public InstructionJson ToSerializable()
+        public ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.Discard,
-                data: new()
+            var protobufTargetSource = Target switch
+            {
+                TargetSource.Hand => ProtoBufTargetSource.TargetSourceHand,
+                TargetSource.Self => ProtoBufTargetSource.TargetSourceSelf,
+                TargetSource.Selection => ProtoBufTargetSource.TargetSourceSelection,
+                _ => throw new System.NotImplementedException(),
+            };
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeDiscard,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.DiscardData,
-                        new DiscardInstructionDataJson(Target)
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeDiscardData,
+                        DiscardData = new ProtoBufDiscardInstructionData
+                        {
+                            TargetSource = protobufTargetSource,
+                        },
+                    },
+                },
+            };
         }
     }
 
