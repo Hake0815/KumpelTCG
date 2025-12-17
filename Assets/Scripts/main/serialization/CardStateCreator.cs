@@ -4,40 +4,45 @@ using System.Linq;
 using gamecore.card;
 using gamecore.common;
 using gamecore.game;
+using Newtonsoft.Json;
 
 namespace gamecore.serialization
 {
     static class CardStateCreator
     {
-        public static List<CardStateJson> CreateCardStates(IPlayer player)
+        public static List<ProtoBufCardState> CreateCardStates(IPlayer player)
         {
-            var cardStates = new List<CardStateJson>();
+            var cardStates = new List<ProtoBufCardState>();
             player.ActivePokemon?.Let(activePokemon =>
-                AddActivePokemonAs(activePokemon, Owner.Self, cardStates)
+                AddActivePokemonAs(activePokemon, ProtoBufOwner.OwnerSelf, cardStates)
             );
             player.CurrentlyPlayedCard?.Let(currentlyPlayedCard =>
-                AddCurrentlyPlayedCardAs(currentlyPlayedCard, Owner.Self, cardStates)
+                AddCurrentlyPlayedCardAs(currentlyPlayedCard, ProtoBufOwner.OwnerSelf, cardStates)
             );
             player.FloatingCards?.Let(floatingCards =>
                 AddFloatingCardsAsSelf(floatingCards, cardStates)
             );
-            AddBenchedPokemonAs(player.Bench, Owner.Self, cardStates);
-            AddDiscardPileAs(player.DiscardPile, Owner.Self, cardStates);
+            AddBenchedPokemonAs(player.Bench, ProtoBufOwner.OwnerSelf, cardStates);
+            AddDiscardPileAs(player.DiscardPile, ProtoBufOwner.OwnerSelf, cardStates);
             AddPrizesAsSelf(player.Prizes, cardStates);
             AddHandAsSelf(player.Hand, cardStates);
             AddDeckAsSelf(player.Deck, cardStates);
 
             player.Opponent.ActivePokemon?.Let(activePokemon =>
-                AddActivePokemonAs(activePokemon, Owner.Opponent, cardStates)
+                AddActivePokemonAs(activePokemon, ProtoBufOwner.OwnerOpponent, cardStates)
             );
             player.Opponent.CurrentlyPlayedCard?.Let(currentlyPlayedCard =>
-                AddCurrentlyPlayedCardAs(currentlyPlayedCard, Owner.Opponent, cardStates)
+                AddCurrentlyPlayedCardAs(
+                    currentlyPlayedCard,
+                    ProtoBufOwner.OwnerOpponent,
+                    cardStates
+                )
             );
             player.Opponent.FloatingCards?.Let(floatingCards =>
                 AddFloatingCardsAsOpponent(floatingCards, cardStates)
             );
-            AddBenchedPokemonAs(player.Opponent.Bench, Owner.Opponent, cardStates);
-            AddDiscardPileAs(player.Opponent.DiscardPile, Owner.Opponent, cardStates);
+            AddBenchedPokemonAs(player.Opponent.Bench, ProtoBufOwner.OwnerOpponent, cardStates);
+            AddDiscardPileAs(player.Opponent.DiscardPile, ProtoBufOwner.OwnerOpponent, cardStates);
             AddPrizesAsOpponent(player.Opponent.Prizes, cardStates);
             AddHandAsOpponent(player.Opponent.Hand, cardStates);
             AddDeckAsOpponent(player.Opponent.Deck, cardStates);
@@ -46,14 +51,14 @@ namespace gamecore.serialization
             {
                 GlobalLogger.Instance.Debug(
                     () =>
-                        $"Card states are [{string.Join(", ", cardStates.Select(cs => cs.ToJsonString()))}]"
+                        $"Card states are [{string.Join(", ", cardStates.Select(cs => JsonConvert.SerializeObject(cs)))}]"
                 );
             }
             else
             {
                 GlobalLogger.Instance.Error(
                     () =>
-                        $"Card states count should be 120, but was {cardStates.Count}, card state were [{string.Join(", ", cardStates.Select(cs => cs.ToJsonString()))}]"
+                        $"Card states count should be 120, but was {cardStates.Count}, card state were [{string.Join(", ", cardStates.Select(cs => JsonConvert.SerializeObject(cs)))}]"
                 );
             }
             return cardStates;
@@ -61,62 +66,82 @@ namespace gamecore.serialization
 
         private static void AddFloatingCardsAsSelf(
             List<ICard> floatingCards,
-            List<CardStateJson> cardStates
+            List<ProtoBufCardState> cardStates
         )
         {
             foreach (var card in floatingCards)
             {
                 cardStates.Add(
-                    new CardStateJson(
-                        card.ToSerializable(),
-                        new PositionJson(Owner.Self, new() { CardPosition.Floating })
-                    )
+                    new ProtoBufCardState
+                    {
+                        Card = card.ToSerializable(),
+                        Position = new ProtoBufPosition
+                        {
+                            Owner = ProtoBufOwner.OwnerSelf,
+                            PossiblePositions = { ProtoBufCardPosition.CardPositionFloating },
+                        },
+                    }
                 );
             }
         }
 
         private static void AddActivePokemonAs(
             IPokemonCard activePokemon,
-            Owner owner,
-            List<CardStateJson> cardStates
+            ProtoBufOwner owner,
+            List<ProtoBufCardState> cardStates
         )
         {
             cardStates.Add(
-                new CardStateJson(
-                    activePokemon.ToSerializable(),
-                    new PositionJson(owner, new() { CardPosition.ActiveSpot })
-                )
+                new ProtoBufCardState
+                {
+                    Card = activePokemon.ToSerializable(),
+                    Position = new ProtoBufPosition
+                    {
+                        Owner = owner,
+                        PossiblePositions = { ProtoBufCardPosition.CardPositionActiveSpot },
+                    },
+                }
             );
             AddAttachedCards(activePokemon, owner, cardStates);
         }
 
         private static void AddCurrentlyPlayedCardAs(
             ICard currentlyPlayedCard,
-            Owner owner,
-            List<CardStateJson> cardStates
+            ProtoBufOwner owner,
+            List<ProtoBufCardState> cardStates
         )
         {
             cardStates.Add(
-                new CardStateJson(
-                    currentlyPlayedCard.ToSerializable(),
-                    new PositionJson(owner, new() { CardPosition.CurrentlyPlayed })
-                )
+                new ProtoBufCardState
+                {
+                    Card = currentlyPlayedCard.ToSerializable(),
+                    Position = new ProtoBufPosition
+                    {
+                        Owner = owner,
+                        PossiblePositions = { ProtoBufCardPosition.CardPositionCurrentlyPlayed },
+                    },
+                }
             );
         }
 
         private static void AddBenchedPokemonAs(
             IBench bench,
-            Owner owner,
-            List<CardStateJson> cardStates
+            ProtoBufOwner owner,
+            List<ProtoBufCardState> cardStates
         )
         {
             foreach (var card in bench.Cards)
             {
                 cardStates.Add(
-                    new CardStateJson(
-                        card.ToSerializable(),
-                        new PositionJson(owner, new() { CardPosition.Bench })
-                    )
+                    new ProtoBufCardState
+                    {
+                        Card = card.ToSerializable(),
+                        Position = new ProtoBufPosition
+                        {
+                            Owner = owner,
+                            PossiblePositions = { ProtoBufCardPosition.CardPositionBench },
+                        },
+                    }
                 );
                 AddAttachedCards(card as IPokemonCard, owner, cardStates);
             }
@@ -124,127 +149,164 @@ namespace gamecore.serialization
 
         private static void AddAttachedCards(
             IPokemonCard pokemonCard,
-            Owner owner,
-            List<CardStateJson> cardStates
+            ProtoBufOwner owner,
+            List<ProtoBufCardState> cardStates
         )
         {
             foreach (var card in pokemonCard.AttachedEnergyCards)
             {
                 cardStates.Add(
-                    new CardStateJson(
-                        card.ToSerializable(pokemonCard),
-                        new PositionJson(
-                            owner,
-                            new() { CardPosition.AttachedToCard },
-                            attachedToPokemonId: pokemonCard.DeckId
-                        )
-                    )
+                    new ProtoBufCardState
+                    {
+                        Card = card.ToSerializable(pokemonCard),
+                        Position = new ProtoBufPosition
+                        {
+                            Owner = owner,
+                            PossiblePositions = { ProtoBufCardPosition.CardPositionAttachedToCard },
+                            AttachedToPokemonId = pokemonCard.DeckId,
+                        },
+                    }
                 );
             }
             foreach (var card in pokemonCard.PreEvolutions)
             {
                 cardStates.Add(
-                    new CardStateJson(
-                        card.ToSerializable(pokemonCard),
-                        new PositionJson(
-                            owner,
-                            new() { CardPosition.AttachedToCard },
-                            attachedToPokemonId: pokemonCard.DeckId
-                        )
-                    )
+                    new ProtoBufCardState
+                    {
+                        Card = card.ToSerializable(pokemonCard),
+                        Position = new ProtoBufPosition
+                        {
+                            Owner = owner,
+                            PossiblePositions = { ProtoBufCardPosition.CardPositionAttachedToCard },
+                            AttachedToPokemonId = pokemonCard.DeckId,
+                        },
+                    }
                 );
             }
         }
 
         private static void AddDiscardPileAs(
             IDiscardPile discardPile,
-            Owner owner,
-            List<CardStateJson> cardStates
+            ProtoBufOwner owner,
+            List<ProtoBufCardState> cardStates
         )
         {
             foreach (var card in discardPile.Cards)
             {
                 cardStates.Add(
-                    new CardStateJson(
-                        card.ToSerializable(),
-                        new PositionJson(owner, new() { CardPosition.DiscardPile })
-                    )
+                    new ProtoBufCardState
+                    {
+                        Card = card.ToSerializable(),
+                        Position = new ProtoBufPosition
+                        {
+                            Owner = owner,
+                            PossiblePositions = { ProtoBufCardPosition.CardPositionDiscardPile },
+                        },
+                    }
                 );
             }
         }
 
-        private static void AddPrizesAsSelf(IPrizes prizes, List<CardStateJson> cardStates)
+        private static void AddPrizesAsSelf(IPrizes prizes, List<ProtoBufCardState> cardStates)
         {
             foreach (var card in prizes.Cards)
             {
                 if (card.OwnerPositionKnowledge == PositionKnowledge.Unknown)
                 {
                     cardStates.Add(
-                        new CardStateJson(
-                            card.ToSerializable(),
-                            new PositionJson(
-                                Owner.Self,
-                                new() { CardPosition.Prizes, CardPosition.Deck },
-                                topDeckPositionIndex: card.TopDeckPositionIndex
-                            )
-                        )
+                        new ProtoBufCardState
+                        {
+                            Card = card.ToSerializable(),
+                            Position = new ProtoBufPosition
+                            {
+                                Owner = ProtoBufOwner.OwnerSelf,
+                                PossiblePositions =
+                                {
+                                    ProtoBufCardPosition.CardPositionPrizes,
+                                    ProtoBufCardPosition.CardPositionDeck,
+                                },
+                                TopDeckPositionIndex = card.TopDeckPositionIndex,
+                            },
+                        }
                     );
                 }
                 else
                 {
                     cardStates.Add(
-                        new CardStateJson(
-                            card.ToSerializable(),
-                            new PositionJson(Owner.Self, new() { CardPosition.Prizes })
-                        )
+                        new ProtoBufCardState
+                        {
+                            Card = card.ToSerializable(),
+                            Position = new ProtoBufPosition
+                            {
+                                Owner = ProtoBufOwner.OwnerSelf,
+                                PossiblePositions = { ProtoBufCardPosition.CardPositionPrizes },
+                            },
+                        }
                     );
                 }
             }
         }
 
-        private static void AddPrizesAsOpponent(IPrizes prizes, List<CardStateJson> cardStates)
+        private static void AddPrizesAsOpponent(IPrizes prizes, List<ProtoBufCardState> cardStates)
         {
             foreach (var card in prizes.Cards)
             {
                 if (card.OpponentPositionKnowledge == PositionKnowledge.Unknown)
                 {
                     cardStates.Add(
-                        new CardStateJson(
-                            CardJson.CreateUnknownCard(card.DeckId),
-                            new PositionJson(
-                                Owner.Opponent,
-                                new() { CardPosition.Prizes, CardPosition.Deck, CardPosition.Hand },
-                                topDeckPositionIndex: card.TopDeckPositionIndex
-                            )
-                        )
+                        new ProtoBufCardState
+                        {
+                            Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                            Position = new ProtoBufPosition
+                            {
+                                Owner = ProtoBufOwner.OwnerOpponent,
+                                PossiblePositions =
+                                {
+                                    ProtoBufCardPosition.CardPositionPrizes,
+                                    ProtoBufCardPosition.CardPositionDeck,
+                                    ProtoBufCardPosition.CardPositionHand,
+                                },
+                                TopDeckPositionIndex = card.TopDeckPositionIndex,
+                            },
+                        }
                     );
                 }
                 else
                 {
                     cardStates.Add(
-                        new CardStateJson(
-                            card.ToSerializable(),
-                            new PositionJson(Owner.Opponent, new() { CardPosition.Prizes })
-                        )
+                        new ProtoBufCardState
+                        {
+                            Card = card.ToSerializable(),
+                            Position = new ProtoBufPosition
+                            {
+                                Owner = ProtoBufOwner.OwnerOpponent,
+                                PossiblePositions = { ProtoBufCardPosition.CardPositionPrizes },
+                            },
+                        }
                     );
                 }
             }
         }
 
-        private static void AddHandAsSelf(IHand hand, List<CardStateJson> cardStates)
+        private static void AddHandAsSelf(IHand hand, List<ProtoBufCardState> cardStates)
         {
             foreach (var card in hand.Cards)
             {
                 cardStates.Add(
-                    new CardStateJson(
-                        card.ToSerializable(),
-                        new PositionJson(Owner.Self, new() { CardPosition.Hand })
-                    )
+                    new ProtoBufCardState
+                    {
+                        Card = card.ToSerializable(),
+                        Position = new ProtoBufPosition
+                        {
+                            Owner = ProtoBufOwner.OwnerSelf,
+                            PossiblePositions = { ProtoBufCardPosition.CardPositionHand },
+                        },
+                    }
                 );
             }
         }
 
-        private static void AddHandAsOpponent(IHand hand, List<CardStateJson> cardStates)
+        private static void AddHandAsOpponent(IHand hand, List<ProtoBufCardState> cardStates)
         {
             foreach (var card in hand.Cards)
             {
@@ -252,79 +314,100 @@ namespace gamecore.serialization
                 {
                     case PositionKnowledge.Known:
                         cardStates.Add(
-                            new CardStateJson(
-                                card.ToSerializable(),
-                                new PositionJson(Owner.Opponent, new() { CardPosition.Hand })
-                            )
+                            new ProtoBufCardState
+                            {
+                                Card = card.ToSerializable(),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions = { ProtoBufCardPosition.CardPositionHand },
+                                },
+                            }
                         );
                         break;
                     case PositionKnowledge.NotPrized:
                         cardStates.Add(
-                            new CardStateJson(
-                                card.ToSerializable(),
-                                new PositionJson(
-                                    Owner.Opponent,
-                                    new() { CardPosition.Hand, CardPosition.Deck },
-                                    topDeckPositionIndex: card.TopDeckPositionIndex
-                                )
-                            )
+                            new ProtoBufCardState
+                            {
+                                Card = card.ToSerializable(),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions =
+                                    {
+                                        ProtoBufCardPosition.CardPositionHand,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                    },
+                                    TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                },
+                            }
                         );
                         break;
                     case PositionKnowledge.Unknown:
                         cardStates.Add(
-                            new CardStateJson(
-                                CardJson.CreateUnknownCard(card.DeckId),
-                                new PositionJson(
-                                    Owner.Opponent,
-                                    new()
+                            new ProtoBufCardState
+                            {
+                                Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions =
                                     {
-                                        CardPosition.Hand,
-                                        CardPosition.Deck,
-                                        CardPosition.Prizes,
+                                        ProtoBufCardPosition.CardPositionHand,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionPrizes,
                                     },
-                                    topDeckPositionIndex: card.TopDeckPositionIndex
-                                )
-                            )
+                                    TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                },
+                            }
                         );
                         break;
                 }
             }
         }
 
-        private static void AddDeckAsSelf(IDeck deck, List<CardStateJson> cardStates)
+        private static void AddDeckAsSelf(IDeck deck, List<ProtoBufCardState> cardStates)
         {
             foreach (var card in deck.Cards)
             {
                 if (card.OwnerPositionKnowledge == PositionKnowledge.Known)
                 {
                     cardStates.Add(
-                        new CardStateJson(
-                            card.ToSerializable(),
-                            new PositionJson(
-                                Owner.Self,
-                                new() { CardPosition.Deck },
-                                topDeckPositionIndex: card.TopDeckPositionIndex
-                            )
-                        )
+                        new ProtoBufCardState
+                        {
+                            Card = card.ToSerializable(),
+                            Position = new ProtoBufPosition
+                            {
+                                Owner = ProtoBufOwner.OwnerSelf,
+                                PossiblePositions = { ProtoBufCardPosition.CardPositionDeck },
+                                TopDeckPositionIndex = card.TopDeckPositionIndex,
+                            },
+                        }
                     );
                 }
                 else
                 {
                     cardStates.Add(
-                        new CardStateJson(
-                            card.ToSerializable(),
-                            new PositionJson(
-                                Owner.Self,
-                                new() { CardPosition.Deck, CardPosition.Prizes },
-                                topDeckPositionIndex: card.TopDeckPositionIndex
-                            )
-                        )
+                        new ProtoBufCardState
+                        {
+                            Card = card.ToSerializable(),
+                            Position = new ProtoBufPosition
+                            {
+                                Owner = ProtoBufOwner.OwnerSelf,
+                                PossiblePositions =
+                                {
+                                    ProtoBufCardPosition.CardPositionDeck,
+                                    ProtoBufCardPosition.CardPositionPrizes,
+                                },
+                                TopDeckPositionIndex = card.TopDeckPositionIndex,
+                            },
+                        }
                     );
                 }
             }
         }
 
-        private static void AddDeckAsOpponent(IDeck deck, List<CardStateJson> cardStates)
+        private static void AddDeckAsOpponent(IDeck deck, List<ProtoBufCardState> cardStates)
         {
             foreach (var card in deck.Cards)
             {
@@ -332,43 +415,53 @@ namespace gamecore.serialization
                 {
                     case PositionKnowledge.Known:
                         cardStates.Add(
-                            new CardStateJson(
-                                card.ToSerializable(),
-                                new PositionJson(
-                                    Owner.Opponent,
-                                    new() { CardPosition.Deck },
-                                    topDeckPositionIndex: card.TopDeckPositionIndex
-                                )
-                            )
+                            new ProtoBufCardState
+                            {
+                                Card = card.ToSerializable(),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions = { ProtoBufCardPosition.CardPositionDeck },
+                                    TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                },
+                            }
                         );
                         break;
                     case PositionKnowledge.NotPrized:
                         cardStates.Add(
-                            new CardStateJson(
-                                card.ToSerializable(),
-                                new PositionJson(
-                                    Owner.Opponent,
-                                    new() { CardPosition.Hand, CardPosition.Deck },
-                                    topDeckPositionIndex: card.TopDeckPositionIndex
-                                )
-                            )
+                            new ProtoBufCardState
+                            {
+                                Card = card.ToSerializable(),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions =
+                                    {
+                                        ProtoBufCardPosition.CardPositionHand,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                    },
+                                    TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                },
+                            }
                         );
                         break;
                     case PositionKnowledge.Unknown:
                         cardStates.Add(
-                            new CardStateJson(
-                                CardJson.CreateUnknownCard(card.DeckId),
-                                new PositionJson(
-                                    Owner.Opponent,
-                                    new()
+                            new ProtoBufCardState
+                            {
+                                Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions =
                                     {
-                                        CardPosition.Hand,
-                                        CardPosition.Deck,
-                                        CardPosition.Prizes,
+                                        ProtoBufCardPosition.CardPositionHand,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionPrizes,
                                     },
-                                    topDeckPositionIndex: card.TopDeckPositionIndex
-                                )
-                            )
+                                    TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                },
+                            }
                         );
                         break;
                 }
@@ -377,7 +470,7 @@ namespace gamecore.serialization
 
         private static void AddFloatingCardsAsOpponent(
             List<ICard> floatingCards,
-            List<CardStateJson> cardStates
+            List<ProtoBufCardState> cardStates
         )
         {
             foreach (var card in floatingCards)
@@ -386,39 +479,55 @@ namespace gamecore.serialization
                 {
                     case PositionKnowledge.Known:
                         cardStates.Add(
-                            new CardStateJson(
-                                card.ToSerializable(),
-                                new PositionJson(Owner.Opponent, new() { CardPosition.Floating })
-                            )
+                            new ProtoBufCardState
+                            {
+                                Card = card.ToSerializable(),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions =
+                                    {
+                                        ProtoBufCardPosition.CardPositionFloating,
+                                    },
+                                },
+                            }
                         );
                         break;
                     case PositionKnowledge.NotPrized:
                         cardStates.Add(
-                            new CardStateJson(
-                                card.ToSerializable(),
-                                new PositionJson(
-                                    Owner.Opponent,
-                                    new() { CardPosition.Hand, CardPosition.Deck },
-                                    topDeckPositionIndex: card.TopDeckPositionIndex
-                                )
-                            )
+                            new ProtoBufCardState
+                            {
+                                Card = card.ToSerializable(),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions =
+                                    {
+                                        ProtoBufCardPosition.CardPositionHand,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                    },
+                                    TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                },
+                            }
                         );
                         break;
                     case PositionKnowledge.Unknown:
                         cardStates.Add(
-                            new CardStateJson(
-                                CardJson.CreateUnknownCard(card.DeckId),
-                                new PositionJson(
-                                    Owner.Opponent,
-                                    new()
+                            new ProtoBufCardState
+                            {
+                                Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                                Position = new ProtoBufPosition
+                                {
+                                    Owner = ProtoBufOwner.OwnerOpponent,
+                                    PossiblePositions =
                                     {
-                                        CardPosition.Hand,
-                                        CardPosition.Deck,
-                                        CardPosition.Prizes,
+                                        ProtoBufCardPosition.CardPositionHand,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionPrizes,
                                     },
-                                    topDeckPositionIndex: card.TopDeckPositionIndex
-                                )
-                            )
+                                    TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                },
+                            }
                         );
                         break;
                 }
