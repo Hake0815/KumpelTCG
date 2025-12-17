@@ -37,7 +37,7 @@ namespace gamecore.instruction.filter
                 FilterType.CardType => Compare(card.CardType, Operation, Value),
                 FilterType.CardSubtype => Compare(card.CardSubtype, Operation, Value),
                 FilterType.Hp => card is IPokemonCardLogic pokemon
-                    && Compare(pokemon.MaxHP, Operation, Value),
+                    && Compare(pokemon.MaxHp, Operation, Value),
                 _ => false,
             };
         }
@@ -81,6 +81,7 @@ namespace gamecore.instruction.filter
                     ProtoBufFilterOperation.FilterOperationGreaterThanOrEqual,
                 _ => throw new System.NotImplementedException(),
             };
+            var protoBufValue = (int)(Value ?? -1);
 
             return new ProtoBufFilter
             {
@@ -89,7 +90,7 @@ namespace gamecore.instruction.filter
                 {
                     Field = protobufFilterType,
                     Operation = protobufFilterOperation,
-                    Value = (int)Value,
+                    Value = protoBufValue,
                 },
             };
         }

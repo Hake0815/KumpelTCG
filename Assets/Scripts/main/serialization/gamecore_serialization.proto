@@ -201,11 +201,6 @@ message ProtoBufIntRange {
   int32 max = 2;
 }
 
-message ProtoBufNumberRange {
-  int32 min = 1;
-  int32 max = 2;
-}
-
 message ProtoBufPosition {
   ProtoBufOwner owner = 1;
   repeated ProtoBufCardPosition possible_positions = 2;
@@ -319,9 +314,10 @@ message ProtoBufCard {
 
   // Pokemon-specific current state
   optional int32 current_damage = 19;
-  repeated int32 attached_energy = 20;
-  repeated int32 pre_evolution_ids = 21;
-  optional int32 evolved_into = 22;
+  repeated ProtoBufEnergyType attached_energy = 20;
+  repeated int32 attached_energy_cards = 21;
+  repeated int32 pre_evolution_ids = 22;
+  optional int32 evolved_into = 23;
 }
 
 message ProtoBufCardState {
@@ -351,7 +347,7 @@ message ProtoBufGameState {
 message ProtoBufConditionalTargetQuery {
   repeated ProtoBufConditionalTargetQuery nested_queries = 1;
   optional ProtoBufLogicalQueryOperator logical_query_operator = 2;
-  optional ProtoBufNumberRange number_range = 3;
+  optional ProtoBufIntRange int_range = 3;
   optional ProtoBufSelectionQualifier selection_qualifier = 4;
 }
 

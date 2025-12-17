@@ -13,6 +13,6 @@ namespace gamecore.effect
             _actionSystem = actionSystem;
         }
 
-        public abstract PlayerEffectType ToSerializable();
+        public abstract ProtoBufPlayerEffectType ToSerializable();
     }
 }

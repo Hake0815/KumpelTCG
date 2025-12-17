@@ -10,9 +10,9 @@ namespace gamecore.effect
         public PutIntoPlayThisTurnEffect(ActionSystem actionSystem, IPokemonCardLogic pokemon)
             : base(actionSystem, pokemon) { }
 
-        public override PokemonEffectType ToSerializable()
+        public override ProtoBufPokemonEffectType ToSerializable()
         {
-            return PokemonEffectType.PutIntoPlayThisTurn;
+            return ProtoBufPokemonEffectType.PokemonEffectTypePutIntoPlayThisTurn;
         }
 
         internal override void Apply()

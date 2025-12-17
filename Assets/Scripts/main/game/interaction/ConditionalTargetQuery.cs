@@ -9,7 +9,7 @@ namespace gamecore.game.interaction
     public interface IConditionalTargetQuery
     {
         public bool IsMet(List<ICard> cards);
-        public ConditionalTargetQueryJson ToSerializable();
+        public ProtoBufConditionalTargetQuery ToSerializable();
     }
 
     class CompoundTargetQuery : IConditionalTargetQuery
@@ -37,12 +37,13 @@ namespace gamecore.game.interaction
                 .Aggregate((left, right) => _logicalQueryOPerator.Apply(left, right));
         }
 
-        public ConditionalTargetQueryJson ToSerializable()
+        public ProtoBufConditionalTargetQuery ToSerializable()
         {
-            return new ConditionalTargetQueryJson(
-                _queries.Select(query => query.ToSerializable()).ToList(),
-                _logicalQueryOPerator
-            );
+            return new ProtoBufConditionalTargetQuery
+            {
+                NestedQueries = { _queries.Select(query => query.ToSerializable()) },
+                LogicalQueryOperator = _logicalQueryOPerator.ToProtoBuf(),
+            };
         }
     }
 
@@ -66,24 +67,28 @@ namespace gamecore.game.interaction
             return _numberRange.Contains(_selectionQualifier.GetQualifierValue(cards));
         }
 
-        public ConditionalTargetQueryJson ToSerializable()
+        public ProtoBufConditionalTargetQuery ToSerializable()
         {
-            return new ConditionalTargetQueryJson(_numberRange, _selectionQualifier);
+            return new ProtoBufConditionalTargetQuery
+            {
+                IntRange = new ProtoBufIntRange { Min = _numberRange.Min, Max = _numberRange.Max },
+                SelectionQualifier = _selectionQualifier.ToProtoBuf(),
+            };
         }
     }
 
     public record NumberRange
     {
-        private readonly int _min;
-        private readonly int _max;
+        public int Min { get; }
+        public int Max { get; }
 
         public NumberRange(int min, int max)
         {
-            _min = min;
-            _max = max;
+            Min = min;
+            Max = max;
         }
 
-        public bool Contains(int value) => value >= _min && value <= _max;
+        public bool Contains(int value) => value >= Min && value <= Max;
     }
 
     public enum SelectionQualifier

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.instruction;
@@ -12,7 +13,7 @@ namespace gamecore.card
         string Name { get; }
         int Damage { get; }
         List<EnergyType> Cost { get; }
-        AttackJson ToSerializable();
+        ProtoBufAttack ToSerializable();
     }
 
     internal interface IAttackLogic : IAttack, IClonable<IAttackLogic>
@@ -56,14 +57,15 @@ namespace gamecore.card
             return new Attack(Name, new(Cost), new(Instructions));
         }
 
-        public AttackJson ToSerializable()
+        public ProtoBufAttack ToSerializable()
         {
-            var instructionJsons = new List<InstructionJson>();
-            foreach (var instruction in Instructions)
+            return new ProtoBufAttack
             {
-                instructionJsons.Add(instruction.ToSerializable());
-            }
-            return new AttackJson(Name, Damage, new(Cost), instructionJsons);
+                Name = Name,
+                Damage = Damage,
+                EnergyCost = { Cost.Select(energyType => energyType.ToProtoBuf()) },
+                Instructions = { Instructions.Select(instruction => instruction.ToSerializable()) },
+            };
         }
     }
 }

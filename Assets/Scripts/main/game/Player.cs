@@ -93,7 +93,7 @@ namespace gamecore.game
             where T : PlayerEffectAbstract;
         void AddEffect(PlayerEffectAbstract effect);
         void RemoveEffect(PlayerEffectAbstract effect);
-        PlayerStateJson ToSerializable();
+        ProtoBufPlayerState ToSerializable();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -215,25 +215,24 @@ namespace gamecore.game
             PlayerEffects.Remove(effect.GetType());
         }
 
-        public PlayerStateJson ToSerializable()
+        public ProtoBufPlayerState ToSerializable()
         {
-            var playerEffects = new List<PlayerEffectType>();
-            foreach (var effect in PlayerEffects.Values)
+            return new ProtoBufPlayerState
             {
-                playerEffects.Add(effect.ToSerializable());
-            }
-            return new PlayerStateJson(
-                isActive: IsActive,
-                isAttacking: IsAttacking,
-                handCount: Hand.CardCount,
-                deckCount: Deck.CardCount,
-                prizesCount: Prizes.CardCount,
-                benchCount: Bench.CardCount,
-                discardPileCount: DiscardPile.CardCount,
-                performedOncePerTurnActions: new(PerformedOncePerTurnActions),
-                turnCounter: TurnCounter,
-                playerEffects: playerEffects
-            );
+                IsActive = IsActive,
+                IsAttacking = IsAttacking,
+                HandCount = Hand.CardCount,
+                DeckCount = Deck.CardCount,
+                PrizesCount = Prizes.CardCount,
+                BenchCount = Bench.CardCount,
+                DiscardPileCount = DiscardPile.CardCount,
+                PerformedOncePerTurnActions =
+                {
+                    PerformedOncePerTurnActions.Select(p => p.ToProtoBuf()),
+                },
+                TurnCounter = TurnCounter,
+                PlayerEffects = { PlayerEffects.Values.Select(effect => effect.ToSerializable()) },
+            };
         }
     }
 }

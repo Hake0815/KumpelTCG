@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.instruction;
 using gamecore.serialization;
 
@@ -7,7 +8,7 @@ namespace gamecore.card
     public interface IAbility
     {
         string Name { get; }
-        AbilityJson ToSerializable();
+        ProtoBufAbility ToSerializable();
     }
 
     internal interface IAbilityLogic : IAbility
@@ -30,23 +31,14 @@ namespace gamecore.card
             Instructions = instructions;
         }
 
-        public AbilityJson ToSerializable()
+        public ProtoBufAbility ToSerializable()
         {
-            // Convert instructions to InstructionJson objects
-            var instructionJsons = new List<InstructionJson>();
-            foreach (var instruction in Instructions)
+            return new ProtoBufAbility
             {
-                instructionJsons.Add(instruction.ToSerializable());
-            }
-
-            // Convert conditions to ConditionJson objects
-            var conditionJsons = new List<ConditionJson>();
-            foreach (var condition in Conditions)
-            {
-                conditionJsons.Add(condition.ToSerializable());
-            }
-
-            return new AbilityJson(Name, instructionJsons, conditionJsons);
+                Name = Name,
+                Instructions = { Instructions.Select(instruction => instruction.ToSerializable()) },
+                Conditions = { Conditions.Select(condition => condition.ToSerializable()) },
+            };
         }
     }
 }

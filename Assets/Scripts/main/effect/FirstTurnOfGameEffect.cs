@@ -23,9 +23,9 @@ namespace gamecore.effect
             return effect;
         }
 
-        public override PlayerEffectType ToSerializable()
+        public override ProtoBufPlayerEffectType ToSerializable()
         {
-            return PlayerEffectType.FirstTurnOfGame;
+            return ProtoBufPlayerEffectType.PlayerEffectTypeFirstTurnOfGame;
         }
     }
 }

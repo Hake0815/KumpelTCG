@@ -19,6 +19,6 @@ namespace gamecore.effect
         }
 
         internal abstract void Apply();
-        public abstract PokemonEffectType ToSerializable();
+        public abstract ProtoBufPokemonEffectType ToSerializable();
     }
 }
