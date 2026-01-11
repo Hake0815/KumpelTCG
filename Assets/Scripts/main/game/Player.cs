@@ -217,7 +217,7 @@ namespace gamecore.game
 
         public ProtoBufPlayerState ToSerializable()
         {
-            return new ProtoBufPlayerState
+            var protoBufPlayerState = new ProtoBufPlayerState
             {
                 IsActive = IsActive,
                 IsAttacking = IsAttacking,
@@ -226,13 +226,25 @@ namespace gamecore.game
                 PrizesCount = Prizes.CardCount,
                 BenchCount = Bench.CardCount,
                 DiscardPileCount = DiscardPile.CardCount,
-                PerformedOncePerTurnActions =
-                {
-                    PerformedOncePerTurnActions.Select(p => p.ToProtoBuf()),
-                },
                 TurnCounter = TurnCounter,
-                PlayerEffects = { PlayerEffects.Values.Select(effect => effect.ToSerializable()) },
             };
+
+            protoBufPlayerState.PerformedOncePerTurnActions.Capacity =
+                PerformedOncePerTurnActions.Count;
+            foreach (var performedOncePerTurnAction in PerformedOncePerTurnActions)
+            {
+                protoBufPlayerState.PerformedOncePerTurnActions.Add(
+                    performedOncePerTurnAction.ToProtoBuf()
+                );
+            }
+
+            protoBufPlayerState.PlayerEffects.Capacity = PlayerEffects.Count;
+            foreach (var playerEffect in PlayerEffects)
+            {
+                protoBufPlayerState.PlayerEffects.Add(playerEffect.Value.ToSerializable());
+            }
+
+            return protoBufPlayerState;
         }
     }
 }

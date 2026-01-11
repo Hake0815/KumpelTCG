@@ -12,7 +12,7 @@ namespace gamecore.serialization
     {
         public static List<ProtoBufCardState> CreateCardStates(IPlayer player)
         {
-            var cardStates = new List<ProtoBufCardState>();
+            var cardStates = new List<ProtoBufCardState>(120);
             player.ActivePokemon?.Let(activePokemon =>
                 AddActivePokemonAs(activePokemon, ProtoBufOwner.OwnerSelf, cardStates)
             );
@@ -46,7 +46,7 @@ namespace gamecore.serialization
             AddPrizesAsOpponent(player.Opponent.Prizes, cardStates);
             AddHandAsOpponent(player.Opponent.Hand, cardStates);
             AddDeckAsOpponent(player.Opponent.Deck, cardStates);
-            cardStates = cardStates.OrderBy(cs => cs.Card.DeckId).ToList();
+            cardStates.Sort((a, b) => a.Card.DeckId.CompareTo(b.Card.DeckId));
             if (cardStates.Count == 120)
             {
                 GlobalLogger.Instance.Debug(
@@ -158,7 +158,7 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(pokemonCard),
+                        Card = card.ToSerializable(),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,
@@ -173,7 +173,7 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(pokemonCard),
+                        Card = card.ToSerializable(),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,

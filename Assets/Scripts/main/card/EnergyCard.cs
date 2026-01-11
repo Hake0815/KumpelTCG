@@ -103,27 +103,37 @@ namespace gamecore.card
 
         public virtual ProtoBufCard ToSerializable()
         {
-            return new ProtoBufCard
+            var protoBufCard = new ProtoBufCard
             {
                 Name = Name,
                 CardType = CardType.Energy.ToProtoBuf(),
                 CardSubtype = CardSubtype.ToProtoBuf(),
-                ProvidedEnergy = { ProvidedEnergy.Select(energyType => energyType.ToProtoBuf()) },
                 DeckId = DeckId,
             };
+            protoBufCard.ProvidedEnergy.Capacity = ProvidedEnergy.Count;
+            foreach (var energyType in ProvidedEnergy)
+            {
+                protoBufCard.ProvidedEnergy.Add(energyType.ToProtoBuf());
+            }
+            return protoBufCard;
         }
 
         public virtual ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
         {
-            return new ProtoBufCard
+            var protoBufCard = new ProtoBufCard
             {
                 Name = Name,
                 CardType = CardType.Energy.ToProtoBuf(),
                 CardSubtype = CardSubtype.ToProtoBuf(),
-                ProvidedEnergy = { ProvidedEnergy.Select(energyType => energyType.ToProtoBuf()) },
                 DeckId = DeckId,
                 AttachedTo = pokemonCard.DeckId,
             };
+            protoBufCard.ProvidedEnergy.Capacity = ProvidedEnergy.Count;
+            foreach (var energyType in ProvidedEnergy)
+            {
+                protoBufCard.ProvidedEnergy.Add(energyType.ToProtoBuf());
+            }
+            return protoBufCard;
         }
     }
 }

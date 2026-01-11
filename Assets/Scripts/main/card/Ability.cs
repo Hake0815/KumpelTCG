@@ -33,12 +33,18 @@ namespace gamecore.card
 
         public ProtoBufAbility ToSerializable()
         {
-            return new ProtoBufAbility
+            var protoBufAbility = new ProtoBufAbility { Name = Name };
+            protoBufAbility.Instructions.Capacity = Instructions.Count;
+            protoBufAbility.Conditions.Capacity = Conditions.Count;
+            foreach (var instruction in Instructions)
             {
-                Name = Name,
-                Instructions = { Instructions.Select(instruction => instruction.ToSerializable()) },
-                Conditions = { Conditions.Select(condition => condition.ToSerializable()) },
-            };
+                protoBufAbility.Instructions.Add(instruction.ToSerializable());
+            }
+            foreach (var condition in Conditions)
+            {
+                protoBufAbility.Conditions.Add(condition.ToSerializable());
+            }
+            return protoBufAbility;
         }
     }
 }

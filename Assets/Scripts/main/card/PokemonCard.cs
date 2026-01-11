@@ -403,7 +403,7 @@ namespace gamecore.card
 
         public ProtoBufCard ToSerializable()
         {
-            return new ProtoBufCard
+            var protoBufCard = new ProtoBufCard
             {
                 Name = Name,
                 CardType = CardType.Pokemon.ToProtoBuf(),
@@ -415,26 +415,41 @@ namespace gamecore.card
                 Resistance = Resistance.ToProtoBuf(),
                 RetreatCost = RetreatCost,
                 NumberOfPrizeCardsOnKnockout = NumberOfPrizeCardsOnKnockout,
-                Attacks = { Attacks.Select(attack => attack.ToSerializable()) },
                 Ability = Ability?.ToSerializable(),
-                PokemonEffects =
-                {
-                    PokemonEffects.Values.Select(effect => effect.ToSerializable()),
-                },
                 DeckId = DeckId,
                 CurrentDamage = Damage,
-                AttachedEnergy = { AttachedEnergy.Select(energy => energy.ToProtoBuf()) },
-                AttachedEnergyCards =
-                {
-                    AttachedEnergyCards.Select(energyCard => energyCard.DeckId),
-                },
-                PreEvolutionIds = { PreEvolutions.Select(preEvolution => preEvolution.DeckId) },
             };
+
+            protoBufCard.Attacks.Capacity = Attacks.Count;
+            protoBufCard.PokemonEffects.Capacity = PokemonEffects.Count;
+            protoBufCard.AttachedEnergyCards.Capacity = AttachedEnergyCards.Count;
+            protoBufCard.PreEvolutionIds.Capacity = PreEvolutions.Count;
+
+            foreach (var attack in Attacks)
+            {
+                protoBufCard.Attacks.Add(attack.ToSerializable());
+            }
+            foreach (var pokemonEffect in PokemonEffects)
+            {
+                protoBufCard.PokemonEffects.Add(pokemonEffect.Value.ToSerializable());
+            }
+            foreach (var attachedEnergyCard in AttachedEnergyCards)
+            {
+                protoBufCard.AttachedEnergyCards.Add(attachedEnergyCard.DeckId);
+                protoBufCard.AttachedEnergy.AddRange(
+                    attachedEnergyCard.ProvidedEnergy.Select(energy => energy.ToProtoBuf())
+                );
+            }
+            foreach (var preEvolution in PreEvolutions)
+            {
+                protoBufCard.PreEvolutionIds.Add(preEvolution.DeckId);
+            }
+            return protoBufCard;
         }
 
         public ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
         {
-            return new ProtoBufCard
+            var protoBufCard = new ProtoBufCard
             {
                 Name = Name,
                 CardType = CardType.Pokemon.ToProtoBuf(),
@@ -446,22 +461,37 @@ namespace gamecore.card
                 Resistance = Resistance.ToProtoBuf(),
                 RetreatCost = RetreatCost,
                 NumberOfPrizeCardsOnKnockout = NumberOfPrizeCardsOnKnockout,
-                Attacks = { Attacks.Select(attack => attack.ToSerializable()) },
                 Ability = Ability?.ToSerializable(),
-                PokemonEffects =
-                {
-                    PokemonEffects.Values.Select(effect => effect.ToSerializable()),
-                },
                 DeckId = DeckId,
                 CurrentDamage = Damage,
-                AttachedEnergy = { AttachedEnergy.Select(energy => energy.ToProtoBuf()) },
-                AttachedEnergyCards =
-                {
-                    AttachedEnergyCards.Select(energyCard => energyCard.DeckId),
-                },
-                PreEvolutionIds = { PreEvolutions.Select(preEvolution => preEvolution.DeckId) },
                 EvolvedInto = pokemonCard.DeckId,
             };
+
+            protoBufCard.Attacks.Capacity = Attacks.Count;
+            protoBufCard.PokemonEffects.Capacity = PokemonEffects.Count;
+            protoBufCard.AttachedEnergyCards.Capacity = AttachedEnergyCards.Count;
+            protoBufCard.PreEvolutionIds.Capacity = PreEvolutions.Count;
+
+            foreach (var attack in Attacks)
+            {
+                protoBufCard.Attacks.Add(attack.ToSerializable());
+            }
+            foreach (var pokemonEffect in PokemonEffects)
+            {
+                protoBufCard.PokemonEffects.Add(pokemonEffect.Value.ToSerializable());
+            }
+            foreach (var attachedEnergyCard in AttachedEnergyCards)
+            {
+                protoBufCard.AttachedEnergyCards.Add(attachedEnergyCard.DeckId);
+                protoBufCard.AttachedEnergy.AddRange(
+                    attachedEnergyCard.ProvidedEnergy.Select(energy => energy.ToProtoBuf())
+                );
+            }
+            foreach (var preEvolution in PreEvolutions)
+            {
+                protoBufCard.PreEvolutionIds.Add(preEvolution.DeckId);
+            }
+            return protoBufCard;
         }
     }
 }

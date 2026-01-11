@@ -19,11 +19,16 @@ namespace gamecore.instruction.filter
 
         public override ProtoBufFilter ToSerializable()
         {
-            return new ProtoBufFilter
+            var protoBufFilter = new ProtoBufFilter
             {
-                Operands = { Operands.ConvertAll(o => o.ToSerializable()) },
                 LogicalOperator = ProtoBufFilterLogicalOperator.FilterLogicalOperatorAnd,
             };
+            protoBufFilter.Operands.Capacity = Operands.Count;
+            foreach (var operand in Operands)
+            {
+                protoBufFilter.Operands.Add(operand.ToSerializable());
+            }
+            return protoBufFilter;
         }
     }
 }

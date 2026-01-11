@@ -109,7 +109,7 @@ namespace gamecore.game.interaction
                     {
                         Mulligans.Select(mulligan => new ProtoBufCardList
                         {
-                            Cards = { mulligan.Select(card => card.ToSerializable()) },
+                            Cards = { mulligan.Select(card => card.DeckId) },
                         }),
                     },
                     Player = ((IPlayerLogic)Player).ToSerializable(),
@@ -163,17 +163,22 @@ namespace gamecore.game.interaction
 
         public ProtoBufGameInteractionData ToSerializable()
         {
-            return new ProtoBufGameInteractionData
+            var protoBufGameInteractionData = new ProtoBufGameInteractionData
             {
                 DataType = DataType.ToProtobuf(),
                 TargetData = new ProtoBufTargetData
                 {
                     NumberOfTargets = NumberOfTargets,
-                    PossibleTargets = { PossibleTargets.Select(card => card.ToSerializable()) },
                     TargetAction = TargetAction.ToProtoBuf(),
                     RemainderAction = RemainderAction.ToProtoBuf(),
                 },
             };
+            protoBufGameInteractionData.TargetData.PossibleTargets.Capacity = PossibleTargets.Count;
+            foreach (var card in PossibleTargets)
+            {
+                protoBufGameInteractionData.TargetData.PossibleTargets.Add(card.DeckId);
+            }
+            return protoBufGameInteractionData;
         }
     }
 
@@ -204,17 +209,23 @@ namespace gamecore.game.interaction
 
         public ProtoBufGameInteractionData ToSerializable()
         {
-            return new ProtoBufGameInteractionData
+            var protoBufGameInteractionData = new ProtoBufGameInteractionData
             {
                 DataType = DataType.ToProtobuf(),
                 ConditionalTargetData = new ProtoBufConditionalTargetData
                 {
-                    PossibleTargets = { PossibleTargets.Select(card => card.ToSerializable()) },
                     ConditionalTargetQuery = ConditionalTargetQuery.ToSerializable(),
                     TargetAction = TargetAction.ToProtoBuf(),
                     RemainderAction = RemainderAction.ToProtoBuf(),
                 },
             };
+            protoBufGameInteractionData.ConditionalTargetData.PossibleTargets.Capacity =
+                PossibleTargets.Count;
+            foreach (var card in PossibleTargets)
+            {
+                protoBufGameInteractionData.ConditionalTargetData.PossibleTargets.Add(card.DeckId);
+            }
+            return protoBufGameInteractionData;
         }
     }
 
@@ -244,10 +255,7 @@ namespace gamecore.game.interaction
             return new ProtoBufGameInteractionData
             {
                 DataType = DataType.ToProtobuf(),
-                InteractionCardData = new ProtoBufInteractionCardData
-                {
-                    Card = Card.ToSerializable(),
-                },
+                InteractionCardData = new ProtoBufInteractionCardData { Card = Card.DeckId },
             };
         }
     }
@@ -317,15 +325,21 @@ namespace gamecore.game.interaction
 
         public ProtoBufGameInteractionData ToSerializable()
         {
-            return new ProtoBufGameInteractionData
+            var protoBufGameInteractionData = new ProtoBufGameInteractionData
             {
                 DataType = DataType.ToProtobuf(),
                 SelectFromData = new ProtoBufSelectFromData
                 {
                     SelectFrom = SelectFrom.ToProtoBuf(),
-                    SelectionSource = { SelectionSource.Select(card => card.ToSerializable()) },
                 },
             };
+            protoBufGameInteractionData.SelectFromData.SelectionSource.Capacity =
+                SelectionSource.Count;
+            foreach (var card in SelectionSource)
+            {
+                protoBufGameInteractionData.SelectFromData.SelectionSource.Add(card.DeckId);
+            }
+            return protoBufGameInteractionData;
         }
     }
 

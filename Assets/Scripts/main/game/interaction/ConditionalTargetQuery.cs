@@ -39,11 +39,16 @@ namespace gamecore.game.interaction
 
         public ProtoBufConditionalTargetQuery ToSerializable()
         {
-            return new ProtoBufConditionalTargetQuery
+            var protoBufConditionalTargetQuery = new ProtoBufConditionalTargetQuery
             {
-                NestedQueries = { _queries.Select(query => query.ToSerializable()) },
                 LogicalQueryOperator = _logicalQueryOPerator.ToProtoBuf(),
             };
+            protoBufConditionalTargetQuery.NestedQueries.Capacity = _queries.Count;
+            foreach (var query in _queries)
+            {
+                protoBufConditionalTargetQuery.NestedQueries.Add(query.ToSerializable());
+            }
+            return protoBufConditionalTargetQuery;
         }
     }
 

@@ -59,13 +59,18 @@ namespace gamecore.card
 
         public ProtoBufAttack ToSerializable()
         {
-            return new ProtoBufAttack
+            var protoBufAttack = new ProtoBufAttack { Name = Name, Damage = Damage };
+            protoBufAttack.EnergyCost.Capacity = Cost.Count;
+            foreach (var energyType in Cost)
             {
-                Name = Name,
-                Damage = Damage,
-                EnergyCost = { Cost.Select(energyType => energyType.ToProtoBuf()) },
-                Instructions = { Instructions.Select(instruction => instruction.ToSerializable()) },
-            };
+                protoBufAttack.EnergyCost.Add(energyType.ToProtoBuf());
+            }
+            protoBufAttack.Instructions.Capacity = Instructions.Count;
+            foreach (var instruction in Instructions)
+            {
+                protoBufAttack.Instructions.Add(instruction.ToSerializable());
+            }
+            return protoBufAttack;
         }
     }
 }

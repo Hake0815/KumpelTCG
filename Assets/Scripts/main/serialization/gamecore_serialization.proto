@@ -357,7 +357,7 @@ message ProtoBufMulliganData {
 }
 
 message ProtoBufCardList {
-  repeated ProtoBufCard cards = 1;
+  repeated int32 cards = 1;
 }
 
 message ProtoBufNumberData {
@@ -366,20 +366,20 @@ message ProtoBufNumberData {
 
 message ProtoBufTargetData {
   int32 number_of_targets = 1;
-  repeated ProtoBufCard possible_targets = 2;
+  repeated int32 possible_targets = 2;
   ProtoBufActionOnSelection target_action = 3;
   ProtoBufActionOnSelection remainder_action = 4;
 }
 
 message ProtoBufConditionalTargetData {
-  repeated ProtoBufCard possible_targets = 1;
+  repeated int32 possible_targets = 1;
   ProtoBufConditionalTargetQuery conditional_target_query = 2;
   ProtoBufActionOnSelection target_action = 3;
   ProtoBufActionOnSelection remainder_action = 4;
 }
 
 message ProtoBufInteractionCardData {
-  ProtoBufCard card = 1;
+  int32 card = 1;
 }
 
 message ProtoBufAttackData {
@@ -393,7 +393,7 @@ message ProtoBufWinnerData {
 
 message ProtoBufSelectFromData {
   ProtoBufSelectFrom select_from = 1;
-  repeated ProtoBufCard selection_source = 2;
+  repeated int32 selection_source = 2;
 }
 
 message ProtoBufGameInteractionData {

@@ -126,15 +126,24 @@ namespace gamecore.card
 
         public virtual ProtoBufCard ToSerializable()
         {
-            return new ProtoBufCard
+            var protoBufCard = new ProtoBufCard
             {
                 Name = Name,
                 CardType = CardType.Trainer.ToProtoBuf(),
                 CardSubtype = CardSubtype.ToProtoBuf(),
-                Conditions = { Conditions.Select(condition => condition.ToSerializable()) },
-                Instructions = { Instructions.Select(instruction => instruction.ToSerializable()) },
                 DeckId = DeckId,
             };
+            protoBufCard.Conditions.Capacity = Conditions.Count;
+            protoBufCard.Instructions.Capacity = Instructions.Count;
+            foreach (var condition in Conditions)
+            {
+                protoBufCard.Conditions.Add(condition.ToSerializable());
+            }
+            foreach (var instruction in Instructions)
+            {
+                protoBufCard.Instructions.Add(instruction.ToSerializable());
+            }
+            return protoBufCard;
         }
 
         public virtual ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
