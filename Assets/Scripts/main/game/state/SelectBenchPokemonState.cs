@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using gamecore.card;
 using gamecore.game.interaction;
+using gamecore.serialization;
 
 namespace gamecore.game.state
 {
@@ -56,6 +57,11 @@ namespace gamecore.game.state
         public void OnAdvanced(Game game)
         {
             game.AwaitInteraction();
+        }
+
+        public ProtoBufTechnicalGameState ToProtoBuf()
+        {
+            return ProtoBufTechnicalGameState.GameStateSelectBenchPokemon;
         }
     }
 }

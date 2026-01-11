@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using gamecore.game.interaction;
+using gamecore.serialization;
 
 namespace gamecore.game.state
 {
@@ -28,6 +29,11 @@ namespace gamecore.game.state
         public void OnAdvanced(Game game)
         {
             game.AwaitGeneralInteraction();
+        }
+
+        public ProtoBufTechnicalGameState ToProtoBuf()
+        {
+            return ProtoBufTechnicalGameState.GameStateSettingPrizeCards;
         }
     }
 }

@@ -200,6 +200,19 @@ enum ProtoBufSelectionQualifier {
   SELECTION_QUALIFIER_PROVIDED_ENERGY = 1;
 }
 
+enum ProtoBufTechnicalGameState{
+  GAME_STATE_GAME_OVER = 0;
+  GAME_STATE_IDLE_PLAYER_TURN = 1;
+  GAME_STATE_SELECT_BENCH_POKEMON = 2;
+  GAME_STATE_SELECTING_MULLIGAN_CARDS = 3;
+  GAME_STATE_SETTING_ACTIVE_POKEMON = 4;
+  GAME_STATE_SETTING_PRIZE_CARDS = 5;
+  GAME_STATE_SETUP_COMPLETED = 6;
+  GAME_STATE_SHOW_FIRST_MULLIGAN = 7;
+  GAME_STATE_SHOW_SECOND_MULLIGAN = 8;
+  GAME_STATE_WAIT_FOR_INPUT = 9;
+}
+
 // Messages
 message ProtoBufIntRange {
   int32 min = 1;
@@ -345,9 +358,11 @@ message ProtoBufPlayerState {
 }
 
 message ProtoBufGameState {
-  ProtoBufPlayerState self_state = 1;
-  ProtoBufPlayerState opponent_state = 2;
-  repeated ProtoBufCardState card_states = 3;
+  bool recreatable = 1;
+  ProtoBufTechnicalGameState technical_game_state = 2;
+  ProtoBufPlayerState self_state = 3;
+  ProtoBufPlayerState opponent_state = 4;
+  repeated ProtoBufCardState card_states = 5;
 }
 
 message ProtoBufConditionalTargetQuery {
