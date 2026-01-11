@@ -10,6 +10,7 @@ using gamecore.game.interaction;
 using gamecore.instruction;
 using gamecore.serialization;
 using Google.Protobuf;
+using Newtonsoft.Json;
 
 namespace gamecore.game
 {
@@ -36,6 +37,7 @@ namespace gamecore.game
         void StartGame();
         ProtoBufGameState ExportGameState(string playerName);
         byte[] ExportGameStateAsByteArray(string playerName);
+        string ExportGameStateAsJson(string playerName);
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -274,6 +276,11 @@ namespace gamecore.game
         public byte[] ExportGameStateAsByteArray(string playerName)
         {
             return ExportGameState(playerName).ToByteArray();
+        }
+
+        public string ExportGameStateAsJson(string playerName)
+        {
+            return JsonConvert.SerializeObject(ExportGameState(playerName));
         }
     }
 }
