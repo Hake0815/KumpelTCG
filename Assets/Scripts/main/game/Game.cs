@@ -197,7 +197,7 @@ namespace gamecore.game
             nextPlayer.TurnCounter++;
             TurnCounter++;
             if (TurnCounter == 1)
-                nextPlayer.AddEffect(FirstTurnOfGameEffect.Create(_actionSystem));
+                nextPlayer.PlayerTurnTraits.Add(PlayerTurnTrait.FirstTurnOfGame);
         }
 
         public Task<SetupGA> Perform(SetupGA action)

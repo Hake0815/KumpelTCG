@@ -227,7 +227,7 @@ namespace gamecore.game.action
             );
             _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
             _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
-            pokemon.Owner.PerformedOncePerTurnActions.Add(OncePerTurnActionType.Retreated);
+            pokemon.Owner.PlayerTurnTraits.Add(PlayerTurnTrait.Retreated);
             return Task.FromResult(action);
         }
 
@@ -235,7 +235,7 @@ namespace gamecore.game.action
         {
             var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
             pokemon.Owner.ActivePokemon = null;
-            pokemon.Owner.PerformedOncePerTurnActions.Add(OncePerTurnActionType.Retreated);
+            pokemon.Owner.PlayerTurnTraits.Add(PlayerTurnTrait.Retreated);
             return Task.FromResult(action);
         }
 
@@ -300,9 +300,7 @@ namespace gamecore.game.action
 
         public Task<PlaySupporterGA> Perform(PlaySupporterGA action)
         {
-            action.Player.PerformedOncePerTurnActions.Add(
-                OncePerTurnActionType.PlayedSupporterThisTurn
-            );
+            action.Player.PlayerTurnTraits.Add(PlayerTurnTrait.PlayedSupporterThisTurn);
             return Task.FromResult(action);
         }
 
@@ -310,34 +308,21 @@ namespace gamecore.game.action
         {
             _game
                 .GetPlayerByName(action.Player.Name)
-                .PerformedOncePerTurnActions.Add(OncePerTurnActionType.PlayedSupporterThisTurn);
+                .PlayerTurnTraits.Add(PlayerTurnTrait.PlayedSupporterThisTurn);
             return Task.FromResult(action);
         }
 
         public Task<RemovePlayerEffectGA> Perform(RemovePlayerEffectGA action)
         {
-            RemoveEffectFromPlayer(action.Player, action.Effect);
+            action.Player.RemoveEffect(action.Effect);
             return Task.FromResult(action);
         }
 
         public Task<RemovePlayerEffectGA> Reperform(RemovePlayerEffectGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
-            RemoveEffectFromPlayer(player, action.Effect);
-
+            player.RemoveEffect(action.Effect);
             return Task.FromResult(action);
-        }
-
-        private void RemoveEffectFromPlayer(IPlayerLogic player, PlayerEffectAbstract effect)
-        {
-            player.RemoveEffect(effect);
-            if (effect is FirstTurnOfGameEffect firstTurnOfGameEffect)
-            {
-                _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(
-                    firstTurnOfGameEffect,
-                    ReactionTiming.POST
-                );
-            }
         }
 
         public Task<RemovePokemonEffectGA> Perform(RemovePokemonEffectGA action)

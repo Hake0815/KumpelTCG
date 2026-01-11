@@ -133,10 +133,11 @@ enum ProtoBufPokemonEffectType {
   POKEMON_EFFECT_TYPE_ABILITY_USED_THIS_TURN = 1;
 }
 
-enum ProtoBufOncePerTurnActionType {
-  ONCE_PER_TURN_ACTION_TYPE_ATTACHED_ENERGY_FOR_TURN = 0;
-  ONCE_PER_TURN_ACTION_TYPE_PLAYED_SUPPORTER_THIS_TURN = 1;
-  ONCE_PER_TURN_ACTION_TYPE_RETREATED = 2;
+enum ProtoBufPlayerTurnTrait {
+  PLAYER_TURN_TRAIT_FIRST_TURN_OF_GAME = 0;
+  PLAYER_TURN_TRAIT_ATTACHED_ENERGY_FOR_TURN = 1;
+  PLAYER_TURN_TRAIT_PLAYED_SUPPORTER_THIS_TURN = 2;
+  PLAYER_TURN_TRAIT_RETREATED = 3;
 }
 
 enum ProtoBufGameInteractionType {
@@ -333,7 +334,7 @@ message ProtoBufPlayerState {
   int32 prizes_count = 5;
   int32 bench_count = 6;
   int32 discard_pile_count = 7;
-  repeated ProtoBufOncePerTurnActionType performed_once_per_turn_actions = 8;
+  repeated ProtoBufPlayerTurnTrait player_turn_traits = 8;
   int32 turn_counter = 9;
   repeated ProtoBufPlayerEffectType player_effects = 10;
 }

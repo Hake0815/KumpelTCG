@@ -69,7 +69,7 @@ namespace gamecore.game
         List<ICard> IPlayer.FloatingCards => FloatingCards?.Cast<ICard>().ToList();
 
         [JsonIgnore]
-        HashSet<OncePerTurnActionType> PerformedOncePerTurnActions { get; }
+        HashSet<PlayerTurnTrait> PlayerTurnTraits { get; }
 
         [JsonIgnore]
         new DiscardPileLogicAbstract DiscardPile { get; }
@@ -87,13 +87,14 @@ namespace gamecore.game
         bool IPlayer.IsAttacking => IsAttacking;
         List<ICardLogic> Draw(int amount);
         void SetPrizeCards();
-        void ResetOncePerTurnActions();
+        void ResetPlayerTurnTraits();
         void Promote(IPokemonCardLogic pokemon);
         bool HasEffect<T>()
             where T : PlayerEffectAbstract;
         void AddEffect(PlayerEffectAbstract effect);
         void RemoveEffect(PlayerEffectAbstract effect);
         ProtoBufPlayerState ToSerializable();
+        IEnumerable<IPokemonCardLogic> GetAllPokemonInPlay();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -110,7 +111,7 @@ namespace gamecore.game
             {
                 _isActive = value;
                 if (!value)
-                    ResetOncePerTurnActions();
+                    ResetPlayerTurnTraits();
             }
         }
         public bool IsAttacking { get; set; }
@@ -165,7 +166,7 @@ namespace gamecore.game
         public BenchLogicAbstract Bench { get; } = new Bench();
         public DiscardPileLogicAbstract DiscardPile { get; } = new DiscardPile();
         public PrizesLogicAbstract Prizes { get; } = new Prizes();
-        public HashSet<OncePerTurnActionType> PerformedOncePerTurnActions { get; } = new();
+        public HashSet<PlayerTurnTrait> PlayerTurnTraits { get; } = new();
         public IPlayerLogic Opponent { get; set; }
         public int TurnCounter { get; set; } = 0;
         public Dictionary<Type, PlayerEffectAbstract> PlayerEffects { get; } = new();
@@ -188,9 +189,9 @@ namespace gamecore.game
             ActivePokemon = pokemon;
         }
 
-        public void ResetOncePerTurnActions()
+        public void ResetPlayerTurnTraits()
         {
-            PerformedOncePerTurnActions.Clear();
+            PlayerTurnTraits.Clear();
         }
 
         public void SetPrizeCards()
@@ -215,6 +216,17 @@ namespace gamecore.game
             PlayerEffects.Remove(effect.GetType());
         }
 
+        public IEnumerable<IPokemonCardLogic> GetAllPokemonInPlay()
+        {
+            if (ActivePokemon != null)
+                yield return ActivePokemon;
+
+            foreach (var benchedPokemon in Bench.Cards)
+            {
+                yield return benchedPokemon as IPokemonCardLogic;
+            }
+        }
+
         public ProtoBufPlayerState ToSerializable()
         {
             var protoBufPlayerState = new ProtoBufPlayerState
@@ -229,13 +241,10 @@ namespace gamecore.game
                 TurnCounter = TurnCounter,
             };
 
-            protoBufPlayerState.PerformedOncePerTurnActions.Capacity =
-                PerformedOncePerTurnActions.Count;
-            foreach (var performedOncePerTurnAction in PerformedOncePerTurnActions)
+            protoBufPlayerState.PlayerTurnTraits.Capacity = PlayerTurnTraits.Count;
+            foreach (var playerTurnTrait in PlayerTurnTraits)
             {
-                protoBufPlayerState.PerformedOncePerTurnActions.Add(
-                    performedOncePerTurnAction.ToProtoBuf()
-                );
+                protoBufPlayerState.PlayerTurnTraits.Add(playerTurnTrait.ToProtoBuf());
             }
 
             protoBufPlayerState.PlayerEffects.Capacity = PlayerEffects.Count;

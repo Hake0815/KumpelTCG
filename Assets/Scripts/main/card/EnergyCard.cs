@@ -70,9 +70,7 @@ namespace gamecore.card
 
         public bool IsPlayableWithTargets()
         {
-            return !Owner.PerformedOncePerTurnActions.Contains(
-                OncePerTurnActionType.AttachedEnergyForTurn
-            );
+            return !Owner.PlayerTurnTraits.Contains(PlayerTurnTrait.AttachedEnergyForTurn);
         }
 
         public bool IsPokemonCard() => false;
