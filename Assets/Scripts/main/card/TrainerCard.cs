@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
@@ -123,31 +124,29 @@ namespace gamecore.card
             throw new IllegalActionException("Trainer cards cannot be played with a target, yet.");
         }
 
-        public virtual CardJson ToSerializable()
+        public virtual ProtoBufCard ToSerializable()
         {
-            var instructionJsons = new List<InstructionJson>();
-            foreach (var instruction in Instructions)
+            var protoBufCard = new ProtoBufCard
             {
-                instructionJsons.Add(instruction.ToSerializable());
-            }
-
-            var conditionJsons = new List<ConditionJson>();
+                Name = Name,
+                CardType = CardType.Trainer.ToProtoBuf(),
+                CardSubtype = CardSubtype.ToProtoBuf(),
+                DeckId = DeckId,
+            };
+            protoBufCard.Conditions.Capacity = Conditions.Count;
+            protoBufCard.Instructions.Capacity = Instructions.Count;
             foreach (var condition in Conditions)
             {
-                conditionJsons.Add(condition.ToSerializable());
+                protoBufCard.Conditions.Add(condition.ToSerializable());
             }
-
-            return new CardJson(
-                name: Name,
-                cardType: CardType.Trainer,
-                cardSubtype: CardSubtype,
-                conditions: conditionJsons,
-                instructions: instructionJsons,
-                deckId: DeckId
-            );
+            foreach (var instruction in Instructions)
+            {
+                protoBufCard.Instructions.Add(instruction.ToSerializable());
+            }
+            return protoBufCard;
         }
 
-        public virtual CardJson ToSerializable(IPokemonCard pokemonCard)
+        public virtual ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
         {
             throw new IllegalActionException("Trainer cards cannot be attached to pokemon, yet.");
         }

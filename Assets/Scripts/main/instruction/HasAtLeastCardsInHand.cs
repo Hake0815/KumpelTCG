@@ -18,21 +18,25 @@ namespace gamecore.instruction
             return card.Owner.Hand.CardCount >= Count;
         }
 
-        public ConditionJson ToSerializable()
+        public ProtoBufCondition ToSerializable()
         {
-            return new ConditionJson(
-                conditionType: ConditionType.HasCards,
-                new()
+            return new ProtoBufCondition
+            {
+                ConditionType = ProtoBufConditionType.ConditionTypeHasCards,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.CardAmountData,
-                        new CardAmountInstructionDataJson(
-                            new IntRange(Count, 60),
-                            CardPosition.Hand
-                        )
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeCardAmountData,
+                        CardAmountData = new ProtoBufCardAmountInstructionData
+                        {
+                            Amount = new ProtoBufIntRange { Min = Count, Max = 60 },
+                            FromPosition = ProtoBufCardPosition.CardPositionHand,
+                        },
+                    },
+                },
+            };
         }
     }
 }

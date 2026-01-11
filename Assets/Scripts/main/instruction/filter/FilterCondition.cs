@@ -37,7 +37,7 @@ namespace gamecore.instruction.filter
                 FilterType.CardType => Compare(card.CardType, Operation, Value),
                 FilterType.CardSubtype => Compare(card.CardSubtype, Operation, Value),
                 FilterType.Hp => card is IPokemonCardLogic pokemon
-                    && Compare(pokemon.MaxHP, Operation, Value),
+                    && Compare(pokemon.MaxHp, Operation, Value),
                 _ => false,
             };
         }
@@ -58,9 +58,41 @@ namespace gamecore.instruction.filter
             };
         }
 
-        public override FilterJson ToSerializable()
+        public override ProtoBufFilter ToSerializable()
         {
-            return new FilterJson(isLeaf: true, condition: new FilterConditionJson(this));
+            var protobufFilterType = Field switch
+            {
+                FilterType.None => ProtoBufFilterType.FilterTypeNone,
+                FilterType.True => ProtoBufFilterType.FilterTypeTrue,
+                FilterType.ExcludeSource => ProtoBufFilterType.FilterTypeExcludeSource,
+                FilterType.CardType => ProtoBufFilterType.FilterTypeCardType,
+                FilterType.CardSubtype => ProtoBufFilterType.FilterTypeCardSubtype,
+                FilterType.Hp => ProtoBufFilterType.FilterTypeHp,
+                _ => throw new System.NotImplementedException(),
+            };
+            var protobufFilterOperation = Operation switch
+            {
+                FilterOperation.None => ProtoBufFilterOperation.FilterOperationNone,
+                FilterOperation.Equals => ProtoBufFilterOperation.FilterOperationEquals,
+                FilterOperation.NotEquals => ProtoBufFilterOperation.FilterOperationNotEquals,
+                FilterOperation.LessThanOrEqual =>
+                    ProtoBufFilterOperation.FilterOperationLessThanOrEqual,
+                FilterOperation.GreaterThanOrEqual =>
+                    ProtoBufFilterOperation.FilterOperationGreaterThanOrEqual,
+                _ => throw new System.NotImplementedException(),
+            };
+            var protoBufValue = (int)(Value ?? -1);
+
+            return new ProtoBufFilter
+            {
+                IsLeaf = true,
+                Condition = new ProtoBufFilterCondition
+                {
+                    Field = protobufFilterType,
+                    Operation = protobufFilterOperation,
+                    Value = protoBufValue,
+                },
+            };
         }
     }
 }

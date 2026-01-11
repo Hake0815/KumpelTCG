@@ -38,22 +38,38 @@ namespace gamecore.instruction
             );
         }
 
-        public override InstructionJson ToSerializable()
+        public override ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.SelectCards,
-                data: new()
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeSelectCards,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.CardAmountData,
-                        new CardAmountInstructionDataJson(CountRange, CardPosition.Hand)
-                    ),
-                    new InstructionDataJson(
-                        InstructionDataType.FilterData,
-                        new FilterInstructionDataJson(Filter.ToSerializable())
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeCardAmountData,
+                        CardAmountData = new ProtoBufCardAmountInstructionData
+                        {
+                            Amount = new ProtoBufIntRange
+                            {
+                                Min = CountRange.Min,
+                                Max = CountRange.Max,
+                            },
+                            FromPosition = ProtoBufCardPosition.CardPositionHand,
+                        },
+                    },
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeFilterData,
+                        FilterData = new ProtoBufFilterInstructionData
+                        {
+                            Filter = Filter.ToSerializable(),
+                        },
+                    },
+                },
+            };
         }
     }
 }

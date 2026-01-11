@@ -17,12 +17,18 @@ namespace gamecore.instruction.filter
         public override bool Matches(ICardLogic card, ICardLogic sourceCard) =>
             Operands.All(o => o.Matches(card, sourceCard));
 
-        public override FilterJson ToSerializable()
+        public override ProtoBufFilter ToSerializable()
         {
-            return new FilterJson(
-                Operands.ConvertAll(o => o.ToSerializable()),
-                FilterLogicalOperator.And
-            );
+            var protoBufFilter = new ProtoBufFilter
+            {
+                LogicalOperator = ProtoBufFilterLogicalOperator.FilterLogicalOperatorAnd,
+            };
+            protoBufFilter.Operands.Capacity = Operands.Count;
+            foreach (var operand in Operands)
+            {
+                protoBufFilter.Operands.Add(operand.ToSerializable());
+            }
+            return protoBufFilter;
         }
     }
 }

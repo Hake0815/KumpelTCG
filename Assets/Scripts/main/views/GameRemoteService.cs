@@ -106,11 +106,13 @@ namespace gameview
 
         private async void HandlePlayer1Interactions(List<GameInteraction> interactions)
         {
+            _gameController.ExportGameStateAsByteArray("Player 1");
             await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }
 
         private async void HandlePlayer2Interactions(List<GameInteraction> interactions)
         {
+            _gameController.ExportGameStateAsByteArray("Player 2");
             await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }
 

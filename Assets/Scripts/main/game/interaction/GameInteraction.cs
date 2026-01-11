@@ -44,16 +44,20 @@ namespace gamecore.game.interaction
         public GameInteraction(Action gameControllerMethod, GameInteractionType type)
             : this(gameControllerMethod, type, new()) { }
 
-        public GameInteractionJson ToSerializable()
+        public ProtoBufGameInteraction ToSerializable()
         {
-            var dataJson = new List<IGameInteractionDataJson>();
+            var protoBufData = new List<ProtoBufGameInteractionData>();
 
             foreach (var data in Data.Values)
             {
-                dataJson.Add(data.ToSerializable());
+                protoBufData.Add(data.ToSerializable());
             }
 
-            return new GameInteractionJson(Type, dataJson);
+            return new ProtoBufGameInteraction
+            {
+                Type = (ProtoBufGameInteractionType)Type,
+                Data = { protoBufData },
+            };
         }
     }
 
@@ -79,7 +83,7 @@ namespace gamecore.game.interaction
     public interface IGameInteractionData
     {
         public GameInteractionDataType DataType { get; }
-        public IGameInteractionDataJson ToSerializable();
+        public ProtoBufGameInteractionData ToSerializable();
     }
 
     public record MulliganData : IGameInteractionData
@@ -94,14 +98,23 @@ namespace gamecore.game.interaction
             Player = player;
         }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new MulliganDataJson(
-                Mulligans
-                    .Select(mulligan => mulligan.Select(card => card.ToSerializable()).ToList())
-                    .ToList(),
-                ((IPlayerLogic)Player).ToSerializable()
-            );
+            return new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                MulliganData = new ProtoBufMulliganData
+                {
+                    Mulligans =
+                    {
+                        Mulligans.Select(mulligan => new ProtoBufCardList
+                        {
+                            Cards = { mulligan.Select(card => card.DeckId) },
+                        }),
+                    },
+                    Player = ((IPlayerLogic)Player).ToSerializable(),
+                },
+            };
         }
     }
 
@@ -116,9 +129,13 @@ namespace gamecore.game.interaction
             Number = number;
         }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new NumberDataJson(Number);
+            return new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                NumberData = new ProtoBufNumberData { Number = Number },
+            };
         }
     }
 
@@ -144,14 +161,24 @@ namespace gamecore.game.interaction
         public ActionOnSelection TargetAction { get; }
         public ActionOnSelection RemainderAction { get; }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new TargetDataJson(
-                NumberOfTargets,
-                PossibleTargets.Select(card => card.ToSerializable()).ToList(),
-                TargetAction,
-                RemainderAction
-            );
+            var protoBufGameInteractionData = new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                TargetData = new ProtoBufTargetData
+                {
+                    NumberOfTargets = NumberOfTargets,
+                    TargetAction = TargetAction.ToProtoBuf(),
+                    RemainderAction = RemainderAction.ToProtoBuf(),
+                },
+            };
+            protoBufGameInteractionData.TargetData.PossibleTargets.Capacity = PossibleTargets.Count;
+            foreach (var card in PossibleTargets)
+            {
+                protoBufGameInteractionData.TargetData.PossibleTargets.Add(card.DeckId);
+            }
+            return protoBufGameInteractionData;
         }
     }
 
@@ -180,14 +207,25 @@ namespace gamecore.game.interaction
         public ActionOnSelection TargetAction { get; }
         public ActionOnSelection RemainderAction { get; }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new ConditionalTargetDataJson(
-                PossibleTargets.Select(card => card.ToSerializable()).ToList(),
-                ConditionalTargetQuery.ToSerializable(),
-                TargetAction,
-                RemainderAction
-            );
+            var protoBufGameInteractionData = new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                ConditionalTargetData = new ProtoBufConditionalTargetData
+                {
+                    ConditionalTargetQuery = ConditionalTargetQuery.ToSerializable(),
+                    TargetAction = TargetAction.ToProtoBuf(),
+                    RemainderAction = RemainderAction.ToProtoBuf(),
+                },
+            };
+            protoBufGameInteractionData.ConditionalTargetData.PossibleTargets.Capacity =
+                PossibleTargets.Count;
+            foreach (var card in PossibleTargets)
+            {
+                protoBufGameInteractionData.ConditionalTargetData.PossibleTargets.Add(card.DeckId);
+            }
+            return protoBufGameInteractionData;
         }
     }
 
@@ -212,9 +250,13 @@ namespace gamecore.game.interaction
             Card = card;
         }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new InteractionCardDataJson(Card.ToSerializable());
+            return new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                InteractionCardData = new ProtoBufInteractionCardData { Card = Card.DeckId },
+            };
         }
     }
 
@@ -228,9 +270,13 @@ namespace gamecore.game.interaction
             Attack = card;
         }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new AttackDataJson(Attack.ToSerializable());
+            return new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                AttackData = new ProtoBufAttackData { Attack = Attack.ToSerializable() },
+            };
         }
     }
 
@@ -246,9 +292,17 @@ namespace gamecore.game.interaction
             Message = message;
         }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new WinnerDataJson(((IPlayerLogic)Winner).ToSerializable(), Message);
+            return new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                WinnerData = new ProtoBufWinnerData
+                {
+                    Winner = ((IPlayerLogic)Winner).ToSerializable(),
+                    Message = Message,
+                },
+            };
         }
     }
 
@@ -269,12 +323,23 @@ namespace gamecore.game.interaction
             SelectFrom = selectFrom;
         }
 
-        public IGameInteractionDataJson ToSerializable()
+        public ProtoBufGameInteractionData ToSerializable()
         {
-            return new SelectFromDataJson(
-                SelectFrom,
-                SelectionSource?.Select(card => card.ToSerializable()).ToList()
-            );
+            var protoBufGameInteractionData = new ProtoBufGameInteractionData
+            {
+                DataType = DataType.ToProtobuf(),
+                SelectFromData = new ProtoBufSelectFromData
+                {
+                    SelectFrom = SelectFrom.ToProtoBuf(),
+                },
+            };
+            protoBufGameInteractionData.SelectFromData.SelectionSource.Capacity =
+                SelectionSource.Count;
+            foreach (var card in SelectionSource)
+            {
+                protoBufGameInteractionData.SelectFromData.SelectionSource.Add(card.DeckId);
+            }
+            return protoBufGameInteractionData;
         }
     }
 

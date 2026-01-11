@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using gamecore.actionsystem;
 using gamecore.card;
 using gamecore.common;
-using gamecore.effect;
 using gamecore.game.action;
 using gamecore.game.interaction;
 using gamecore.instruction;
 using gamecore.serialization;
+using Google.Protobuf;
 using Newtonsoft.Json;
 
 namespace gamecore.game
@@ -35,8 +35,9 @@ namespace gamecore.game
         Task RecreateGameFromLog();
         Task StartReplay();
         void StartGame();
-        GameStateJson ExportGameState(string playerName);
-        string ExportGameStateAsJsonString(string playerName);
+        ProtoBufGameState ExportGameState(string playerName);
+        byte[] ExportGameStateAsByteArray(string playerName);
+        string ExportGameStateAsJson(string playerName);
     }
 
     class GameController : IGameController, IActionPerformer<CreateGameGA>
@@ -240,14 +241,14 @@ namespace gamecore.game
             _game.AdvanceGameState();
         }
 
-        public GameStateJson ExportGameState(string playerName)
+        public ProtoBufGameState ExportGameState(string playerName)
         {
             if (_game == null)
                 throw new InvalidOperationException("Game has not been created yet.");
 
             var player = _game.GetPlayerByName(playerName);
-            PlayerStateJson selfState;
-            PlayerStateJson opponentState;
+            ProtoBufPlayerState selfState;
+            ProtoBufPlayerState opponentState;
             if (player == _game.Player1)
             {
                 selfState = _game.Player1.ToSerializable();
@@ -264,12 +265,22 @@ namespace gamecore.game
             );
             var cardStates = CardStateCreator.CreateCardStates(player);
 
-            return new GameStateJson(selfState, opponentState, cardStates);
+            return new ProtoBufGameState
+            {
+                SelfState = selfState,
+                OpponentState = opponentState,
+                CardStates = { cardStates },
+            };
         }
 
-        public string ExportGameStateAsJsonString(string playerName)
+        public byte[] ExportGameStateAsByteArray(string playerName)
         {
-            return ExportGameState(playerName).ToJsonString();
+            return ExportGameState(playerName).ToByteArray();
+        }
+
+        public string ExportGameStateAsJson(string playerName)
+        {
+            return JsonConvert.SerializeObject(ExportGameState(playerName));
         }
     }
 }

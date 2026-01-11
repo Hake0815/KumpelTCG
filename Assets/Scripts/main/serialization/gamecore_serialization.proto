@@ -1,0 +1,417 @@
+syntax = "proto3";
+package gamecore.serialization;
+
+option csharp_namespace = "gamecore.serialization";
+// Enums
+enum ProtoBufCardType {
+  CARD_TYPE_UNKNOWN = 0;
+  CARD_TYPE_POKEMON = 1;
+  CARD_TYPE_TRAINER = 2;
+  CARD_TYPE_ENERGY = 3;
+}
+
+enum ProtoBufCardSubtype {
+  CARD_SUBTYPE_UNKNOWN = 0;
+  CARD_SUBTYPE_BASIC_POKEMON = 1;
+  CARD_SUBTYPE_STAGE1_POKEMON = 2;
+  CARD_SUBTYPE_STAGE2_POKEMON = 3;
+  CARD_SUBTYPE_SUPPORTER = 4;
+  CARD_SUBTYPE_ITEM = 5;
+  CARD_SUBTYPE_TOOL = 6;
+  CARD_SUBTYPE_STADIUM = 7;
+  CARD_SUBTYPE_BASIC_ENERGY = 8;
+  CARD_SUBTYPE_SPECIAL_ENERGY = 9;
+}
+
+enum ProtoBufEnergyType {
+  ENERGY_TYPE_NONE = 0;
+  ENERGY_TYPE_GRASS = 1;
+  ENERGY_TYPE_FIRE = 2;
+  ENERGY_TYPE_WATER = 3;
+  ENERGY_TYPE_LIGHTNING = 4;
+  ENERGY_TYPE_FIGHTING = 5;
+  ENERGY_TYPE_PSYCHIC = 6;
+  ENERGY_TYPE_COLORLESS = 7;
+  ENERGY_TYPE_DARKNESS = 8;
+  ENERGY_TYPE_METAL = 9;
+  ENERGY_TYPE_DRAGON = 10;
+}
+
+enum ProtoBufCardPosition {
+  CARD_POSITION_ATTACHED_TO_CARD = 0;
+  CARD_POSITION_BENCH = 1;
+  CARD_POSITION_CURRENTLY_PLAYED = 2;
+  CARD_POSITION_ACTIVE_SPOT = 3;
+  CARD_POSITION_FLOATING = 4;
+  CARD_POSITION_DISCARD_PILE = 5;
+  CARD_POSITION_PRIZES = 6;
+  CARD_POSITION_DECK = 7;
+  CARD_POSITION_HAND = 8;
+  CARD_POSITION_SELECTED_CARDS_REMAINDER = 9;
+  CARD_POSITION_SELECTED_CARDS = 10;
+}
+
+enum ProtoBufOwner {
+  OWNER_SELF = 0;
+  OWNER_OPPONENT = 1;
+}
+
+enum ProtoBufInstructionType {
+  INSTRUCTION_TYPE_DEAL_DAMAGE = 0;
+  INSTRUCTION_TYPE_SELECT_CARDS = 1;
+  INSTRUCTION_TYPE_DISCARD = 2;
+  INSTRUCTION_TYPE_TAKE_TO_HAND = 3;
+  INSTRUCTION_TYPE_PUT_IN_DECK = 4;
+  INSTRUCTION_TYPE_REVEAL_CARDS = 5;
+  INSTRUCTION_TYPE_SHOW_CARDS = 6;
+  INSTRUCTION_TYPE_SHUFFLE_DECK = 7;
+}
+
+enum ProtoBufConditionType {
+  CONDITION_TYPE_ABILITY_NOT_USED = 0;
+  CONDITION_TYPE_HAS_CARDS = 1;
+}
+
+enum ProtoBufInstructionDataType {
+  INSTRUCTION_DATA_TYPE_ATTACK_DATA = 0;
+  INSTRUCTION_DATA_TYPE_DISCARD_DATA = 1;
+  INSTRUCTION_DATA_TYPE_CARD_AMOUNT_DATA = 2;
+  INSTRUCTION_DATA_TYPE_RETURN_TO_DECK_TYPE_DATA = 3;
+  INSTRUCTION_DATA_TYPE_FILTER_DATA = 4;
+  INSTRUCTION_DATA_TYPE_PLAYER_TARGET_DATA = 5;
+}
+
+enum ProtoBufAttackTarget {
+  ATTACK_TARGET_DEFENDING_POKEMON = 0;
+}
+
+enum ProtoBufPlayerTarget {
+  PLAYER_TARGET_SELF = 0;
+  PLAYER_TARGET_OPPONENT = 1;
+}
+
+enum ProtoBufReturnToDeckType {
+  RETURN_TO_DECK_TYPE_UNDER = 0;
+  RETURN_TO_DECK_TYPE_SHUFFLED = 1;
+}
+
+enum ProtoBufFilterLogicalOperator {
+  FILTER_LOGICAL_OPERATOR_NONE = 0;
+  FILTER_LOGICAL_OPERATOR_AND = 1;
+  FILTER_LOGICAL_OPERATOR_OR = 2;
+}
+
+enum ProtoBufFilterType {
+  FILTER_TYPE_NONE = 0;
+  FILTER_TYPE_TRUE = 1;
+  FILTER_TYPE_EXCLUDE_SOURCE = 2;
+  FILTER_TYPE_CARD_TYPE = 3;
+  FILTER_TYPE_CARD_SUBTYPE = 4;
+  FILTER_TYPE_HP = 5;
+}
+
+enum ProtoBufFilterOperation {
+  FILTER_OPERATION_NONE = 0;
+  FILTER_OPERATION_EQUALS = 1;
+  FILTER_OPERATION_NOT_EQUALS = 2;
+  FILTER_OPERATION_LESS_THAN_OR_EQUAL = 3;
+  FILTER_OPERATION_GREATER_THAN_OR_EQUAL = 4;
+}
+
+enum ProtoBufTargetSource {
+  TARGET_SOURCE_HAND = 0;
+  TARGET_SOURCE_SELF = 1;
+  TARGET_SOURCE_SELECTION = 2;
+}
+
+enum ProtoBufPlayerEffectType {
+  PLAYER_EFFECT_TYPE_FIRST_TURN_OF_GAME = 0;
+}
+
+enum ProtoBufPokemonEffectType {
+  POKEMON_EFFECT_TYPE_PUT_INTO_PLAY_THIS_TURN = 0;
+  POKEMON_EFFECT_TYPE_ABILITY_USED_THIS_TURN = 1;
+}
+
+enum ProtoBufOncePerTurnActionType {
+  ONCE_PER_TURN_ACTION_TYPE_ATTACHED_ENERGY_FOR_TURN = 0;
+  ONCE_PER_TURN_ACTION_TYPE_PLAYED_SUPPORTER_THIS_TURN = 1;
+  ONCE_PER_TURN_ACTION_TYPE_RETREATED = 2;
+}
+
+enum ProtoBufGameInteractionType {
+  GAME_INTERACTION_TYPE_SELECT_ACTIVE_POKEMON = 0;
+  GAME_INTERACTION_TYPE_PLAY_CARD = 1;
+  GAME_INTERACTION_TYPE_END_TURN = 2;
+  GAME_INTERACTION_TYPE_CONFIRM_MULLIGANS = 3;
+  GAME_INTERACTION_TYPE_SELECT_MULLIGANS = 4;
+  GAME_INTERACTION_TYPE_CONFIRM = 5;
+  GAME_INTERACTION_TYPE_SETUP_COMPLETED = 6;
+  GAME_INTERACTION_TYPE_PLAY_CARD_WITH_TARGETS = 7;
+  GAME_INTERACTION_TYPE_PERFORM_ATTACK = 8;
+  GAME_INTERACTION_TYPE_GAME_OVER = 9;
+  GAME_INTERACTION_TYPE_SELECT_CARDS = 10;
+  GAME_INTERACTION_TYPE_RETREAT = 11;
+  GAME_INTERACTION_TYPE_PERFORM_ABILITY = 12;
+  GAME_INTERACTION_TYPE_SET_PRIZE_CARDS = 13;
+  GAME_INTERACTION_TYPE_REPLAY_NEXT_ACTION = 14;
+}
+
+enum ProtoBufGameInteractionDataType {
+  GAME_INTERACTION_DATA_TYPE_MULLIGAN_DATA = 0;
+  GAME_INTERACTION_DATA_TYPE_NUMBER_DATA = 1;
+  GAME_INTERACTION_DATA_TYPE_TARGET_DATA = 2;
+  GAME_INTERACTION_DATA_TYPE_CONDITIONAL_TARGET_DATA = 3;
+  GAME_INTERACTION_DATA_TYPE_INTERACTION_CARD_DATA = 4;
+  GAME_INTERACTION_DATA_TYPE_ATTACK_DATA = 5;
+  GAME_INTERACTION_DATA_TYPE_WINNER_DATA = 6;
+  GAME_INTERACTION_DATA_TYPE_SELECT_FROM_DATA = 7;
+}
+
+enum ProtoBufActionOnSelection {
+  ACTION_ON_SELECTION_DISCARD = 0;
+  ACTION_ON_SELECTION_TAKE_TO_HAND = 1;
+  ACTION_ON_SELECTION_EVOLVE = 2;
+  ACTION_ON_SELECTION_ATTACH_TO = 3;
+  ACTION_ON_SELECTION_PROMOTE = 4;
+  ACTION_ON_SELECTION_NOTHING = 5;
+  ACTION_ON_SELECTION_PUT_UNDER_DECK = 6;
+}
+
+enum ProtoBufSelectFrom {
+  SELECT_FROM_IN_PLAY = 0;
+  SELECT_FROM_FLOATING = 1;
+  SELECT_FROM_DECK = 2;
+  SELECT_FROM_DISCARD_PILE = 3;
+}
+
+enum ProtoBufLogicalQueryOperator {
+  LOGICAL_QUERY_OPERATOR_AND = 0;
+  LOGICAL_QUERY_OPERATOR_OR = 1;
+}
+
+enum ProtoBufSelectionQualifier {
+  SELECTION_QUALIFIER_NUMBER_OF_CARDS = 0;
+  SELECTION_QUALIFIER_PROVIDED_ENERGY = 1;
+}
+
+// Messages
+message ProtoBufIntRange {
+  int32 min = 1;
+  int32 max = 2;
+}
+
+message ProtoBufPosition {
+  ProtoBufOwner owner = 1;
+  repeated ProtoBufCardPosition possible_positions = 2;
+  optional int32 top_deck_position_index = 3;
+  optional int32 attached_to_pokemon_id = 4;
+}
+
+message ProtoBufAttack {
+  string name = 1;
+  int32 damage = 2;
+  repeated ProtoBufEnergyType energy_cost = 3;
+  repeated ProtoBufInstruction instructions = 4;
+}
+
+message ProtoBufAbility {
+  string name = 1;
+  repeated ProtoBufInstruction instructions = 2;
+  repeated ProtoBufCondition conditions = 3;
+}
+
+message ProtoBufCondition {
+  ProtoBufConditionType condition_type = 1;
+  repeated ProtoBufInstructionData data = 2;
+}
+
+message ProtoBufInstruction {
+  ProtoBufInstructionType instruction_type = 1;
+  repeated ProtoBufInstructionData data = 2;
+}
+
+message ProtoBufFilterCondition {
+  ProtoBufFilterType field = 1;
+  ProtoBufFilterOperation operation = 2;
+  int32 value = 3;
+}
+
+message ProtoBufFilter {
+  repeated ProtoBufFilter operands = 1;
+  ProtoBufFilterLogicalOperator logical_operator = 2;
+  bool is_leaf = 3;
+  optional ProtoBufFilterCondition condition = 4;
+}
+
+message ProtoBufAttackInstructionData {
+  ProtoBufAttackTarget attack_target = 1;
+  int32 damage = 2;
+}
+
+message ProtoBufDiscardInstructionData {
+  ProtoBufTargetSource target_source = 1;
+}
+
+message ProtoBufCardAmountInstructionData {
+  ProtoBufIntRange amount = 1;
+  ProtoBufCardPosition from_position = 2;
+}
+
+message ProtoBufReturnToDeckTypeInstructionData {
+  ProtoBufReturnToDeckType return_to_deck_type = 1;
+  ProtoBufCardPosition from_position = 2;
+}
+
+message ProtoBufFilterInstructionData {
+  ProtoBufFilter filter = 1;
+}
+
+message ProtoBufPlayerTargetInstructionData {
+  ProtoBufPlayerTarget player_target = 1;
+}
+
+message ProtoBufInstructionData {
+  ProtoBufInstructionDataType instruction_data_type = 1;
+  oneof payload {
+    ProtoBufAttackInstructionData attack_data = 2;
+    ProtoBufDiscardInstructionData discard_data = 3;
+    ProtoBufCardAmountInstructionData card_amount_data = 4;
+    ProtoBufReturnToDeckTypeInstructionData return_to_deck_type_data = 5;
+    ProtoBufFilterInstructionData filter_data = 6;
+    ProtoBufPlayerTargetInstructionData player_target_data = 7;
+  }
+}
+
+message ProtoBufCard {
+  // Static card data properties
+  string name = 1;
+  ProtoBufCardType card_type = 2;
+  ProtoBufCardSubtype card_subtype = 3;
+  ProtoBufEnergyType energy_type = 4;
+
+  // Pokemon-specific static properties
+  optional int32 max_hp = 5;
+  optional string evolves_from = 6;
+  ProtoBufEnergyType weakness = 7;
+  ProtoBufEnergyType resistance = 8;
+  optional int32 retreat_cost = 9;
+  optional int32 number_of_prize_cards_on_knockout = 10;
+  repeated ProtoBufAttack attacks = 11;
+  optional ProtoBufAbility ability = 12;
+  repeated ProtoBufPokemonEffectType pokemon_effects = 13;
+
+  // Trainer-specific static properties
+  repeated ProtoBufInstruction instructions = 14;
+  repeated ProtoBufCondition conditions = 15;
+
+  // Energy-specific static properties
+  repeated ProtoBufEnergyType provided_energy = 16;
+  optional int32 attached_to = 17;
+
+  // Current state properties
+  optional int32 deck_id = 18;
+
+  // Pokemon-specific current state
+  optional int32 current_damage = 19;
+  repeated ProtoBufEnergyType attached_energy = 20;
+  repeated int32 attached_energy_cards = 21;
+  repeated int32 pre_evolution_ids = 22;
+  optional int32 evolved_into = 23;
+}
+
+message ProtoBufCardState {
+  ProtoBufCard card = 1;
+  ProtoBufPosition position = 2;
+}
+
+message ProtoBufPlayerState {
+  bool is_active = 1;
+  bool is_attacking = 2;
+  int32 hand_count = 3;
+  int32 deck_count = 4;
+  int32 prizes_count = 5;
+  int32 bench_count = 6;
+  int32 discard_pile_count = 7;
+  repeated ProtoBufOncePerTurnActionType performed_once_per_turn_actions = 8;
+  int32 turn_counter = 9;
+  repeated ProtoBufPlayerEffectType player_effects = 10;
+}
+
+message ProtoBufGameState {
+  ProtoBufPlayerState self_state = 1;
+  ProtoBufPlayerState opponent_state = 2;
+  repeated ProtoBufCardState card_states = 3;
+}
+
+message ProtoBufConditionalTargetQuery {
+  repeated ProtoBufConditionalTargetQuery nested_queries = 1;
+  optional ProtoBufLogicalQueryOperator logical_query_operator = 2;
+  optional ProtoBufIntRange int_range = 3;
+  optional ProtoBufSelectionQualifier selection_qualifier = 4;
+}
+
+message ProtoBufMulliganData {
+  repeated ProtoBufCardList mulligans = 1;
+  ProtoBufPlayerState player = 2;
+}
+
+message ProtoBufCardList {
+  repeated int32 cards = 1;
+}
+
+message ProtoBufNumberData {
+  int32 number = 1;
+}
+
+message ProtoBufTargetData {
+  int32 number_of_targets = 1;
+  repeated int32 possible_targets = 2;
+  ProtoBufActionOnSelection target_action = 3;
+  ProtoBufActionOnSelection remainder_action = 4;
+}
+
+message ProtoBufConditionalTargetData {
+  repeated int32 possible_targets = 1;
+  ProtoBufConditionalTargetQuery conditional_target_query = 2;
+  ProtoBufActionOnSelection target_action = 3;
+  ProtoBufActionOnSelection remainder_action = 4;
+}
+
+message ProtoBufInteractionCardData {
+  int32 card = 1;
+}
+
+message ProtoBufAttackData {
+  ProtoBufAttack attack = 1;
+}
+
+message ProtoBufWinnerData {
+  ProtoBufPlayerState winner = 1;
+  string message = 2;
+}
+
+message ProtoBufSelectFromData {
+  ProtoBufSelectFrom select_from = 1;
+  repeated int32 selection_source = 2;
+}
+
+message ProtoBufGameInteractionData {
+  ProtoBufGameInteractionDataType data_type = 1;
+  oneof payload {
+    ProtoBufMulliganData mulligan_data = 2;
+    ProtoBufNumberData number_data = 3;
+    ProtoBufTargetData target_data = 4;
+    ProtoBufConditionalTargetData conditional_target_data = 5;
+    ProtoBufInteractionCardData interaction_card_data = 6;
+    ProtoBufAttackData attack_data = 7;
+    ProtoBufWinnerData winner_data = 8;
+    ProtoBufSelectFromData select_from_data = 9;
+  }
+}
+
+message ProtoBufGameInteraction {
+  ProtoBufGameInteractionType type = 1;
+  repeated ProtoBufGameInteractionData data = 2;
+}
+

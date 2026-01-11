@@ -23,8 +23,8 @@ namespace gamecore.card
         bool IsPokemonCard();
         bool IsEnergyCard();
         bool IsBasicEnergyCard();
-        CardJson ToSerializable();
-        CardJson ToSerializable(IPokemonCard pokemonCard);
+        ProtoBufCard ToSerializable();
+        ProtoBufCard ToSerializable(IPokemonCard pokemonCard);
 
         int CompareToCardByType(ICard other)
         {

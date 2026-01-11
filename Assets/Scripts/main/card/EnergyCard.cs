@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using gamecore.actionsystem;
 using gamecore.common;
 using gamecore.game;
@@ -100,27 +101,39 @@ namespace gamecore.card
 
         public ActionOnSelection GetTargetAction() => ActionOnSelection.AttachTo;
 
-        public virtual CardJson ToSerializable()
+        public virtual ProtoBufCard ToSerializable()
         {
-            return new CardJson(
-                name: Name,
-                cardType: CardType.Energy,
-                cardSubtype: CardSubtype,
-                providedEnergy: ProvidedEnergy,
-                deckId: DeckId
-            );
+            var protoBufCard = new ProtoBufCard
+            {
+                Name = Name,
+                CardType = CardType.Energy.ToProtoBuf(),
+                CardSubtype = CardSubtype.ToProtoBuf(),
+                DeckId = DeckId,
+            };
+            protoBufCard.ProvidedEnergy.Capacity = ProvidedEnergy.Count;
+            foreach (var energyType in ProvidedEnergy)
+            {
+                protoBufCard.ProvidedEnergy.Add(energyType.ToProtoBuf());
+            }
+            return protoBufCard;
         }
 
-        public virtual CardJson ToSerializable(IPokemonCard pokemonCard)
+        public virtual ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
         {
-            return new CardJson(
-                name: Name,
-                cardType: CardType.Energy,
-                cardSubtype: CardSubtype,
-                providedEnergy: ProvidedEnergy,
-                deckId: DeckId,
-                attachedTo: pokemonCard.DeckId
-            );
+            var protoBufCard = new ProtoBufCard
+            {
+                Name = Name,
+                CardType = CardType.Energy.ToProtoBuf(),
+                CardSubtype = CardSubtype.ToProtoBuf(),
+                DeckId = DeckId,
+                AttachedTo = pokemonCard.DeckId,
+            };
+            protoBufCard.ProvidedEnergy.Capacity = ProvidedEnergy.Count;
+            foreach (var energyType in ProvidedEnergy)
+            {
+                protoBufCard.ProvidedEnergy.Add(energyType.ToProtoBuf());
+            }
+            return protoBufCard;
         }
     }
 }

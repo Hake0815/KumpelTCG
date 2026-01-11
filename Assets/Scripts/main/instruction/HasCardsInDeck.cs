@@ -8,18 +8,25 @@ namespace gamecore.instruction
     {
         public bool IsMet(ICardLogic card) => card.Owner.Deck.CardCount > 0;
 
-        public ConditionJson ToSerializable()
+        public ProtoBufCondition ToSerializable()
         {
-            return new ConditionJson(
-                conditionType: ConditionType.HasCards,
-                new()
+            return new ProtoBufCondition
+            {
+                ConditionType = ProtoBufConditionType.ConditionTypeHasCards,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.CardAmountData,
-                        new CardAmountInstructionDataJson(new IntRange(1, 60), CardPosition.Deck)
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeCardAmountData,
+                        CardAmountData = new ProtoBufCardAmountInstructionData
+                        {
+                            Amount = new ProtoBufIntRange { Min = 1, Max = 60 },
+                            FromPosition = ProtoBufCardPosition.CardPositionDeck,
+                        },
+                    },
+                },
+            };
         }
     }
 }

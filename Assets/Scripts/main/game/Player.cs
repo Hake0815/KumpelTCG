@@ -93,7 +93,7 @@ namespace gamecore.game
             where T : PlayerEffectAbstract;
         void AddEffect(PlayerEffectAbstract effect);
         void RemoveEffect(PlayerEffectAbstract effect);
-        PlayerStateJson ToSerializable();
+        ProtoBufPlayerState ToSerializable();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -215,25 +215,36 @@ namespace gamecore.game
             PlayerEffects.Remove(effect.GetType());
         }
 
-        public PlayerStateJson ToSerializable()
+        public ProtoBufPlayerState ToSerializable()
         {
-            var playerEffects = new List<PlayerEffectType>();
-            foreach (var effect in PlayerEffects.Values)
+            var protoBufPlayerState = new ProtoBufPlayerState
             {
-                playerEffects.Add(effect.ToSerializable());
+                IsActive = IsActive,
+                IsAttacking = IsAttacking,
+                HandCount = Hand.CardCount,
+                DeckCount = Deck.CardCount,
+                PrizesCount = Prizes.CardCount,
+                BenchCount = Bench.CardCount,
+                DiscardPileCount = DiscardPile.CardCount,
+                TurnCounter = TurnCounter,
+            };
+
+            protoBufPlayerState.PerformedOncePerTurnActions.Capacity =
+                PerformedOncePerTurnActions.Count;
+            foreach (var performedOncePerTurnAction in PerformedOncePerTurnActions)
+            {
+                protoBufPlayerState.PerformedOncePerTurnActions.Add(
+                    performedOncePerTurnAction.ToProtoBuf()
+                );
             }
-            return new PlayerStateJson(
-                isActive: IsActive,
-                isAttacking: IsAttacking,
-                handCount: Hand.CardCount,
-                deckCount: Deck.CardCount,
-                prizesCount: Prizes.CardCount,
-                benchCount: Bench.CardCount,
-                discardPileCount: DiscardPile.CardCount,
-                performedOncePerTurnActions: new(PerformedOncePerTurnActions),
-                turnCounter: TurnCounter,
-                playerEffects: playerEffects
-            );
+
+            protoBufPlayerState.PlayerEffects.Capacity = PlayerEffects.Count;
+            foreach (var playerEffect in PlayerEffects)
+            {
+                protoBufPlayerState.PlayerEffects.Add(playerEffect.Value.ToSerializable());
+            }
+
+            return protoBufPlayerState;
         }
     }
 }

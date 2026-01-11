@@ -53,22 +53,38 @@ namespace gamecore.instruction
             return true;
         }
 
-        public override InstructionJson ToSerializable()
+        public override ProtoBufInstruction ToSerializable()
         {
-            return new InstructionJson(
-                instructionType: InstructionType.SelectCards,
-                data: new()
+            return new ProtoBufInstruction
+            {
+                InstructionType = ProtoBufInstructionType.InstructionTypeSelectCards,
+                Data =
                 {
-                    new InstructionDataJson(
-                        InstructionDataType.CardAmountData,
-                        new CardAmountInstructionDataJson(CountRange, CardPosition.Floating)
-                    ),
-                    new InstructionDataJson(
-                        InstructionDataType.FilterData,
-                        new FilterInstructionDataJson(Filter.ToSerializable())
-                    ),
-                }
-            );
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeCardAmountData,
+                        CardAmountData = new ProtoBufCardAmountInstructionData
+                        {
+                            Amount = new ProtoBufIntRange
+                            {
+                                Min = CountRange.Min,
+                                Max = CountRange.Max,
+                            },
+                            FromPosition = ProtoBufCardPosition.CardPositionFloating,
+                        },
+                    },
+                    new ProtoBufInstructionData
+                    {
+                        InstructionDataType =
+                            ProtoBufInstructionDataType.InstructionDataTypeFilterData,
+                        FilterData = new ProtoBufFilterInstructionData
+                        {
+                            Filter = Filter.ToSerializable(),
+                        },
+                    },
+                },
+            };
         }
     }
 }
