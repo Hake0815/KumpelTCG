@@ -125,12 +125,16 @@ enum ProtoBufTargetSource {
 }
 
 enum ProtoBufPlayerEffectType {
-  PLAYER_EFFECT_TYPE_FIRST_TURN_OF_GAME = 0;
+  PLAYER_EFFECT_TYPE_NONE = 0;
 }
 
 enum ProtoBufPokemonEffectType {
-  POKEMON_EFFECT_TYPE_PUT_INTO_PLAY_THIS_TURN = 0;
-  POKEMON_EFFECT_TYPE_ABILITY_USED_THIS_TURN = 1;
+  POKEMON_EFFECT_TYPE_NONE = 0;
+}
+
+enum ProtoBufPokemonTurnTrait {
+  POKEMON_TURN_TRAIT_PUT_IN_PLAY_THIS_TURN = 0;
+  POKEMON_TURN_TRAIT_ABILITY_USED_THIS_TURN = 1;
 }
 
 enum ProtoBufPlayerTurnTrait {
@@ -301,24 +305,25 @@ message ProtoBufCard {
   repeated ProtoBufAttack attacks = 11;
   optional ProtoBufAbility ability = 12;
   repeated ProtoBufPokemonEffectType pokemon_effects = 13;
+  repeated ProtoBufPokemonTurnTrait pokemon_turn_traits = 14;
 
   // Trainer-specific static properties
-  repeated ProtoBufInstruction instructions = 14;
-  repeated ProtoBufCondition conditions = 15;
+  repeated ProtoBufInstruction instructions = 15;
+  repeated ProtoBufCondition conditions = 16;
 
   // Energy-specific static properties
-  repeated ProtoBufEnergyType provided_energy = 16;
-  optional int32 attached_to = 17;
+  repeated ProtoBufEnergyType provided_energy = 17;
+  optional int32 attached_to = 18;
 
   // Current state properties
-  optional int32 deck_id = 18;
+  optional int32 deck_id = 19;
 
   // Pokemon-specific current state
-  optional int32 current_damage = 19;
-  repeated ProtoBufEnergyType attached_energy = 20;
-  repeated int32 attached_energy_cards = 21;
-  repeated int32 pre_evolution_ids = 22;
-  optional int32 evolved_into = 23;
+  optional int32 current_damage = 20;
+  repeated ProtoBufEnergyType attached_energy = 21;
+  repeated int32 attached_energy_cards = 22;
+  repeated int32 pre_evolution_ids = 23;
+  optional int32 evolved_into = 24;
 }
 
 message ProtoBufCardState {

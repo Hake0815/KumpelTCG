@@ -100,20 +100,9 @@ namespace gamecore.game
     [JsonObject(MemberSerialization.OptIn)]
     class Player : IPlayerLogic
     {
-        private bool _isActive;
-
         [JsonProperty]
         public string Name { get; set; }
-        public bool IsActive
-        {
-            get => _isActive;
-            set
-            {
-                _isActive = value;
-                if (!value)
-                    ResetPlayerTurnTraits();
-            }
-        }
+        public bool IsActive { get; set; }
         public bool IsAttacking { get; set; }
         private IPokemonCardLogic _activePokemon;
         public IPokemonCardLogic ActivePokemon

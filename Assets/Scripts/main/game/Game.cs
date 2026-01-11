@@ -25,7 +25,8 @@ namespace gamecore.game
             IActionPerformer<EndTurnGA>,
             IActionPerformer<StartTurnGA>,
             IActionPerformer<SetupGA>,
-            IActionPerformer<SetPrizeCardsGA>
+            IActionPerformer<SetPrizeCardsGA>,
+            IActionSubscriber<EndTurnGA>
     {
         public IPlayerLogic Player1 { get; private set; }
         public IPlayerLogic Player2 { get; private set; }
@@ -77,6 +78,7 @@ namespace gamecore.game
             _actionSystem.AttachPerformer<StartTurnGA>(this);
             _actionSystem.AttachPerformer<SetupGA>(this);
             _actionSystem.AttachPerformer<SetPrizeCardsGA>(this);
+            _actionSystem.SubscribeToGameAction<EndTurnGA>(this, ReactionTiming.POST);
             _cardSystem = new CardSystem(_actionSystem, this);
             _damageSystem = new DamageSystem(_actionSystem, this);
             _generalMechnicSystem = new GeneralMechnicSystem(_actionSystem, this);
@@ -90,6 +92,7 @@ namespace gamecore.game
             _actionSystem.DetachPerformer<StartTurnGA>();
             _actionSystem.DetachPerformer<SetupGA>();
             _actionSystem.DetachPerformer<SetPrizeCardsGA>();
+            _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(this, ReactionTiming.POST);
             _cardSystem.Disable();
             _damageSystem.Disable();
             _generalMechnicSystem.Disable();
@@ -159,7 +162,6 @@ namespace gamecore.game
                 Player2.IsActive = false;
                 endTurnGA.NextPlayer = Player1;
             }
-            _actionSystem.AddReaction(new StartTurnGA(endTurnGA.NextPlayer));
             return Task.FromResult(endTurnGA);
         }
 
@@ -302,6 +304,14 @@ namespace gamecore.game
             if (cardReference != null)
                 return cardReference;
             throw new IllegalStateException($"Could not find card {card} for Player {owner}!");
+        }
+
+        public EndTurnGA React(EndTurnGA endTurnGA)
+        {
+            _actionSystem.AddReaction(new ClearPlayerTurnTraitsGA(endTurnGA.NextPlayer.Opponent));
+            _actionSystem.AddReaction(new ClearPokemonTurnTraitsGA(endTurnGA.NextPlayer.Opponent));
+            _actionSystem.AddReaction(new StartTurnGA(endTurnGA.NextPlayer));
+            return endTurnGA;
         }
     }
 }

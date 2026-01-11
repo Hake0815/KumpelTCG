@@ -11,7 +11,7 @@ namespace gamecore.game
         Retreated,
     }
 
-    public static class ToProtoBufExtensions
+    public static class ToProtoBufPlayerTurnTraitExtensions
     {
         public static ProtoBufPlayerTurnTrait ToProtoBuf(this PlayerTurnTrait playerTurnTrait)
         {

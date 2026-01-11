@@ -1,5 +1,6 @@
 using gamecore.card;
 using gamecore.effect;
+using gamecore.game;
 using gamecore.serialization;
 
 namespace gamecore.instruction
@@ -8,7 +9,9 @@ namespace gamecore.instruction
     {
         public bool IsMet(ICardLogic card)
         {
-            return !(card as IPokemonCardLogic).HasEffect<AbilityUsedThisTurnEffect>();
+            return !(card as IPokemonCardLogic).PokemonTurnTraits.Contains(
+                PokemonTurnTrait.AbilityUsedThisTurn
+            );
         }
 
         public ProtoBufCondition ToSerializable()
