@@ -48,6 +48,13 @@ namespace gamecore.card
             base.AddCards(cards);
         }
 
+        public override void AddCard(ICardLogic card)
+        {
+            card.OwnerPositionKnowledge = PositionKnowledge.Known;
+            card.OpponentPositionKnowledge = PositionKnowledge.Known;
+            base.AddCard(card);
+        }
+
         public override void ReplaceInPlace(
             IPokemonCardLogic oldPokemon,
             IPokemonCardLogic newPokemon

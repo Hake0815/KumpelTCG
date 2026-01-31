@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using gamecore.game.interaction;
+using gamecore.serialization;
 
 namespace gamecore.game.state
 {
@@ -11,5 +12,6 @@ namespace gamecore.game.state
             IPlayerLogic player
         );
         void OnAdvanced(Game game);
+        ProtoBufTechnicalGameState ToProtoBuf();
     }
 }

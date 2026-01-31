@@ -31,6 +31,7 @@ namespace gamecore.game.action
             IActionPerformer<ShowCardsGA>,
             IActionPerformer<SetCardCurrentlyPlayedGA>,
             IActionPerformer<UnsetCardCurrentlyPlayedGA>,
+            IActionPerformer<ClearPokemonTurnTraitsGA>,
             IActionSubscriber<StartTurnGA>
     {
         public CardSystem(ActionSystem actionSystem, Game game)
@@ -76,6 +77,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<ShowCardsGA>(this);
             _actionSystem.AttachPerformer<SetCardCurrentlyPlayedGA>(this);
             _actionSystem.AttachPerformer<UnsetCardCurrentlyPlayedGA>(this);
+            _actionSystem.AttachPerformer<ClearPokemonTurnTraitsGA>(this);
             _actionSystem.SubscribeToGameAction<StartTurnGA>(this, ReactionTiming.POST);
         }
 
@@ -100,6 +102,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<ShowCardsGA>();
             _actionSystem.DetachPerformer<SetCardCurrentlyPlayedGA>();
             _actionSystem.DetachPerformer<UnsetCardCurrentlyPlayedGA>();
+            _actionSystem.DetachPerformer<ClearPokemonTurnTraitsGA>();
             _actionSystem.UnsubscribeFromGameAction<StartTurnGA>(this, ReactionTiming.POST);
         }
 
@@ -158,9 +161,7 @@ namespace gamecore.game.action
         public Task<AttachEnergyFromHandForTurnGA> Perform(AttachEnergyFromHandForTurnGA action)
         {
             AttachEnergyFromHand(action.EnergyCard, action.TargetPokemon);
-            action.EnergyCard.Owner.PerformedOncePerTurnActions.Add(
-                OncePerTurnActionType.AttachedEnergyForTurn
-            );
+            action.EnergyCard.Owner.PlayerTurnTraits.Add(PlayerTurnTrait.AttachedEnergyForTurn);
             return Task.FromResult(action);
         }
 
@@ -172,9 +173,7 @@ namespace gamecore.game.action
                     .DeckList.GetCardByDeckId(action.EnergyCard.DeckId) as IEnergyCardLogic;
             var targetPokemon = _game.FindCardAnywhere(action.TargetPokemon) as IPokemonCardLogic;
             AttachEnergyFromHand(energyCard, targetPokemon);
-            energyCard.Owner.PerformedOncePerTurnActions.Add(
-                OncePerTurnActionType.AttachedEnergyForTurn
-            );
+            energyCard.Owner.PlayerTurnTraits.Add(PlayerTurnTrait.AttachedEnergyForTurn);
             return Task.FromResult(action);
         }
 
@@ -584,6 +583,25 @@ namespace gamecore.game.action
         {
             var player = _game.GetPlayerByName(action.Player.Name);
             player.CurrentlyPlayedCard = null;
+            return Task.FromResult(action);
+        }
+
+        public Task<ClearPokemonTurnTraitsGA> Perform(ClearPokemonTurnTraitsGA action)
+        {
+            foreach (var pokemon in action.Player.GetAllPokemonInPlay())
+            {
+                pokemon.PokemonTurnTraits.Clear();
+            }
+            return Task.FromResult(action);
+        }
+
+        public Task<ClearPokemonTurnTraitsGA> Reperform(ClearPokemonTurnTraitsGA action)
+        {
+            var player = _game.GetPlayerByName(action.Player.Name);
+            foreach (var pokemon in player.GetAllPokemonInPlay())
+            {
+                pokemon.PokemonTurnTraits.Clear();
+            }
             return Task.FromResult(action);
         }
     }

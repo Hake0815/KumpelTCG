@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,10 +16,19 @@ namespace gameview
         private Button _loadGameButton;
 
         [SerializeField]
+        private Button _recreateStateButton;
+
+        [SerializeField]
         private Button _replayGameButton;
 
         [SerializeField]
         private Button _quitButton;
+
+        [SerializeField]
+        private Button _confirmButton;
+
+        [SerializeField]
+        private TMP_InputField _gameStateInputField;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -35,7 +46,29 @@ namespace gameview
             _newGameButton.onClick.AddListener(NewGame);
             _loadGameButton.onClick.AddListener(LoadGame);
             _replayGameButton.onClick.AddListener(ReplayGame);
+            _recreateStateButton.onClick.AddListener(RecreateState);
+            _confirmButton.onClick.AddListener(ConfirmRecreateState);
             _quitButton.onClick.AddListener(Quit);
+        }
+
+        private void RecreateState()
+        {
+            _gameStateInputField.gameObject.SetActive(true);
+            _confirmButton.gameObject.SetActive(true);
+            _gameStateInputField.text = string.Empty;
+
+            _newGameButton.gameObject.SetActive(false);
+            _loadGameButton.gameObject.SetActive(false);
+            _replayGameButton.gameObject.SetActive(false);
+            _recreateStateButton.gameObject.SetActive(false);
+            _quitButton.gameObject.SetActive(false);
+        }
+
+        private void ConfirmRecreateState()
+        {
+            GameParameters.GameState = _gameStateInputField.text;
+            GameParameters.LoadModus = LoadModus.RecreateState;
+            SceneManager.LoadScene("GameScene");
         }
 
         private static void NewGame()

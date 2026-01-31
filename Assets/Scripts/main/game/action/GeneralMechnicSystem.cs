@@ -20,7 +20,8 @@ namespace gamecore.game.action
             IActionPerformer<PlaySupporterGA>,
             IActionPerformer<RemovePlayerEffectGA>,
             IActionPerformer<RemovePokemonEffectGA>,
-            IActionPerformer<EvolveGA>
+            IActionPerformer<EvolveGA>,
+            IActionPerformer<ClearPlayerTurnTraitsGA>
     {
         public GeneralMechnicSystem(ActionSystem actionSystem, Game game)
         {
@@ -45,6 +46,7 @@ namespace gamecore.game.action
             _actionSystem.AttachPerformer<EvolveGA>(this);
             _actionSystem.AttachPerformer<RemovePlayerEffectGA>(this);
             _actionSystem.AttachPerformer<RemovePokemonEffectGA>(this);
+            _actionSystem.AttachPerformer<ClearPlayerTurnTraitsGA>(this);
         }
 
         public void Disable()
@@ -60,6 +62,7 @@ namespace gamecore.game.action
             _actionSystem.DetachPerformer<EvolveGA>();
             _actionSystem.DetachPerformer<RemovePlayerEffectGA>();
             _actionSystem.DetachPerformer<RemovePokemonEffectGA>();
+            _actionSystem.DetachPerformer<ClearPlayerTurnTraitsGA>();
         }
 
         public Task<AttackGA> Perform(AttackGA action)
@@ -227,7 +230,7 @@ namespace gamecore.game.action
             );
             _actionSystem.AddReaction(new PromoteGA(new() { pokemon.Owner }));
             _actionSystem.AddReaction(new MovePokemonToBenchGA(pokemon));
-            pokemon.Owner.PerformedOncePerTurnActions.Add(OncePerTurnActionType.Retreated);
+            pokemon.Owner.PlayerTurnTraits.Add(PlayerTurnTrait.Retreated);
             return Task.FromResult(action);
         }
 
@@ -235,7 +238,7 @@ namespace gamecore.game.action
         {
             var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
             pokemon.Owner.ActivePokemon = null;
-            pokemon.Owner.PerformedOncePerTurnActions.Add(OncePerTurnActionType.Retreated);
+            pokemon.Owner.PlayerTurnTraits.Add(PlayerTurnTrait.Retreated);
             return Task.FromResult(action);
         }
 
@@ -245,16 +248,14 @@ namespace gamecore.game.action
             {
                 instruction.Perform(action.Pokemon, _actionSystem);
             }
-            (
-                (PokemonEffectAbstract)new AbilityUsedThisTurnEffect(_actionSystem, action.Pokemon)
-            ).Apply();
+            action.Pokemon.PokemonTurnTraits.Add(PokemonTurnTrait.AbilityUsedThisTurn);
             return Task.FromResult(action);
         }
 
         public Task<PerformAbilityGA> Reperform(PerformAbilityGA action)
         {
             var pokemon = (IPokemonCardLogic)_game.FindCardAnywhere(action.Pokemon);
-            ((PokemonEffectAbstract)new AbilityUsedThisTurnEffect(_actionSystem, pokemon)).Apply();
+            pokemon.PokemonTurnTraits.Add(PokemonTurnTrait.AbilityUsedThisTurn);
             return Task.FromResult(action);
         }
 
@@ -300,9 +301,7 @@ namespace gamecore.game.action
 
         public Task<PlaySupporterGA> Perform(PlaySupporterGA action)
         {
-            action.Player.PerformedOncePerTurnActions.Add(
-                OncePerTurnActionType.PlayedSupporterThisTurn
-            );
+            action.Player.PlayerTurnTraits.Add(PlayerTurnTrait.PlayedSupporterThisTurn);
             return Task.FromResult(action);
         }
 
@@ -310,34 +309,21 @@ namespace gamecore.game.action
         {
             _game
                 .GetPlayerByName(action.Player.Name)
-                .PerformedOncePerTurnActions.Add(OncePerTurnActionType.PlayedSupporterThisTurn);
+                .PlayerTurnTraits.Add(PlayerTurnTrait.PlayedSupporterThisTurn);
             return Task.FromResult(action);
         }
 
         public Task<RemovePlayerEffectGA> Perform(RemovePlayerEffectGA action)
         {
-            RemoveEffectFromPlayer(action.Player, action.Effect);
+            action.Player.RemoveEffect(action.Effect);
             return Task.FromResult(action);
         }
 
         public Task<RemovePlayerEffectGA> Reperform(RemovePlayerEffectGA action)
         {
             var player = _game.GetPlayerByName(action.Player.Name);
-            RemoveEffectFromPlayer(player, action.Effect);
-
+            player.RemoveEffect(action.Effect);
             return Task.FromResult(action);
-        }
-
-        private void RemoveEffectFromPlayer(IPlayerLogic player, PlayerEffectAbstract effect)
-        {
-            player.RemoveEffect(effect);
-            if (effect is FirstTurnOfGameEffect firstTurnOfGameEffect)
-            {
-                _actionSystem.UnsubscribeFromGameAction<EndTurnGA>(
-                    firstTurnOfGameEffect,
-                    ReactionTiming.POST
-                );
-            }
         }
 
         public Task<RemovePokemonEffectGA> Perform(RemovePokemonEffectGA action)
@@ -350,6 +336,18 @@ namespace gamecore.game.action
         {
             var pokemon = _game.FindCardAnywhere(action.Pokemon) as IPokemonCardLogic;
             pokemon.RemoveEffect(action.Effect);
+            return Task.FromResult(action);
+        }
+
+        public Task<ClearPlayerTurnTraitsGA> Perform(ClearPlayerTurnTraitsGA action)
+        {
+            action.Player.ResetPlayerTurnTraits();
+            return Task.FromResult(action);
+        }
+
+        public Task<ClearPlayerTurnTraitsGA> Reperform(ClearPlayerTurnTraitsGA action)
+        {
+            _game.GetPlayerByName(action.Player.Name).ResetPlayerTurnTraits();
             return Task.FromResult(action);
         }
     }

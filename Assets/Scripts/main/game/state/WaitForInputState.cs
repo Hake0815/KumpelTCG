@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using gamecore.card;
 using gamecore.game.interaction;
+using gamecore.serialization;
 
 namespace gamecore.game.state
 {
@@ -89,5 +90,10 @@ namespace gamecore.game.state
         }
 
         public void OnAdvanced(Game game) { }
+
+        public ProtoBufTechnicalGameState ToProtoBuf()
+        {
+            return ProtoBufTechnicalGameState.GameStateWaitForInput;
+        }
     }
 }

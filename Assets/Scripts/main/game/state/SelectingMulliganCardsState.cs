@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using gamecore.game.interaction;
+using gamecore.serialization;
 
 namespace gamecore.game.state
 {
@@ -49,6 +50,11 @@ namespace gamecore.game.state
                 game.AwaitInteraction();
             else
                 game.AdvanceGameState();
+        }
+
+        public ProtoBufTechnicalGameState ToProtoBuf()
+        {
+            return ProtoBufTechnicalGameState.GameStateSelectingMulliganCards;
         }
     }
 }

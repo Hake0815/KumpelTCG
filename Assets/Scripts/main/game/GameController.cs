@@ -7,6 +7,7 @@ using gamecore.card;
 using gamecore.common;
 using gamecore.game.action;
 using gamecore.game.interaction;
+using gamecore.game.state;
 using gamecore.instruction;
 using gamecore.serialization;
 using Google.Protobuf;
@@ -33,6 +34,13 @@ namespace gamecore.game
             string player2Name
         );
         Task RecreateGameFromLog();
+        void RecreateGameFromGameState(
+            ProtoBufGameState gameState,
+            Dictionary<string, int> deckList1,
+            Dictionary<string, int> deckList2,
+            string player1Name,
+            string player2Name
+        );
         Task StartReplay();
         void StartGame();
         ProtoBufGameState ExportGameState(string playerName);
@@ -267,6 +275,8 @@ namespace gamecore.game
 
             return new ProtoBufGameState
             {
+                Recreatable = !_actionSystem.IsPerforming,
+                TechnicalGameState = _game.GameState.ToProtoBuf(),
                 SelfState = selfState,
                 OpponentState = opponentState,
                 CardStates = { cardStates },
@@ -281,6 +291,52 @@ namespace gamecore.game
         public string ExportGameStateAsJson(string playerName)
         {
             return JsonConvert.SerializeObject(ExportGameState(playerName));
+        }
+
+        public void RecreateGameFromGameState(
+            ProtoBufGameState gameState,
+            Dictionary<string, int> deckList1,
+            Dictionary<string, int> deckList2,
+            string player1Name,
+            string player2Name
+        )
+        {
+            _game = new GameBuilder()
+                .WithPlayer1(player1Name)
+                .WithPlayer2(player2Name)
+                .WithPlayer1Decklist(deckList1)
+                .WithPlayer2Decklist(deckList2)
+                .WithActionSystem(_actionSystem)
+                .Build();
+            _game.AwaitInteractionEvent += NotifyPlayers;
+            _game.AwaitGeneralInteractionEvent += OnExpectGeneralInteraction;
+            _game.CardSystem.CardsRevealed += OnCardsRevealed;
+            _game.GameState = gameState.TechnicalGameState switch
+            {
+                ProtoBufTechnicalGameState.GameStateGameOver => new GameOverState(
+                    _game.Player1,
+                    "Game Over"
+                ),
+                ProtoBufTechnicalGameState.GameStateIdlePlayerTurn => new IdlePlayerTurnState(),
+                ProtoBufTechnicalGameState.GameStateSelectBenchPokemon =>
+                    new SelectBenchPokemonState(),
+                ProtoBufTechnicalGameState.GameStateSelectingMulliganCards =>
+                    new SelectingMulliganCardsState(),
+                ProtoBufTechnicalGameState.GameStateSettingActivePokemon =>
+                    new SettingActivePokemonState(),
+                ProtoBufTechnicalGameState.GameStateSettingPrizeCards =>
+                    new SettingPrizeCardsState(),
+                ProtoBufTechnicalGameState.GameStateSetupCompleted => new SetupCompletedState(),
+                ProtoBufTechnicalGameState.GameStateShowFirstMulligan =>
+                    new ShowFirstMulliganState(),
+                ProtoBufTechnicalGameState.GameStateShowSecondMulligan =>
+                    new ShowSecondMulliganState(),
+                ProtoBufTechnicalGameState.GameStateWaitForInput => throw new IllegalStateException(
+                    "WaitForInputState is not supported for recreation"
+                ),
+                _ => throw new NotImplementedException(),
+            };
+            GameRecreator.RecreateGameFromGameState(gameState, _game);
         }
     }
 }

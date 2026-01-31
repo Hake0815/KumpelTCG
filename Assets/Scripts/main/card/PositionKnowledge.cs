@@ -1,4 +1,5 @@
 using System;
+using gamecore.serialization;
 
 namespace gamecore.card
 {
@@ -18,6 +19,36 @@ namespace gamecore.card
                 PositionKnowledge.Unknown => PositionKnowledge.Unknown,
                 PositionKnowledge.NotPrized => PositionKnowledge.NotPrized,
                 PositionKnowledge.Known => PositionKnowledge.NotPrized,
+                _ => throw new ArgumentOutOfRangeException(
+                    nameof(positionKnowledge),
+                    $"Not a valid position knowledge: {positionKnowledge}"
+                ),
+            };
+        }
+
+        public static ProtoBufPositionKnowledge ToProtoBuf(this PositionKnowledge positionKnowledge)
+        {
+            return positionKnowledge switch
+            {
+                PositionKnowledge.Unknown => ProtoBufPositionKnowledge.PositionKnowledgeUnknown,
+                PositionKnowledge.NotPrized => ProtoBufPositionKnowledge.PositionKnowledgeNotPrized,
+                PositionKnowledge.Known => ProtoBufPositionKnowledge.PositionKnowledgeKnown,
+                _ => throw new ArgumentOutOfRangeException(
+                    nameof(positionKnowledge),
+                    $"Not a valid position knowledge: {positionKnowledge}"
+                ),
+            };
+        }
+
+        public static PositionKnowledge FromProtoBuf(
+            this ProtoBufPositionKnowledge positionKnowledge
+        )
+        {
+            return positionKnowledge switch
+            {
+                ProtoBufPositionKnowledge.PositionKnowledgeUnknown => PositionKnowledge.Unknown,
+                ProtoBufPositionKnowledge.PositionKnowledgeNotPrized => PositionKnowledge.NotPrized,
+                ProtoBufPositionKnowledge.PositionKnowledgeKnown => PositionKnowledge.Known,
                 _ => throw new ArgumentOutOfRangeException(
                     nameof(positionKnowledge),
                     $"Not a valid position knowledge: {positionKnowledge}"

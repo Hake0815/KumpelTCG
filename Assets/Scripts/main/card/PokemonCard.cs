@@ -73,6 +73,9 @@ namespace gamecore.card
         List<IAttackLogic> GetUsableAttacks();
 
         [JsonIgnore]
+        List<PokemonTurnTrait> PokemonTurnTraits { get; }
+
+        [JsonIgnore]
         new IAbilityLogic Ability { get; }
         bool HasUsableAbility();
         bool IsActive();
@@ -160,6 +163,8 @@ namespace gamecore.card
         public event Action DamageModified;
         public event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         public event Action Evolved;
+
+        public List<PokemonTurnTrait> PokemonTurnTraits { get; } = new();
 
         [JsonConstructor]
         public PokemonCard(string name, string id, int deckId, IPlayerLogic owner)
@@ -278,16 +283,12 @@ namespace gamecore.card
         {
             if (Owner.TurnCounter < 2)
                 return false;
-            if (
-                Owner.ActivePokemon.Name == EvolvesFrom
-                && !Owner.ActivePokemon.HasEffect<PutIntoPlayThisTurnEffect>()
-            )
-                return true;
-            foreach (var benchPokemon in Owner.Bench.Cards)
+
+            foreach (var pokemon in Owner.GetAllPokemonInPlay())
             {
                 if (
-                    benchPokemon.Name == EvolvesFrom
-                    && !(benchPokemon as IPokemonCardLogic).HasEffect<PutIntoPlayThisTurnEffect>()
+                    pokemon.Name == EvolvesFrom
+                    && !pokemon.PokemonTurnTraits.Contains(PokemonTurnTrait.PutInPlayThisTurn)
                 )
                     return true;
             }
@@ -297,20 +298,14 @@ namespace gamecore.card
         public List<ICardLogic> GetPossibleTargets()
         {
             var targets = new List<ICardLogic>();
-            foreach (var benchPokemon in Owner.Bench.Cards)
+            foreach (var pokemon in Owner.GetAllPokemonInPlay())
             {
                 if (
-                    benchPokemon.Name == EvolvesFrom
-                    && !(benchPokemon as IPokemonCardLogic).HasEffect<PutIntoPlayThisTurnEffect>()
+                    pokemon.Name == EvolvesFrom
+                    && !pokemon.PokemonTurnTraits.Contains(PokemonTurnTrait.PutInPlayThisTurn)
                 )
-                    targets.Add(benchPokemon);
+                    targets.Add(pokemon);
             }
-            if (
-                Owner.ActivePokemon.Name == EvolvesFrom
-                && !Owner.ActivePokemon.HasEffect<PutIntoPlayThisTurnEffect>()
-            )
-                targets.Add(Owner.ActivePokemon);
-
             return targets;
         }
 
@@ -326,7 +321,7 @@ namespace gamecore.card
 
         public void SetPutInPlay(ActionSystem actionSystem)
         {
-            ((PokemonEffectAbstract)new PutIntoPlayThisTurnEffect(actionSystem, this)).Apply();
+            PokemonTurnTraits.Add(PokemonTurnTrait.PutInPlayThisTurn);
         }
 
         public int GetNumberOfTargets() => 1;
@@ -424,6 +419,7 @@ namespace gamecore.card
             protoBufCard.PokemonEffects.Capacity = PokemonEffects.Count;
             protoBufCard.AttachedEnergyCards.Capacity = AttachedEnergyCards.Count;
             protoBufCard.PreEvolutionIds.Capacity = PreEvolutions.Count;
+            protoBufCard.PokemonTurnTraits.Capacity = PokemonTurnTraits.Count;
 
             foreach (var attack in Attacks)
             {
@@ -443,6 +439,10 @@ namespace gamecore.card
             foreach (var preEvolution in PreEvolutions)
             {
                 protoBufCard.PreEvolutionIds.Add(preEvolution.DeckId);
+            }
+            foreach (var pokemonTurnTrait in PokemonTurnTraits)
+            {
+                protoBufCard.PokemonTurnTraits.Add(pokemonTurnTrait.ToProtoBuf());
             }
             return protoBufCard;
         }

@@ -38,5 +38,26 @@ namespace gamecore.card
                 _ => throw new InvalidOperationException($"Invalid energy type: {energyType}"),
             };
         }
+
+        public static EnergyType FromProtoBuf(this ProtoBufEnergyType protoBufEnergyType)
+        {
+            return protoBufEnergyType switch
+            {
+                ProtoBufEnergyType.EnergyTypeNone => EnergyType.None,
+                ProtoBufEnergyType.EnergyTypeGrass => EnergyType.Grass,
+                ProtoBufEnergyType.EnergyTypeFire => EnergyType.Fire,
+                ProtoBufEnergyType.EnergyTypeWater => EnergyType.Water,
+                ProtoBufEnergyType.EnergyTypeLightning => EnergyType.Lightning,
+                ProtoBufEnergyType.EnergyTypeFighting => EnergyType.Fighting,
+                ProtoBufEnergyType.EnergyTypePsychic => EnergyType.Psychic,
+                ProtoBufEnergyType.EnergyTypeColorless => EnergyType.Colorless,
+                ProtoBufEnergyType.EnergyTypeDarkness => EnergyType.Darkness,
+                ProtoBufEnergyType.EnergyTypeMetal => EnergyType.Metal,
+                ProtoBufEnergyType.EnergyTypeDragon => EnergyType.Dragon,
+                _ => throw new InvalidOperationException(
+                    $"Invalid energy type: {protoBufEnergyType}"
+                ),
+            };
+        }
     }
 }

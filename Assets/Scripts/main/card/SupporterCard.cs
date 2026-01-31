@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using gamecore.actionsystem;
 using gamecore.effect;
 using gamecore.game;
@@ -8,6 +9,11 @@ namespace gamecore.card
 {
     class SupporterCard : TrainerCard
     {
+        private static readonly HashSet<PlayerTurnTrait> UnplayableTurnTraits = new()
+        {
+            PlayerTurnTrait.PlayedSupporterThisTurn,
+            PlayerTurnTrait.FirstTurnOfGame,
+        };
         public override CardSubtype CardSubtype => CardSubtype.Supporter;
 
         public SupporterCard(ITrainerCardData cardData, IPlayerLogic owner, int deckId)
@@ -29,11 +35,7 @@ namespace gamecore.card
 
         public override bool IsPlayable()
         {
-            if (
-                Owner.PerformedOncePerTurnActions.Contains(
-                    OncePerTurnActionType.PlayedSupporterThisTurn
-                ) || Owner.HasEffect<FirstTurnOfGameEffect>()
-            )
+            if (Owner.PlayerTurnTraits.Overlaps(UnplayableTurnTraits))
                 return false;
             return base.IsPlayable();
         }

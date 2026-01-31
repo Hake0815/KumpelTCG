@@ -4,6 +4,7 @@ namespace gameview
     {
         public const string GAME_LOG_FILE = "log.txt";
         public static LoadModus LoadModus { get; set; } = LoadModus.NewGame;
+        public static string GameState { get; set; } = string.Empty;
     }
 
     public enum LoadModus
@@ -11,5 +12,6 @@ namespace gameview
         NewGame,
         ResumeGame,
         ReplayGame,
+        RecreateState,
     }
 }

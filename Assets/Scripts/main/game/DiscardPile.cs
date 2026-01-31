@@ -32,6 +32,14 @@ namespace gamecore.game
         public DiscardPile()
             : base() { }
 
+        public override void AddCard(ICardLogic card)
+        {
+            card.OwnerPositionKnowledge = PositionKnowledge.Known;
+            card.OpponentPositionKnowledge = PositionKnowledge.Known;
+            base.AddCard(card);
+            OnCardsAdded(new() { card });
+        }
+
         public override void AddCards(List<ICardLogic> cards)
         {
             foreach (var card in cards)
