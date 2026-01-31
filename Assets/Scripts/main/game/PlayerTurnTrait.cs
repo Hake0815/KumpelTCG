@@ -29,5 +29,24 @@ namespace gamecore.game
                 ),
             };
         }
+
+        public static PlayerTurnTrait FromProtoBuf(
+            this ProtoBufPlayerTurnTrait protoBufPlayerTurnTrait
+        )
+        {
+            return protoBufPlayerTurnTrait switch
+            {
+                ProtoBufPlayerTurnTrait.PlayerTurnTraitFirstTurnOfGame =>
+                    PlayerTurnTrait.FirstTurnOfGame,
+                ProtoBufPlayerTurnTrait.PlayerTurnTraitAttachedEnergyForTurn =>
+                    PlayerTurnTrait.AttachedEnergyForTurn,
+                ProtoBufPlayerTurnTrait.PlayerTurnTraitPlayedSupporterThisTurn =>
+                    PlayerTurnTrait.PlayedSupporterThisTurn,
+                ProtoBufPlayerTurnTrait.PlayerTurnTraitRetreated => PlayerTurnTrait.Retreated,
+                _ => throw new InvalidOperationException(
+                    $"Invalid player turn trait: {protoBufPlayerTurnTrait}"
+                ),
+            };
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace gamecore.game
         public abstract List<ICardLogic> DrawFaceDown(int amount);
         public abstract void RemoveFaceDown(List<ICardLogic> cards);
         public abstract List<ICardLogic> Draw(int amount);
+        public abstract void SetAllCardsAsKnown();
     }
 
     class Deck : DeckLogicAbstract
@@ -71,15 +72,21 @@ namespace gamecore.game
             Cards[0].TopDeckPositionIndex = 0;
         }
 
+        public override void AddCard(ICardLogic card)
+        {
+            card.TopDeckPositionIndex = CardCount;
+            base.AddCard(card);
+            OnCardsAdded(new() { card });
+        }
+
         public override void AddCards(List<ICardLogic> cards)
         {
             foreach (var card in cards)
             {
                 card.TopDeckPositionIndex = CardCount;
             }
-            Cards.AddRange(cards);
+            base.AddCards(cards);
             OnCardsAdded(cards);
-            OnCardCountChanged();
         }
 
         public override void RemoveCards(List<ICardLogic> cards)
@@ -156,6 +163,14 @@ namespace gamecore.game
         public void OnCardsAdded(List<ICardLogic> cards)
         {
             CardsAdded?.Invoke(cards.Cast<ICard>().ToList());
+        }
+
+        public override void SetAllCardsAsKnown()
+        {
+            foreach (var card in Cards)
+            {
+                card.OwnerPositionKnowledge = PositionKnowledge.Known;
+            }
         }
     }
 }

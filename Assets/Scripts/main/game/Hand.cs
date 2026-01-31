@@ -23,6 +23,12 @@ namespace gamecore.card
             CardCountChanged?.Invoke(((ICardList)this).Cards);
         }
 
+        public override void AddCard(ICardLogic card)
+        {
+            card.OwnerPositionKnowledge = PositionKnowledge.Known;
+            base.AddCard(card);
+        }
+
         public override void AddCards(List<ICardLogic> cards)
         {
             foreach (var card in cards)

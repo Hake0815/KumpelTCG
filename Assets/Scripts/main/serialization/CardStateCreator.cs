@@ -335,8 +335,8 @@ namespace gamecore.serialization
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions =
                                     {
-                                        ProtoBufCardPosition.CardPositionHand,
                                         ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
                                 },
@@ -353,9 +353,9 @@ namespace gamecore.serialization
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions =
                                     {
-                                        ProtoBufCardPosition.CardPositionHand,
-                                        ProtoBufCardPosition.CardPositionDeck,
                                         ProtoBufCardPosition.CardPositionPrizes,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
                                 },
@@ -396,8 +396,8 @@ namespace gamecore.serialization
                                 Owner = ProtoBufOwner.OwnerSelf,
                                 PossiblePositions =
                                 {
-                                    ProtoBufCardPosition.CardPositionDeck,
                                     ProtoBufCardPosition.CardPositionPrizes,
+                                    ProtoBufCardPosition.CardPositionDeck,
                                 },
                                 TopDeckPositionIndex = card.TopDeckPositionIndex,
                             },
@@ -437,8 +437,8 @@ namespace gamecore.serialization
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions =
                                     {
-                                        ProtoBufCardPosition.CardPositionHand,
                                         ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
                                 },
@@ -455,9 +455,9 @@ namespace gamecore.serialization
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions =
                                     {
-                                        ProtoBufCardPosition.CardPositionHand,
-                                        ProtoBufCardPosition.CardPositionDeck,
                                         ProtoBufCardPosition.CardPositionPrizes,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
                                 },
@@ -503,8 +503,8 @@ namespace gamecore.serialization
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions =
                                     {
-                                        ProtoBufCardPosition.CardPositionHand,
                                         ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
                                 },
@@ -521,9 +521,9 @@ namespace gamecore.serialization
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions =
                                     {
-                                        ProtoBufCardPosition.CardPositionHand,
-                                        ProtoBufCardPosition.CardPositionDeck,
                                         ProtoBufCardPosition.CardPositionPrizes,
+                                        ProtoBufCardPosition.CardPositionDeck,
+                                        ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
                                 },

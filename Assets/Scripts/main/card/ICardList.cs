@@ -45,6 +45,12 @@ namespace gamecore.card
             }
         }
 
+        public virtual void AddCard(ICardLogic card)
+        {
+            Cards.Add(card);
+            OnCardCountChanged();
+        }
+
         public virtual void AddCards(List<ICardLogic> cards)
         {
             Cards.AddRange(cards);

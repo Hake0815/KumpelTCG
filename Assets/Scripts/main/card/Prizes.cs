@@ -14,20 +14,27 @@ namespace gamecore.card
         protected PrizesLogicAbstract()
             : base(new()) { }
 
+        public abstract event Action BecameKnown;
         public abstract event Action<List<ICard>> PrizesTaken;
 
         public abstract List<ICardLogic> TakePrizes(int amount);
 
         public abstract void DeckSearched();
+        public abstract bool AreKnown();
     }
 
     class Prizes : PrizesLogicAbstract
     {
+        private bool _known = false;
+
         public override event Action<List<ICard>> CardCountChanged;
         public override event Action<List<ICard>> PrizesTaken;
+        public override event Action BecameKnown;
 
         public Prizes()
             : base() { }
+
+        public override bool AreKnown() => _known;
 
         public override void OnCardCountChanged()
         {
@@ -52,10 +59,14 @@ namespace gamecore.card
 
         public override void DeckSearched()
         {
+            if (_known)
+                return;
             foreach (var card in Cards)
             {
                 card.OwnerPositionKnowledge = PositionKnowledge.Known;
             }
+            _known = true;
+            BecameKnown?.Invoke();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace gamecore.game
             var cards = CreateDeckFromDecklist(decklist, _player1, 0);
             _player1.Deck = new Deck(cards);
             _player1.DeckList = new DeckList(new(cards));
+            _player1.Prizes.BecameKnown += _player1.Deck.SetAllCardsAsKnown;
             return this;
         }
 
@@ -36,6 +37,7 @@ namespace gamecore.game
             var cards = CreateDeckFromDecklist(decklist, _player2, 60);
             _player2.Deck = new Deck(cards);
             _player2.DeckList = new DeckList(new(cards));
+            _player2.Prizes.BecameKnown += _player2.Deck.SetAllCardsAsKnown;
             return this;
         }
 

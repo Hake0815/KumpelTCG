@@ -59,7 +59,7 @@ namespace gamecore.game
                 return result;
             }
         }
-        public int TurnCounter { get; private set; } = 0;
+        public int TurnCounter { get; set; } = 0;
         public event Action AwaitInteractionEvent;
         public event Action AwaitGeneralInteractionEvent;
         public bool IsReplaying { get; set; } = false;

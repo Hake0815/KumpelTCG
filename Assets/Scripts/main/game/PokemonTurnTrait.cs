@@ -24,5 +24,21 @@ namespace gamecore.game
                 ),
             };
         }
+
+        public static PokemonTurnTrait FromProtoBuf(
+            this ProtoBufPokemonTurnTrait protoBufPokemonTurnTrait
+        )
+        {
+            return protoBufPokemonTurnTrait switch
+            {
+                ProtoBufPokemonTurnTrait.PokemonTurnTraitPutInPlayThisTurn =>
+                    PokemonTurnTrait.PutInPlayThisTurn,
+                ProtoBufPokemonTurnTrait.PokemonTurnTraitAbilityUsedThisTurn =>
+                    PokemonTurnTrait.AbilityUsedThisTurn,
+                _ => throw new InvalidOperationException(
+                    $"Invalid pokemon turn trait: {protoBufPokemonTurnTrait}"
+                ),
+            };
+        }
     }
 }

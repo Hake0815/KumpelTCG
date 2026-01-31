@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using gamecore.card;
 using gamecore.game;
 using gamecore.game.interaction;
+using gamecore.serialization;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,11 +37,24 @@ namespace gameview
             {
                 await _gameController.RecreateGameFromLog();
             }
+            else if (GameParameters.LoadModus == LoadModus.RecreateState)
+            {
+                var gameState = JsonConvert.DeserializeObject<ProtoBufGameState>(
+                    GameParameters.GameState
+                );
+                _gameController.RecreateGameFromGameState(
+                    gameState,
+                    CreateDeckList(),
+                    CreateDeckList(),
+                    "Player 1",
+                    "Player 2"
+                );
+            }
             else if (GameParameters.LoadModus == LoadModus.ReplayGame)
             {
                 await _gameController.StartReplay();
             }
-            else
+            else if (GameParameters.LoadModus == LoadModus.NewGame)
             {
                 await File.WriteAllTextAsync(gameLogFile, string.Empty);
                 await _gameController.CreateGame(
