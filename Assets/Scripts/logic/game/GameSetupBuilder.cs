@@ -47,6 +47,10 @@ namespace gamecore
             {
                 Mulligans[player].Add(player.Hand.Cards.GetRange(0, player.Hand.CardCount));
                 player.Deck.AddCards(player.Hand.Cards);
+                foreach (var card in player.Hand.Cards)
+                {
+                    card.OwnerPositionKnowledge = PositionKnowledge.Unknown;
+                }
                 player.Hand.Clear();
             }
         }

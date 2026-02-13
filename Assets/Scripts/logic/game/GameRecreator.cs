@@ -222,7 +222,7 @@ namespace gamecore.game
             else
             {
                 throw new IllegalStateException(
-                    $"Invalid position: {cardState.Position.PossiblePositions}"
+                    $"Card with deck id {card.DeckId} has invalid positions: {cardState.Position.PossiblePositions}"
                 );
             }
         }
@@ -273,15 +273,9 @@ namespace gamecore.game
             RepeatedField<ProtoBufCardPosition> possiblePositions
         )
         {
-            return possiblePositions.Count switch
-            {
-                3 => PositionKnowledge.Unknown,
-                2 => PositionKnowledge.NotPrized,
-                1 => PositionKnowledge.Known,
-                _ => throw new IllegalStateException(
-                    $"Invalid number of possible positions: {possiblePositions.Count}"
-                ),
-            };
+            return possiblePositions.Contains(ProtoBufCardPosition.CardPositionPrizes)
+                ? PositionKnowledge.Unknown
+                : PositionKnowledge.Known;
         }
 
         private static void SetTracker(
