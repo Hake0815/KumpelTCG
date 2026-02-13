@@ -21,9 +21,9 @@ namespace gamecore.game
 
         private static void RecreatePlayers(ProtoBufGameState gameState, Game game)
         {
-            RecreatePlayerCards(gameState, game);
             var isPlayer1Self =
                 gameState.CardStates.First().Position.Owner == ProtoBufOwner.OwnerSelf;
+            RecreatePlayersCards(gameState, game, isPlayer1Self);
             var player1State = isPlayer1Self ? gameState.SelfState : gameState.OpponentState;
             var player2State = isPlayer1Self ? gameState.OpponentState : gameState.SelfState;
             RecreatePlayerAttributes(player1State, game.Player1);
@@ -44,51 +44,87 @@ namespace gamecore.game
             }
         }
 
-        private static void RecreatePlayerCards(ProtoBufGameState gameState, Game game)
+        private static void RecreatePlayersCards(
+            ProtoBufGameState gameState,
+            Game game,
+            bool isPlayer1Self
+        )
         {
-            int remainingHandCardsToSetup = 0;
-            int remainingPrizesToSetup = 0;
-            IPlayerLogic currentPlayer = null;
+            RecreatePlayerCards(gameState, game.Player1, isPlayer1Self);
+            RecreatePlayerCards(gameState, game.Player2, !isPlayer1Self);
+        }
 
-            foreach (var cardState in gameState.CardStates)
+        private static void RecreatePlayerCards(
+            ProtoBufGameState gameState,
+            IPlayerLogic currentPlayer,
+            bool isPlayerSelf
+        )
+        {
+            SetTracker(
+                isPlayerSelf,
+                gameState,
+                out int remainingHandCardsToSetup,
+                out int remainingPrizesToSetup
+            );
+            int currentCardIndex = 0;
+            bool cardRemovedFromDeck = false;
+            while (currentCardIndex < currentPlayer.Deck.CardCount)
             {
+                var card = currentPlayer.Deck.Cards[currentCardIndex];
                 SetupCard(
+                    card,
                     gameState,
-                    game,
+                    currentPlayer,
                     ref remainingHandCardsToSetup,
                     ref remainingPrizesToSetup,
-                    ref currentPlayer,
-                    cardState
+                    ref cardRemovedFromDeck
                 );
+                if (!cardRemovedFromDeck)
+                {
+                    currentCardIndex++;
+                }
             }
-            game.Player1.Deck.Cards.Sort(
-                (left, right) => left.TopDeckPositionIndex.CompareTo(right.TopDeckPositionIndex)
-            );
-            game.Player2.Deck.Cards.Sort(
+            currentPlayer.Deck.Cards.Sort(
                 (left, right) => left.TopDeckPositionIndex.CompareTo(right.TopDeckPositionIndex)
             );
         }
 
-        private static void SetupCard(
+        private static void SetTracker(
+            bool isPlayerSelf,
             ProtoBufGameState gameState,
-            Game game,
-            ref int remainingHandCardsToSetup,
-            ref int remainingPrizesToSetup,
-            ref IPlayerLogic currentPlayer,
-            ProtoBufCardState cardState
+            out int remainingHandCardsToSetup,
+            out int remainingPrizesToSetup
         )
         {
-            if (cardState.Card.DeckId == 0 || cardState.Card.DeckId == 60)
+            if (isPlayerSelf)
             {
-                SetTracker(
-                    cardState,
-                    gameState,
-                    out remainingHandCardsToSetup,
-                    out remainingPrizesToSetup
-                );
-                currentPlayer = cardState.Card.DeckId == 0 ? game.Player1 : game.Player2;
+                remainingHandCardsToSetup = gameState.SelfState.HandCount;
+                remainingPrizesToSetup = gameState.SelfState.PrizesCount;
             }
-            var card = currentPlayer.DeckList.GetCardByDeckId(cardState.Card.DeckId);
+            else
+            {
+                remainingHandCardsToSetup = gameState.OpponentState.HandCount;
+                remainingPrizesToSetup = gameState.OpponentState.PrizesCount;
+            }
+        }
+
+        private static void SetupCard(
+            ICardLogic card,
+            ProtoBufGameState gameState,
+            IPlayerLogic currentPlayer,
+            ref int remainingHandCardsToSetup,
+            ref int remainingPrizesToSetup,
+            ref bool cardRemovedFromDeck
+        )
+        {
+            var cardState = gameState.CardStates[card.DeckId];
+            if (cardState.Card.DeckId != card.DeckId)
+            {
+                throw new IllegalStateException(
+                    $"card states in game state are not ordered by deck id"
+                );
+            }
+
             card.OpponentPositionKnowledge =
                 cardState.Position.OpponentPositionKnowledge.FromProtoBuf();
             card.OwnerPositionKnowledge = GetOwnerPositionKnowledge(
@@ -101,6 +137,7 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.RemoveCard(card);
+                cardRemovedFromDeck = true;
                 currentPlayer.Hand.AddCard(card);
                 remainingHandCardsToSetup--;
             }
@@ -112,6 +149,7 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.RemoveCard(card);
+                cardRemovedFromDeck = true;
                 currentPlayer.Prizes.AddCard(card);
                 remainingPrizesToSetup--;
             }
@@ -130,6 +168,7 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.RemoveCard(card);
+                cardRemovedFromDeck = true;
                 currentPlayer.Bench.AddCard(card);
                 SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
             }
@@ -140,6 +179,7 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.RemoveCard(card);
+                cardRemovedFromDeck = true;
                 currentPlayer.ActivePokemon = card as IPokemonCardLogic;
                 SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
             }
@@ -150,6 +190,7 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.RemoveCard(card);
+                cardRemovedFromDeck = true;
                 currentPlayer.CurrentlyPlayedCard = card;
             }
             else if (
@@ -159,6 +200,7 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.RemoveCard(card);
+                cardRemovedFromDeck = true;
                 currentPlayer.FloatingCards.Add(card);
             }
             else if (
@@ -168,12 +210,14 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.RemoveCard(card);
+                cardRemovedFromDeck = true;
                 currentPlayer.DiscardPile.AddCard(card);
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(ProtoBufCardPosition.CardPositionDeck)
             )
-            { /* Deck is already setup */
+            {
+                cardRemovedFromDeck = false;
             }
             else
             {
@@ -241,19 +285,21 @@ namespace gamecore.game
         }
 
         private static void SetTracker(
+            ICardLogic card,
             ProtoBufCardState cardState,
             ProtoBufGameState gameState,
             out int remainingHandCardsToSetup,
             out int remainingPrizesToSetup
         )
         {
+            var owner = card.Owner;
             var isSelf = cardState.Position.Owner == ProtoBufOwner.OwnerSelf;
             remainingHandCardsToSetup = isSelf
-                ? gameState.SelfState.HandCount
-                : gameState.OpponentState.HandCount;
+                ? gameState.SelfState.HandCount - owner.Hand.CardCount
+                : gameState.OpponentState.HandCount - owner.Opponent.Hand.CardCount;
             remainingPrizesToSetup = isSelf
-                ? gameState.SelfState.PrizesCount
-                : gameState.OpponentState.PrizesCount;
+                ? gameState.SelfState.PrizesCount - owner.Prizes.CardCount
+                : gameState.OpponentState.PrizesCount - owner.Opponent.Prizes.CardCount;
         }
     }
 }
