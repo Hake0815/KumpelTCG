@@ -69,7 +69,16 @@ namespace gameview
         private Button _button;
         private TMP_Text _buttonText;
 
-        async Task Start()
+        void Awake()
+        {
+            TaskScheduler.UnobservedTaskException += (_, e) =>
+            {
+                Debug.LogException(e.Exception);
+                e.SetObserved();
+            };
+        }
+
+        async void Start()
         {
             _button = GetComponentInChildren<Button>();
             _buttonText = _button.GetComponentInChildren<TMP_Text>();

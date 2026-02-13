@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using gamecore.card;
+using gamecore.common;
 using gamecore.game;
 using gamecore.game.interaction;
 using gamecore.serialization;
@@ -20,6 +21,7 @@ namespace gameview
         private readonly GameManager _gameManager;
         private readonly List<ICard> _playableCards = new();
         private readonly List<ICard> _selectedCards = new();
+        private readonly String _gameStateLogFile = "game_state.txt";
 
         public GameRemoteService(GameManager gameManager)
         {
@@ -39,6 +41,9 @@ namespace gameview
             }
             else if (GameParameters.LoadModus == LoadModus.RecreateState)
             {
+                GlobalLogger.Instance.Info(
+                    () => $"Recreating game from game state: {GameParameters.GameState}"
+                );
                 var gameState = JsonConvert.DeserializeObject<ProtoBufGameState>(
                     GameParameters.GameState
                 );
@@ -64,6 +69,7 @@ namespace gameview
                     "Player 2"
                 );
             }
+            File.WriteAllText(_gameStateLogFile, string.Empty);
             _gameManager.SetUpPlayerViews(
                 _gameController.Game.Player1,
                 _gameController.Game.Player2
@@ -121,12 +127,19 @@ namespace gameview
 
         private async void HandlePlayer1Interactions(List<GameInteraction> interactions)
         {
-            _gameController.ExportGameStateAsByteArray("Player 1");
+            File.AppendAllText(
+                _gameStateLogFile,
+                _gameController.ExportGameStateAsJson("Player 1") + "\n"
+            );
             await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }
 
         private async void HandlePlayer2Interactions(List<GameInteraction> interactions)
         {
+            File.AppendAllText(
+                _gameStateLogFile,
+                _gameController.ExportGameStateAsJson("Player 2") + "\n"
+            );
             _gameController.ExportGameStateAsByteArray("Player 2");
             await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }

@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using gamecore.common;
 using SFB;
 using TMPro;
 using UnityEngine;
@@ -25,13 +27,6 @@ namespace gameview
         [SerializeField]
         private Button _quitButton;
 
-        [SerializeField]
-        private Button _confirmButton;
-
-        [SerializeField]
-        private TMP_InputField _gameStateInputField;
-
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             if (
@@ -48,29 +43,24 @@ namespace gameview
             _loadGameButton.onClick.AddListener(LoadGame);
             _replayGameButton.onClick.AddListener(ReplayGame);
             _recreateStateButton.onClick.AddListener(RecreateState);
-            _confirmButton.onClick.AddListener(ConfirmRecreateState);
             _quitButton.onClick.AddListener(Quit);
         }
 
         private void RecreateState()
         {
-            StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false);
-            _gameStateInputField.gameObject.SetActive(true);
-            _confirmButton.gameObject.SetActive(true);
-            _gameStateInputField.text = string.Empty;
+            var paths = StandaloneFileBrowser.OpenFilePanel("Open game state file", "", "", false);
+            var recreatableGameState = File.ReadLines(paths[0])
+                .Where(line => line.StartsWith("{\"Recreatable\":true"))
+                .Last();
+            GameParameters.GameState = recreatableGameState;
+            GameParameters.LoadModus = LoadModus.RecreateState;
+            SceneManager.LoadScene("GameScene");
 
             _newGameButton.gameObject.SetActive(false);
             _loadGameButton.gameObject.SetActive(false);
             _replayGameButton.gameObject.SetActive(false);
             _recreateStateButton.gameObject.SetActive(false);
             _quitButton.gameObject.SetActive(false);
-        }
-
-        private void ConfirmRecreateState()
-        {
-            GameParameters.GameState = _gameStateInputField.text;
-            GameParameters.LoadModus = LoadModus.RecreateState;
-            SceneManager.LoadScene("GameScene");
         }
 
         private static void NewGame()

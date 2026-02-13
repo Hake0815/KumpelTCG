@@ -80,3 +80,4 @@ GameLogicTraining/*
 application.log
 log.txt
 Assets/Resources/Images/*
+game_state.txt
