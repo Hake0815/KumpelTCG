@@ -2,6 +2,7 @@ syntax = "proto3";
 package gamecore.serialization;
 
 option csharp_namespace = "gamecore.serialization";
+
 // Enums
 enum ProtoBufCardType {
   CARD_TYPE_UNKNOWN = 0;
@@ -200,7 +201,7 @@ enum ProtoBufSelectionQualifier {
   SELECTION_QUALIFIER_PROVIDED_ENERGY = 1;
 }
 
-enum ProtoBufTechnicalGameState{
+enum ProtoBufTechnicalGameState {
   GAME_STATE_GAME_OVER = 0;
   GAME_STATE_IDLE_PLAYER_TURN = 1;
   GAME_STATE_SELECT_BENCH_POKEMON = 2;
@@ -228,7 +229,7 @@ message ProtoBufIntRange {
 message ProtoBufPosition {
   ProtoBufOwner owner = 1;
   repeated ProtoBufCardPosition possible_positions = 2;
-  optional int32 top_deck_position_index = 3;
+  int32 top_deck_position_index = 3;
   optional int32 attached_to_pokemon_id = 4;
   optional ProtoBufPositionKnowledge opponent_position_knowledge = 5;
 }
@@ -442,4 +443,3 @@ message ProtoBufGameInteraction {
   ProtoBufGameInteractionType type = 1;
   repeated ProtoBufGameInteractionData data = 2;
 }
-

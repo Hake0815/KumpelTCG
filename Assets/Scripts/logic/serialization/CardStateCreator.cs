@@ -79,6 +79,8 @@ namespace gamecore.serialization
                         {
                             Owner = ProtoBufOwner.OwnerSelf,
                             PossiblePositions = { ProtoBufCardPosition.CardPositionFloating },
+                            TopDeckPositionIndex = -1,
+                            OpponentPositionKnowledge = card.OpponentPositionKnowledge.ToProtoBuf(),
                         },
                     }
                 );
@@ -99,6 +101,9 @@ namespace gamecore.serialization
                     {
                         Owner = owner,
                         PossiblePositions = { ProtoBufCardPosition.CardPositionActiveSpot },
+                        TopDeckPositionIndex = -1,
+                        OpponentPositionKnowledge =
+                            activePokemon.OpponentPositionKnowledge.ToProtoBuf(),
                     },
                 }
             );
@@ -119,6 +124,9 @@ namespace gamecore.serialization
                     {
                         Owner = owner,
                         PossiblePositions = { ProtoBufCardPosition.CardPositionCurrentlyPlayed },
+                        TopDeckPositionIndex = -1,
+                        OpponentPositionKnowledge =
+                            currentlyPlayedCard.OpponentPositionKnowledge.ToProtoBuf(),
                     },
                 }
             );
@@ -140,6 +148,8 @@ namespace gamecore.serialization
                         {
                             Owner = owner,
                             PossiblePositions = { ProtoBufCardPosition.CardPositionBench },
+                            TopDeckPositionIndex = -1,
+                            OpponentPositionKnowledge = card.OpponentPositionKnowledge.ToProtoBuf(),
                         },
                     }
                 );
@@ -164,6 +174,8 @@ namespace gamecore.serialization
                             Owner = owner,
                             PossiblePositions = { ProtoBufCardPosition.CardPositionAttachedToCard },
                             AttachedToPokemonId = pokemonCard.DeckId,
+                            TopDeckPositionIndex = -1,
+                            OpponentPositionKnowledge = card.OpponentPositionKnowledge.ToProtoBuf(),
                         },
                     }
                 );
@@ -179,6 +191,8 @@ namespace gamecore.serialization
                             Owner = owner,
                             PossiblePositions = { ProtoBufCardPosition.CardPositionAttachedToCard },
                             AttachedToPokemonId = pokemonCard.DeckId,
+                            TopDeckPositionIndex = -1,
+                            OpponentPositionKnowledge = card.OpponentPositionKnowledge.ToProtoBuf(),
                         },
                     }
                 );
@@ -201,6 +215,8 @@ namespace gamecore.serialization
                         {
                             Owner = owner,
                             PossiblePositions = { ProtoBufCardPosition.CardPositionDiscardPile },
+                            TopDeckPositionIndex = -1,
+                            OpponentPositionKnowledge = card.OpponentPositionKnowledge.ToProtoBuf(),
                         },
                     }
                 );
@@ -226,6 +242,8 @@ namespace gamecore.serialization
                                     ProtoBufCardPosition.CardPositionDeck,
                                 },
                                 TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                OpponentPositionKnowledge =
+                                    card.OpponentPositionKnowledge.ToProtoBuf(),
                             },
                         }
                     );
@@ -240,6 +258,9 @@ namespace gamecore.serialization
                             {
                                 Owner = ProtoBufOwner.OwnerSelf,
                                 PossiblePositions = { ProtoBufCardPosition.CardPositionPrizes },
+                                TopDeckPositionIndex = -1,
+                                OpponentPositionKnowledge =
+                                    card.OpponentPositionKnowledge.ToProtoBuf(),
                             },
                         }
                     );
@@ -267,6 +288,8 @@ namespace gamecore.serialization
                                     ProtoBufCardPosition.CardPositionHand,
                                 },
                                 TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                OpponentPositionKnowledge =
+                                    card.OpponentPositionKnowledge.ToProtoBuf(),
                             },
                         }
                     );
@@ -281,6 +304,9 @@ namespace gamecore.serialization
                             {
                                 Owner = ProtoBufOwner.OwnerOpponent,
                                 PossiblePositions = { ProtoBufCardPosition.CardPositionPrizes },
+                                TopDeckPositionIndex = -1,
+                                OpponentPositionKnowledge =
+                                    card.OpponentPositionKnowledge.ToProtoBuf(),
                             },
                         }
                     );
@@ -300,6 +326,8 @@ namespace gamecore.serialization
                         {
                             Owner = ProtoBufOwner.OwnerSelf,
                             PossiblePositions = { ProtoBufCardPosition.CardPositionHand },
+                            TopDeckPositionIndex = -1,
+                            OpponentPositionKnowledge = card.OpponentPositionKnowledge.ToProtoBuf(),
                         },
                     }
                 );
@@ -321,6 +349,9 @@ namespace gamecore.serialization
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions = { ProtoBufCardPosition.CardPositionHand },
+                                    TopDeckPositionIndex = -1,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -339,6 +370,8 @@ namespace gamecore.serialization
                                         ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -358,6 +391,8 @@ namespace gamecore.serialization
                                         ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -381,6 +416,8 @@ namespace gamecore.serialization
                                 Owner = ProtoBufOwner.OwnerSelf,
                                 PossiblePositions = { ProtoBufCardPosition.CardPositionDeck },
                                 TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                OpponentPositionKnowledge =
+                                    card.OpponentPositionKnowledge.ToProtoBuf(),
                             },
                         }
                     );
@@ -400,6 +437,8 @@ namespace gamecore.serialization
                                     ProtoBufCardPosition.CardPositionDeck,
                                 },
                                 TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                OpponentPositionKnowledge =
+                                    card.OpponentPositionKnowledge.ToProtoBuf(),
                             },
                         }
                     );
@@ -423,6 +462,8 @@ namespace gamecore.serialization
                                     Owner = ProtoBufOwner.OwnerOpponent,
                                     PossiblePositions = { ProtoBufCardPosition.CardPositionDeck },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -441,6 +482,8 @@ namespace gamecore.serialization
                                         ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -460,6 +503,8 @@ namespace gamecore.serialization
                                         ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -489,6 +534,9 @@ namespace gamecore.serialization
                                     {
                                         ProtoBufCardPosition.CardPositionFloating,
                                     },
+                                    TopDeckPositionIndex = -1,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -507,6 +555,8 @@ namespace gamecore.serialization
                                         ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );
@@ -526,6 +576,8 @@ namespace gamecore.serialization
                                         ProtoBufCardPosition.CardPositionHand,
                                     },
                                     TopDeckPositionIndex = card.TopDeckPositionIndex,
+                                    OpponentPositionKnowledge =
+                                        card.OpponentPositionKnowledge.ToProtoBuf(),
                                 },
                             }
                         );

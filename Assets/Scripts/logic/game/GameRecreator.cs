@@ -66,6 +66,14 @@ namespace gamecore.game
                 out int remainingHandCardsToSetup,
                 out int remainingPrizesToSetup
             );
+            currentPlayer.Deck.Cards.Sort(
+                (left, right) =>
+                    gameState
+                        .CardStates[left.DeckId]
+                        .Position.TopDeckPositionIndex.CompareTo(
+                            gameState.CardStates[right.DeckId].Position.TopDeckPositionIndex
+                        )
+            );
             int currentCardIndex = 0;
             bool cardRemovedFromDeck = false;
             while (currentCardIndex < currentPlayer.Deck.CardCount)
@@ -84,9 +92,6 @@ namespace gamecore.game
                     currentCardIndex++;
                 }
             }
-            currentPlayer.Deck.Cards.Sort(
-                (left, right) => left.TopDeckPositionIndex.CompareTo(right.TopDeckPositionIndex)
-            );
         }
 
         private static void SetTracker(
@@ -130,13 +135,13 @@ namespace gamecore.game
             card.OwnerPositionKnowledge = GetOwnerPositionKnowledge(
                 cardState.Position.PossiblePositions
             );
-            card.TopDeckPositionIndex = cardState.Position.TopDeckPositionIndex;
+            card.TopDeckPositionIndex = Math.Max(0, cardState.Position.TopDeckPositionIndex);
             if (
                 cardState.Position.PossiblePositions.Contains(ProtoBufCardPosition.CardPositionHand)
                 && remainingHandCardsToSetup > 0
             )
             {
-                currentPlayer.Deck.RemoveCard(card);
+                currentPlayer.Deck.Cards.Remove(card);
                 cardRemovedFromDeck = true;
                 currentPlayer.Hand.AddCard(card);
                 remainingHandCardsToSetup--;
@@ -148,7 +153,7 @@ namespace gamecore.game
                 && remainingPrizesToSetup > 0
             )
             {
-                currentPlayer.Deck.RemoveCard(card);
+                currentPlayer.Deck.Cards.Remove(card);
                 cardRemovedFromDeck = true;
                 currentPlayer.Prizes.AddCard(card);
                 remainingPrizesToSetup--;
@@ -167,7 +172,7 @@ namespace gamecore.game
                 )
             )
             {
-                currentPlayer.Deck.RemoveCard(card);
+                currentPlayer.Deck.Cards.Remove(card);
                 cardRemovedFromDeck = true;
                 currentPlayer.Bench.AddCard(card);
                 SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
@@ -178,7 +183,7 @@ namespace gamecore.game
                 )
             )
             {
-                currentPlayer.Deck.RemoveCard(card);
+                currentPlayer.Deck.Cards.Remove(card);
                 cardRemovedFromDeck = true;
                 currentPlayer.ActivePokemon = card as IPokemonCardLogic;
                 SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
@@ -189,7 +194,7 @@ namespace gamecore.game
                 )
             )
             {
-                currentPlayer.Deck.RemoveCard(card);
+                currentPlayer.Deck.Cards.Remove(card);
                 cardRemovedFromDeck = true;
                 currentPlayer.CurrentlyPlayedCard = card;
             }
@@ -199,7 +204,7 @@ namespace gamecore.game
                 )
             )
             {
-                currentPlayer.Deck.RemoveCard(card);
+                currentPlayer.Deck.Cards.Remove(card);
                 cardRemovedFromDeck = true;
                 currentPlayer.FloatingCards.Add(card);
             }
@@ -209,7 +214,7 @@ namespace gamecore.game
                 )
             )
             {
-                currentPlayer.Deck.RemoveCard(card);
+                currentPlayer.Deck.Cards.Remove(card);
                 cardRemovedFromDeck = true;
                 currentPlayer.DiscardPile.AddCard(card);
             }
@@ -248,7 +253,7 @@ namespace gamecore.game
             ICardLogic card
         )
         {
-            currentPlayer.Deck.RemoveCard(card);
+            currentPlayer.Deck.Cards.Remove(card);
             var attachedToCard =
                 currentPlayer.DeckList.GetCardByDeckId(cardState.Position.AttachedToPokemonId)
                 as IPokemonCardLogic;
