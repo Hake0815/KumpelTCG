@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SFB;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -53,6 +54,7 @@ namespace gameview
 
         private void RecreateState()
         {
+            StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false);
             _gameStateInputField.gameObject.SetActive(true);
             _confirmButton.gameObject.SetActive(true);
             _gameStateInputField.text = string.Empty;
