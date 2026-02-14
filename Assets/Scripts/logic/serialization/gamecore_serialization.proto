@@ -355,14 +355,15 @@ message ProtoBufCardState {
 message ProtoBufPlayerState {
   bool is_active = 1;
   bool is_attacking = 2;
-  int32 hand_count = 3;
-  int32 deck_count = 4;
-  int32 prizes_count = 5;
-  int32 bench_count = 6;
-  int32 discard_pile_count = 7;
-  repeated ProtoBufPlayerTurnTrait player_turn_traits = 8;
-  int32 turn_counter = 9;
-  repeated ProtoBufPlayerEffectType player_effects = 10;
+  bool knows_his_prizes = 3;
+  int32 hand_count = 4;
+  int32 deck_count = 5;
+  int32 prizes_count = 6;
+  int32 bench_count = 7;
+  int32 discard_pile_count = 8;
+  repeated ProtoBufPlayerTurnTrait player_turn_traits = 9;
+  int32 turn_counter = 10;
+  repeated ProtoBufPlayerEffectType player_effects = 11;
 }
 
 message ProtoBufGameState {

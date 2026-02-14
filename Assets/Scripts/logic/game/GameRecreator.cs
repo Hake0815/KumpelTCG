@@ -38,6 +38,10 @@ namespace gamecore.game
             player.IsActive = playerState.IsActive;
             player.IsAttacking = playerState.IsAttacking;
             player.TurnCounter = playerState.TurnCounter;
+            if (playerState.KnowsHisPrizes)
+            {
+                player.Prizes.DeckSearched();
+            }
             foreach (var trait in playerState.PlayerTurnTraits)
             {
                 player.PlayerTurnTraits.Add(trait.FromProtoBuf());

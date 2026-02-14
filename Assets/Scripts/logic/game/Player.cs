@@ -222,6 +222,7 @@ namespace gamecore.game
             {
                 IsActive = IsActive,
                 IsAttacking = IsAttacking,
+                KnowsHisPrizes = Prizes.AreKnown(),
                 HandCount = Hand.CardCount,
                 DeckCount = Deck.CardCount,
                 PrizesCount = Prizes.CardCount,
