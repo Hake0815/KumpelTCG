@@ -133,6 +133,7 @@ namespace gamecore.game
             card.OpponentPositionKnowledge =
                 cardState.Position.OpponentPositionKnowledge.FromProtoBuf();
             card.OwnerPositionKnowledge = GetOwnerPositionKnowledge(
+                cardState.Position.Owner == ProtoBufOwner.OwnerSelf,
                 cardState.Position.PossiblePositions
             );
             card.TopDeckPositionIndex = Math.Max(0, cardState.Position.TopDeckPositionIndex);
@@ -275,12 +276,32 @@ namespace gamecore.game
         }
 
         private static PositionKnowledge GetOwnerPositionKnowledge(
+            bool isOwnCard,
             RepeatedField<ProtoBufCardPosition> possiblePositions
         )
         {
-            return possiblePositions.Contains(ProtoBufCardPosition.CardPositionPrizes)
-                ? PositionKnowledge.Unknown
-                : PositionKnowledge.Known;
+            if (isOwnCard)
+            {
+                return possiblePositions.Count switch
+                {
+                    2 => PositionKnowledge.Unknown,
+                    1 => PositionKnowledge.Known,
+                    _ => throw new IllegalStateException(
+                        $"Own card has invalid number of possible positions: {possiblePositions.Count}"
+                    ),
+                };
+            }
+            return possiblePositions.Count switch
+            {
+                3 => PositionKnowledge.Unknown,
+                2 => possiblePositions.Contains(ProtoBufCardPosition.CardPositionHand)
+                    ? PositionKnowledge.Known
+                    : PositionKnowledge.Unknown,
+                1 => PositionKnowledge.Known,
+                _ => throw new IllegalStateException(
+                    $"Opponent card has invalid number of possible positions: {possiblePositions.Count}"
+                ),
+            };
         }
 
         private static void SetTracker(
