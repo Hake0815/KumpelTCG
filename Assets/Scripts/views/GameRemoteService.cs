@@ -1,0 +1,578 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using gamecore.card;
+using gamecore.common;
+using gamecore.game;
+using gamecore.game.interaction;
+using gamecore.serialization;
+using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace gameview
+{
+    public class GameRemoteService
+    {
+        private IGameController _gameController;
+        private readonly GameManager _gameManager;
+        private readonly List<ICard> _playableCards = new();
+        private readonly List<ICard> _selectedCards = new();
+        private readonly String _gameStateLogFile = "game_state.txt";
+
+        public GameRemoteService(GameManager gameManager)
+        {
+            _gameManager = gameManager;
+        }
+
+        public async Task InitializeGame()
+        {
+            var gameLogFile = GameParameters.GAME_LOG_FILE;
+            _gameController = IGameController.Create(gameLogFile);
+            _gameController.NotifyPlayer1 += HandlePlayer1Interactions;
+            _gameController.NotifyPlayer2 += HandlePlayer2Interactions;
+            _gameController.NotifyGeneral += HandleGeneralInteractions;
+            if (GameParameters.LoadModus == LoadModus.ResumeGame)
+            {
+                await _gameController.RecreateGameFromLog();
+            }
+            else if (GameParameters.LoadModus == LoadModus.RecreateState)
+            {
+                GlobalLogger.Instance.Info(
+                    () => $"Recreating game from game state: {GameParameters.GameState}"
+                );
+                var gameState = JsonConvert.DeserializeObject<ProtoBufGameState>(
+                    GameParameters.GameState
+                );
+                _gameController.RecreateGameFromGameState(
+                    gameState,
+                    CreateDeckList(),
+                    CreateDeckList(),
+                    "Player 1",
+                    "Player 2"
+                );
+            }
+            else if (GameParameters.LoadModus == LoadModus.ReplayGame)
+            {
+                await _gameController.StartReplay();
+            }
+            else if (GameParameters.LoadModus == LoadModus.NewGame)
+            {
+                await File.WriteAllTextAsync(gameLogFile, string.Empty);
+                await _gameController.CreateGame(
+                    CreateDeckList(),
+                    CreateDeckList(),
+                    "Player 1",
+                    "Player 2"
+                );
+            }
+            File.WriteAllText(_gameStateLogFile, string.Empty);
+            _gameManager.SetUpPlayerViews(
+                _gameController.Game.Player1,
+                _gameController.Game.Player2
+            );
+            _gameManager.EnablePlayerHandViews();
+            var cachedSpeed = AnimationSpeedHolder.AnimationSpeed;
+            AnimationSpeedHolder.AnimationSpeed = 0.0f;
+            await _gameManager.ShowGameState();
+            _gameController.CardsRevealed += ShowRevealedCardsUntilConfirmed;
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                AnimationSpeedHolder.AnimationSpeed = cachedSpeed;
+                _gameController.StartGame();
+                return Task.CompletedTask;
+            });
+        }
+
+        private async void ShowRevealedCardsUntilConfirmed(List<ICard> list)
+        {
+            if (list.Count == 0)
+                return;
+            var confirmTask = new TaskCompletionSource<bool>();
+            void Confirm()
+            {
+                confirmTask.SetResult(true);
+                InputHandler.INSTANCE.OnSpace -= Confirm;
+            }
+            _gameManager.EnableDoneButton(Confirm);
+            InputHandler.INSTANCE.OnSpace += Confirm;
+            await UIQueue.INSTANCE.Queue(() =>
+            {
+                PrepareFloatingSelection(list);
+                return Task.CompletedTask;
+            });
+            await UIQueue.INSTANCE.Queue(async () =>
+            {
+                await confirmTask.Task;
+                _gameManager.DisableFloatingSelection();
+            });
+        }
+
+        private static Dictionary<string, int> CreateDeckList()
+        {
+            return new Dictionary<string, int>
+            {
+                { "professorsResearch", 8 },
+                { "TWM128", 8 },
+                { "TWM129", 8 },
+                { "ultraBall", 12 },
+                { "nightStretcher", 10 },
+                { "FireNRG", 7 },
+                { "PsychicNRG", 7 },
+            };
+        }
+
+        private async void HandlePlayer1Interactions(List<GameInteraction> interactions)
+        {
+            File.AppendAllText(
+                _gameStateLogFile,
+                _gameController.ExportGameStateAsJson("Player 1") + "\n"
+            );
+            await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
+        }
+
+        private async void HandlePlayer2Interactions(List<GameInteraction> interactions)
+        {
+            File.AppendAllText(
+                _gameStateLogFile,
+                _gameController.ExportGameStateAsJson("Player 2") + "\n"
+            );
+            _gameController.ExportGameStateAsByteArray("Player 2");
+            await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
+        }
+
+        private async void HandleGeneralInteractions(List<GameInteraction> interactions)
+        {
+            await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
+        }
+
+        private async Task HandleInteraction(List<GameInteraction> interactions)
+        {
+            foreach (var interaction in interactions)
+            {
+                switch (interaction.Type)
+                {
+                    case GameInteractionType.PlayCard:
+                        HandlePlayCard(interaction);
+                        break;
+                    case GameInteractionType.PlayCardWithTargets:
+                        HandlePlayCardWithTargets(interaction);
+                        break;
+                    case GameInteractionType.PerformAttack:
+                        HandlePerformAttack(interaction);
+                        break;
+                    case GameInteractionType.PerformAbility:
+                        HandlePerformAbility(interaction);
+                        break;
+                    case GameInteractionType.Retreat:
+                        HandleRetreat(interaction);
+                        break;
+                    case GameInteractionType.EndTurn:
+                        _gameManager.EnableEndTurnButton(
+                            interaction.GameControllerMethod,
+                            OnInteract
+                        );
+                        break;
+                    case GameInteractionType.SelectActivePokemon:
+                        HandleSelectActivePokemon(interaction);
+                        break;
+                    case GameInteractionType.SetupCompleted:
+                        SimpleProceed(interaction);
+                        break;
+                    case GameInteractionType.ConfirmMulligans:
+                        await HandleConfirmMulligans(interaction);
+                        break;
+                    case GameInteractionType.SelectMulligans:
+                        HandleSelectMulligans(interaction);
+                        break;
+                    case GameInteractionType.Confirm:
+                        _gameManager.EnableDoneButton(() =>
+                        {
+                            OnInteract();
+                            interaction.GameControllerMethod.Invoke();
+                        });
+                        break;
+                    case GameInteractionType.GameOver:
+                        _gameManager.ShowGameOver(
+                            (
+                                interaction.Data[GameInteractionDataType.WinnerData] as WinnerData
+                            ).Winner
+                        );
+                        break;
+                    case GameInteractionType.SelectCards:
+                        HandleSelectCards(interaction);
+                        break;
+                    case GameInteractionType.SetPrizeCards:
+                        SimpleProceed(interaction);
+                        break;
+                    case GameInteractionType.ReplayNextAction:
+                        HandleReplayNextAction(interaction);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+        }
+
+        private void HandleReplayNextAction(GameInteraction interaction)
+        {
+            void NextAction()
+            {
+                OnInteract();
+                InputHandler.INSTANCE.OnSpace -= NextAction;
+                interaction.GameControllerMethod.Invoke();
+            }
+
+            _gameManager.EnableButtonWithText("Next", NextAction);
+            InputHandler.INSTANCE.OnSpace += NextAction;
+        }
+
+        private void HandleSelectCards(GameInteraction interaction)
+        {
+            var targetData =
+                interaction.Data[GameInteractionDataType.ConditionalTargetData]
+                as ConditionalTargetData;
+            var selectFromData =
+                interaction.Data[GameInteractionDataType.SelectFromData] as SelectFromData;
+            switch (selectFromData.SelectFrom)
+            {
+                case SelectFrom.InPlay:
+                    // Nothing to do here
+                    break;
+                case SelectFrom.Floating:
+                    PrepareFloatingSelection(targetData.PossibleTargets);
+                    break;
+                case SelectFrom.Deck:
+                    PrepareSearch(selectFromData.SelectionSource, targetData.PossibleTargets);
+                    break;
+                case SelectFrom.DiscardPile:
+                    PrepareSearch(selectFromData.SelectionSource, targetData.PossibleTargets);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            SetUpSelection(
+                targetData.ConditionalTargetQuery.IsMet,
+                targetData.PossibleTargets,
+                interaction.GameControllerMethodWithTargets,
+                targetData.IsQuickSelection
+            );
+        }
+
+        private void PrepareFloatingSelection(List<ICard> possibleTargets)
+        {
+            _gameManager.ActivateFloatingSelectionView(possibleTargets);
+        }
+
+        private void PrepareSearch(List<ICard> cards, List<ICard> possibleTargets)
+        {
+            _gameManager.ActivateSearchView(cards, possibleTargets);
+        }
+
+        private static void SimpleProceed(GameInteraction interaction)
+        {
+            interaction.GameControllerMethod.Invoke();
+        }
+
+        private void HandlePlayCard(GameInteraction interaction)
+        {
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.SetPlayable(
+                true,
+                new DragBehaviour(() =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                })
+            );
+        }
+
+        private void HandlePlayCardWithTargets(GameInteraction interaction)
+        {
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.SetPlayable(
+                true,
+                new DragToTargetBehaviour(
+                    (targets) =>
+                    {
+                        OnInteract();
+                        interaction.GameControllerMethodWithTargets.Invoke(targets);
+                    },
+                    (interaction.Data[GameInteractionDataType.TargetData] as TargetData)
+                        .PossibleTargets.AsEnumerable()
+                        .Select(card => CardViewRegistry.INSTANCE.Get(card))
+                        .ToList()
+                )
+            );
+        }
+
+        private void HandlePerformAttack(GameInteraction interaction)
+        {
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.AddAttack(
+                (interaction.Data[GameInteractionDataType.AttackData] as AttackData).Attack,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                }
+            );
+            var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
+            cardView.SetPlayable(true, clickBehaviour);
+        }
+
+        private void HandlePerformAbility(GameInteraction interaction)
+        {
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            cardView.AddAbility(
+                (card as IPokemonCard).Ability,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                },
+                card.Owner.ActivePokemon == card
+            );
+            if (card.Owner.ActivePokemon == card)
+            {
+                var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
+                cardView.SetPlayable(true, clickBehaviour);
+            }
+            else
+            {
+                var clickBehaviour = new ClickBehaviour(cardView.ShowBenchedPokemonActions);
+                cardView.SetPlayable(true, clickBehaviour);
+            }
+        }
+
+        private void HandleRetreat(GameInteraction interaction)
+        {
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            if (
+                interaction.Data.TryGetValue(
+                    GameInteractionDataType.ConditionalTargetData,
+                    out var targetData
+                )
+            )
+            {
+                var conditionalTargetData = targetData as ConditionalTargetData;
+                cardView.AddRetreat(() =>
+                {
+                    OnInteract();
+                    SetUpSelection(
+                        conditionalTargetData.ConditionalTargetQuery.IsMet,
+                        conditionalTargetData.PossibleTargets,
+                        interaction.GameControllerMethodWithTargets,
+                        true
+                    );
+                });
+            }
+            else
+            {
+                cardView.AddRetreat(() =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                });
+            }
+            var clickBehaviour = new ClickBehaviour(cardView.ShowActivePokemonActions);
+            cardView.SetPlayable(true, clickBehaviour);
+        }
+
+        private void SetUpSelection(
+            Predicate<List<ICard>> conditionOnSelection,
+            List<ICard> possibleTargets,
+            Action<List<ICard>> gameControllerMethodWithTargets,
+            bool isQuickSelection
+        )
+        {
+            ClearSelectedCards();
+            Button button = null;
+            if (!isQuickSelection)
+            {
+                button = _gameManager.EnableDoneButton(() =>
+                {
+                    OnInteract();
+                    _gameManager.DisableSearchView();
+                    gameControllerMethodWithTargets.Invoke(_selectedCards);
+                    ClearSelectedCards();
+                });
+                button.interactable = conditionOnSelection(_selectedCards);
+            }
+
+            foreach (var possibleTarget in possibleTargets)
+            {
+                _playableCards.Add(possibleTarget);
+                var cardView = CardViewRegistry.INSTANCE.Get(possibleTarget);
+                cardView.SetPlayable(
+                    true,
+                    new ClickBehaviour(
+                        () =>
+                            HandleSelectionClicked(
+                                cardView,
+                                conditionOnSelection,
+                                gameControllerMethodWithTargets,
+                                button
+                            )
+                    )
+                );
+            }
+        }
+
+        private void HandleSelectionClicked(
+            CardView cardView,
+            Predicate<List<ICard>> conditionOnSelection,
+            Action<List<ICard>> gameControllerMethodWithTargets,
+            Button confirmButton
+        )
+        {
+            if (cardView.Selected)
+            {
+                UnselectCardView(cardView);
+                UpdateConfirmButton(conditionOnSelection, confirmButton);
+                return;
+            }
+            SelectCardView(cardView);
+
+            if (confirmButton != null)
+            {
+                if (confirmButton.interactable && !conditionOnSelection(_selectedCards))
+                    UnselectCardView(cardView);
+                confirmButton.interactable = conditionOnSelection(_selectedCards);
+            }
+            else
+            {
+                if (conditionOnSelection(_selectedCards))
+                {
+                    OnInteract();
+                    gameControllerMethodWithTargets.Invoke(_selectedCards);
+                    ClearSelectedCards();
+                }
+            }
+        }
+
+        private void UpdateConfirmButton(
+            Predicate<List<ICard>> conditionOnSelection,
+            Button confirmButton
+        )
+        {
+            if (confirmButton != null)
+            {
+                confirmButton.interactable = conditionOnSelection(_selectedCards);
+            }
+        }
+
+        private void SelectCardView(CardView cardView)
+        {
+            cardView.Selected = true;
+            _selectedCards.Add(cardView.Card);
+        }
+
+        private void UnselectCardView(CardView cardView)
+        {
+            cardView.Selected = false;
+            _selectedCards.Remove(cardView.Card);
+        }
+
+        private void HandleSelectActivePokemon(GameInteraction interaction)
+        {
+            var card = (
+                interaction.Data[GameInteractionDataType.InteractionCardData] as InteractionCard
+            ).Card;
+            _playableCards.Add(card);
+            var cardView = CardViewRegistry.INSTANCE.Get(card);
+            var clickBehaviour = new ClickBehaviour(async () =>
+            {
+                OnInteract();
+                await _gameManager.PlayerActiveSpots[card.Owner].SetActivePokemon(card);
+
+                interaction.GameControllerMethod.Invoke();
+            });
+            cardView.SetPlayable(true, clickBehaviour);
+        }
+
+        private async Task HandleConfirmMulligans(GameInteraction interaction)
+        {
+            var mulliganData =
+                interaction.Data[GameInteractionDataType.MulliganData] as MulliganData;
+            var mulligans = mulliganData.Mulligans;
+            var player = mulliganData.Player;
+            if (mulligans.Count == 0)
+            {
+                OnInteract();
+                interaction.GameControllerMethod.Invoke();
+                return;
+            }
+            await _gameManager.ShowMulligan(
+                player,
+                mulligans,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                }
+            );
+        }
+
+        private void HandleSelectMulligans(GameInteraction interaction)
+        {
+            _gameManager.AddOptionToMulliganSelector(
+                (interaction.Data[GameInteractionDataType.NumberData] as NumberData).Number,
+                () =>
+                {
+                    OnInteract();
+                    interaction.GameControllerMethod.Invoke();
+                }
+            );
+        }
+
+        private void OnInteract()
+        {
+            _gameManager.DisableButton();
+            _gameManager.DisableFloatingSelection();
+            ClearPlayableCards();
+        }
+
+        private void ClearPlayableCards()
+        {
+            foreach (var cardView in CardViewRegistry.INSTANCE.GetAll(_playableCards))
+            {
+                cardView.SetPlayable(false, null);
+            }
+            _playableCards.Clear();
+        }
+
+        private void ClearSelectedCards()
+        {
+            foreach (var cardView in CardViewRegistry.INSTANCE.GetAllAvailable(_selectedCards))
+            {
+                cardView.Selected = false;
+            }
+            _selectedCards.Clear();
+        }
+    }
+}
