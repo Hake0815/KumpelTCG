@@ -1,4 +1,4 @@
 protoc \
-  --proto_path=./Assets/Scripts/logic/serialization \
+  --proto_path=./KumpelInterface/proto \
   --csharp_out=./Assets/Scripts/logic/serialization \
   gamecore_serialization.proto

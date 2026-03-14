@@ -1,0 +1,3 @@
+[submodule "KumpelInterface"]
+	path = KumpelInterface
+	url = git@github.com:Hake0815/KumpelInterface.git
