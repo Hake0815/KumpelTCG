@@ -89,226 +89,227 @@ namespace gamecore.serialization {
             "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmRmlsdGVySW5zdHJ1Y3Rpb25E",
             "YXRhSAASWQoScGxheWVyX3RhcmdldF9kYXRhGAcgASgLMjsuZ2FtZWNvcmUu",
             "c2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBsYXllclRhcmdldEluc3RydWN0aW9u",
-            "RGF0YUgAQgkKB3BheWxvYWQitgoKDFByb3RvQnVmQ2FyZBIMCgRuYW1lGAEg",
+            "RGF0YUgAQgkKB3BheWxvYWQi8QoKDFByb3RvQnVmQ2FyZBIMCgRuYW1lGAEg",
             "ASgJEjsKCWNhcmRfdHlwZRgCIAEoDjIoLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
             "b24uUHJvdG9CdWZDYXJkVHlwZRJBCgxjYXJkX3N1YnR5cGUYAyABKA4yKy5n",
-            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQ2FyZFN1YnR5cGUSPwoL",
+            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQ2FyZFN1YnR5cGUSRAoL",
             "ZW5lcmd5X3R5cGUYBCABKA4yKi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
-            "b3RvQnVmRW5lcmd5VHlwZRITCgZtYXhfaHAYBSABKAVIAIgBARIZCgxldm9s",
-            "dmVzX2Zyb20YBiABKAlIAYgBARI8Cgh3ZWFrbmVzcxgHIAEoDjIqLmdhbWVj",
-            "b3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZFbmVyZ3lUeXBlEj4KCnJlc2lz",
-            "dGFuY2UYCCABKA4yKi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVm",
-            "RW5lcmd5VHlwZRIZCgxyZXRyZWF0X2Nvc3QYCSABKAVIAogBARIuCiFudW1i",
-            "ZXJfb2ZfcHJpemVfY2FyZHNfb25fa25vY2tvdXQYCiABKAVIA4gBARI3Cgdh",
-            "dHRhY2tzGAsgAygLMiYuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
-            "ZkF0dGFjaxI9CgdhYmlsaXR5GAwgASgLMicuZ2FtZWNvcmUuc2VyaWFsaXph",
-            "dGlvbi5Qcm90b0J1ZkFiaWxpdHlIBIgBARJKCg9wb2tlbW9uX2VmZmVjdHMY",
-            "DSADKA4yMS5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmUG9rZW1v",
-            "bkVmZmVjdFR5cGUSTQoTcG9rZW1vbl90dXJuX3RyYWl0cxgOIAMoDjIwLmdh",
-            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZQb2tlbW9uVHVyblRyYWl0",
-            "EkEKDGluc3RydWN0aW9ucxgPIAMoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
-            "b24uUHJvdG9CdWZJbnN0cnVjdGlvbhI9Cgpjb25kaXRpb25zGBAgAygLMiku",
-            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNvbmRpdGlvbhJDCg9w",
-            "cm92aWRlZF9lbmVyZ3kYESADKA4yKi5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
-            "LlByb3RvQnVmRW5lcmd5VHlwZRIYCgthdHRhY2hlZF90bxgSIAEoBUgFiAEB",
-            "EhQKB2RlY2tfaWQYEyABKAVIBogBARIbCg5jdXJyZW50X2RhbWFnZRgUIAEo",
-            "BUgHiAEBEkMKD2F0dGFjaGVkX2VuZXJneRgVIAMoDjIqLmdhbWVjb3JlLnNl",
-            "cmlhbGl6YXRpb24uUHJvdG9CdWZFbmVyZ3lUeXBlEh0KFWF0dGFjaGVkX2Vu",
-            "ZXJneV9jYXJkcxgWIAMoBRIZChFwcmVfZXZvbHV0aW9uX2lkcxgXIAMoBRIZ",
-            "Cgxldm9sdmVkX2ludG8YGCABKAVICIgBAUIJCgdfbWF4X2hwQg8KDV9ldm9s",
-            "dmVzX2Zyb21CDwoNX3JldHJlYXRfY29zdEIkCiJfbnVtYmVyX29mX3ByaXpl",
-            "X2NhcmRzX29uX2tub2Nrb3V0QgoKCF9hYmlsaXR5Qg4KDF9hdHRhY2hlZF90",
-            "b0IKCghfZGVja19pZEIRCg9fY3VycmVudF9kYW1hZ2VCDwoNX2V2b2x2ZWRf",
-            "aW50byKDAQoRUHJvdG9CdWZDYXJkU3RhdGUSMgoEY2FyZBgBIAEoCzIkLmdh",
-            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZDYXJkEjoKCHBvc2l0aW9u",
-            "GAIgASgLMiguZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBvc2l0",
-            "aW9uIvQCChNQcm90b0J1ZlBsYXllclN0YXRlEhEKCWlzX2FjdGl2ZRgBIAEo",
-            "CBIUCgxpc19hdHRhY2tpbmcYAiABKAgSGAoQa25vd3NfaGlzX3ByaXplcxgD",
-            "IAEoCBISCgpoYW5kX2NvdW50GAQgASgFEhIKCmRlY2tfY291bnQYBSABKAUS",
-            "FAoMcHJpemVzX2NvdW50GAYgASgFEhMKC2JlbmNoX2NvdW50GAcgASgFEhoK",
-            "EmRpc2NhcmRfcGlsZV9jb3VudBgIIAEoBRJLChJwbGF5ZXJfdHVybl90cmFp",
-            "dHMYCSADKA4yLy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmUGxh",
-            "eWVyVHVyblRyYWl0EhQKDHR1cm5fY291bnRlchgKIAEoBRJICg5wbGF5ZXJf",
-            "ZWZmZWN0cxgLIAMoDjIwLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9C",
-            "dWZQbGF5ZXJFZmZlY3RUeXBlIsACChFQcm90b0J1ZkdhbWVTdGF0ZRITCgty",
-            "ZWNyZWF0YWJsZRgBIAEoCBJQChR0ZWNobmljYWxfZ2FtZV9zdGF0ZRgCIAEo",
-            "DjIyLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZUZWNobmljYWxH",
-            "YW1lU3RhdGUSPwoKc2VsZl9zdGF0ZRgDIAEoCzIrLmdhbWVjb3JlLnNlcmlh",
-            "bGl6YXRpb24uUHJvdG9CdWZQbGF5ZXJTdGF0ZRJDCg5vcHBvbmVudF9zdGF0",
-            "ZRgEIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZQbGF5",
-            "ZXJTdGF0ZRI+CgtjYXJkX3N0YXRlcxgFIAMoCzIpLmdhbWVjb3JlLnNlcmlh",
-            "bGl6YXRpb24uUHJvdG9CdWZDYXJkU3RhdGUipAMKHlByb3RvQnVmQ29uZGl0",
-            "aW9uYWxUYXJnZXRRdWVyeRJOCg5uZXN0ZWRfcXVlcmllcxgBIAMoCzI2Lmdh",
-            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZDb25kaXRpb25hbFRhcmdl",
-            "dFF1ZXJ5ElkKFmxvZ2ljYWxfcXVlcnlfb3BlcmF0b3IYAiABKA4yNC5nYW1l",
-            "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmTG9naWNhbFF1ZXJ5T3BlcmF0",
-            "b3JIAIgBARJACglpbnRfcmFuZ2UYAyABKAsyKC5nYW1lY29yZS5zZXJpYWxp",
-            "emF0aW9uLlByb3RvQnVmSW50UmFuZ2VIAYgBARJUChNzZWxlY3Rpb25fcXVh",
-            "bGlmaWVyGAQgASgOMjIuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
-            "ZlNlbGVjdGlvblF1YWxpZmllckgCiAEBQhkKF19sb2dpY2FsX3F1ZXJ5X29w",
-            "ZXJhdG9yQgwKCl9pbnRfcmFuZ2VCFgoUX3NlbGVjdGlvbl9xdWFsaWZpZXIi",
-            "kAEKFFByb3RvQnVmTXVsbGlnYW5EYXRhEjsKCW11bGxpZ2FucxgBIAMoCzIo",
-            "LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZDYXJkTGlzdBI7CgZw",
-            "bGF5ZXIYAiABKAsyKy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVm",
-            "UGxheWVyU3RhdGUiIQoQUHJvdG9CdWZDYXJkTGlzdBINCgVjYXJkcxgBIAMo",
-            "BSIkChJQcm90b0J1Zk51bWJlckRhdGESDgoGbnVtYmVyGAEgASgFIuABChJQ",
-            "cm90b0J1ZlRhcmdldERhdGESGQoRbnVtYmVyX29mX3RhcmdldHMYASABKAUS",
-            "GAoQcG9zc2libGVfdGFyZ2V0cxgCIAMoBRJICg10YXJnZXRfYWN0aW9uGAMg",
+            "b3RvQnVmRW5lcmd5VHlwZUgAiAEBEhMKBm1heF9ocBgFIAEoBUgBiAEBEhkK",
+            "DGV2b2x2ZXNfZnJvbRgGIAEoCUgCiAEBEkEKCHdlYWtuZXNzGAcgASgOMiou",
+            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkVuZXJneVR5cGVIA4gB",
+            "ARJDCgpyZXNpc3RhbmNlGAggASgOMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlv",
+            "bi5Qcm90b0J1ZkVuZXJneVR5cGVIBIgBARIZCgxyZXRyZWF0X2Nvc3QYCSAB",
+            "KAVIBYgBARIuCiFudW1iZXJfb2ZfcHJpemVfY2FyZHNfb25fa25vY2tvdXQY",
+            "CiABKAVIBogBARI3CgdhdHRhY2tzGAsgAygLMiYuZ2FtZWNvcmUuc2VyaWFs",
+            "aXphdGlvbi5Qcm90b0J1ZkF0dGFjaxI9CgdhYmlsaXR5GAwgASgLMicuZ2Ft",
+            "ZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkFiaWxpdHlIB4gBARJKCg9w",
+            "b2tlbW9uX2VmZmVjdHMYDSADKA4yMS5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
+            "LlByb3RvQnVmUG9rZW1vbkVmZmVjdFR5cGUSTQoTcG9rZW1vbl90dXJuX3Ry",
+            "YWl0cxgOIAMoDjIwLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZQ",
+            "b2tlbW9uVHVyblRyYWl0EkEKDGluc3RydWN0aW9ucxgPIAMoCzIrLmdhbWVj",
+            "b3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZJbnN0cnVjdGlvbhI9Cgpjb25k",
+            "aXRpb25zGBAgAygLMikuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
+            "ZkNvbmRpdGlvbhJDCg9wcm92aWRlZF9lbmVyZ3kYESADKA4yKi5nYW1lY29y",
+            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmRW5lcmd5VHlwZRIYCgthdHRhY2hl",
+            "ZF90bxgSIAEoBUgIiAEBEhQKB2RlY2tfaWQYEyABKAVICYgBARIbCg5jdXJy",
+            "ZW50X2RhbWFnZRgUIAEoBUgKiAEBEkMKD2F0dGFjaGVkX2VuZXJneRgVIAMo",
+            "DjIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZFbmVyZ3lUeXBl",
+            "Eh0KFWF0dGFjaGVkX2VuZXJneV9jYXJkcxgWIAMoBRIZChFwcmVfZXZvbHV0",
+            "aW9uX2lkcxgXIAMoBRIZCgxldm9sdmVkX2ludG8YGCABKAVIC4gBAUIOCgxf",
+            "ZW5lcmd5X3R5cGVCCQoHX21heF9ocEIPCg1fZXZvbHZlc19mcm9tQgsKCV93",
+            "ZWFrbmVzc0INCgtfcmVzaXN0YW5jZUIPCg1fcmV0cmVhdF9jb3N0QiQKIl9u",
+            "dW1iZXJfb2ZfcHJpemVfY2FyZHNfb25fa25vY2tvdXRCCgoIX2FiaWxpdHlC",
+            "DgoMX2F0dGFjaGVkX3RvQgoKCF9kZWNrX2lkQhEKD19jdXJyZW50X2RhbWFn",
+            "ZUIPCg1fZXZvbHZlZF9pbnRvIoMBChFQcm90b0J1ZkNhcmRTdGF0ZRIyCgRj",
+            "YXJkGAEgASgLMiQuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNh",
+            "cmQSOgoIcG9zaXRpb24YAiABKAsyKC5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
+            "LlByb3RvQnVmUG9zaXRpb24i9AIKE1Byb3RvQnVmUGxheWVyU3RhdGUSEQoJ",
+            "aXNfYWN0aXZlGAEgASgIEhQKDGlzX2F0dGFja2luZxgCIAEoCBIYChBrbm93",
+            "c19oaXNfcHJpemVzGAMgASgIEhIKCmhhbmRfY291bnQYBCABKAUSEgoKZGVj",
+            "a19jb3VudBgFIAEoBRIUCgxwcml6ZXNfY291bnQYBiABKAUSEwoLYmVuY2hf",
+            "Y291bnQYByABKAUSGgoSZGlzY2FyZF9waWxlX2NvdW50GAggASgFEksKEnBs",
+            "YXllcl90dXJuX3RyYWl0cxgJIAMoDjIvLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
+            "b24uUHJvdG9CdWZQbGF5ZXJUdXJuVHJhaXQSFAoMdHVybl9jb3VudGVyGAog",
+            "ASgFEkgKDnBsYXllcl9lZmZlY3RzGAsgAygOMjAuZ2FtZWNvcmUuc2VyaWFs",
+            "aXphdGlvbi5Qcm90b0J1ZlBsYXllckVmZmVjdFR5cGUiwAIKEVByb3RvQnVm",
+            "R2FtZVN0YXRlEhMKC3JlY3JlYXRhYmxlGAEgASgIElAKFHRlY2huaWNhbF9n",
+            "YW1lX3N0YXRlGAIgASgOMjIuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90",
+            "b0J1ZlRlY2huaWNhbEdhbWVTdGF0ZRI/CgpzZWxmX3N0YXRlGAMgASgLMisu",
+            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBsYXllclN0YXRlEkMK",
+            "Dm9wcG9uZW50X3N0YXRlGAQgASgLMisuZ2FtZWNvcmUuc2VyaWFsaXphdGlv",
+            "bi5Qcm90b0J1ZlBsYXllclN0YXRlEj4KC2NhcmRfc3RhdGVzGAUgAygLMiku",
+            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNhcmRTdGF0ZSKkAwoe",
+            "UHJvdG9CdWZDb25kaXRpb25hbFRhcmdldFF1ZXJ5Ek4KDm5lc3RlZF9xdWVy",
+            "aWVzGAEgAygLMjYuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNv",
+            "bmRpdGlvbmFsVGFyZ2V0UXVlcnkSWQoWbG9naWNhbF9xdWVyeV9vcGVyYXRv",
+            "chgCIAEoDjI0LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZMb2dp",
+            "Y2FsUXVlcnlPcGVyYXRvckgAiAEBEkAKCWludF9yYW5nZRgDIAEoCzIoLmdh",
+            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZJbnRSYW5nZUgBiAEBElQK",
+            "E3NlbGVjdGlvbl9xdWFsaWZpZXIYBCABKA4yMi5nYW1lY29yZS5zZXJpYWxp",
+            "emF0aW9uLlByb3RvQnVmU2VsZWN0aW9uUXVhbGlmaWVySAKIAQFCGQoXX2xv",
+            "Z2ljYWxfcXVlcnlfb3BlcmF0b3JCDAoKX2ludF9yYW5nZUIWChRfc2VsZWN0",
+            "aW9uX3F1YWxpZmllciKQAQoUUHJvdG9CdWZNdWxsaWdhbkRhdGESOwoJbXVs",
+            "bGlnYW5zGAEgAygLMiguZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
+            "ZkNhcmRMaXN0EjsKBnBsYXllchgCIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6",
+            "YXRpb24uUHJvdG9CdWZQbGF5ZXJTdGF0ZSIhChBQcm90b0J1ZkNhcmRMaXN0",
+            "Eg0KBWNhcmRzGAEgAygFIiQKElByb3RvQnVmTnVtYmVyRGF0YRIOCgZudW1i",
+            "ZXIYASABKAUi4AEKElByb3RvQnVmVGFyZ2V0RGF0YRIZChFudW1iZXJfb2Zf",
+            "dGFyZ2V0cxgBIAEoBRIYChBwb3NzaWJsZV90YXJnZXRzGAIgAygFEkgKDXRh",
+            "cmdldF9hY3Rpb24YAyABKA4yMS5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
+            "b3RvQnVmQWN0aW9uT25TZWxlY3Rpb24SSwoQcmVtYWluZGVyX2FjdGlvbhgE",
+            "IAEoDjIxLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZBY3Rpb25P",
+            "blNlbGVjdGlvbiKqAgodUHJvdG9CdWZDb25kaXRpb25hbFRhcmdldERhdGES",
+            "GAoQcG9zc2libGVfdGFyZ2V0cxgBIAMoBRJYChhjb25kaXRpb25hbF90YXJn",
+            "ZXRfcXVlcnkYAiABKAsyNi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3Rv",
+            "QnVmQ29uZGl0aW9uYWxUYXJnZXRRdWVyeRJICg10YXJnZXRfYWN0aW9uGAMg",
             "ASgOMjEuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkFjdGlvbk9u",
             "U2VsZWN0aW9uEksKEHJlbWFpbmRlcl9hY3Rpb24YBCABKA4yMS5nYW1lY29y",
-            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWN0aW9uT25TZWxlY3Rpb24iqgIK",
-            "HVByb3RvQnVmQ29uZGl0aW9uYWxUYXJnZXREYXRhEhgKEHBvc3NpYmxlX3Rh",
-            "cmdldHMYASADKAUSWAoYY29uZGl0aW9uYWxfdGFyZ2V0X3F1ZXJ5GAIgASgL",
-            "MjYuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNvbmRpdGlvbmFs",
-            "VGFyZ2V0UXVlcnkSSAoNdGFyZ2V0X2FjdGlvbhgDIAEoDjIxLmdhbWVjb3Jl",
-            "LnNlcmlhbGl6YXRpb24uUHJvdG9CdWZBY3Rpb25PblNlbGVjdGlvbhJLChBy",
-            "ZW1haW5kZXJfYWN0aW9uGAQgASgOMjEuZ2FtZWNvcmUuc2VyaWFsaXphdGlv",
-            "bi5Qcm90b0J1ZkFjdGlvbk9uU2VsZWN0aW9uIisKG1Byb3RvQnVmSW50ZXJh",
-            "Y3Rpb25DYXJkRGF0YRIMCgRjYXJkGAEgASgFIkwKElByb3RvQnVmQXR0YWNr",
-            "RGF0YRI2CgZhdHRhY2sYASABKAsyJi5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
-            "LlByb3RvQnVmQXR0YWNrImIKElByb3RvQnVmV2lubmVyRGF0YRI7CgZ3aW5u",
-            "ZXIYASABKAsyKy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmUGxh",
-            "eWVyU3RhdGUSDwoHbWVzc2FnZRgCIAEoCSJzChZQcm90b0J1ZlNlbGVjdEZy",
-            "b21EYXRhEj8KC3NlbGVjdF9mcm9tGAEgASgOMiouZ2FtZWNvcmUuc2VyaWFs",
-            "aXphdGlvbi5Qcm90b0J1ZlNlbGVjdEZyb20SGAoQc2VsZWN0aW9uX3NvdXJj",
-            "ZRgCIAMoBSLDBQobUHJvdG9CdWZHYW1lSW50ZXJhY3Rpb25EYXRhEkoKCWRh",
-            "dGFfdHlwZRgBIAEoDjI3LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9C",
-            "dWZHYW1lSW50ZXJhY3Rpb25EYXRhVHlwZRJFCg1tdWxsaWdhbl9kYXRhGAIg",
-            "ASgLMiwuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1Zk11bGxpZ2Fu",
-            "RGF0YUgAEkEKC251bWJlcl9kYXRhGAMgASgLMiouZ2FtZWNvcmUuc2VyaWFs",
-            "aXphdGlvbi5Qcm90b0J1Zk51bWJlckRhdGFIABJBCgt0YXJnZXRfZGF0YRgE",
-            "IAEoCzIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZUYXJnZXRE",
-            "YXRhSAASWAoXY29uZGl0aW9uYWxfdGFyZ2V0X2RhdGEYBSABKAsyNS5nYW1l",
-            "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQ29uZGl0aW9uYWxUYXJnZXRE",
-            "YXRhSAASVAoVaW50ZXJhY3Rpb25fY2FyZF9kYXRhGAYgASgLMjMuZ2FtZWNv",
-            "cmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkludGVyYWN0aW9uQ2FyZERhdGFI",
-            "ABJBCgthdHRhY2tfZGF0YRgHIAEoCzIqLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
-            "b24uUHJvdG9CdWZBdHRhY2tEYXRhSAASQQoLd2lubmVyX2RhdGEYCCABKAsy",
-            "Ki5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmV2lubmVyRGF0YUgA",
-            "EkoKEHNlbGVjdF9mcm9tX2RhdGEYCSABKAsyLi5nYW1lY29yZS5zZXJpYWxp",
-            "emF0aW9uLlByb3RvQnVmU2VsZWN0RnJvbURhdGFIAEIJCgdwYXlsb2FkIp8B",
-            "ChdQcm90b0J1ZkdhbWVJbnRlcmFjdGlvbhJBCgR0eXBlGAEgASgOMjMuZ2Ft",
-            "ZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkdhbWVJbnRlcmFjdGlvblR5",
-            "cGUSQQoEZGF0YRgCIAMoCzIzLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJv",
-            "dG9CdWZHYW1lSW50ZXJhY3Rpb25EYXRhKm0KEFByb3RvQnVmQ2FyZFR5cGUS",
-            "FQoRQ0FSRF9UWVBFX1VOS05PV04QABIVChFDQVJEX1RZUEVfUE9LRU1PThAB",
-            "EhUKEUNBUkRfVFlQRV9UUkFJTkVSEAISFAoQQ0FSRF9UWVBFX0VORVJHWRAD",
-            "KrUCChNQcm90b0J1ZkNhcmRTdWJ0eXBlEhgKFENBUkRfU1VCVFlQRV9VTktO",
-            "T1dOEAASHgoaQ0FSRF9TVUJUWVBFX0JBU0lDX1BPS0VNT04QARIfChtDQVJE",
-            "X1NVQlRZUEVfU1RBR0UxX1BPS0VNT04QAhIfChtDQVJEX1NVQlRZUEVfU1RB",
-            "R0UyX1BPS0VNT04QAxIaChZDQVJEX1NVQlRZUEVfU1VQUE9SVEVSEAQSFQoR",
-            "Q0FSRF9TVUJUWVBFX0lURU0QBRIVChFDQVJEX1NVQlRZUEVfVE9PTBAGEhgK",
-            "FENBUkRfU1VCVFlQRV9TVEFESVVNEAcSHQoZQ0FSRF9TVUJUWVBFX0JBU0lD",
-            "X0VORVJHWRAIEh8KG0NBUkRfU1VCVFlQRV9TUEVDSUFMX0VORVJHWRAJKqAC",
-            "ChJQcm90b0J1ZkVuZXJneVR5cGUSFAoQRU5FUkdZX1RZUEVfTk9ORRAAEhUK",
-            "EUVORVJHWV9UWVBFX0dSQVNTEAESFAoQRU5FUkdZX1RZUEVfRklSRRACEhUK",
-            "EUVORVJHWV9UWVBFX1dBVEVSEAMSGQoVRU5FUkdZX1RZUEVfTElHSFROSU5H",
-            "EAQSGAoURU5FUkdZX1RZUEVfRklHSFRJTkcQBRIXChNFTkVSR1lfVFlQRV9Q",
-            "U1lDSElDEAYSGQoVRU5FUkdZX1RZUEVfQ09MT1JMRVNTEAcSGAoURU5FUkdZ",
-            "X1RZUEVfREFSS05FU1MQCBIVChFFTkVSR1lfVFlQRV9NRVRBTBAJEhYKEkVO",
-            "RVJHWV9UWVBFX0RSQUdPThAKKuoCChRQcm90b0J1ZkNhcmRQb3NpdGlvbhIi",
-            "Ch5DQVJEX1BPU0lUSU9OX0FUVEFDSEVEX1RPX0NBUkQQABIXChNDQVJEX1BP",
-            "U0lUSU9OX0JFTkNIEAESIgoeQ0FSRF9QT1NJVElPTl9DVVJSRU5UTFlfUExB",
-            "WUVEEAISHQoZQ0FSRF9QT1NJVElPTl9BQ1RJVkVfU1BPVBADEhoKFkNBUkRf",
-            "UE9TSVRJT05fRkxPQVRJTkcQBBIeChpDQVJEX1BPU0lUSU9OX0RJU0NBUkRf",
-            "UElMRRAFEhgKFENBUkRfUE9TSVRJT05fUFJJWkVTEAYSFgoSQ0FSRF9QT1NJ",
-            "VElPTl9ERUNLEAcSFgoSQ0FSRF9QT1NJVElPTl9IQU5EEAgSKgomQ0FSRF9Q",
-            "T1NJVElPTl9TRUxFQ1RFRF9DQVJEU19SRU1BSU5ERVIQCRIgChxDQVJEX1BP",
-            "U0lUSU9OX1NFTEVDVEVEX0NBUkRTEAoqMwoNUHJvdG9CdWZPd25lchIOCgpP",
-            "V05FUl9TRUxGEAASEgoOT1dORVJfT1BQT05FTlQQASqoAgoXUHJvdG9CdWZJ",
-            "bnN0cnVjdGlvblR5cGUSIAocSU5TVFJVQ1RJT05fVFlQRV9ERUFMX0RBTUFH",
-            "RRAAEiEKHUlOU1RSVUNUSU9OX1RZUEVfU0VMRUNUX0NBUkRTEAESHAoYSU5T",
-            "VFJVQ1RJT05fVFlQRV9ESVNDQVJEEAISIQodSU5TVFJVQ1RJT05fVFlQRV9U",
-            "QUtFX1RPX0hBTkQQAxIgChxJTlNUUlVDVElPTl9UWVBFX1BVVF9JTl9ERUNL",
-            "EAQSIQodSU5TVFJVQ1RJT05fVFlQRV9SRVZFQUxfQ0FSRFMQBRIfChtJTlNU",
-            "UlVDVElPTl9UWVBFX1NIT1dfQ0FSRFMQBhIhCh1JTlNUUlVDVElPTl9UWVBF",
-            "X1NIVUZGTEVfREVDSxAHKloKFVByb3RvQnVmQ29uZGl0aW9uVHlwZRIjCh9D",
-            "T05ESVRJT05fVFlQRV9BQklMSVRZX05PVF9VU0VEEAASHAoYQ09ORElUSU9O",
-            "X1RZUEVfSEFTX0NBUkRTEAEqoQIKG1Byb3RvQnVmSW5zdHJ1Y3Rpb25EYXRh",
-            "VHlwZRIlCiFJTlNUUlVDVElPTl9EQVRBX1RZUEVfQVRUQUNLX0RBVEEQABIm",
-            "CiJJTlNUUlVDVElPTl9EQVRBX1RZUEVfRElTQ0FSRF9EQVRBEAESKgomSU5T",
-            "VFJVQ1RJT05fREFUQV9UWVBFX0NBUkRfQU1PVU5UX0RBVEEQAhIyCi5JTlNU",
-            "UlVDVElPTl9EQVRBX1RZUEVfUkVUVVJOX1RPX0RFQ0tfVFlQRV9EQVRBEAMS",
-            "JQohSU5TVFJVQ1RJT05fREFUQV9UWVBFX0ZJTFRFUl9EQVRBEAQSLAooSU5T",
-            "VFJVQ1RJT05fREFUQV9UWVBFX1BMQVlFUl9UQVJHRVRfREFUQRAFKjsKFFBy",
-            "b3RvQnVmQXR0YWNrVGFyZ2V0EiMKH0FUVEFDS19UQVJHRVRfREVGRU5ESU5H",
-            "X1BPS0VNT04QACpKChRQcm90b0J1ZlBsYXllclRhcmdldBIWChJQTEFZRVJf",
-            "VEFSR0VUX1NFTEYQABIaChZQTEFZRVJfVEFSR0VUX09QUE9ORU5UEAEqWwoY",
-            "UHJvdG9CdWZSZXR1cm5Ub0RlY2tUeXBlEh0KGVJFVFVSTl9UT19ERUNLX1RZ",
-            "UEVfVU5ERVIQABIgChxSRVRVUk5fVE9fREVDS19UWVBFX1NIVUZGTEVEEAEq",
-            "ggEKHVByb3RvQnVmRmlsdGVyTG9naWNhbE9wZXJhdG9yEiAKHEZJTFRFUl9M",
-            "T0dJQ0FMX09QRVJBVE9SX05PTkUQABIfChtGSUxURVJfTE9HSUNBTF9PUEVS",
-            "QVRPUl9BTkQQARIeChpGSUxURVJfTE9HSUNBTF9PUEVSQVRPUl9PUhACKq0B",
-            "ChJQcm90b0J1ZkZpbHRlclR5cGUSFAoQRklMVEVSX1RZUEVfTk9ORRAAEhQK",
-            "EEZJTFRFUl9UWVBFX1RSVUUQARIeChpGSUxURVJfVFlQRV9FWENMVURFX1NP",
-            "VVJDRRACEhkKFUZJTFRFUl9UWVBFX0NBUkRfVFlQRRADEhwKGEZJTFRFUl9U",
-            "WVBFX0NBUkRfU1VCVFlQRRAEEhIKDkZJTFRFUl9UWVBFX0hQEAUqxwEKF1By",
-            "b3RvQnVmRmlsdGVyT3BlcmF0aW9uEhkKFUZJTFRFUl9PUEVSQVRJT05fTk9O",
-            "RRAAEhsKF0ZJTFRFUl9PUEVSQVRJT05fRVFVQUxTEAESHwobRklMVEVSX09Q",
-            "RVJBVElPTl9OT1RfRVFVQUxTEAISJwojRklMVEVSX09QRVJBVElPTl9MRVNT",
-            "X1RIQU5fT1JfRVFVQUwQAxIqCiZGSUxURVJfT1BFUkFUSU9OX0dSRUFURVJf",
-            "VEhBTl9PUl9FUVVBTBAEKmMKFFByb3RvQnVmVGFyZ2V0U291cmNlEhYKElRB",
-            "UkdFVF9TT1VSQ0VfSEFORBAAEhYKElRBUkdFVF9TT1VSQ0VfU0VMRhABEhsK",
-            "F1RBUkdFVF9TT1VSQ0VfU0VMRUNUSU9OEAIqNwoYUHJvdG9CdWZQbGF5ZXJF",
-            "ZmZlY3RUeXBlEhsKF1BMQVlFUl9FRkZFQ1RfVFlQRV9OT05FEAAqOQoZUHJv",
-            "dG9CdWZQb2tlbW9uRWZmZWN0VHlwZRIcChhQT0tFTU9OX0VGRkVDVF9UWVBF",
-            "X05PTkUQACp3ChhQcm90b0J1ZlBva2Vtb25UdXJuVHJhaXQSLAooUE9LRU1P",
-            "Tl9UVVJOX1RSQUlUX1BVVF9JTl9QTEFZX1RISVNfVFVSThAAEi0KKVBPS0VN",
-            "T05fVFVSTl9UUkFJVF9BQklMSVRZX1VTRURfVEhJU19UVVJOEAEqxgEKF1By",
-            "b3RvQnVmUGxheWVyVHVyblRyYWl0EigKJFBMQVlFUl9UVVJOX1RSQUlUX0ZJ",
-            "UlNUX1RVUk5fT0ZfR0FNRRAAEi4KKlBMQVlFUl9UVVJOX1RSQUlUX0FUVEFD",
-            "SEVEX0VORVJHWV9GT1JfVFVSThABEjAKLFBMQVlFUl9UVVJOX1RSQUlUX1BM",
-            "QVlFRF9TVVBQT1JURVJfVEhJU19UVVJOEAISHwobUExBWUVSX1RVUk5fVFJB",
-            "SVRfUkVUUkVBVEVEEAMqjgUKG1Byb3RvQnVmR2FtZUludGVyYWN0aW9uVHlw",
-            "ZRIvCitHQU1FX0lOVEVSQUNUSU9OX1RZUEVfU0VMRUNUX0FDVElWRV9QT0tF",
-            "TU9OEAASIwofR0FNRV9JTlRFUkFDVElPTl9UWVBFX1BMQVlfQ0FSRBABEiIK",
-            "HkdBTUVfSU5URVJBQ1RJT05fVFlQRV9FTkRfVFVSThACEisKJ0dBTUVfSU5U",
-            "RVJBQ1RJT05fVFlQRV9DT05GSVJNX01VTExJR0FOUxADEioKJkdBTUVfSU5U",
-            "RVJBQ1RJT05fVFlQRV9TRUxFQ1RfTVVMTElHQU5TEAQSIQodR0FNRV9JTlRF",
-            "UkFDVElPTl9UWVBFX0NPTkZJUk0QBRIpCiVHQU1FX0lOVEVSQUNUSU9OX1RZ",
-            "UEVfU0VUVVBfQ09NUExFVEVEEAYSMAosR0FNRV9JTlRFUkFDVElPTl9UWVBF",
-            "X1BMQVlfQ0FSRF9XSVRIX1RBUkdFVFMQBxIoCiRHQU1FX0lOVEVSQUNUSU9O",
-            "X1RZUEVfUEVSRk9STV9BVFRBQ0sQCBIjCh9HQU1FX0lOVEVSQUNUSU9OX1RZ",
-            "UEVfR0FNRV9PVkVSEAkSJgoiR0FNRV9JTlRFUkFDVElPTl9UWVBFX1NFTEVD",
-            "VF9DQVJEUxAKEiEKHUdBTUVfSU5URVJBQ1RJT05fVFlQRV9SRVRSRUFUEAsS",
-            "KQolR0FNRV9JTlRFUkFDVElPTl9UWVBFX1BFUkZPUk1fQUJJTElUWRAMEikK",
-            "JUdBTUVfSU5URVJBQ1RJT05fVFlQRV9TRVRfUFJJWkVfQ0FSRFMQDRIsCihH",
-            "QU1FX0lOVEVSQUNUSU9OX1RZUEVfUkVQTEFZX05FWFRfQUNUSU9OEA4qngMK",
-            "H1Byb3RvQnVmR2FtZUludGVyYWN0aW9uRGF0YVR5cGUSLAooR0FNRV9JTlRF",
-            "UkFDVElPTl9EQVRBX1RZUEVfTVVMTElHQU5fREFUQRAAEioKJkdBTUVfSU5U",
-            "RVJBQ1RJT05fREFUQV9UWVBFX05VTUJFUl9EQVRBEAESKgomR0FNRV9JTlRF",
-            "UkFDVElPTl9EQVRBX1RZUEVfVEFSR0VUX0RBVEEQAhI2CjJHQU1FX0lOVEVS",
-            "QUNUSU9OX0RBVEFfVFlQRV9DT05ESVRJT05BTF9UQVJHRVRfREFUQRADEjQK",
-            "MEdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX0lOVEVSQUNUSU9OX0NBUkRf",
-            "REFUQRAEEioKJkdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX0FUVEFDS19E",
-            "QVRBEAUSKgomR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfV0lOTkVSX0RB",
-            "VEEQBhIvCitHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9TRUxFQ1RfRlJP",
-            "TV9EQVRBEAcqjwIKGVByb3RvQnVmQWN0aW9uT25TZWxlY3Rpb24SHwobQUNU",
-            "SU9OX09OX1NFTEVDVElPTl9ESVNDQVJEEAASJAogQUNUSU9OX09OX1NFTEVD",
-            "VElPTl9UQUtFX1RPX0hBTkQQARIeChpBQ1RJT05fT05fU0VMRUNUSU9OX0VW",
-            "T0xWRRACEiEKHUFDVElPTl9PTl9TRUxFQ1RJT05fQVRUQUNIX1RPEAMSHwob",
-            "QUNUSU9OX09OX1NFTEVDVElPTl9QUk9NT1RFEAQSHwobQUNUSU9OX09OX1NF",
-            "TEVDVElPTl9OT1RISU5HEAUSJgoiQUNUSU9OX09OX1NFTEVDVElPTl9QVVRf",
-            "VU5ERVJfREVDSxAGKnsKElByb3RvQnVmU2VsZWN0RnJvbRIXChNTRUxFQ1Rf",
-            "RlJPTV9JTl9QTEFZEAASGAoUU0VMRUNUX0ZST01fRkxPQVRJTkcQARIUChBT",
-            "RUxFQ1RfRlJPTV9ERUNLEAISHAoYU0VMRUNUX0ZST01fRElTQ0FSRF9QSUxF",
-            "EAMqXQocUHJvdG9CdWZMb2dpY2FsUXVlcnlPcGVyYXRvchIeChpMT0dJQ0FM",
-            "X1FVRVJZX09QRVJBVE9SX0FORBAAEh0KGUxPR0lDQUxfUVVFUllfT1BFUkFU",
-            "T1JfT1IQASpuChpQcm90b0J1ZlNlbGVjdGlvblF1YWxpZmllchInCiNTRUxF",
-            "Q1RJT05fUVVBTElGSUVSX05VTUJFUl9PRl9DQVJEUxAAEicKI1NFTEVDVElP",
-            "Tl9RVUFMSUZJRVJfUFJPVklERURfRU5FUkdZEAEq+AIKGlByb3RvQnVmVGVj",
-            "aG5pY2FsR2FtZVN0YXRlEhgKFEdBTUVfU1RBVEVfR0FNRV9PVkVSEAASHwob",
-            "R0FNRV9TVEFURV9JRExFX1BMQVlFUl9UVVJOEAESIwofR0FNRV9TVEFURV9T",
-            "RUxFQ1RfQkVOQ0hfUE9LRU1PThACEicKI0dBTUVfU1RBVEVfU0VMRUNUSU5H",
-            "X01VTExJR0FOX0NBUkRTEAMSJQohR0FNRV9TVEFURV9TRVRUSU5HX0FDVElW",
-            "RV9QT0tFTU9OEAQSIgoeR0FNRV9TVEFURV9TRVRUSU5HX1BSSVpFX0NBUkRT",
-            "EAUSHgoaR0FNRV9TVEFURV9TRVRVUF9DT01QTEVURUQQBhIiCh5HQU1FX1NU",
-            "QVRFX1NIT1dfRklSU1RfTVVMTElHQU4QBxIjCh9HQU1FX1NUQVRFX1NIT1df",
-            "U0VDT05EX01VTExJR0FOEAgSHQoZR0FNRV9TVEFURV9XQUlUX0ZPUl9JTlBV",
-            "VBAJKnwKGVByb3RvQnVmUG9zaXRpb25Lbm93bGVkZ2USHgoaUE9TSVRJT05f",
-            "S05PV0xFREdFX1VOS05PV04QABIhCh1QT1NJVElPTl9LTk9XTEVER0VfTk9U",
-            "X1BSSVpFRBABEhwKGFBPU0lUSU9OX0tOT1dMRURHRV9LTk9XThACQhmqAhZn",
-            "YW1lY29yZS5zZXJpYWxpemF0aW9uYgZwcm90bzM="));
+            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWN0aW9uT25TZWxlY3Rpb24iKwob",
+            "UHJvdG9CdWZJbnRlcmFjdGlvbkNhcmREYXRhEgwKBGNhcmQYASABKAUiTAoS",
+            "UHJvdG9CdWZBdHRhY2tEYXRhEjYKBmF0dGFjaxgBIAEoCzImLmdhbWVjb3Jl",
+            "LnNlcmlhbGl6YXRpb24uUHJvdG9CdWZBdHRhY2siYgoSUHJvdG9CdWZXaW5u",
+            "ZXJEYXRhEjsKBndpbm5lchgBIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
+            "b24uUHJvdG9CdWZQbGF5ZXJTdGF0ZRIPCgdtZXNzYWdlGAIgASgJInMKFlBy",
+            "b3RvQnVmU2VsZWN0RnJvbURhdGESPwoLc2VsZWN0X2Zyb20YASABKA4yKi5n",
+            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmU2VsZWN0RnJvbRIYChBz",
+            "ZWxlY3Rpb25fc291cmNlGAIgAygFIsMFChtQcm90b0J1ZkdhbWVJbnRlcmFj",
+            "dGlvbkRhdGESSgoJZGF0YV90eXBlGAEgASgOMjcuZ2FtZWNvcmUuc2VyaWFs",
+            "aXphdGlvbi5Qcm90b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGFUeXBlEkUKDW11",
+            "bGxpZ2FuX2RhdGEYAiABKAsyLC5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
+            "b3RvQnVmTXVsbGlnYW5EYXRhSAASQQoLbnVtYmVyX2RhdGEYAyABKAsyKi5n",
+            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmTnVtYmVyRGF0YUgAEkEK",
+            "C3RhcmdldF9kYXRhGAQgASgLMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Q",
+            "cm90b0J1ZlRhcmdldERhdGFIABJYChdjb25kaXRpb25hbF90YXJnZXRfZGF0",
+            "YRgFIAEoCzI1LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZDb25k",
+            "aXRpb25hbFRhcmdldERhdGFIABJUChVpbnRlcmFjdGlvbl9jYXJkX2RhdGEY",
+            "BiABKAsyMy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmSW50ZXJh",
+            "Y3Rpb25DYXJkRGF0YUgAEkEKC2F0dGFja19kYXRhGAcgASgLMiouZ2FtZWNv",
+            "cmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkF0dGFja0RhdGFIABJBCgt3aW5u",
+            "ZXJfZGF0YRgIIAEoCzIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9C",
+            "dWZXaW5uZXJEYXRhSAASSgoQc2VsZWN0X2Zyb21fZGF0YRgJIAEoCzIuLmdh",
+            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZTZWxlY3RGcm9tRGF0YUgA",
+            "QgkKB3BheWxvYWQinwEKF1Byb3RvQnVmR2FtZUludGVyYWN0aW9uEkEKBHR5",
+            "cGUYASABKA4yMy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmR2Ft",
+            "ZUludGVyYWN0aW9uVHlwZRJBCgRkYXRhGAIgAygLMjMuZ2FtZWNvcmUuc2Vy",
+            "aWFsaXphdGlvbi5Qcm90b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGEqbQoQUHJv",
+            "dG9CdWZDYXJkVHlwZRIVChFDQVJEX1RZUEVfVU5LTk9XThAAEhUKEUNBUkRf",
+            "VFlQRV9QT0tFTU9OEAESFQoRQ0FSRF9UWVBFX1RSQUlORVIQAhIUChBDQVJE",
+            "X1RZUEVfRU5FUkdZEAMqtQIKE1Byb3RvQnVmQ2FyZFN1YnR5cGUSGAoUQ0FS",
+            "RF9TVUJUWVBFX1VOS05PV04QABIeChpDQVJEX1NVQlRZUEVfQkFTSUNfUE9L",
+            "RU1PThABEh8KG0NBUkRfU1VCVFlQRV9TVEFHRTFfUE9LRU1PThACEh8KG0NB",
+            "UkRfU1VCVFlQRV9TVEFHRTJfUE9LRU1PThADEhoKFkNBUkRfU1VCVFlQRV9T",
+            "VVBQT1JURVIQBBIVChFDQVJEX1NVQlRZUEVfSVRFTRAFEhUKEUNBUkRfU1VC",
+            "VFlQRV9UT09MEAYSGAoUQ0FSRF9TVUJUWVBFX1NUQURJVU0QBxIdChlDQVJE",
+            "X1NVQlRZUEVfQkFTSUNfRU5FUkdZEAgSHwobQ0FSRF9TVUJUWVBFX1NQRUNJ",
+            "QUxfRU5FUkdZEAkqoAIKElByb3RvQnVmRW5lcmd5VHlwZRIUChBFTkVSR1lf",
+            "VFlQRV9OT05FEAASFQoRRU5FUkdZX1RZUEVfR1JBU1MQARIUChBFTkVSR1lf",
+            "VFlQRV9GSVJFEAISFQoRRU5FUkdZX1RZUEVfV0FURVIQAxIZChVFTkVSR1lf",
+            "VFlQRV9MSUdIVE5JTkcQBBIYChRFTkVSR1lfVFlQRV9GSUdIVElORxAFEhcK",
+            "E0VORVJHWV9UWVBFX1BTWUNISUMQBhIZChVFTkVSR1lfVFlQRV9DT0xPUkxF",
+            "U1MQBxIYChRFTkVSR1lfVFlQRV9EQVJLTkVTUxAIEhUKEUVORVJHWV9UWVBF",
+            "X01FVEFMEAkSFgoSRU5FUkdZX1RZUEVfRFJBR09OEAoq6gIKFFByb3RvQnVm",
+            "Q2FyZFBvc2l0aW9uEiIKHkNBUkRfUE9TSVRJT05fQVRUQUNIRURfVE9fQ0FS",
+            "RBAAEhcKE0NBUkRfUE9TSVRJT05fQkVOQ0gQARIiCh5DQVJEX1BPU0lUSU9O",
+            "X0NVUlJFTlRMWV9QTEFZRUQQAhIdChlDQVJEX1BPU0lUSU9OX0FDVElWRV9T",
+            "UE9UEAMSGgoWQ0FSRF9QT1NJVElPTl9GTE9BVElORxAEEh4KGkNBUkRfUE9T",
+            "SVRJT05fRElTQ0FSRF9QSUxFEAUSGAoUQ0FSRF9QT1NJVElPTl9QUklaRVMQ",
+            "BhIWChJDQVJEX1BPU0lUSU9OX0RFQ0sQBxIWChJDQVJEX1BPU0lUSU9OX0hB",
+            "TkQQCBIqCiZDQVJEX1BPU0lUSU9OX1NFTEVDVEVEX0NBUkRTX1JFTUFJTkRF",
+            "UhAJEiAKHENBUkRfUE9TSVRJT05fU0VMRUNURURfQ0FSRFMQCiozCg1Qcm90",
+            "b0J1Zk93bmVyEg4KCk9XTkVSX1NFTEYQABISCg5PV05FUl9PUFBPTkVOVBAB",
+            "KqgCChdQcm90b0J1Zkluc3RydWN0aW9uVHlwZRIgChxJTlNUUlVDVElPTl9U",
+            "WVBFX0RFQUxfREFNQUdFEAASIQodSU5TVFJVQ1RJT05fVFlQRV9TRUxFQ1Rf",
+            "Q0FSRFMQARIcChhJTlNUUlVDVElPTl9UWVBFX0RJU0NBUkQQAhIhCh1JTlNU",
+            "UlVDVElPTl9UWVBFX1RBS0VfVE9fSEFORBADEiAKHElOU1RSVUNUSU9OX1RZ",
+            "UEVfUFVUX0lOX0RFQ0sQBBIhCh1JTlNUUlVDVElPTl9UWVBFX1JFVkVBTF9D",
+            "QVJEUxAFEh8KG0lOU1RSVUNUSU9OX1RZUEVfU0hPV19DQVJEUxAGEiEKHUlO",
+            "U1RSVUNUSU9OX1RZUEVfU0hVRkZMRV9ERUNLEAcqWgoVUHJvdG9CdWZDb25k",
+            "aXRpb25UeXBlEiMKH0NPTkRJVElPTl9UWVBFX0FCSUxJVFlfTk9UX1VTRUQQ",
+            "ABIcChhDT05ESVRJT05fVFlQRV9IQVNfQ0FSRFMQASqhAgobUHJvdG9CdWZJ",
+            "bnN0cnVjdGlvbkRhdGFUeXBlEiUKIUlOU1RSVUNUSU9OX0RBVEFfVFlQRV9B",
+            "VFRBQ0tfREFUQRAAEiYKIklOU1RSVUNUSU9OX0RBVEFfVFlQRV9ESVNDQVJE",
+            "X0RBVEEQARIqCiZJTlNUUlVDVElPTl9EQVRBX1RZUEVfQ0FSRF9BTU9VTlRf",
+            "REFUQRACEjIKLklOU1RSVUNUSU9OX0RBVEFfVFlQRV9SRVRVUk5fVE9fREVD",
+            "S19UWVBFX0RBVEEQAxIlCiFJTlNUUlVDVElPTl9EQVRBX1RZUEVfRklMVEVS",
+            "X0RBVEEQBBIsCihJTlNUUlVDVElPTl9EQVRBX1RZUEVfUExBWUVSX1RBUkdF",
+            "VF9EQVRBEAUqOwoUUHJvdG9CdWZBdHRhY2tUYXJnZXQSIwofQVRUQUNLX1RB",
+            "UkdFVF9ERUZFTkRJTkdfUE9LRU1PThAAKkoKFFByb3RvQnVmUGxheWVyVGFy",
+            "Z2V0EhYKElBMQVlFUl9UQVJHRVRfU0VMRhAAEhoKFlBMQVlFUl9UQVJHRVRf",
+            "T1BQT05FTlQQASpbChhQcm90b0J1ZlJldHVyblRvRGVja1R5cGUSHQoZUkVU",
+            "VVJOX1RPX0RFQ0tfVFlQRV9VTkRFUhAAEiAKHFJFVFVSTl9UT19ERUNLX1RZ",
+            "UEVfU0hVRkZMRUQQASqCAQodUHJvdG9CdWZGaWx0ZXJMb2dpY2FsT3BlcmF0",
+            "b3ISIAocRklMVEVSX0xPR0lDQUxfT1BFUkFUT1JfTk9ORRAAEh8KG0ZJTFRF",
+            "Ul9MT0dJQ0FMX09QRVJBVE9SX0FORBABEh4KGkZJTFRFUl9MT0dJQ0FMX09Q",
+            "RVJBVE9SX09SEAIqrQEKElByb3RvQnVmRmlsdGVyVHlwZRIUChBGSUxURVJf",
+            "VFlQRV9OT05FEAASFAoQRklMVEVSX1RZUEVfVFJVRRABEh4KGkZJTFRFUl9U",
+            "WVBFX0VYQ0xVREVfU09VUkNFEAISGQoVRklMVEVSX1RZUEVfQ0FSRF9UWVBF",
+            "EAMSHAoYRklMVEVSX1RZUEVfQ0FSRF9TVUJUWVBFEAQSEgoORklMVEVSX1RZ",
+            "UEVfSFAQBSrHAQoXUHJvdG9CdWZGaWx0ZXJPcGVyYXRpb24SGQoVRklMVEVS",
+            "X09QRVJBVElPTl9OT05FEAASGwoXRklMVEVSX09QRVJBVElPTl9FUVVBTFMQ",
+            "ARIfChtGSUxURVJfT1BFUkFUSU9OX05PVF9FUVVBTFMQAhInCiNGSUxURVJf",
+            "T1BFUkFUSU9OX0xFU1NfVEhBTl9PUl9FUVVBTBADEioKJkZJTFRFUl9PUEVS",
+            "QVRJT05fR1JFQVRFUl9USEFOX09SX0VRVUFMEAQqYwoUUHJvdG9CdWZUYXJn",
+            "ZXRTb3VyY2USFgoSVEFSR0VUX1NPVVJDRV9IQU5EEAASFgoSVEFSR0VUX1NP",
+            "VVJDRV9TRUxGEAESGwoXVEFSR0VUX1NPVVJDRV9TRUxFQ1RJT04QAio3ChhQ",
+            "cm90b0J1ZlBsYXllckVmZmVjdFR5cGUSGwoXUExBWUVSX0VGRkVDVF9UWVBF",
+            "X05PTkUQACo5ChlQcm90b0J1ZlBva2Vtb25FZmZlY3RUeXBlEhwKGFBPS0VN",
+            "T05fRUZGRUNUX1RZUEVfTk9ORRAAKncKGFByb3RvQnVmUG9rZW1vblR1cm5U",
+            "cmFpdBIsCihQT0tFTU9OX1RVUk5fVFJBSVRfUFVUX0lOX1BMQVlfVEhJU19U",
+            "VVJOEAASLQopUE9LRU1PTl9UVVJOX1RSQUlUX0FCSUxJVFlfVVNFRF9USElT",
+            "X1RVUk4QASrGAQoXUHJvdG9CdWZQbGF5ZXJUdXJuVHJhaXQSKAokUExBWUVS",
+            "X1RVUk5fVFJBSVRfRklSU1RfVFVSTl9PRl9HQU1FEAASLgoqUExBWUVSX1RV",
+            "Uk5fVFJBSVRfQVRUQUNIRURfRU5FUkdZX0ZPUl9UVVJOEAESMAosUExBWUVS",
+            "X1RVUk5fVFJBSVRfUExBWUVEX1NVUFBPUlRFUl9USElTX1RVUk4QAhIfChtQ",
+            "TEFZRVJfVFVSTl9UUkFJVF9SRVRSRUFURUQQAyqOBQobUHJvdG9CdWZHYW1l",
+            "SW50ZXJhY3Rpb25UeXBlEi8KK0dBTUVfSU5URVJBQ1RJT05fVFlQRV9TRUxF",
+            "Q1RfQUNUSVZFX1BPS0VNT04QABIjCh9HQU1FX0lOVEVSQUNUSU9OX1RZUEVf",
+            "UExBWV9DQVJEEAESIgoeR0FNRV9JTlRFUkFDVElPTl9UWVBFX0VORF9UVVJO",
+            "EAISKwonR0FNRV9JTlRFUkFDVElPTl9UWVBFX0NPTkZJUk1fTVVMTElHQU5T",
+            "EAMSKgomR0FNRV9JTlRFUkFDVElPTl9UWVBFX1NFTEVDVF9NVUxMSUdBTlMQ",
+            "BBIhCh1HQU1FX0lOVEVSQUNUSU9OX1RZUEVfQ09ORklSTRAFEikKJUdBTUVf",
+            "SU5URVJBQ1RJT05fVFlQRV9TRVRVUF9DT01QTEVURUQQBhIwCixHQU1FX0lO",
+            "VEVSQUNUSU9OX1RZUEVfUExBWV9DQVJEX1dJVEhfVEFSR0VUUxAHEigKJEdB",
+            "TUVfSU5URVJBQ1RJT05fVFlQRV9QRVJGT1JNX0FUVEFDSxAIEiMKH0dBTUVf",
+            "SU5URVJBQ1RJT05fVFlQRV9HQU1FX09WRVIQCRImCiJHQU1FX0lOVEVSQUNU",
+            "SU9OX1RZUEVfU0VMRUNUX0NBUkRTEAoSIQodR0FNRV9JTlRFUkFDVElPTl9U",
+            "WVBFX1JFVFJFQVQQCxIpCiVHQU1FX0lOVEVSQUNUSU9OX1RZUEVfUEVSRk9S",
+            "TV9BQklMSVRZEAwSKQolR0FNRV9JTlRFUkFDVElPTl9UWVBFX1NFVF9QUkla",
+            "RV9DQVJEUxANEiwKKEdBTUVfSU5URVJBQ1RJT05fVFlQRV9SRVBMQVlfTkVY",
+            "VF9BQ1RJT04QDiqeAwofUHJvdG9CdWZHYW1lSW50ZXJhY3Rpb25EYXRhVHlw",
+            "ZRIsCihHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9NVUxMSUdBTl9EQVRB",
+            "EAASKgomR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfTlVNQkVSX0RBVEEQ",
+            "ARIqCiZHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9UQVJHRVRfREFUQRAC",
+            "EjYKMkdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX0NPTkRJVElPTkFMX1RB",
+            "UkdFVF9EQVRBEAMSNAowR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfSU5U",
+            "RVJBQ1RJT05fQ0FSRF9EQVRBEAQSKgomR0FNRV9JTlRFUkFDVElPTl9EQVRB",
+            "X1RZUEVfQVRUQUNLX0RBVEEQBRIqCiZHQU1FX0lOVEVSQUNUSU9OX0RBVEFf",
+            "VFlQRV9XSU5ORVJfREFUQRAGEi8KK0dBTUVfSU5URVJBQ1RJT05fREFUQV9U",
+            "WVBFX1NFTEVDVF9GUk9NX0RBVEEQByqPAgoZUHJvdG9CdWZBY3Rpb25PblNl",
+            "bGVjdGlvbhIfChtBQ1RJT05fT05fU0VMRUNUSU9OX0RJU0NBUkQQABIkCiBB",
+            "Q1RJT05fT05fU0VMRUNUSU9OX1RBS0VfVE9fSEFORBABEh4KGkFDVElPTl9P",
+            "Tl9TRUxFQ1RJT05fRVZPTFZFEAISIQodQUNUSU9OX09OX1NFTEVDVElPTl9B",
+            "VFRBQ0hfVE8QAxIfChtBQ1RJT05fT05fU0VMRUNUSU9OX1BST01PVEUQBBIf",
+            "ChtBQ1RJT05fT05fU0VMRUNUSU9OX05PVEhJTkcQBRImCiJBQ1RJT05fT05f",
+            "U0VMRUNUSU9OX1BVVF9VTkRFUl9ERUNLEAYqewoSUHJvdG9CdWZTZWxlY3RG",
+            "cm9tEhcKE1NFTEVDVF9GUk9NX0lOX1BMQVkQABIYChRTRUxFQ1RfRlJPTV9G",
+            "TE9BVElORxABEhQKEFNFTEVDVF9GUk9NX0RFQ0sQAhIcChhTRUxFQ1RfRlJP",
+            "TV9ESVNDQVJEX1BJTEUQAypdChxQcm90b0J1ZkxvZ2ljYWxRdWVyeU9wZXJh",
+            "dG9yEh4KGkxPR0lDQUxfUVVFUllfT1BFUkFUT1JfQU5EEAASHQoZTE9HSUNB",
+            "TF9RVUVSWV9PUEVSQVRPUl9PUhABKm4KGlByb3RvQnVmU2VsZWN0aW9uUXVh",
+            "bGlmaWVyEicKI1NFTEVDVElPTl9RVUFMSUZJRVJfTlVNQkVSX09GX0NBUkRT",
+            "EAASJwojU0VMRUNUSU9OX1FVQUxJRklFUl9QUk9WSURFRF9FTkVSR1kQASr4",
+            "AgoaUHJvdG9CdWZUZWNobmljYWxHYW1lU3RhdGUSGAoUR0FNRV9TVEFURV9H",
+            "QU1FX09WRVIQABIfChtHQU1FX1NUQVRFX0lETEVfUExBWUVSX1RVUk4QARIj",
+            "Ch9HQU1FX1NUQVRFX1NFTEVDVF9CRU5DSF9QT0tFTU9OEAISJwojR0FNRV9T",
+            "VEFURV9TRUxFQ1RJTkdfTVVMTElHQU5fQ0FSRFMQAxIlCiFHQU1FX1NUQVRF",
+            "X1NFVFRJTkdfQUNUSVZFX1BPS0VNT04QBBIiCh5HQU1FX1NUQVRFX1NFVFRJ",
+            "TkdfUFJJWkVfQ0FSRFMQBRIeChpHQU1FX1NUQVRFX1NFVFVQX0NPTVBMRVRF",
+            "RBAGEiIKHkdBTUVfU1RBVEVfU0hPV19GSVJTVF9NVUxMSUdBThAHEiMKH0dB",
+            "TUVfU1RBVEVfU0hPV19TRUNPTkRfTVVMTElHQU4QCBIdChlHQU1FX1NUQVRF",
+            "X1dBSVRfRk9SX0lOUFVUEAkqfAoZUHJvdG9CdWZQb3NpdGlvbktub3dsZWRn",
+            "ZRIeChpQT1NJVElPTl9LTk9XTEVER0VfVU5LTk9XThAAEiEKHVBPU0lUSU9O",
+            "X0tOT1dMRURHRV9OT1RfUFJJWkVEEAESHAoYUE9TSVRJT05fS05PV0xFREdF",
+            "X0tOT1dOEAJCGaoCFmdhbWVjb3JlLnNlcmlhbGl6YXRpb25iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::gamecore.serialization.ProtoBufCardType), typeof(global::gamecore.serialization.ProtoBufCardSubtype), typeof(global::gamecore.serialization.ProtoBufEnergyType), typeof(global::gamecore.serialization.ProtoBufCardPosition), typeof(global::gamecore.serialization.ProtoBufOwner), typeof(global::gamecore.serialization.ProtoBufInstructionType), typeof(global::gamecore.serialization.ProtoBufConditionType), typeof(global::gamecore.serialization.ProtoBufInstructionDataType), typeof(global::gamecore.serialization.ProtoBufAttackTarget), typeof(global::gamecore.serialization.ProtoBufPlayerTarget), typeof(global::gamecore.serialization.ProtoBufReturnToDeckType), typeof(global::gamecore.serialization.ProtoBufFilterLogicalOperator), typeof(global::gamecore.serialization.ProtoBufFilterType), typeof(global::gamecore.serialization.ProtoBufFilterOperation), typeof(global::gamecore.serialization.ProtoBufTargetSource), typeof(global::gamecore.serialization.ProtoBufPlayerEffectType), typeof(global::gamecore.serialization.ProtoBufPokemonEffectType), typeof(global::gamecore.serialization.ProtoBufPokemonTurnTrait), typeof(global::gamecore.serialization.ProtoBufPlayerTurnTrait), typeof(global::gamecore.serialization.ProtoBufGameInteractionType), typeof(global::gamecore.serialization.ProtoBufGameInteractionDataType), typeof(global::gamecore.serialization.ProtoBufActionOnSelection), typeof(global::gamecore.serialization.ProtoBufSelectFrom), typeof(global::gamecore.serialization.ProtoBufLogicalQueryOperator), typeof(global::gamecore.serialization.ProtoBufSelectionQualifier), typeof(global::gamecore.serialization.ProtoBufTechnicalGameState), typeof(global::gamecore.serialization.ProtoBufPositionKnowledge), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -327,7 +328,7 @@ namespace gamecore.serialization {
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufFilterInstructionData), global::gamecore.serialization.ProtoBufFilterInstructionData.Parser, new[]{ "Filter" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufPlayerTargetInstructionData), global::gamecore.serialization.ProtoBufPlayerTargetInstructionData.Parser, new[]{ "PlayerTarget" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufInstructionData), global::gamecore.serialization.ProtoBufInstructionData.Parser, new[]{ "InstructionDataType", "AttackData", "DiscardData", "CardAmountData", "ReturnToDeckTypeData", "FilterData", "PlayerTargetData" }, new[]{ "Payload" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCard), global::gamecore.serialization.ProtoBufCard.Parser, new[]{ "Name", "CardType", "CardSubtype", "EnergyType", "MaxHp", "EvolvesFrom", "Weakness", "Resistance", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "Attacks", "Ability", "PokemonEffects", "PokemonTurnTraits", "Instructions", "Conditions", "ProvidedEnergy", "AttachedTo", "DeckId", "CurrentDamage", "AttachedEnergy", "AttachedEnergyCards", "PreEvolutionIds", "EvolvedInto" }, new[]{ "MaxHp", "EvolvesFrom", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "Ability", "AttachedTo", "DeckId", "CurrentDamage", "EvolvedInto" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCard), global::gamecore.serialization.ProtoBufCard.Parser, new[]{ "Name", "CardType", "CardSubtype", "EnergyType", "MaxHp", "EvolvesFrom", "Weakness", "Resistance", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "Attacks", "Ability", "PokemonEffects", "PokemonTurnTraits", "Instructions", "Conditions", "ProvidedEnergy", "AttachedTo", "DeckId", "CurrentDamage", "AttachedEnergy", "AttachedEnergyCards", "PreEvolutionIds", "EvolvedInto" }, new[]{ "EnergyType", "MaxHp", "EvolvesFrom", "Weakness", "Resistance", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "Ability", "AttachedTo", "DeckId", "CurrentDamage", "EvolvedInto" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCardState), global::gamecore.serialization.ProtoBufCardState.Parser, new[]{ "Card", "Position" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufPlayerState), global::gamecore.serialization.ProtoBufPlayerState.Parser, new[]{ "IsActive", "IsAttacking", "KnowsHisPrizes", "HandCount", "DeckCount", "PrizesCount", "BenchCount", "DiscardPileCount", "PlayerTurnTraits", "TurnCounter", "PlayerEffects" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufGameState), global::gamecore.serialization.ProtoBufGameState.Parser, new[]{ "Recreatable", "TechnicalGameState", "SelfState", "OpponentState", "CardStates" }, null, null, null, null),
@@ -4700,14 +4701,29 @@ namespace gamecore.serialization {
 
     /// <summary>Field number for the "energy_type" field.</summary>
     public const int EnergyTypeFieldNumber = 4;
-    private global::gamecore.serialization.ProtoBufEnergyType energyType_ = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+    private readonly static global::gamecore.serialization.ProtoBufEnergyType EnergyTypeDefaultValue = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+
+    private global::gamecore.serialization.ProtoBufEnergyType energyType_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::gamecore.serialization.ProtoBufEnergyType EnergyType {
-      get { return energyType_; }
+      get { if ((_hasBits0 & 1) != 0) { return energyType_; } else { return EnergyTypeDefaultValue; } }
       set {
+        _hasBits0 |= 1;
         energyType_ = value;
       }
+    }
+    /// <summary>Gets whether the "energy_type" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasEnergyType {
+      get { return (_hasBits0 & 1) != 0; }
+    }
+    /// <summary>Clears the value of the "energy_type" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearEnergyType() {
+      _hasBits0 &= ~1;
     }
 
     /// <summary>Field number for the "max_hp" field.</summary>
@@ -4721,9 +4737,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int MaxHp {
-      get { if ((_hasBits0 & 1) != 0) { return maxHp_; } else { return MaxHpDefaultValue; } }
+      get { if ((_hasBits0 & 2) != 0) { return maxHp_; } else { return MaxHpDefaultValue; } }
       set {
-        _hasBits0 |= 1;
+        _hasBits0 |= 2;
         maxHp_ = value;
       }
     }
@@ -4731,13 +4747,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasMaxHp {
-      get { return (_hasBits0 & 1) != 0; }
+      get { return (_hasBits0 & 2) != 0; }
     }
     /// <summary>Clears the value of the "max_hp" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearMaxHp() {
-      _hasBits0 &= ~1;
+      _hasBits0 &= ~2;
     }
 
     /// <summary>Field number for the "evolves_from" field.</summary>
@@ -4768,26 +4784,56 @@ namespace gamecore.serialization {
 
     /// <summary>Field number for the "weakness" field.</summary>
     public const int WeaknessFieldNumber = 7;
-    private global::gamecore.serialization.ProtoBufEnergyType weakness_ = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+    private readonly static global::gamecore.serialization.ProtoBufEnergyType WeaknessDefaultValue = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+
+    private global::gamecore.serialization.ProtoBufEnergyType weakness_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::gamecore.serialization.ProtoBufEnergyType Weakness {
-      get { return weakness_; }
+      get { if ((_hasBits0 & 4) != 0) { return weakness_; } else { return WeaknessDefaultValue; } }
       set {
+        _hasBits0 |= 4;
         weakness_ = value;
       }
+    }
+    /// <summary>Gets whether the "weakness" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasWeakness {
+      get { return (_hasBits0 & 4) != 0; }
+    }
+    /// <summary>Clears the value of the "weakness" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearWeakness() {
+      _hasBits0 &= ~4;
     }
 
     /// <summary>Field number for the "resistance" field.</summary>
     public const int ResistanceFieldNumber = 8;
-    private global::gamecore.serialization.ProtoBufEnergyType resistance_ = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+    private readonly static global::gamecore.serialization.ProtoBufEnergyType ResistanceDefaultValue = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+
+    private global::gamecore.serialization.ProtoBufEnergyType resistance_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::gamecore.serialization.ProtoBufEnergyType Resistance {
-      get { return resistance_; }
+      get { if ((_hasBits0 & 8) != 0) { return resistance_; } else { return ResistanceDefaultValue; } }
       set {
+        _hasBits0 |= 8;
         resistance_ = value;
       }
+    }
+    /// <summary>Gets whether the "resistance" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasResistance {
+      get { return (_hasBits0 & 8) != 0; }
+    }
+    /// <summary>Clears the value of the "resistance" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearResistance() {
+      _hasBits0 &= ~8;
     }
 
     /// <summary>Field number for the "retreat_cost" field.</summary>
@@ -4798,9 +4844,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int RetreatCost {
-      get { if ((_hasBits0 & 2) != 0) { return retreatCost_; } else { return RetreatCostDefaultValue; } }
+      get { if ((_hasBits0 & 16) != 0) { return retreatCost_; } else { return RetreatCostDefaultValue; } }
       set {
-        _hasBits0 |= 2;
+        _hasBits0 |= 16;
         retreatCost_ = value;
       }
     }
@@ -4808,13 +4854,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasRetreatCost {
-      get { return (_hasBits0 & 2) != 0; }
+      get { return (_hasBits0 & 16) != 0; }
     }
     /// <summary>Clears the value of the "retreat_cost" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearRetreatCost() {
-      _hasBits0 &= ~2;
+      _hasBits0 &= ~16;
     }
 
     /// <summary>Field number for the "number_of_prize_cards_on_knockout" field.</summary>
@@ -4825,9 +4871,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int NumberOfPrizeCardsOnKnockout {
-      get { if ((_hasBits0 & 4) != 0) { return numberOfPrizeCardsOnKnockout_; } else { return NumberOfPrizeCardsOnKnockoutDefaultValue; } }
+      get { if ((_hasBits0 & 32) != 0) { return numberOfPrizeCardsOnKnockout_; } else { return NumberOfPrizeCardsOnKnockoutDefaultValue; } }
       set {
-        _hasBits0 |= 4;
+        _hasBits0 |= 32;
         numberOfPrizeCardsOnKnockout_ = value;
       }
     }
@@ -4835,13 +4881,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasNumberOfPrizeCardsOnKnockout {
-      get { return (_hasBits0 & 4) != 0; }
+      get { return (_hasBits0 & 32) != 0; }
     }
     /// <summary>Clears the value of the "number_of_prize_cards_on_knockout" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearNumberOfPrizeCardsOnKnockout() {
-      _hasBits0 &= ~4;
+      _hasBits0 &= ~32;
     }
 
     /// <summary>Field number for the "attacks" field.</summary>
@@ -4936,9 +4982,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int AttachedTo {
-      get { if ((_hasBits0 & 8) != 0) { return attachedTo_; } else { return AttachedToDefaultValue; } }
+      get { if ((_hasBits0 & 64) != 0) { return attachedTo_; } else { return AttachedToDefaultValue; } }
       set {
-        _hasBits0 |= 8;
+        _hasBits0 |= 64;
         attachedTo_ = value;
       }
     }
@@ -4946,13 +4992,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasAttachedTo {
-      get { return (_hasBits0 & 8) != 0; }
+      get { return (_hasBits0 & 64) != 0; }
     }
     /// <summary>Clears the value of the "attached_to" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearAttachedTo() {
-      _hasBits0 &= ~8;
+      _hasBits0 &= ~64;
     }
 
     /// <summary>Field number for the "deck_id" field.</summary>
@@ -4966,9 +5012,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int DeckId {
-      get { if ((_hasBits0 & 16) != 0) { return deckId_; } else { return DeckIdDefaultValue; } }
+      get { if ((_hasBits0 & 128) != 0) { return deckId_; } else { return DeckIdDefaultValue; } }
       set {
-        _hasBits0 |= 16;
+        _hasBits0 |= 128;
         deckId_ = value;
       }
     }
@@ -4976,13 +5022,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasDeckId {
-      get { return (_hasBits0 & 16) != 0; }
+      get { return (_hasBits0 & 128) != 0; }
     }
     /// <summary>Clears the value of the "deck_id" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearDeckId() {
-      _hasBits0 &= ~16;
+      _hasBits0 &= ~128;
     }
 
     /// <summary>Field number for the "current_damage" field.</summary>
@@ -4996,9 +5042,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CurrentDamage {
-      get { if ((_hasBits0 & 32) != 0) { return currentDamage_; } else { return CurrentDamageDefaultValue; } }
+      get { if ((_hasBits0 & 256) != 0) { return currentDamage_; } else { return CurrentDamageDefaultValue; } }
       set {
-        _hasBits0 |= 32;
+        _hasBits0 |= 256;
         currentDamage_ = value;
       }
     }
@@ -5006,13 +5052,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasCurrentDamage {
-      get { return (_hasBits0 & 32) != 0; }
+      get { return (_hasBits0 & 256) != 0; }
     }
     /// <summary>Clears the value of the "current_damage" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearCurrentDamage() {
-      _hasBits0 &= ~32;
+      _hasBits0 &= ~256;
     }
 
     /// <summary>Field number for the "attached_energy" field.</summary>
@@ -5056,9 +5102,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int EvolvedInto {
-      get { if ((_hasBits0 & 64) != 0) { return evolvedInto_; } else { return EvolvedIntoDefaultValue; } }
+      get { if ((_hasBits0 & 512) != 0) { return evolvedInto_; } else { return EvolvedIntoDefaultValue; } }
       set {
-        _hasBits0 |= 64;
+        _hasBits0 |= 512;
         evolvedInto_ = value;
       }
     }
@@ -5066,13 +5112,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasEvolvedInto {
-      get { return (_hasBits0 & 64) != 0; }
+      get { return (_hasBits0 & 512) != 0; }
     }
     /// <summary>Clears the value of the "evolved_into" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearEvolvedInto() {
-      _hasBits0 &= ~64;
+      _hasBits0 &= ~512;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5124,11 +5170,11 @@ namespace gamecore.serialization {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) hash ^= CardType.GetHashCode();
       if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) hash ^= CardSubtype.GetHashCode();
-      if (EnergyType != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) hash ^= EnergyType.GetHashCode();
+      if (HasEnergyType) hash ^= EnergyType.GetHashCode();
       if (HasMaxHp) hash ^= MaxHp.GetHashCode();
       if (HasEvolvesFrom) hash ^= EvolvesFrom.GetHashCode();
-      if (Weakness != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) hash ^= Weakness.GetHashCode();
-      if (Resistance != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) hash ^= Resistance.GetHashCode();
+      if (HasWeakness) hash ^= Weakness.GetHashCode();
+      if (HasResistance) hash ^= Resistance.GetHashCode();
       if (HasRetreatCost) hash ^= RetreatCost.GetHashCode();
       if (HasNumberOfPrizeCardsOnKnockout) hash ^= NumberOfPrizeCardsOnKnockout.GetHashCode();
       hash ^= attacks_.GetHashCode();
@@ -5175,7 +5221,7 @@ namespace gamecore.serialization {
         output.WriteRawTag(24);
         output.WriteEnum((int) CardSubtype);
       }
-      if (EnergyType != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasEnergyType) {
         output.WriteRawTag(32);
         output.WriteEnum((int) EnergyType);
       }
@@ -5187,11 +5233,11 @@ namespace gamecore.serialization {
         output.WriteRawTag(50);
         output.WriteString(EvolvesFrom);
       }
-      if (Weakness != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasWeakness) {
         output.WriteRawTag(56);
         output.WriteEnum((int) Weakness);
       }
-      if (Resistance != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasResistance) {
         output.WriteRawTag(64);
         output.WriteEnum((int) Resistance);
       }
@@ -5254,7 +5300,7 @@ namespace gamecore.serialization {
         output.WriteRawTag(24);
         output.WriteEnum((int) CardSubtype);
       }
-      if (EnergyType != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasEnergyType) {
         output.WriteRawTag(32);
         output.WriteEnum((int) EnergyType);
       }
@@ -5266,11 +5312,11 @@ namespace gamecore.serialization {
         output.WriteRawTag(50);
         output.WriteString(EvolvesFrom);
       }
-      if (Weakness != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasWeakness) {
         output.WriteRawTag(56);
         output.WriteEnum((int) Weakness);
       }
-      if (Resistance != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasResistance) {
         output.WriteRawTag(64);
         output.WriteEnum((int) Resistance);
       }
@@ -5330,7 +5376,7 @@ namespace gamecore.serialization {
       if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) CardSubtype);
       }
-      if (EnergyType != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasEnergyType) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EnergyType);
       }
       if (HasMaxHp) {
@@ -5339,10 +5385,10 @@ namespace gamecore.serialization {
       if (HasEvolvesFrom) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(EvolvesFrom);
       }
-      if (Weakness != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasWeakness) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Weakness);
       }
-      if (Resistance != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (HasResistance) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Resistance);
       }
       if (HasRetreatCost) {
@@ -5396,7 +5442,7 @@ namespace gamecore.serialization {
       if (other.CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
         CardSubtype = other.CardSubtype;
       }
-      if (other.EnergyType != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (other.HasEnergyType) {
         EnergyType = other.EnergyType;
       }
       if (other.HasMaxHp) {
@@ -5405,10 +5451,10 @@ namespace gamecore.serialization {
       if (other.HasEvolvesFrom) {
         EvolvesFrom = other.EvolvesFrom;
       }
-      if (other.Weakness != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (other.HasWeakness) {
         Weakness = other.Weakness;
       }
-      if (other.Resistance != global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone) {
+      if (other.HasResistance) {
         Resistance = other.Resistance;
       }
       if (other.HasRetreatCost) {
