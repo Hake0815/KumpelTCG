@@ -224,12 +224,12 @@ namespace gamecore.game.state
                 new NumberRange(0, retreatCost),
                 SelectionQualifier.NumberOfCards
             );
-            var atLEastEnergyToPayRetreatCost = new ConditionalTargetQuery(
+            var atLeastEnergyToPayRetreatCost = new ConditionalTargetQuery(
                 new NumberRange(retreatCost, 60),
                 SelectionQualifier.ProvidedEnergy
             );
             return new CompoundTargetQuery(
-                new() { lessOrEqualCardsThanRetreatCost, atLEastEnergyToPayRetreatCost },
+                new() { lessOrEqualCardsThanRetreatCost, atLeastEnergyToPayRetreatCost },
                 LogicalQueryOperator.And
             );
         }

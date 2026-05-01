@@ -312,10 +312,10 @@ namespace gamecore.game.interaction
         public List<ICard> SelectionSource { get; }
         public GameInteractionDataType DataType => GameInteractionDataType.SelectFromData;
 
-        public SelectFromData(SelectFrom selectFrom, List<ICard> selectionsource)
+        public SelectFromData(SelectFrom selectFrom, List<ICard> selectionSource)
         {
             SelectFrom = selectFrom;
-            SelectionSource = selectionsource;
+            SelectionSource = selectionSource;
         }
 
         public SelectFromData(SelectFrom selectFrom)
