@@ -153,163 +153,161 @@ namespace gamecore.serialization {
             "ZkNhcmRMaXN0EjsKBnBsYXllchgCIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6",
             "YXRpb24uUHJvdG9CdWZQbGF5ZXJTdGF0ZSIhChBQcm90b0J1ZkNhcmRMaXN0",
             "Eg0KBWNhcmRzGAEgAygFIiQKElByb3RvQnVmTnVtYmVyRGF0YRIOCgZudW1i",
-            "ZXIYASABKAUi4AEKElByb3RvQnVmVGFyZ2V0RGF0YRIZChFudW1iZXJfb2Zf",
-            "dGFyZ2V0cxgBIAEoBRIYChBwb3NzaWJsZV90YXJnZXRzGAIgAygFEkgKDXRh",
-            "cmdldF9hY3Rpb24YAyABKA4yMS5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
-            "b3RvQnVmQWN0aW9uT25TZWxlY3Rpb24SSwoQcmVtYWluZGVyX2FjdGlvbhgE",
-            "IAEoDjIxLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZBY3Rpb25P",
-            "blNlbGVjdGlvbiKqAgodUHJvdG9CdWZDb25kaXRpb25hbFRhcmdldERhdGES",
-            "GAoQcG9zc2libGVfdGFyZ2V0cxgBIAMoBRJYChhjb25kaXRpb25hbF90YXJn",
-            "ZXRfcXVlcnkYAiABKAsyNi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3Rv",
-            "QnVmQ29uZGl0aW9uYWxUYXJnZXRRdWVyeRJICg10YXJnZXRfYWN0aW9uGAMg",
-            "ASgOMjEuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkFjdGlvbk9u",
-            "U2VsZWN0aW9uEksKEHJlbWFpbmRlcl9hY3Rpb24YBCABKA4yMS5nYW1lY29y",
-            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWN0aW9uT25TZWxlY3Rpb24iKwob",
-            "UHJvdG9CdWZJbnRlcmFjdGlvbkNhcmREYXRhEgwKBGNhcmQYASABKAUiTAoS",
-            "UHJvdG9CdWZBdHRhY2tEYXRhEjYKBmF0dGFjaxgBIAEoCzImLmdhbWVjb3Jl",
-            "LnNlcmlhbGl6YXRpb24uUHJvdG9CdWZBdHRhY2siYgoSUHJvdG9CdWZXaW5u",
-            "ZXJEYXRhEjsKBndpbm5lchgBIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
-            "b24uUHJvdG9CdWZQbGF5ZXJTdGF0ZRIPCgdtZXNzYWdlGAIgASgJInMKFlBy",
-            "b3RvQnVmU2VsZWN0RnJvbURhdGESPwoLc2VsZWN0X2Zyb20YASABKA4yKi5n",
-            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmU2VsZWN0RnJvbRIYChBz",
-            "ZWxlY3Rpb25fc291cmNlGAIgAygFIsMFChtQcm90b0J1ZkdhbWVJbnRlcmFj",
-            "dGlvbkRhdGESSgoJZGF0YV90eXBlGAEgASgOMjcuZ2FtZWNvcmUuc2VyaWFs",
-            "aXphdGlvbi5Qcm90b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGFUeXBlEkUKDW11",
-            "bGxpZ2FuX2RhdGEYAiABKAsyLC5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
-            "b3RvQnVmTXVsbGlnYW5EYXRhSAASQQoLbnVtYmVyX2RhdGEYAyABKAsyKi5n",
-            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmTnVtYmVyRGF0YUgAEkEK",
-            "C3RhcmdldF9kYXRhGAQgASgLMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Q",
-            "cm90b0J1ZlRhcmdldERhdGFIABJYChdjb25kaXRpb25hbF90YXJnZXRfZGF0",
-            "YRgFIAEoCzI1LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZDb25k",
-            "aXRpb25hbFRhcmdldERhdGFIABJUChVpbnRlcmFjdGlvbl9jYXJkX2RhdGEY",
-            "BiABKAsyMy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmSW50ZXJh",
-            "Y3Rpb25DYXJkRGF0YUgAEkEKC2F0dGFja19kYXRhGAcgASgLMiouZ2FtZWNv",
-            "cmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkF0dGFja0RhdGFIABJBCgt3aW5u",
-            "ZXJfZGF0YRgIIAEoCzIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9C",
-            "dWZXaW5uZXJEYXRhSAASSgoQc2VsZWN0X2Zyb21fZGF0YRgJIAEoCzIuLmdh",
-            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZTZWxlY3RGcm9tRGF0YUgA",
-            "QgkKB3BheWxvYWQinwEKF1Byb3RvQnVmR2FtZUludGVyYWN0aW9uEkEKBHR5",
-            "cGUYASABKA4yMy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmR2Ft",
-            "ZUludGVyYWN0aW9uVHlwZRJBCgRkYXRhGAIgAygLMjMuZ2FtZWNvcmUuc2Vy",
-            "aWFsaXphdGlvbi5Qcm90b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGEqbQoQUHJv",
-            "dG9CdWZDYXJkVHlwZRIVChFDQVJEX1RZUEVfVU5LTk9XThAAEhUKEUNBUkRf",
-            "VFlQRV9QT0tFTU9OEAESFQoRQ0FSRF9UWVBFX1RSQUlORVIQAhIUChBDQVJE",
-            "X1RZUEVfRU5FUkdZEAMqtQIKE1Byb3RvQnVmQ2FyZFN1YnR5cGUSGAoUQ0FS",
-            "RF9TVUJUWVBFX1VOS05PV04QABIeChpDQVJEX1NVQlRZUEVfQkFTSUNfUE9L",
-            "RU1PThABEh8KG0NBUkRfU1VCVFlQRV9TVEFHRTFfUE9LRU1PThACEh8KG0NB",
-            "UkRfU1VCVFlQRV9TVEFHRTJfUE9LRU1PThADEhoKFkNBUkRfU1VCVFlQRV9T",
-            "VVBQT1JURVIQBBIVChFDQVJEX1NVQlRZUEVfSVRFTRAFEhUKEUNBUkRfU1VC",
-            "VFlQRV9UT09MEAYSGAoUQ0FSRF9TVUJUWVBFX1NUQURJVU0QBxIdChlDQVJE",
-            "X1NVQlRZUEVfQkFTSUNfRU5FUkdZEAgSHwobQ0FSRF9TVUJUWVBFX1NQRUNJ",
-            "QUxfRU5FUkdZEAkqoAIKElByb3RvQnVmRW5lcmd5VHlwZRIUChBFTkVSR1lf",
-            "VFlQRV9OT05FEAASFQoRRU5FUkdZX1RZUEVfR1JBU1MQARIUChBFTkVSR1lf",
-            "VFlQRV9GSVJFEAISFQoRRU5FUkdZX1RZUEVfV0FURVIQAxIZChVFTkVSR1lf",
-            "VFlQRV9MSUdIVE5JTkcQBBIYChRFTkVSR1lfVFlQRV9GSUdIVElORxAFEhcK",
-            "E0VORVJHWV9UWVBFX1BTWUNISUMQBhIZChVFTkVSR1lfVFlQRV9DT0xPUkxF",
-            "U1MQBxIYChRFTkVSR1lfVFlQRV9EQVJLTkVTUxAIEhUKEUVORVJHWV9UWVBF",
-            "X01FVEFMEAkSFgoSRU5FUkdZX1RZUEVfRFJBR09OEAoq6gIKFFByb3RvQnVm",
-            "Q2FyZFBvc2l0aW9uEiIKHkNBUkRfUE9TSVRJT05fQVRUQUNIRURfVE9fQ0FS",
-            "RBAAEhcKE0NBUkRfUE9TSVRJT05fQkVOQ0gQARIiCh5DQVJEX1BPU0lUSU9O",
-            "X0NVUlJFTlRMWV9QTEFZRUQQAhIdChlDQVJEX1BPU0lUSU9OX0FDVElWRV9T",
-            "UE9UEAMSGgoWQ0FSRF9QT1NJVElPTl9GTE9BVElORxAEEh4KGkNBUkRfUE9T",
-            "SVRJT05fRElTQ0FSRF9QSUxFEAUSGAoUQ0FSRF9QT1NJVElPTl9QUklaRVMQ",
-            "BhIWChJDQVJEX1BPU0lUSU9OX0RFQ0sQBxIWChJDQVJEX1BPU0lUSU9OX0hB",
-            "TkQQCBIqCiZDQVJEX1BPU0lUSU9OX1NFTEVDVEVEX0NBUkRTX1JFTUFJTkRF",
-            "UhAJEiAKHENBUkRfUE9TSVRJT05fU0VMRUNURURfQ0FSRFMQCiozCg1Qcm90",
-            "b0J1Zk93bmVyEg4KCk9XTkVSX1NFTEYQABISCg5PV05FUl9PUFBPTkVOVBAB",
-            "KqgCChdQcm90b0J1Zkluc3RydWN0aW9uVHlwZRIgChxJTlNUUlVDVElPTl9U",
-            "WVBFX0RFQUxfREFNQUdFEAASIQodSU5TVFJVQ1RJT05fVFlQRV9TRUxFQ1Rf",
-            "Q0FSRFMQARIcChhJTlNUUlVDVElPTl9UWVBFX0RJU0NBUkQQAhIhCh1JTlNU",
-            "UlVDVElPTl9UWVBFX1RBS0VfVE9fSEFORBADEiAKHElOU1RSVUNUSU9OX1RZ",
-            "UEVfUFVUX0lOX0RFQ0sQBBIhCh1JTlNUUlVDVElPTl9UWVBFX1JFVkVBTF9D",
-            "QVJEUxAFEh8KG0lOU1RSVUNUSU9OX1RZUEVfU0hPV19DQVJEUxAGEiEKHUlO",
-            "U1RSVUNUSU9OX1RZUEVfU0hVRkZMRV9ERUNLEAcqWgoVUHJvdG9CdWZDb25k",
-            "aXRpb25UeXBlEiMKH0NPTkRJVElPTl9UWVBFX0FCSUxJVFlfTk9UX1VTRUQQ",
-            "ABIcChhDT05ESVRJT05fVFlQRV9IQVNfQ0FSRFMQASqhAgobUHJvdG9CdWZJ",
-            "bnN0cnVjdGlvbkRhdGFUeXBlEiUKIUlOU1RSVUNUSU9OX0RBVEFfVFlQRV9B",
-            "VFRBQ0tfREFUQRAAEiYKIklOU1RSVUNUSU9OX0RBVEFfVFlQRV9ESVNDQVJE",
-            "X0RBVEEQARIqCiZJTlNUUlVDVElPTl9EQVRBX1RZUEVfQ0FSRF9BTU9VTlRf",
-            "REFUQRACEjIKLklOU1RSVUNUSU9OX0RBVEFfVFlQRV9SRVRVUk5fVE9fREVD",
-            "S19UWVBFX0RBVEEQAxIlCiFJTlNUUlVDVElPTl9EQVRBX1RZUEVfRklMVEVS",
-            "X0RBVEEQBBIsCihJTlNUUlVDVElPTl9EQVRBX1RZUEVfUExBWUVSX1RBUkdF",
-            "VF9EQVRBEAUqOwoUUHJvdG9CdWZBdHRhY2tUYXJnZXQSIwofQVRUQUNLX1RB",
-            "UkdFVF9ERUZFTkRJTkdfUE9LRU1PThAAKkoKFFByb3RvQnVmUGxheWVyVGFy",
-            "Z2V0EhYKElBMQVlFUl9UQVJHRVRfU0VMRhAAEhoKFlBMQVlFUl9UQVJHRVRf",
-            "T1BQT05FTlQQASpbChhQcm90b0J1ZlJldHVyblRvRGVja1R5cGUSHQoZUkVU",
-            "VVJOX1RPX0RFQ0tfVFlQRV9VTkRFUhAAEiAKHFJFVFVSTl9UT19ERUNLX1RZ",
-            "UEVfU0hVRkZMRUQQASqCAQodUHJvdG9CdWZGaWx0ZXJMb2dpY2FsT3BlcmF0",
-            "b3ISIAocRklMVEVSX0xPR0lDQUxfT1BFUkFUT1JfTk9ORRAAEh8KG0ZJTFRF",
-            "Ul9MT0dJQ0FMX09QRVJBVE9SX0FORBABEh4KGkZJTFRFUl9MT0dJQ0FMX09Q",
-            "RVJBVE9SX09SEAIqrQEKElByb3RvQnVmRmlsdGVyVHlwZRIUChBGSUxURVJf",
-            "VFlQRV9OT05FEAASFAoQRklMVEVSX1RZUEVfVFJVRRABEh4KGkZJTFRFUl9U",
-            "WVBFX0VYQ0xVREVfU09VUkNFEAISGQoVRklMVEVSX1RZUEVfQ0FSRF9UWVBF",
-            "EAMSHAoYRklMVEVSX1RZUEVfQ0FSRF9TVUJUWVBFEAQSEgoORklMVEVSX1RZ",
-            "UEVfSFAQBSrHAQoXUHJvdG9CdWZGaWx0ZXJPcGVyYXRpb24SGQoVRklMVEVS",
-            "X09QRVJBVElPTl9OT05FEAASGwoXRklMVEVSX09QRVJBVElPTl9FUVVBTFMQ",
-            "ARIfChtGSUxURVJfT1BFUkFUSU9OX05PVF9FUVVBTFMQAhInCiNGSUxURVJf",
-            "T1BFUkFUSU9OX0xFU1NfVEhBTl9PUl9FUVVBTBADEioKJkZJTFRFUl9PUEVS",
-            "QVRJT05fR1JFQVRFUl9USEFOX09SX0VRVUFMEAQqYwoUUHJvdG9CdWZUYXJn",
-            "ZXRTb3VyY2USFgoSVEFSR0VUX1NPVVJDRV9IQU5EEAASFgoSVEFSR0VUX1NP",
-            "VVJDRV9TRUxGEAESGwoXVEFSR0VUX1NPVVJDRV9TRUxFQ1RJT04QAio3ChhQ",
-            "cm90b0J1ZlBsYXllckVmZmVjdFR5cGUSGwoXUExBWUVSX0VGRkVDVF9UWVBF",
-            "X05PTkUQACo5ChlQcm90b0J1ZlBva2Vtb25FZmZlY3RUeXBlEhwKGFBPS0VN",
-            "T05fRUZGRUNUX1RZUEVfTk9ORRAAKncKGFByb3RvQnVmUG9rZW1vblR1cm5U",
-            "cmFpdBIsCihQT0tFTU9OX1RVUk5fVFJBSVRfUFVUX0lOX1BMQVlfVEhJU19U",
-            "VVJOEAASLQopUE9LRU1PTl9UVVJOX1RSQUlUX0FCSUxJVFlfVVNFRF9USElT",
-            "X1RVUk4QASrGAQoXUHJvdG9CdWZQbGF5ZXJUdXJuVHJhaXQSKAokUExBWUVS",
-            "X1RVUk5fVFJBSVRfRklSU1RfVFVSTl9PRl9HQU1FEAASLgoqUExBWUVSX1RV",
-            "Uk5fVFJBSVRfQVRUQUNIRURfRU5FUkdZX0ZPUl9UVVJOEAESMAosUExBWUVS",
-            "X1RVUk5fVFJBSVRfUExBWUVEX1NVUFBPUlRFUl9USElTX1RVUk4QAhIfChtQ",
-            "TEFZRVJfVFVSTl9UUkFJVF9SRVRSRUFURUQQAyqOBQobUHJvdG9CdWZHYW1l",
-            "SW50ZXJhY3Rpb25UeXBlEi8KK0dBTUVfSU5URVJBQ1RJT05fVFlQRV9TRUxF",
-            "Q1RfQUNUSVZFX1BPS0VNT04QABIjCh9HQU1FX0lOVEVSQUNUSU9OX1RZUEVf",
-            "UExBWV9DQVJEEAESIgoeR0FNRV9JTlRFUkFDVElPTl9UWVBFX0VORF9UVVJO",
-            "EAISKwonR0FNRV9JTlRFUkFDVElPTl9UWVBFX0NPTkZJUk1fTVVMTElHQU5T",
-            "EAMSKgomR0FNRV9JTlRFUkFDVElPTl9UWVBFX1NFTEVDVF9NVUxMSUdBTlMQ",
-            "BBIhCh1HQU1FX0lOVEVSQUNUSU9OX1RZUEVfQ09ORklSTRAFEikKJUdBTUVf",
-            "SU5URVJBQ1RJT05fVFlQRV9TRVRVUF9DT01QTEVURUQQBhIwCixHQU1FX0lO",
-            "VEVSQUNUSU9OX1RZUEVfUExBWV9DQVJEX1dJVEhfVEFSR0VUUxAHEigKJEdB",
-            "TUVfSU5URVJBQ1RJT05fVFlQRV9QRVJGT1JNX0FUVEFDSxAIEiMKH0dBTUVf",
-            "SU5URVJBQ1RJT05fVFlQRV9HQU1FX09WRVIQCRImCiJHQU1FX0lOVEVSQUNU",
-            "SU9OX1RZUEVfU0VMRUNUX0NBUkRTEAoSIQodR0FNRV9JTlRFUkFDVElPTl9U",
-            "WVBFX1JFVFJFQVQQCxIpCiVHQU1FX0lOVEVSQUNUSU9OX1RZUEVfUEVSRk9S",
-            "TV9BQklMSVRZEAwSKQolR0FNRV9JTlRFUkFDVElPTl9UWVBFX1NFVF9QUkla",
-            "RV9DQVJEUxANEiwKKEdBTUVfSU5URVJBQ1RJT05fVFlQRV9SRVBMQVlfTkVY",
-            "VF9BQ1RJT04QDiqeAwofUHJvdG9CdWZHYW1lSW50ZXJhY3Rpb25EYXRhVHlw",
-            "ZRIsCihHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9NVUxMSUdBTl9EQVRB",
-            "EAASKgomR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfTlVNQkVSX0RBVEEQ",
-            "ARIqCiZHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9UQVJHRVRfREFUQRAC",
-            "EjYKMkdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX0NPTkRJVElPTkFMX1RB",
-            "UkdFVF9EQVRBEAMSNAowR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfSU5U",
-            "RVJBQ1RJT05fQ0FSRF9EQVRBEAQSKgomR0FNRV9JTlRFUkFDVElPTl9EQVRB",
-            "X1RZUEVfQVRUQUNLX0RBVEEQBRIqCiZHQU1FX0lOVEVSQUNUSU9OX0RBVEFf",
-            "VFlQRV9XSU5ORVJfREFUQRAGEi8KK0dBTUVfSU5URVJBQ1RJT05fREFUQV9U",
-            "WVBFX1NFTEVDVF9GUk9NX0RBVEEQByqPAgoZUHJvdG9CdWZBY3Rpb25PblNl",
-            "bGVjdGlvbhIfChtBQ1RJT05fT05fU0VMRUNUSU9OX0RJU0NBUkQQABIkCiBB",
-            "Q1RJT05fT05fU0VMRUNUSU9OX1RBS0VfVE9fSEFORBABEh4KGkFDVElPTl9P",
-            "Tl9TRUxFQ1RJT05fRVZPTFZFEAISIQodQUNUSU9OX09OX1NFTEVDVElPTl9B",
-            "VFRBQ0hfVE8QAxIfChtBQ1RJT05fT05fU0VMRUNUSU9OX1BST01PVEUQBBIf",
-            "ChtBQ1RJT05fT05fU0VMRUNUSU9OX05PVEhJTkcQBRImCiJBQ1RJT05fT05f",
-            "U0VMRUNUSU9OX1BVVF9VTkRFUl9ERUNLEAYqewoSUHJvdG9CdWZTZWxlY3RG",
-            "cm9tEhcKE1NFTEVDVF9GUk9NX0lOX1BMQVkQABIYChRTRUxFQ1RfRlJPTV9G",
-            "TE9BVElORxABEhQKEFNFTEVDVF9GUk9NX0RFQ0sQAhIcChhTRUxFQ1RfRlJP",
-            "TV9ESVNDQVJEX1BJTEUQAypdChxQcm90b0J1ZkxvZ2ljYWxRdWVyeU9wZXJh",
-            "dG9yEh4KGkxPR0lDQUxfUVVFUllfT1BFUkFUT1JfQU5EEAASHQoZTE9HSUNB",
-            "TF9RVUVSWV9PUEVSQVRPUl9PUhABKm4KGlByb3RvQnVmU2VsZWN0aW9uUXVh",
-            "bGlmaWVyEicKI1NFTEVDVElPTl9RVUFMSUZJRVJfTlVNQkVSX09GX0NBUkRT",
-            "EAASJwojU0VMRUNUSU9OX1FVQUxJRklFUl9QUk9WSURFRF9FTkVSR1kQASr4",
-            "AgoaUHJvdG9CdWZUZWNobmljYWxHYW1lU3RhdGUSGAoUR0FNRV9TVEFURV9H",
-            "QU1FX09WRVIQABIfChtHQU1FX1NUQVRFX0lETEVfUExBWUVSX1RVUk4QARIj",
-            "Ch9HQU1FX1NUQVRFX1NFTEVDVF9CRU5DSF9QT0tFTU9OEAISJwojR0FNRV9T",
-            "VEFURV9TRUxFQ1RJTkdfTVVMTElHQU5fQ0FSRFMQAxIlCiFHQU1FX1NUQVRF",
-            "X1NFVFRJTkdfQUNUSVZFX1BPS0VNT04QBBIiCh5HQU1FX1NUQVRFX1NFVFRJ",
-            "TkdfUFJJWkVfQ0FSRFMQBRIeChpHQU1FX1NUQVRFX1NFVFVQX0NPTVBMRVRF",
-            "RBAGEiIKHkdBTUVfU1RBVEVfU0hPV19GSVJTVF9NVUxMSUdBThAHEiMKH0dB",
-            "TUVfU1RBVEVfU0hPV19TRUNPTkRfTVVMTElHQU4QCBIdChlHQU1FX1NUQVRF",
-            "X1dBSVRfRk9SX0lOUFVUEAkqfAoZUHJvdG9CdWZQb3NpdGlvbktub3dsZWRn",
-            "ZRIeChpQT1NJVElPTl9LTk9XTEVER0VfVU5LTk9XThAAEiEKHVBPU0lUSU9O",
-            "X0tOT1dMRURHRV9OT1RfUFJJWkVEEAESHAoYUE9TSVRJT05fS05PV0xFREdF",
-            "X0tOT1dOEAJCGaoCFmdhbWVjb3JlLnNlcmlhbGl6YXRpb25iBnByb3RvMw=="));
+            "ZXIYASABKAUi8AIKElByb3RvQnVmVGFyZ2V0RGF0YRIYChBwb3NzaWJsZV90",
+            "YXJnZXRzGAEgAygFEkgKDXRhcmdldF9hY3Rpb24YAiABKA4yMS5nYW1lY29y",
+            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWN0aW9uT25TZWxlY3Rpb24SSwoQ",
+            "cmVtYWluZGVyX2FjdGlvbhgDIAEoDjIxLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
+            "b24uUHJvdG9CdWZBY3Rpb25PblNlbGVjdGlvbhIcChRhbGxvd19tdWx0aXBs",
+            "ZV90aW1lcxgEIAEoCBIbChFudW1iZXJfb2ZfdGFyZ2V0cxgFIAEoBUgAEloK",
+            "GGNvbmRpdGlvbmFsX3RhcmdldF9xdWVyeRgGIAEoCzI2LmdhbWVjb3JlLnNl",
+            "cmlhbGl6YXRpb24uUHJvdG9CdWZDb25kaXRpb25hbFRhcmdldFF1ZXJ5SABC",
+            "EgoQdGFyZ2V0X3RvX2Nob29zZSIrChtQcm90b0J1ZkludGVyYWN0aW9uQ2Fy",
+            "ZERhdGESDAoEY2FyZBgBIAEoBSJMChJQcm90b0J1ZkF0dGFja0RhdGESNgoG",
+            "YXR0YWNrGAEgASgLMiYuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
+            "ZkF0dGFjayJPChNQcm90b0J1ZkFiaWxpdHlEYXRhEjgKB2FiaWxpdHkYASAB",
+            "KAsyJy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWJpbGl0eSJi",
+            "ChJQcm90b0J1Zldpbm5lckRhdGESOwoGd2lubmVyGAEgASgLMisuZ2FtZWNv",
+            "cmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBsYXllclN0YXRlEg8KB21lc3Nh",
+            "Z2UYAiABKAkiWQoWUHJvdG9CdWZTZWxlY3RGcm9tRGF0YRI/CgtzZWxlY3Rf",
+            "ZnJvbRgBIAEoDjIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZT",
+            "ZWxlY3RGcm9tIq4FChtQcm90b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGESSgoJ",
+            "ZGF0YV90eXBlGAEgASgOMjcuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90",
+            "b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGFUeXBlEkUKDW11bGxpZ2FuX2RhdGEY",
+            "AiABKAsyLC5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmTXVsbGln",
+            "YW5EYXRhSAASQQoLbnVtYmVyX2RhdGEYAyABKAsyKi5nYW1lY29yZS5zZXJp",
+            "YWxpemF0aW9uLlByb3RvQnVmTnVtYmVyRGF0YUgAEkEKC3RhcmdldF9kYXRh",
+            "GAQgASgLMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlRhcmdl",
+            "dERhdGFIABJUChVpbnRlcmFjdGlvbl9jYXJkX2RhdGEYBSABKAsyMy5nYW1l",
+            "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmSW50ZXJhY3Rpb25DYXJkRGF0",
+            "YUgAEkEKC2F0dGFja19kYXRhGAYgASgLMiouZ2FtZWNvcmUuc2VyaWFsaXph",
+            "dGlvbi5Qcm90b0J1ZkF0dGFja0RhdGFIABJBCgt3aW5uZXJfZGF0YRgHIAEo",
+            "CzIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZXaW5uZXJEYXRh",
+            "SAASSgoQc2VsZWN0X2Zyb21fZGF0YRgIIAEoCzIuLmdhbWVjb3JlLnNlcmlh",
+            "bGl6YXRpb24uUHJvdG9CdWZTZWxlY3RGcm9tRGF0YUgAEkMKDGFiaWxpdHlf",
+            "ZGF0YRgJIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZB",
+            "YmlsaXR5RGF0YUgAQgkKB3BheWxvYWQinwEKF1Byb3RvQnVmR2FtZUludGVy",
+            "YWN0aW9uEkEKBHR5cGUYASABKA4yMy5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
+            "LlByb3RvQnVmR2FtZUludGVyYWN0aW9uVHlwZRJBCgRkYXRhGAIgAygLMjMu",
+            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkdhbWVJbnRlcmFjdGlv",
+            "bkRhdGEqbQoQUHJvdG9CdWZDYXJkVHlwZRIVChFDQVJEX1RZUEVfVU5LTk9X",
+            "ThAAEhUKEUNBUkRfVFlQRV9QT0tFTU9OEAESFQoRQ0FSRF9UWVBFX1RSQUlO",
+            "RVIQAhIUChBDQVJEX1RZUEVfRU5FUkdZEAMqtQIKE1Byb3RvQnVmQ2FyZFN1",
+            "YnR5cGUSGAoUQ0FSRF9TVUJUWVBFX1VOS05PV04QABIeChpDQVJEX1NVQlRZ",
+            "UEVfQkFTSUNfUE9LRU1PThABEh8KG0NBUkRfU1VCVFlQRV9TVEFHRTFfUE9L",
+            "RU1PThACEh8KG0NBUkRfU1VCVFlQRV9TVEFHRTJfUE9LRU1PThADEhoKFkNB",
+            "UkRfU1VCVFlQRV9TVVBQT1JURVIQBBIVChFDQVJEX1NVQlRZUEVfSVRFTRAF",
+            "EhUKEUNBUkRfU1VCVFlQRV9UT09MEAYSGAoUQ0FSRF9TVUJUWVBFX1NUQURJ",
+            "VU0QBxIdChlDQVJEX1NVQlRZUEVfQkFTSUNfRU5FUkdZEAgSHwobQ0FSRF9T",
+            "VUJUWVBFX1NQRUNJQUxfRU5FUkdZEAkqoAIKElByb3RvQnVmRW5lcmd5VHlw",
+            "ZRIUChBFTkVSR1lfVFlQRV9OT05FEAASFQoRRU5FUkdZX1RZUEVfR1JBU1MQ",
+            "ARIUChBFTkVSR1lfVFlQRV9GSVJFEAISFQoRRU5FUkdZX1RZUEVfV0FURVIQ",
+            "AxIZChVFTkVSR1lfVFlQRV9MSUdIVE5JTkcQBBIYChRFTkVSR1lfVFlQRV9G",
+            "SUdIVElORxAFEhcKE0VORVJHWV9UWVBFX1BTWUNISUMQBhIZChVFTkVSR1lf",
+            "VFlQRV9DT0xPUkxFU1MQBxIYChRFTkVSR1lfVFlQRV9EQVJLTkVTUxAIEhUK",
+            "EUVORVJHWV9UWVBFX01FVEFMEAkSFgoSRU5FUkdZX1RZUEVfRFJBR09OEAoq",
+            "6gIKFFByb3RvQnVmQ2FyZFBvc2l0aW9uEiIKHkNBUkRfUE9TSVRJT05fQVRU",
+            "QUNIRURfVE9fQ0FSRBAAEhcKE0NBUkRfUE9TSVRJT05fQkVOQ0gQARIiCh5D",
+            "QVJEX1BPU0lUSU9OX0NVUlJFTlRMWV9QTEFZRUQQAhIdChlDQVJEX1BPU0lU",
+            "SU9OX0FDVElWRV9TUE9UEAMSGgoWQ0FSRF9QT1NJVElPTl9GTE9BVElORxAE",
+            "Eh4KGkNBUkRfUE9TSVRJT05fRElTQ0FSRF9QSUxFEAUSGAoUQ0FSRF9QT1NJ",
+            "VElPTl9QUklaRVMQBhIWChJDQVJEX1BPU0lUSU9OX0RFQ0sQBxIWChJDQVJE",
+            "X1BPU0lUSU9OX0hBTkQQCBIqCiZDQVJEX1BPU0lUSU9OX1NFTEVDVEVEX0NB",
+            "UkRTX1JFTUFJTkRFUhAJEiAKHENBUkRfUE9TSVRJT05fU0VMRUNURURfQ0FS",
+            "RFMQCiozCg1Qcm90b0J1Zk93bmVyEg4KCk9XTkVSX1NFTEYQABISCg5PV05F",
+            "Ul9PUFBPTkVOVBABKqgCChdQcm90b0J1Zkluc3RydWN0aW9uVHlwZRIgChxJ",
+            "TlNUUlVDVElPTl9UWVBFX0RFQUxfREFNQUdFEAASIQodSU5TVFJVQ1RJT05f",
+            "VFlQRV9TRUxFQ1RfQ0FSRFMQARIcChhJTlNUUlVDVElPTl9UWVBFX0RJU0NB",
+            "UkQQAhIhCh1JTlNUUlVDVElPTl9UWVBFX1RBS0VfVE9fSEFORBADEiAKHElO",
+            "U1RSVUNUSU9OX1RZUEVfUFVUX0lOX0RFQ0sQBBIhCh1JTlNUUlVDVElPTl9U",
+            "WVBFX1JFVkVBTF9DQVJEUxAFEh8KG0lOU1RSVUNUSU9OX1RZUEVfU0hPV19D",
+            "QVJEUxAGEiEKHUlOU1RSVUNUSU9OX1RZUEVfU0hVRkZMRV9ERUNLEAcqWgoV",
+            "UHJvdG9CdWZDb25kaXRpb25UeXBlEiMKH0NPTkRJVElPTl9UWVBFX0FCSUxJ",
+            "VFlfTk9UX1VTRUQQABIcChhDT05ESVRJT05fVFlQRV9IQVNfQ0FSRFMQASqh",
+            "AgobUHJvdG9CdWZJbnN0cnVjdGlvbkRhdGFUeXBlEiUKIUlOU1RSVUNUSU9O",
+            "X0RBVEFfVFlQRV9BVFRBQ0tfREFUQRAAEiYKIklOU1RSVUNUSU9OX0RBVEFf",
+            "VFlQRV9ESVNDQVJEX0RBVEEQARIqCiZJTlNUUlVDVElPTl9EQVRBX1RZUEVf",
+            "Q0FSRF9BTU9VTlRfREFUQRACEjIKLklOU1RSVUNUSU9OX0RBVEFfVFlQRV9S",
+            "RVRVUk5fVE9fREVDS19UWVBFX0RBVEEQAxIlCiFJTlNUUlVDVElPTl9EQVRB",
+            "X1RZUEVfRklMVEVSX0RBVEEQBBIsCihJTlNUUlVDVElPTl9EQVRBX1RZUEVf",
+            "UExBWUVSX1RBUkdFVF9EQVRBEAUqOwoUUHJvdG9CdWZBdHRhY2tUYXJnZXQS",
+            "IwofQVRUQUNLX1RBUkdFVF9ERUZFTkRJTkdfUE9LRU1PThAAKkoKFFByb3Rv",
+            "QnVmUGxheWVyVGFyZ2V0EhYKElBMQVlFUl9UQVJHRVRfU0VMRhAAEhoKFlBM",
+            "QVlFUl9UQVJHRVRfT1BQT05FTlQQASpbChhQcm90b0J1ZlJldHVyblRvRGVj",
+            "a1R5cGUSHQoZUkVUVVJOX1RPX0RFQ0tfVFlQRV9VTkRFUhAAEiAKHFJFVFVS",
+            "Tl9UT19ERUNLX1RZUEVfU0hVRkZMRUQQASqCAQodUHJvdG9CdWZGaWx0ZXJM",
+            "b2dpY2FsT3BlcmF0b3ISIAocRklMVEVSX0xPR0lDQUxfT1BFUkFUT1JfTk9O",
+            "RRAAEh8KG0ZJTFRFUl9MT0dJQ0FMX09QRVJBVE9SX0FORBABEh4KGkZJTFRF",
+            "Ul9MT0dJQ0FMX09QRVJBVE9SX09SEAIqrQEKElByb3RvQnVmRmlsdGVyVHlw",
+            "ZRIUChBGSUxURVJfVFlQRV9OT05FEAASFAoQRklMVEVSX1RZUEVfVFJVRRAB",
+            "Eh4KGkZJTFRFUl9UWVBFX0VYQ0xVREVfU09VUkNFEAISGQoVRklMVEVSX1RZ",
+            "UEVfQ0FSRF9UWVBFEAMSHAoYRklMVEVSX1RZUEVfQ0FSRF9TVUJUWVBFEAQS",
+            "EgoORklMVEVSX1RZUEVfSFAQBSrHAQoXUHJvdG9CdWZGaWx0ZXJPcGVyYXRp",
+            "b24SGQoVRklMVEVSX09QRVJBVElPTl9OT05FEAASGwoXRklMVEVSX09QRVJB",
+            "VElPTl9FUVVBTFMQARIfChtGSUxURVJfT1BFUkFUSU9OX05PVF9FUVVBTFMQ",
+            "AhInCiNGSUxURVJfT1BFUkFUSU9OX0xFU1NfVEhBTl9PUl9FUVVBTBADEioK",
+            "JkZJTFRFUl9PUEVSQVRJT05fR1JFQVRFUl9USEFOX09SX0VRVUFMEAQqYwoU",
+            "UHJvdG9CdWZUYXJnZXRTb3VyY2USFgoSVEFSR0VUX1NPVVJDRV9IQU5EEAAS",
+            "FgoSVEFSR0VUX1NPVVJDRV9TRUxGEAESGwoXVEFSR0VUX1NPVVJDRV9TRUxF",
+            "Q1RJT04QAio3ChhQcm90b0J1ZlBsYXllckVmZmVjdFR5cGUSGwoXUExBWUVS",
+            "X0VGRkVDVF9UWVBFX05PTkUQACo5ChlQcm90b0J1ZlBva2Vtb25FZmZlY3RU",
+            "eXBlEhwKGFBPS0VNT05fRUZGRUNUX1RZUEVfTk9ORRAAKncKGFByb3RvQnVm",
+            "UG9rZW1vblR1cm5UcmFpdBIsCihQT0tFTU9OX1RVUk5fVFJBSVRfUFVUX0lO",
+            "X1BMQVlfVEhJU19UVVJOEAASLQopUE9LRU1PTl9UVVJOX1RSQUlUX0FCSUxJ",
+            "VFlfVVNFRF9USElTX1RVUk4QASrGAQoXUHJvdG9CdWZQbGF5ZXJUdXJuVHJh",
+            "aXQSKAokUExBWUVSX1RVUk5fVFJBSVRfRklSU1RfVFVSTl9PRl9HQU1FEAAS",
+            "LgoqUExBWUVSX1RVUk5fVFJBSVRfQVRUQUNIRURfRU5FUkdZX0ZPUl9UVVJO",
+            "EAESMAosUExBWUVSX1RVUk5fVFJBSVRfUExBWUVEX1NVUFBPUlRFUl9USElT",
+            "X1RVUk4QAhIfChtQTEFZRVJfVFVSTl9UUkFJVF9SRVRSRUFURUQQAyqOBQob",
+            "UHJvdG9CdWZHYW1lSW50ZXJhY3Rpb25UeXBlEi8KK0dBTUVfSU5URVJBQ1RJ",
+            "T05fVFlQRV9TRUxFQ1RfQUNUSVZFX1BPS0VNT04QABIjCh9HQU1FX0lOVEVS",
+            "QUNUSU9OX1RZUEVfUExBWV9DQVJEEAESIgoeR0FNRV9JTlRFUkFDVElPTl9U",
+            "WVBFX0VORF9UVVJOEAISKwonR0FNRV9JTlRFUkFDVElPTl9UWVBFX0NPTkZJ",
+            "Uk1fTVVMTElHQU5TEAMSKgomR0FNRV9JTlRFUkFDVElPTl9UWVBFX1NFTEVD",
+            "VF9NVUxMSUdBTlMQBBIhCh1HQU1FX0lOVEVSQUNUSU9OX1RZUEVfQ09ORklS",
+            "TRAFEikKJUdBTUVfSU5URVJBQ1RJT05fVFlQRV9TRVRVUF9DT01QTEVURUQQ",
+            "BhIwCixHQU1FX0lOVEVSQUNUSU9OX1RZUEVfUExBWV9DQVJEX1dJVEhfVEFS",
+            "R0VUUxAHEigKJEdBTUVfSU5URVJBQ1RJT05fVFlQRV9QRVJGT1JNX0FUVEFD",
+            "SxAIEiMKH0dBTUVfSU5URVJBQ1RJT05fVFlQRV9HQU1FX09WRVIQCRImCiJH",
+            "QU1FX0lOVEVSQUNUSU9OX1RZUEVfU0VMRUNUX0NBUkRTEAoSIQodR0FNRV9J",
+            "TlRFUkFDVElPTl9UWVBFX1JFVFJFQVQQCxIpCiVHQU1FX0lOVEVSQUNUSU9O",
+            "X1RZUEVfUEVSRk9STV9BQklMSVRZEAwSKQolR0FNRV9JTlRFUkFDVElPTl9U",
+            "WVBFX1NFVF9QUklaRV9DQVJEUxANEiwKKEdBTUVfSU5URVJBQ1RJT05fVFlQ",
+            "RV9SRVBMQVlfTkVYVF9BQ1RJT04QDiqTAwofUHJvdG9CdWZHYW1lSW50ZXJh",
+            "Y3Rpb25EYXRhVHlwZRIsCihHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9N",
+            "VUxMSUdBTl9EQVRBEAASKgomR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVf",
+            "TlVNQkVSX0RBVEEQARIqCiZHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9U",
+            "QVJHRVRfREFUQRACEjQKMEdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX0lO",
+            "VEVSQUNUSU9OX0NBUkRfREFUQRADEioKJkdBTUVfSU5URVJBQ1RJT05fREFU",
+            "QV9UWVBFX0FUVEFDS19EQVRBEAQSKgomR0FNRV9JTlRFUkFDVElPTl9EQVRB",
+            "X1RZUEVfV0lOTkVSX0RBVEEQBRIvCitHQU1FX0lOVEVSQUNUSU9OX0RBVEFf",
+            "VFlQRV9TRUxFQ1RfRlJPTV9EQVRBEAYSKwonR0FNRV9JTlRFUkFDVElPTl9E",
+            "QVRBX1RZUEVfQUJJTElUWV9EQVRBEAcqjwIKGVByb3RvQnVmQWN0aW9uT25T",
+            "ZWxlY3Rpb24SHwobQUNUSU9OX09OX1NFTEVDVElPTl9ESVNDQVJEEAASJAog",
+            "QUNUSU9OX09OX1NFTEVDVElPTl9UQUtFX1RPX0hBTkQQARIeChpBQ1RJT05f",
+            "T05fU0VMRUNUSU9OX0VWT0xWRRACEiEKHUFDVElPTl9PTl9TRUxFQ1RJT05f",
+            "QVRUQUNIX1RPEAMSHwobQUNUSU9OX09OX1NFTEVDVElPTl9QUk9NT1RFEAQS",
+            "HwobQUNUSU9OX09OX1NFTEVDVElPTl9OT1RISU5HEAUSJgoiQUNUSU9OX09O",
+            "X1NFTEVDVElPTl9QVVRfVU5ERVJfREVDSxAGKnsKElByb3RvQnVmU2VsZWN0",
+            "RnJvbRIXChNTRUxFQ1RfRlJPTV9JTl9QTEFZEAASGAoUU0VMRUNUX0ZST01f",
+            "RkxPQVRJTkcQARIUChBTRUxFQ1RfRlJPTV9ERUNLEAISHAoYU0VMRUNUX0ZS",
+            "T01fRElTQ0FSRF9QSUxFEAMqfQocUHJvdG9CdWZMb2dpY2FsUXVlcnlPcGVy",
+            "YXRvchIeChpMT0dJQ0FMX1FVRVJZX09QRVJBVE9SX0FORBAAEh0KGUxPR0lD",
+            "QUxfUVVFUllfT1BFUkFUT1JfT1IQARIeChpMT0dJQ0FMX1FVRVJZX09QRVJB",
+            "VE9SX1hPUhACKm4KGlByb3RvQnVmU2VsZWN0aW9uUXVhbGlmaWVyEicKI1NF",
+            "TEVDVElPTl9RVUFMSUZJRVJfTlVNQkVSX09GX0NBUkRTEAASJwojU0VMRUNU",
+            "SU9OX1FVQUxJRklFUl9QUk9WSURFRF9FTkVSR1kQASr4AgoaUHJvdG9CdWZU",
+            "ZWNobmljYWxHYW1lU3RhdGUSGAoUR0FNRV9TVEFURV9HQU1FX09WRVIQABIf",
+            "ChtHQU1FX1NUQVRFX0lETEVfUExBWUVSX1RVUk4QARIjCh9HQU1FX1NUQVRF",
+            "X1NFTEVDVF9CRU5DSF9QT0tFTU9OEAISJwojR0FNRV9TVEFURV9TRUxFQ1RJ",
+            "TkdfTVVMTElHQU5fQ0FSRFMQAxIlCiFHQU1FX1NUQVRFX1NFVFRJTkdfQUNU",
+            "SVZFX1BPS0VNT04QBBIiCh5HQU1FX1NUQVRFX1NFVFRJTkdfUFJJWkVfQ0FS",
+            "RFMQBRIeChpHQU1FX1NUQVRFX1NFVFVQX0NPTVBMRVRFRBAGEiIKHkdBTUVf",
+            "U1RBVEVfU0hPV19GSVJTVF9NVUxMSUdBThAHEiMKH0dBTUVfU1RBVEVfU0hP",
+            "V19TRUNPTkRfTVVMTElHQU4QCBIdChlHQU1FX1NUQVRFX1dBSVRfRk9SX0lO",
+            "UFVUEAkqfAoZUHJvdG9CdWZQb3NpdGlvbktub3dsZWRnZRIeChpQT1NJVElP",
+            "Tl9LTk9XTEVER0VfVU5LTk9XThAAEiEKHVBPU0lUSU9OX0tOT1dMRURHRV9O",
+            "T1RfUFJJWkVEEAESHAoYUE9TSVRJT05fS05PV0xFREdFX0tOT1dOEAJCGaoC",
+            "FmdhbWVjb3JlLnNlcmlhbGl6YXRpb25iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::gamecore.serialization.ProtoBufCardType), typeof(global::gamecore.serialization.ProtoBufCardSubtype), typeof(global::gamecore.serialization.ProtoBufEnergyType), typeof(global::gamecore.serialization.ProtoBufCardPosition), typeof(global::gamecore.serialization.ProtoBufOwner), typeof(global::gamecore.serialization.ProtoBufInstructionType), typeof(global::gamecore.serialization.ProtoBufConditionType), typeof(global::gamecore.serialization.ProtoBufInstructionDataType), typeof(global::gamecore.serialization.ProtoBufAttackTarget), typeof(global::gamecore.serialization.ProtoBufPlayerTarget), typeof(global::gamecore.serialization.ProtoBufReturnToDeckType), typeof(global::gamecore.serialization.ProtoBufFilterLogicalOperator), typeof(global::gamecore.serialization.ProtoBufFilterType), typeof(global::gamecore.serialization.ProtoBufFilterOperation), typeof(global::gamecore.serialization.ProtoBufTargetSource), typeof(global::gamecore.serialization.ProtoBufPlayerEffectType), typeof(global::gamecore.serialization.ProtoBufPokemonEffectType), typeof(global::gamecore.serialization.ProtoBufPokemonTurnTrait), typeof(global::gamecore.serialization.ProtoBufPlayerTurnTrait), typeof(global::gamecore.serialization.ProtoBufGameInteractionType), typeof(global::gamecore.serialization.ProtoBufGameInteractionDataType), typeof(global::gamecore.serialization.ProtoBufActionOnSelection), typeof(global::gamecore.serialization.ProtoBufSelectFrom), typeof(global::gamecore.serialization.ProtoBufLogicalQueryOperator), typeof(global::gamecore.serialization.ProtoBufSelectionQualifier), typeof(global::gamecore.serialization.ProtoBufTechnicalGameState), typeof(global::gamecore.serialization.ProtoBufPositionKnowledge), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -336,13 +334,13 @@ namespace gamecore.serialization {
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufMulliganData), global::gamecore.serialization.ProtoBufMulliganData.Parser, new[]{ "Mulligans", "Player" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCardList), global::gamecore.serialization.ProtoBufCardList.Parser, new[]{ "Cards" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufNumberData), global::gamecore.serialization.ProtoBufNumberData.Parser, new[]{ "Number" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufTargetData), global::gamecore.serialization.ProtoBufTargetData.Parser, new[]{ "NumberOfTargets", "PossibleTargets", "TargetAction", "RemainderAction" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufConditionalTargetData), global::gamecore.serialization.ProtoBufConditionalTargetData.Parser, new[]{ "PossibleTargets", "ConditionalTargetQuery", "TargetAction", "RemainderAction" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufTargetData), global::gamecore.serialization.ProtoBufTargetData.Parser, new[]{ "PossibleTargets", "TargetAction", "RemainderAction", "AllowMultipleTimes", "NumberOfTargets", "ConditionalTargetQuery" }, new[]{ "TargetToChoose" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufInteractionCardData), global::gamecore.serialization.ProtoBufInteractionCardData.Parser, new[]{ "Card" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufAttackData), global::gamecore.serialization.ProtoBufAttackData.Parser, new[]{ "Attack" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufAbilityData), global::gamecore.serialization.ProtoBufAbilityData.Parser, new[]{ "Ability" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufWinnerData), global::gamecore.serialization.ProtoBufWinnerData.Parser, new[]{ "Winner", "Message" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufSelectFromData), global::gamecore.serialization.ProtoBufSelectFromData.Parser, new[]{ "SelectFrom", "SelectionSource" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufGameInteractionData), global::gamecore.serialization.ProtoBufGameInteractionData.Parser, new[]{ "DataType", "MulliganData", "NumberData", "TargetData", "ConditionalTargetData", "InteractionCardData", "AttackData", "WinnerData", "SelectFromData" }, new[]{ "Payload" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufSelectFromData), global::gamecore.serialization.ProtoBufSelectFromData.Parser, new[]{ "SelectFrom" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufGameInteractionData), global::gamecore.serialization.ProtoBufGameInteractionData.Parser, new[]{ "DataType", "MulliganData", "NumberData", "TargetData", "InteractionCardData", "AttackData", "WinnerData", "SelectFromData", "AbilityData" }, new[]{ "Payload" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufGameInteraction), global::gamecore.serialization.ProtoBufGameInteraction.Parser, new[]{ "Type", "Data" }, null, null, null, null)
           }));
     }
@@ -516,11 +514,11 @@ namespace gamecore.serialization {
     [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_MULLIGAN_DATA")] GameInteractionDataTypeMulliganData = 0,
     [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_NUMBER_DATA")] GameInteractionDataTypeNumberData = 1,
     [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_TARGET_DATA")] GameInteractionDataTypeTargetData = 2,
-    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_CONDITIONAL_TARGET_DATA")] GameInteractionDataTypeConditionalTargetData = 3,
-    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_INTERACTION_CARD_DATA")] GameInteractionDataTypeInteractionCardData = 4,
-    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_ATTACK_DATA")] GameInteractionDataTypeAttackData = 5,
-    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_WINNER_DATA")] GameInteractionDataTypeWinnerData = 6,
-    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_SELECT_FROM_DATA")] GameInteractionDataTypeSelectFromData = 7,
+    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_INTERACTION_CARD_DATA")] GameInteractionDataTypeInteractionCardData = 3,
+    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_ATTACK_DATA")] GameInteractionDataTypeAttackData = 4,
+    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_WINNER_DATA")] GameInteractionDataTypeWinnerData = 5,
+    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_SELECT_FROM_DATA")] GameInteractionDataTypeSelectFromData = 6,
+    [pbr::OriginalName("GAME_INTERACTION_DATA_TYPE_ABILITY_DATA")] GameInteractionDataTypeAbilityData = 7,
   }
 
   public enum ProtoBufActionOnSelection {
@@ -543,6 +541,7 @@ namespace gamecore.serialization {
   public enum ProtoBufLogicalQueryOperator {
     [pbr::OriginalName("LOGICAL_QUERY_OPERATOR_AND")] LogicalQueryOperatorAnd = 0,
     [pbr::OriginalName("LOGICAL_QUERY_OPERATOR_OR")] LogicalQueryOperatorOr = 1,
+    [pbr::OriginalName("LOGICAL_QUERY_OPERATOR_XOR")] LogicalQueryOperatorXor = 2,
   }
 
   public enum ProtoBufSelectionQualifier {
@@ -7895,10 +7894,19 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ProtoBufTargetData(ProtoBufTargetData other) : this() {
-      numberOfTargets_ = other.numberOfTargets_;
       possibleTargets_ = other.possibleTargets_.Clone();
       targetAction_ = other.targetAction_;
       remainderAction_ = other.remainderAction_;
+      allowMultipleTimes_ = other.allowMultipleTimes_;
+      switch (other.TargetToChooseCase) {
+        case TargetToChooseOneofCase.NumberOfTargets:
+          NumberOfTargets = other.NumberOfTargets;
+          break;
+        case TargetToChooseOneofCase.ConditionalTargetQuery:
+          ConditionalTargetQuery = other.ConditionalTargetQuery.Clone();
+          break;
+      }
+
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -7908,22 +7916,10 @@ namespace gamecore.serialization {
       return new ProtoBufTargetData(this);
     }
 
-    /// <summary>Field number for the "number_of_targets" field.</summary>
-    public const int NumberOfTargetsFieldNumber = 1;
-    private int numberOfTargets_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int NumberOfTargets {
-      get { return numberOfTargets_; }
-      set {
-        numberOfTargets_ = value;
-      }
-    }
-
     /// <summary>Field number for the "possible_targets" field.</summary>
-    public const int PossibleTargetsFieldNumber = 2;
+    public const int PossibleTargetsFieldNumber = 1;
     private static readonly pb::FieldCodec<int> _repeated_possibleTargets_codec
-        = pb::FieldCodec.ForInt32(18);
+        = pb::FieldCodec.ForInt32(10);
     private readonly pbc::RepeatedField<int> possibleTargets_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7932,7 +7928,7 @@ namespace gamecore.serialization {
     }
 
     /// <summary>Field number for the "target_action" field.</summary>
-    public const int TargetActionFieldNumber = 3;
+    public const int TargetActionFieldNumber = 2;
     private global::gamecore.serialization.ProtoBufActionOnSelection targetAction_ = global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7944,7 +7940,7 @@ namespace gamecore.serialization {
     }
 
     /// <summary>Field number for the "remainder_action" field.</summary>
-    public const int RemainderActionFieldNumber = 4;
+    public const int RemainderActionFieldNumber = 3;
     private global::gamecore.serialization.ProtoBufActionOnSelection remainderAction_ = global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7953,6 +7949,77 @@ namespace gamecore.serialization {
       set {
         remainderAction_ = value;
       }
+    }
+
+    /// <summary>Field number for the "allow_multiple_times" field.</summary>
+    public const int AllowMultipleTimesFieldNumber = 4;
+    private bool allowMultipleTimes_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool AllowMultipleTimes {
+      get { return allowMultipleTimes_; }
+      set {
+        allowMultipleTimes_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "number_of_targets" field.</summary>
+    public const int NumberOfTargetsFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int NumberOfTargets {
+      get { return HasNumberOfTargets ? (int) targetToChoose_ : 0; }
+      set {
+        targetToChoose_ = value;
+        targetToChooseCase_ = TargetToChooseOneofCase.NumberOfTargets;
+      }
+    }
+    /// <summary>Gets whether the "number_of_targets" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasNumberOfTargets {
+      get { return targetToChooseCase_ == TargetToChooseOneofCase.NumberOfTargets; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "number_of_targets" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearNumberOfTargets() {
+      if (HasNumberOfTargets) {
+        ClearTargetToChoose();
+      }
+    }
+
+    /// <summary>Field number for the "conditional_target_query" field.</summary>
+    public const int ConditionalTargetQueryFieldNumber = 6;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::gamecore.serialization.ProtoBufConditionalTargetQuery ConditionalTargetQuery {
+      get { return targetToChooseCase_ == TargetToChooseOneofCase.ConditionalTargetQuery ? (global::gamecore.serialization.ProtoBufConditionalTargetQuery) targetToChoose_ : null; }
+      set {
+        targetToChoose_ = value;
+        targetToChooseCase_ = value == null ? TargetToChooseOneofCase.None : TargetToChooseOneofCase.ConditionalTargetQuery;
+      }
+    }
+
+    private object targetToChoose_;
+    /// <summary>Enum of possible cases for the "target_to_choose" oneof.</summary>
+    public enum TargetToChooseOneofCase {
+      None = 0,
+      NumberOfTargets = 5,
+      ConditionalTargetQuery = 6,
+    }
+    private TargetToChooseOneofCase targetToChooseCase_ = TargetToChooseOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public TargetToChooseOneofCase TargetToChooseCase {
+      get { return targetToChooseCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearTargetToChoose() {
+      targetToChooseCase_ = TargetToChooseOneofCase.None;
+      targetToChoose_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7970,10 +8037,13 @@ namespace gamecore.serialization {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (NumberOfTargets != other.NumberOfTargets) return false;
       if(!possibleTargets_.Equals(other.possibleTargets_)) return false;
       if (TargetAction != other.TargetAction) return false;
       if (RemainderAction != other.RemainderAction) return false;
+      if (AllowMultipleTimes != other.AllowMultipleTimes) return false;
+      if (NumberOfTargets != other.NumberOfTargets) return false;
+      if (!object.Equals(ConditionalTargetQuery, other.ConditionalTargetQuery)) return false;
+      if (TargetToChooseCase != other.TargetToChooseCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -7981,10 +8051,13 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (NumberOfTargets != 0) hash ^= NumberOfTargets.GetHashCode();
       hash ^= possibleTargets_.GetHashCode();
       if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) hash ^= TargetAction.GetHashCode();
       if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) hash ^= RemainderAction.GetHashCode();
+      if (AllowMultipleTimes != false) hash ^= AllowMultipleTimes.GetHashCode();
+      if (HasNumberOfTargets) hash ^= NumberOfTargets.GetHashCode();
+      if (targetToChooseCase_ == TargetToChooseOneofCase.ConditionalTargetQuery) hash ^= ConditionalTargetQuery.GetHashCode();
+      hash ^= (int) targetToChooseCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -8003,18 +8076,26 @@ namespace gamecore.serialization {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (NumberOfTargets != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(NumberOfTargets);
-      }
       possibleTargets_.WriteTo(output, _repeated_possibleTargets_codec);
       if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteEnum((int) TargetAction);
       }
       if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) RemainderAction);
+      }
+      if (AllowMultipleTimes != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(AllowMultipleTimes);
+      }
+      if (HasNumberOfTargets) {
+        output.WriteRawTag(40);
+        output.WriteInt32(NumberOfTargets);
+      }
+      if (targetToChooseCase_ == TargetToChooseOneofCase.ConditionalTargetQuery) {
+        output.WriteRawTag(50);
+        output.WriteMessage(ConditionalTargetQuery);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -8026,18 +8107,26 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (NumberOfTargets != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(NumberOfTargets);
-      }
       possibleTargets_.WriteTo(ref output, _repeated_possibleTargets_codec);
       if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteEnum((int) TargetAction);
       }
       if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) RemainderAction);
+      }
+      if (AllowMultipleTimes != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(AllowMultipleTimes);
+      }
+      if (HasNumberOfTargets) {
+        output.WriteRawTag(40);
+        output.WriteInt32(NumberOfTargets);
+      }
+      if (targetToChooseCase_ == TargetToChooseOneofCase.ConditionalTargetQuery) {
+        output.WriteRawTag(50);
+        output.WriteMessage(ConditionalTargetQuery);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -8049,15 +8138,21 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (NumberOfTargets != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(NumberOfTargets);
-      }
       size += possibleTargets_.CalculateSize(_repeated_possibleTargets_codec);
       if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TargetAction);
       }
       if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) RemainderAction);
+      }
+      if (AllowMultipleTimes != false) {
+        size += 1 + 1;
+      }
+      if (HasNumberOfTargets) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(NumberOfTargets);
+      }
+      if (targetToChooseCase_ == TargetToChooseOneofCase.ConditionalTargetQuery) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ConditionalTargetQuery);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -8071,9 +8166,6 @@ namespace gamecore.serialization {
       if (other == null) {
         return;
       }
-      if (other.NumberOfTargets != 0) {
-        NumberOfTargets = other.NumberOfTargets;
-      }
       possibleTargets_.Add(other.possibleTargets_);
       if (other.TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
         TargetAction = other.TargetAction;
@@ -8081,309 +8173,21 @@ namespace gamecore.serialization {
       if (other.RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
         RemainderAction = other.RemainderAction;
       }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
+      if (other.AllowMultipleTimes != false) {
+        AllowMultipleTimes = other.AllowMultipleTimes;
       }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            NumberOfTargets = input.ReadInt32();
-            break;
+      switch (other.TargetToChooseCase) {
+        case TargetToChooseOneofCase.NumberOfTargets:
+          NumberOfTargets = other.NumberOfTargets;
+          break;
+        case TargetToChooseOneofCase.ConditionalTargetQuery:
+          if (ConditionalTargetQuery == null) {
+            ConditionalTargetQuery = new global::gamecore.serialization.ProtoBufConditionalTargetQuery();
           }
-          case 18:
-          case 16: {
-            possibleTargets_.AddEntriesFrom(input, _repeated_possibleTargets_codec);
-            break;
-          }
-          case 24: {
-            TargetAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
-            break;
-          }
-          case 32: {
-            RemainderAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
-            break;
-          }
-        }
+          ConditionalTargetQuery.MergeFrom(other.ConditionalTargetQuery);
+          break;
       }
-    #endif
-    }
 
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            NumberOfTargets = input.ReadInt32();
-            break;
-          }
-          case 18:
-          case 16: {
-            possibleTargets_.AddEntriesFrom(ref input, _repeated_possibleTargets_codec);
-            break;
-          }
-          case 24: {
-            TargetAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
-            break;
-          }
-          case 32: {
-            RemainderAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class ProtoBufConditionalTargetData : pb::IMessage<ProtoBufConditionalTargetData>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<ProtoBufConditionalTargetData> _parser = new pb::MessageParser<ProtoBufConditionalTargetData>(() => new ProtoBufConditionalTargetData());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ProtoBufConditionalTargetData> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[24]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProtoBufConditionalTargetData() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProtoBufConditionalTargetData(ProtoBufConditionalTargetData other) : this() {
-      possibleTargets_ = other.possibleTargets_.Clone();
-      conditionalTargetQuery_ = other.conditionalTargetQuery_ != null ? other.conditionalTargetQuery_.Clone() : null;
-      targetAction_ = other.targetAction_;
-      remainderAction_ = other.remainderAction_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProtoBufConditionalTargetData Clone() {
-      return new ProtoBufConditionalTargetData(this);
-    }
-
-    /// <summary>Field number for the "possible_targets" field.</summary>
-    public const int PossibleTargetsFieldNumber = 1;
-    private static readonly pb::FieldCodec<int> _repeated_possibleTargets_codec
-        = pb::FieldCodec.ForInt32(10);
-    private readonly pbc::RepeatedField<int> possibleTargets_ = new pbc::RepeatedField<int>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<int> PossibleTargets {
-      get { return possibleTargets_; }
-    }
-
-    /// <summary>Field number for the "conditional_target_query" field.</summary>
-    public const int ConditionalTargetQueryFieldNumber = 2;
-    private global::gamecore.serialization.ProtoBufConditionalTargetQuery conditionalTargetQuery_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::gamecore.serialization.ProtoBufConditionalTargetQuery ConditionalTargetQuery {
-      get { return conditionalTargetQuery_; }
-      set {
-        conditionalTargetQuery_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "target_action" field.</summary>
-    public const int TargetActionFieldNumber = 3;
-    private global::gamecore.serialization.ProtoBufActionOnSelection targetAction_ = global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::gamecore.serialization.ProtoBufActionOnSelection TargetAction {
-      get { return targetAction_; }
-      set {
-        targetAction_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "remainder_action" field.</summary>
-    public const int RemainderActionFieldNumber = 4;
-    private global::gamecore.serialization.ProtoBufActionOnSelection remainderAction_ = global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::gamecore.serialization.ProtoBufActionOnSelection RemainderAction {
-      get { return remainderAction_; }
-      set {
-        remainderAction_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as ProtoBufConditionalTargetData);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ProtoBufConditionalTargetData other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if(!possibleTargets_.Equals(other.possibleTargets_)) return false;
-      if (!object.Equals(ConditionalTargetQuery, other.ConditionalTargetQuery)) return false;
-      if (TargetAction != other.TargetAction) return false;
-      if (RemainderAction != other.RemainderAction) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      hash ^= possibleTargets_.GetHashCode();
-      if (conditionalTargetQuery_ != null) hash ^= ConditionalTargetQuery.GetHashCode();
-      if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) hash ^= TargetAction.GetHashCode();
-      if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) hash ^= RemainderAction.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      possibleTargets_.WriteTo(output, _repeated_possibleTargets_codec);
-      if (conditionalTargetQuery_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(ConditionalTargetQuery);
-      }
-      if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) TargetAction);
-      }
-      if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) RemainderAction);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      possibleTargets_.WriteTo(ref output, _repeated_possibleTargets_codec);
-      if (conditionalTargetQuery_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(ConditionalTargetQuery);
-      }
-      if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) TargetAction);
-      }
-      if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) RemainderAction);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      size += possibleTargets_.CalculateSize(_repeated_possibleTargets_codec);
-      if (conditionalTargetQuery_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ConditionalTargetQuery);
-      }
-      if (TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TargetAction);
-      }
-      if (RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) RemainderAction);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ProtoBufConditionalTargetData other) {
-      if (other == null) {
-        return;
-      }
-      possibleTargets_.Add(other.possibleTargets_);
-      if (other.conditionalTargetQuery_ != null) {
-        if (conditionalTargetQuery_ == null) {
-          ConditionalTargetQuery = new global::gamecore.serialization.ProtoBufConditionalTargetQuery();
-        }
-        ConditionalTargetQuery.MergeFrom(other.ConditionalTargetQuery);
-      }
-      if (other.TargetAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        TargetAction = other.TargetAction;
-      }
-      if (other.RemainderAction != global::gamecore.serialization.ProtoBufActionOnSelection.ActionOnSelectionDiscard) {
-        RemainderAction = other.RemainderAction;
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -8408,19 +8212,29 @@ namespace gamecore.serialization {
             possibleTargets_.AddEntriesFrom(input, _repeated_possibleTargets_codec);
             break;
           }
-          case 18: {
-            if (conditionalTargetQuery_ == null) {
-              ConditionalTargetQuery = new global::gamecore.serialization.ProtoBufConditionalTargetQuery();
-            }
-            input.ReadMessage(ConditionalTargetQuery);
-            break;
-          }
-          case 24: {
+          case 16: {
             TargetAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
             break;
           }
-          case 32: {
+          case 24: {
             RemainderAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            AllowMultipleTimes = input.ReadBool();
+            break;
+          }
+          case 40: {
+            NumberOfTargets = input.ReadInt32();
+            break;
+          }
+          case 50: {
+            global::gamecore.serialization.ProtoBufConditionalTargetQuery subBuilder = new global::gamecore.serialization.ProtoBufConditionalTargetQuery();
+            if (targetToChooseCase_ == TargetToChooseOneofCase.ConditionalTargetQuery) {
+              subBuilder.MergeFrom(ConditionalTargetQuery);
+            }
+            input.ReadMessage(subBuilder);
+            ConditionalTargetQuery = subBuilder;
             break;
           }
         }
@@ -8447,19 +8261,29 @@ namespace gamecore.serialization {
             possibleTargets_.AddEntriesFrom(ref input, _repeated_possibleTargets_codec);
             break;
           }
-          case 18: {
-            if (conditionalTargetQuery_ == null) {
-              ConditionalTargetQuery = new global::gamecore.serialization.ProtoBufConditionalTargetQuery();
-            }
-            input.ReadMessage(ConditionalTargetQuery);
-            break;
-          }
-          case 24: {
+          case 16: {
             TargetAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
             break;
           }
-          case 32: {
+          case 24: {
             RemainderAction = (global::gamecore.serialization.ProtoBufActionOnSelection) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            AllowMultipleTimes = input.ReadBool();
+            break;
+          }
+          case 40: {
+            NumberOfTargets = input.ReadInt32();
+            break;
+          }
+          case 50: {
+            global::gamecore.serialization.ProtoBufConditionalTargetQuery subBuilder = new global::gamecore.serialization.ProtoBufConditionalTargetQuery();
+            if (targetToChooseCase_ == TargetToChooseOneofCase.ConditionalTargetQuery) {
+              subBuilder.MergeFrom(ConditionalTargetQuery);
+            }
+            input.ReadMessage(subBuilder);
+            ConditionalTargetQuery = subBuilder;
             break;
           }
         }
@@ -8484,7 +8308,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[25]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[24]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8682,7 +8506,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[26]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[25]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8865,6 +8689,213 @@ namespace gamecore.serialization {
               Attack = new global::gamecore.serialization.ProtoBufAttack();
             }
             input.ReadMessage(Attack);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ProtoBufAbilityData : pb::IMessage<ProtoBufAbilityData>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ProtoBufAbilityData> _parser = new pb::MessageParser<ProtoBufAbilityData>(() => new ProtoBufAbilityData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ProtoBufAbilityData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[26]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufAbilityData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufAbilityData(ProtoBufAbilityData other) : this() {
+      ability_ = other.ability_ != null ? other.ability_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufAbilityData Clone() {
+      return new ProtoBufAbilityData(this);
+    }
+
+    /// <summary>Field number for the "ability" field.</summary>
+    public const int AbilityFieldNumber = 1;
+    private global::gamecore.serialization.ProtoBufAbility ability_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::gamecore.serialization.ProtoBufAbility Ability {
+      get { return ability_; }
+      set {
+        ability_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ProtoBufAbilityData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ProtoBufAbilityData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Ability, other.Ability)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ability_ != null) hash ^= Ability.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (ability_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Ability);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (ability_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Ability);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (ability_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Ability);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ProtoBufAbilityData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ability_ != null) {
+        if (ability_ == null) {
+          Ability = new global::gamecore.serialization.ProtoBufAbility();
+        }
+        Ability.MergeFrom(other.Ability);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (ability_ == null) {
+              Ability = new global::gamecore.serialization.ProtoBufAbility();
+            }
+            input.ReadMessage(Ability);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (ability_ == null) {
+              Ability = new global::gamecore.serialization.ProtoBufAbility();
+            }
+            input.ReadMessage(Ability);
             break;
           }
         }
@@ -9154,7 +9185,6 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ProtoBufSelectFromData(ProtoBufSelectFromData other) : this() {
       selectFrom_ = other.selectFrom_;
-      selectionSource_ = other.selectionSource_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -9176,17 +9206,6 @@ namespace gamecore.serialization {
       }
     }
 
-    /// <summary>Field number for the "selection_source" field.</summary>
-    public const int SelectionSourceFieldNumber = 2;
-    private static readonly pb::FieldCodec<int> _repeated_selectionSource_codec
-        = pb::FieldCodec.ForInt32(18);
-    private readonly pbc::RepeatedField<int> selectionSource_ = new pbc::RepeatedField<int>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<int> SelectionSource {
-      get { return selectionSource_; }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -9203,7 +9222,6 @@ namespace gamecore.serialization {
         return true;
       }
       if (SelectFrom != other.SelectFrom) return false;
-      if(!selectionSource_.Equals(other.selectionSource_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -9212,7 +9230,6 @@ namespace gamecore.serialization {
     public override int GetHashCode() {
       int hash = 1;
       if (SelectFrom != global::gamecore.serialization.ProtoBufSelectFrom.SelectFromInPlay) hash ^= SelectFrom.GetHashCode();
-      hash ^= selectionSource_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -9235,7 +9252,6 @@ namespace gamecore.serialization {
         output.WriteRawTag(8);
         output.WriteEnum((int) SelectFrom);
       }
-      selectionSource_.WriteTo(output, _repeated_selectionSource_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -9250,7 +9266,6 @@ namespace gamecore.serialization {
         output.WriteRawTag(8);
         output.WriteEnum((int) SelectFrom);
       }
-      selectionSource_.WriteTo(ref output, _repeated_selectionSource_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -9264,7 +9279,6 @@ namespace gamecore.serialization {
       if (SelectFrom != global::gamecore.serialization.ProtoBufSelectFrom.SelectFromInPlay) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) SelectFrom);
       }
-      size += selectionSource_.CalculateSize(_repeated_selectionSource_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -9280,7 +9294,6 @@ namespace gamecore.serialization {
       if (other.SelectFrom != global::gamecore.serialization.ProtoBufSelectFrom.SelectFromInPlay) {
         SelectFrom = other.SelectFrom;
       }
-      selectionSource_.Add(other.selectionSource_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -9304,11 +9317,6 @@ namespace gamecore.serialization {
             SelectFrom = (global::gamecore.serialization.ProtoBufSelectFrom) input.ReadEnum();
             break;
           }
-          case 18:
-          case 16: {
-            selectionSource_.AddEntriesFrom(input, _repeated_selectionSource_codec);
-            break;
-          }
         }
       }
     #endif
@@ -9330,11 +9338,6 @@ namespace gamecore.serialization {
             break;
           case 8: {
             SelectFrom = (global::gamecore.serialization.ProtoBufSelectFrom) input.ReadEnum();
-            break;
-          }
-          case 18:
-          case 16: {
-            selectionSource_.AddEntriesFrom(ref input, _repeated_selectionSource_codec);
             break;
           }
         }
@@ -9390,9 +9393,6 @@ namespace gamecore.serialization {
         case PayloadOneofCase.TargetData:
           TargetData = other.TargetData.Clone();
           break;
-        case PayloadOneofCase.ConditionalTargetData:
-          ConditionalTargetData = other.ConditionalTargetData.Clone();
-          break;
         case PayloadOneofCase.InteractionCardData:
           InteractionCardData = other.InteractionCardData.Clone();
           break;
@@ -9404,6 +9404,9 @@ namespace gamecore.serialization {
           break;
         case PayloadOneofCase.SelectFromData:
           SelectFromData = other.SelectFromData.Clone();
+          break;
+        case PayloadOneofCase.AbilityData:
+          AbilityData = other.AbilityData.Clone();
           break;
       }
 
@@ -9464,20 +9467,8 @@ namespace gamecore.serialization {
       }
     }
 
-    /// <summary>Field number for the "conditional_target_data" field.</summary>
-    public const int ConditionalTargetDataFieldNumber = 5;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::gamecore.serialization.ProtoBufConditionalTargetData ConditionalTargetData {
-      get { return payloadCase_ == PayloadOneofCase.ConditionalTargetData ? (global::gamecore.serialization.ProtoBufConditionalTargetData) payload_ : null; }
-      set {
-        payload_ = value;
-        payloadCase_ = value == null ? PayloadOneofCase.None : PayloadOneofCase.ConditionalTargetData;
-      }
-    }
-
     /// <summary>Field number for the "interaction_card_data" field.</summary>
-    public const int InteractionCardDataFieldNumber = 6;
+    public const int InteractionCardDataFieldNumber = 5;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::gamecore.serialization.ProtoBufInteractionCardData InteractionCardData {
@@ -9489,7 +9480,7 @@ namespace gamecore.serialization {
     }
 
     /// <summary>Field number for the "attack_data" field.</summary>
-    public const int AttackDataFieldNumber = 7;
+    public const int AttackDataFieldNumber = 6;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::gamecore.serialization.ProtoBufAttackData AttackData {
@@ -9501,7 +9492,7 @@ namespace gamecore.serialization {
     }
 
     /// <summary>Field number for the "winner_data" field.</summary>
-    public const int WinnerDataFieldNumber = 8;
+    public const int WinnerDataFieldNumber = 7;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::gamecore.serialization.ProtoBufWinnerData WinnerData {
@@ -9513,7 +9504,7 @@ namespace gamecore.serialization {
     }
 
     /// <summary>Field number for the "select_from_data" field.</summary>
-    public const int SelectFromDataFieldNumber = 9;
+    public const int SelectFromDataFieldNumber = 8;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::gamecore.serialization.ProtoBufSelectFromData SelectFromData {
@@ -9524,6 +9515,18 @@ namespace gamecore.serialization {
       }
     }
 
+    /// <summary>Field number for the "ability_data" field.</summary>
+    public const int AbilityDataFieldNumber = 9;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::gamecore.serialization.ProtoBufAbilityData AbilityData {
+      get { return payloadCase_ == PayloadOneofCase.AbilityData ? (global::gamecore.serialization.ProtoBufAbilityData) payload_ : null; }
+      set {
+        payload_ = value;
+        payloadCase_ = value == null ? PayloadOneofCase.None : PayloadOneofCase.AbilityData;
+      }
+    }
+
     private object payload_;
     /// <summary>Enum of possible cases for the "payload" oneof.</summary>
     public enum PayloadOneofCase {
@@ -9531,11 +9534,11 @@ namespace gamecore.serialization {
       MulliganData = 2,
       NumberData = 3,
       TargetData = 4,
-      ConditionalTargetData = 5,
-      InteractionCardData = 6,
-      AttackData = 7,
-      WinnerData = 8,
-      SelectFromData = 9,
+      InteractionCardData = 5,
+      AttackData = 6,
+      WinnerData = 7,
+      SelectFromData = 8,
+      AbilityData = 9,
     }
     private PayloadOneofCase payloadCase_ = PayloadOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9570,11 +9573,11 @@ namespace gamecore.serialization {
       if (!object.Equals(MulliganData, other.MulliganData)) return false;
       if (!object.Equals(NumberData, other.NumberData)) return false;
       if (!object.Equals(TargetData, other.TargetData)) return false;
-      if (!object.Equals(ConditionalTargetData, other.ConditionalTargetData)) return false;
       if (!object.Equals(InteractionCardData, other.InteractionCardData)) return false;
       if (!object.Equals(AttackData, other.AttackData)) return false;
       if (!object.Equals(WinnerData, other.WinnerData)) return false;
       if (!object.Equals(SelectFromData, other.SelectFromData)) return false;
+      if (!object.Equals(AbilityData, other.AbilityData)) return false;
       if (PayloadCase != other.PayloadCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -9587,11 +9590,11 @@ namespace gamecore.serialization {
       if (payloadCase_ == PayloadOneofCase.MulliganData) hash ^= MulliganData.GetHashCode();
       if (payloadCase_ == PayloadOneofCase.NumberData) hash ^= NumberData.GetHashCode();
       if (payloadCase_ == PayloadOneofCase.TargetData) hash ^= TargetData.GetHashCode();
-      if (payloadCase_ == PayloadOneofCase.ConditionalTargetData) hash ^= ConditionalTargetData.GetHashCode();
       if (payloadCase_ == PayloadOneofCase.InteractionCardData) hash ^= InteractionCardData.GetHashCode();
       if (payloadCase_ == PayloadOneofCase.AttackData) hash ^= AttackData.GetHashCode();
       if (payloadCase_ == PayloadOneofCase.WinnerData) hash ^= WinnerData.GetHashCode();
       if (payloadCase_ == PayloadOneofCase.SelectFromData) hash ^= SelectFromData.GetHashCode();
+      if (payloadCase_ == PayloadOneofCase.AbilityData) hash ^= AbilityData.GetHashCode();
       hash ^= (int) payloadCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -9627,25 +9630,25 @@ namespace gamecore.serialization {
         output.WriteRawTag(34);
         output.WriteMessage(TargetData);
       }
-      if (payloadCase_ == PayloadOneofCase.ConditionalTargetData) {
-        output.WriteRawTag(42);
-        output.WriteMessage(ConditionalTargetData);
-      }
       if (payloadCase_ == PayloadOneofCase.InteractionCardData) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(42);
         output.WriteMessage(InteractionCardData);
       }
       if (payloadCase_ == PayloadOneofCase.AttackData) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(50);
         output.WriteMessage(AttackData);
       }
       if (payloadCase_ == PayloadOneofCase.WinnerData) {
-        output.WriteRawTag(66);
+        output.WriteRawTag(58);
         output.WriteMessage(WinnerData);
       }
       if (payloadCase_ == PayloadOneofCase.SelectFromData) {
-        output.WriteRawTag(74);
+        output.WriteRawTag(66);
         output.WriteMessage(SelectFromData);
+      }
+      if (payloadCase_ == PayloadOneofCase.AbilityData) {
+        output.WriteRawTag(74);
+        output.WriteMessage(AbilityData);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -9673,25 +9676,25 @@ namespace gamecore.serialization {
         output.WriteRawTag(34);
         output.WriteMessage(TargetData);
       }
-      if (payloadCase_ == PayloadOneofCase.ConditionalTargetData) {
-        output.WriteRawTag(42);
-        output.WriteMessage(ConditionalTargetData);
-      }
       if (payloadCase_ == PayloadOneofCase.InteractionCardData) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(42);
         output.WriteMessage(InteractionCardData);
       }
       if (payloadCase_ == PayloadOneofCase.AttackData) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(50);
         output.WriteMessage(AttackData);
       }
       if (payloadCase_ == PayloadOneofCase.WinnerData) {
-        output.WriteRawTag(66);
+        output.WriteRawTag(58);
         output.WriteMessage(WinnerData);
       }
       if (payloadCase_ == PayloadOneofCase.SelectFromData) {
-        output.WriteRawTag(74);
+        output.WriteRawTag(66);
         output.WriteMessage(SelectFromData);
+      }
+      if (payloadCase_ == PayloadOneofCase.AbilityData) {
+        output.WriteRawTag(74);
+        output.WriteMessage(AbilityData);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -9715,9 +9718,6 @@ namespace gamecore.serialization {
       if (payloadCase_ == PayloadOneofCase.TargetData) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(TargetData);
       }
-      if (payloadCase_ == PayloadOneofCase.ConditionalTargetData) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ConditionalTargetData);
-      }
       if (payloadCase_ == PayloadOneofCase.InteractionCardData) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(InteractionCardData);
       }
@@ -9729,6 +9729,9 @@ namespace gamecore.serialization {
       }
       if (payloadCase_ == PayloadOneofCase.SelectFromData) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(SelectFromData);
+      }
+      if (payloadCase_ == PayloadOneofCase.AbilityData) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(AbilityData);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -9764,12 +9767,6 @@ namespace gamecore.serialization {
           }
           TargetData.MergeFrom(other.TargetData);
           break;
-        case PayloadOneofCase.ConditionalTargetData:
-          if (ConditionalTargetData == null) {
-            ConditionalTargetData = new global::gamecore.serialization.ProtoBufConditionalTargetData();
-          }
-          ConditionalTargetData.MergeFrom(other.ConditionalTargetData);
-          break;
         case PayloadOneofCase.InteractionCardData:
           if (InteractionCardData == null) {
             InteractionCardData = new global::gamecore.serialization.ProtoBufInteractionCardData();
@@ -9793,6 +9790,12 @@ namespace gamecore.serialization {
             SelectFromData = new global::gamecore.serialization.ProtoBufSelectFromData();
           }
           SelectFromData.MergeFrom(other.SelectFromData);
+          break;
+        case PayloadOneofCase.AbilityData:
+          if (AbilityData == null) {
+            AbilityData = new global::gamecore.serialization.ProtoBufAbilityData();
+          }
+          AbilityData.MergeFrom(other.AbilityData);
           break;
       }
 
@@ -9847,15 +9850,6 @@ namespace gamecore.serialization {
             break;
           }
           case 42: {
-            global::gamecore.serialization.ProtoBufConditionalTargetData subBuilder = new global::gamecore.serialization.ProtoBufConditionalTargetData();
-            if (payloadCase_ == PayloadOneofCase.ConditionalTargetData) {
-              subBuilder.MergeFrom(ConditionalTargetData);
-            }
-            input.ReadMessage(subBuilder);
-            ConditionalTargetData = subBuilder;
-            break;
-          }
-          case 50: {
             global::gamecore.serialization.ProtoBufInteractionCardData subBuilder = new global::gamecore.serialization.ProtoBufInteractionCardData();
             if (payloadCase_ == PayloadOneofCase.InteractionCardData) {
               subBuilder.MergeFrom(InteractionCardData);
@@ -9864,7 +9858,7 @@ namespace gamecore.serialization {
             InteractionCardData = subBuilder;
             break;
           }
-          case 58: {
+          case 50: {
             global::gamecore.serialization.ProtoBufAttackData subBuilder = new global::gamecore.serialization.ProtoBufAttackData();
             if (payloadCase_ == PayloadOneofCase.AttackData) {
               subBuilder.MergeFrom(AttackData);
@@ -9873,7 +9867,7 @@ namespace gamecore.serialization {
             AttackData = subBuilder;
             break;
           }
-          case 66: {
+          case 58: {
             global::gamecore.serialization.ProtoBufWinnerData subBuilder = new global::gamecore.serialization.ProtoBufWinnerData();
             if (payloadCase_ == PayloadOneofCase.WinnerData) {
               subBuilder.MergeFrom(WinnerData);
@@ -9882,13 +9876,22 @@ namespace gamecore.serialization {
             WinnerData = subBuilder;
             break;
           }
-          case 74: {
+          case 66: {
             global::gamecore.serialization.ProtoBufSelectFromData subBuilder = new global::gamecore.serialization.ProtoBufSelectFromData();
             if (payloadCase_ == PayloadOneofCase.SelectFromData) {
               subBuilder.MergeFrom(SelectFromData);
             }
             input.ReadMessage(subBuilder);
             SelectFromData = subBuilder;
+            break;
+          }
+          case 74: {
+            global::gamecore.serialization.ProtoBufAbilityData subBuilder = new global::gamecore.serialization.ProtoBufAbilityData();
+            if (payloadCase_ == PayloadOneofCase.AbilityData) {
+              subBuilder.MergeFrom(AbilityData);
+            }
+            input.ReadMessage(subBuilder);
+            AbilityData = subBuilder;
             break;
           }
         }
@@ -9942,15 +9945,6 @@ namespace gamecore.serialization {
             break;
           }
           case 42: {
-            global::gamecore.serialization.ProtoBufConditionalTargetData subBuilder = new global::gamecore.serialization.ProtoBufConditionalTargetData();
-            if (payloadCase_ == PayloadOneofCase.ConditionalTargetData) {
-              subBuilder.MergeFrom(ConditionalTargetData);
-            }
-            input.ReadMessage(subBuilder);
-            ConditionalTargetData = subBuilder;
-            break;
-          }
-          case 50: {
             global::gamecore.serialization.ProtoBufInteractionCardData subBuilder = new global::gamecore.serialization.ProtoBufInteractionCardData();
             if (payloadCase_ == PayloadOneofCase.InteractionCardData) {
               subBuilder.MergeFrom(InteractionCardData);
@@ -9959,7 +9953,7 @@ namespace gamecore.serialization {
             InteractionCardData = subBuilder;
             break;
           }
-          case 58: {
+          case 50: {
             global::gamecore.serialization.ProtoBufAttackData subBuilder = new global::gamecore.serialization.ProtoBufAttackData();
             if (payloadCase_ == PayloadOneofCase.AttackData) {
               subBuilder.MergeFrom(AttackData);
@@ -9968,7 +9962,7 @@ namespace gamecore.serialization {
             AttackData = subBuilder;
             break;
           }
-          case 66: {
+          case 58: {
             global::gamecore.serialization.ProtoBufWinnerData subBuilder = new global::gamecore.serialization.ProtoBufWinnerData();
             if (payloadCase_ == PayloadOneofCase.WinnerData) {
               subBuilder.MergeFrom(WinnerData);
@@ -9977,13 +9971,22 @@ namespace gamecore.serialization {
             WinnerData = subBuilder;
             break;
           }
-          case 74: {
+          case 66: {
             global::gamecore.serialization.ProtoBufSelectFromData subBuilder = new global::gamecore.serialization.ProtoBufSelectFromData();
             if (payloadCase_ == PayloadOneofCase.SelectFromData) {
               subBuilder.MergeFrom(SelectFromData);
             }
             input.ReadMessage(subBuilder);
             SelectFromData = subBuilder;
+            break;
+          }
+          case 74: {
+            global::gamecore.serialization.ProtoBufAbilityData subBuilder = new global::gamecore.serialization.ProtoBufAbilityData();
+            if (payloadCase_ == PayloadOneofCase.AbilityData) {
+              subBuilder.MergeFrom(AbilityData);
+            }
+            input.ReadMessage(subBuilder);
+            AbilityData = subBuilder;
             break;
           }
         }
