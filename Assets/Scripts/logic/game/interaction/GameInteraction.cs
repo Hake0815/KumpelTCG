@@ -255,12 +255,16 @@ namespace gamecore.game.interaction
             return protoBufGameInteractionData;
         }
 
-        // public List<ICard> GetPossibleTargetsGivenPartialSelection(List<ICard> partialSelection){
-        //     if (AllowMultipleTimes){
-        //         return PossibleTargets;
-        //     }
-        //     return PossibleTargets.Where(card => !partialSelection.Contains(card)).ToList();
-        // }
+        public List<ICard> GetPossibleTargetsGivenPartialSelection(List<ICard> partialSelection)
+        {
+            if (AllowMultipleTimes)
+            {
+                return PossibleTargets.Where(candidateCard => ConditionalTargetQuery.CanBeAddedToPartialSelection(candidateCard, partialSelection)).ToList();
+            }
+            return PossibleTargets.Where(candidateCard => !partialSelection.Select(card => card.DeckId).Contains(candidateCard.DeckId))
+                .Where(candidateCard => ConditionalTargetQuery.CanBeAddedToPartialSelection(candidateCard, partialSelection))
+                .ToList();
+        }
     }
 
     public enum ActionOnSelection
