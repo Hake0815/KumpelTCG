@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using gamecore.card;
 using gamecore.serialization;
+using Google.Protobuf;
 
 namespace gamecore.game.interaction
 {
@@ -78,6 +79,11 @@ namespace gamecore.game.interaction
                 Type = (ProtoBufGameInteractionType)Type,
                 Data = { protoBufData },
             };
+        }
+
+        public byte[] ToByteArray()
+        {
+            return ToSerializable().ToByteArray();
         }
     }
 
@@ -255,7 +261,7 @@ namespace gamecore.game.interaction
             return protoBufGameInteractionData;
         }
 
-        public List<ICard> GetPossibleTargetsGivenPartialSelection(List<ICard> partialSelection)
+        public List<ICard> GetCandidatesGivenPartialSelection(List<ICard> partialSelection)
         {
             if (AllowMultipleTimes)
             {
