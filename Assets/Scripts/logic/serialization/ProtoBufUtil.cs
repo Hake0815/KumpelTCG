@@ -9,7 +9,6 @@ namespace gamecore.serialization
                 Name = "Unknown",
                 CardType = ProtoBufCardType.CardTypeUnknown,
                 CardSubtype = ProtoBufCardSubtype.CardSubtypeUnknown,
-                EnergyType = ProtoBufEnergyType.EnergyTypeNone,
                 DeckId = deckId,
             };
         }

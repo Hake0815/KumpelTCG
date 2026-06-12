@@ -168,7 +168,7 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(),
+                        Card = card.ToSerializable(pokemonCard),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,
@@ -185,7 +185,7 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(),
+                        Card = card.ToSerializable(pokemonCard),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,

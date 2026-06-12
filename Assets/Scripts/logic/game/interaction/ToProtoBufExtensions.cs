@@ -18,7 +18,7 @@ namespace gamecore.game.interaction
                 GameInteractionDataType.TargetData =>
                     ProtoBufGameInteractionDataType.GameInteractionDataTypeTargetData,
                 GameInteractionDataType.ConditionalTargetData =>
-                    ProtoBufGameInteractionDataType.GameInteractionDataTypeConditionalTargetData,
+                    ProtoBufGameInteractionDataType.GameInteractionDataTypeTargetData,
                 GameInteractionDataType.InteractionCardData =>
                     ProtoBufGameInteractionDataType.GameInteractionDataTypeInteractionCardData,
                 GameInteractionDataType.AttackData =>
@@ -73,6 +73,7 @@ namespace gamecore.game.interaction
             {
                 LogicalQueryOperator.And => ProtoBufLogicalQueryOperator.LogicalQueryOperatorAnd,
                 LogicalQueryOperator.Or => ProtoBufLogicalQueryOperator.LogicalQueryOperatorOr,
+                LogicalQueryOperator.Xor => ProtoBufLogicalQueryOperator.LogicalQueryOperatorXor,
                 _ => throw new InvalidOperationException(
                     $"Unknown logical operator: {logicalQueryOperator}"
                 ),

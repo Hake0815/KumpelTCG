@@ -9,13 +9,14 @@ namespace gamecore.game.interaction
     public interface IConditionalTargetQuery
     {
         public bool IsMet(List<ICard> cards);
+        public bool CanBeAddedToPartialSelection(ICard candidateCard, List<ICard> partialSelection);
         public ProtoBufConditionalTargetQuery ToSerializable();
     }
 
     class CompoundTargetQuery : IConditionalTargetQuery
     {
         private readonly List<IConditionalTargetQuery> _queries;
-        private readonly LogicalQueryOperator _logicalQueryOPerator;
+        private readonly LogicalQueryOperator _logicalQueryOperator;
 
         public CompoundTargetQuery(
             List<IConditionalTargetQuery> queries,
@@ -23,7 +24,18 @@ namespace gamecore.game.interaction
         )
         {
             _queries = queries;
-            _logicalQueryOPerator = logicalQueryOPerator;
+            _logicalQueryOperator = logicalQueryOPerator;
+        }
+
+        public bool CanBeAddedToPartialSelection(ICard candidateCard, List<ICard> partialSelection)
+        {
+            if (_queries.Count == 0)
+            {
+                throw new IllegalStateException("No queries provided!");
+            }
+            return _queries
+                .Select(query => query.CanBeAddedToPartialSelection(candidateCard, partialSelection))
+                .Aggregate((left, right) => _logicalQueryOperator.Apply(left, right));
         }
 
         public bool IsMet(List<ICard> cards)
@@ -34,14 +46,14 @@ namespace gamecore.game.interaction
             }
             return _queries
                 .Select(query => query.IsMet(cards))
-                .Aggregate((left, right) => _logicalQueryOPerator.Apply(left, right));
+                .Aggregate((left, right) => _logicalQueryOperator.Apply(left, right));
         }
 
         public ProtoBufConditionalTargetQuery ToSerializable()
         {
             var protoBufConditionalTargetQuery = new ProtoBufConditionalTargetQuery
             {
-                LogicalQueryOperator = _logicalQueryOPerator.ToProtoBuf(),
+                LogicalQueryOperator = _logicalQueryOperator.ToProtoBuf(),
             };
             protoBufConditionalTargetQuery.NestedQueries.Capacity = _queries.Count;
             foreach (var query in _queries)
@@ -79,6 +91,12 @@ namespace gamecore.game.interaction
                 IntRange = new ProtoBufIntRange { Min = _numberRange.Min, Max = _numberRange.Max },
                 SelectionQualifier = _selectionQualifier.ToProtoBuf(),
             };
+        }
+
+        public bool CanBeAddedToPartialSelection(ICard candidateCard, List<ICard> partialSelection)
+        {
+            var hypotheticalSelection = new List<ICard>(partialSelection) { candidateCard };
+            return _numberRange.Max >= _selectionQualifier.GetQualifierValue(hypotheticalSelection);
         }
     }
 
@@ -121,6 +139,7 @@ namespace gamecore.game.interaction
     {
         And,
         Or,
+        Xor,
     }
 
     static class LogicalQueryOperatorExtensions
@@ -131,6 +150,7 @@ namespace gamecore.game.interaction
             {
                 LogicalQueryOperator.And => left && right,
                 LogicalQueryOperator.Or => left || right,
+                LogicalQueryOperator.Xor => left ^ right,
                 _ => throw new System.Exception($"Unknown logical operator: {logicalOperator}"),
             };
         }

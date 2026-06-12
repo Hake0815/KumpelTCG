@@ -62,6 +62,10 @@ namespace gamecore.game
         public override void Shuffle()
         {
             var n = CardCount;
+            if (n == 0)
+            {
+                return;
+            }
             while (n > 1)
             {
                 n--;

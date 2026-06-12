@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using gamecore.card;
 using gamecore.serialization;
+using Google.Protobuf;
 
 namespace gamecore.game.interaction
 {
@@ -53,11 +54,36 @@ namespace gamecore.game.interaction
                 protoBufData.Add(data.ToSerializable());
             }
 
+            if (Type == GameInteractionType.PerformAbility)
+            {
+                var abilityData = new ProtoBufAbilityData
+                {
+                    Ability = (
+                        (Data[GameInteractionDataType.InteractionCardData] as InteractionCard).Card
+                        as IPokemonCardLogic
+                    ).Ability.ToSerializable(),
+                };
+
+                protoBufData.Add(
+                    new ProtoBufGameInteractionData
+                    {
+                        DataType =
+                            ProtoBufGameInteractionDataType.GameInteractionDataTypeAbilityData,
+                        AbilityData = abilityData,
+                    }
+                );
+            }
+
             return new ProtoBufGameInteraction
             {
                 Type = (ProtoBufGameInteractionType)Type,
                 Data = { protoBufData },
             };
+        }
+
+        public byte[] ToByteArray()
+        {
+            return ToSerializable().ToByteArray();
         }
     }
 
@@ -147,17 +173,20 @@ namespace gamecore.game.interaction
             int numberOfTargets,
             List<ICard> possibleTargets,
             ActionOnSelection targetAction,
-            ActionOnSelection remainderAction
+            ActionOnSelection remainderAction,
+            bool allowMultipleTimes = false
         )
         {
             NumberOfTargets = numberOfTargets;
             PossibleTargets = possibleTargets;
             TargetAction = targetAction;
             RemainderAction = remainderAction;
+            AllowMultipleTimes = allowMultipleTimes;
         }
 
         public List<ICard> PossibleTargets { get; }
         public int NumberOfTargets { get; } = 0;
+        public bool AllowMultipleTimes { get; }
         public ActionOnSelection TargetAction { get; }
         public ActionOnSelection RemainderAction { get; }
 
@@ -168,6 +197,7 @@ namespace gamecore.game.interaction
                 DataType = DataType.ToProtobuf(),
                 TargetData = new ProtoBufTargetData
                 {
+                    AllowMultipleTimes = AllowMultipleTimes,
                     NumberOfTargets = NumberOfTargets,
                     TargetAction = TargetAction.ToProtoBuf(),
                     RemainderAction = RemainderAction.ToProtoBuf(),
@@ -191,11 +221,13 @@ namespace gamecore.game.interaction
             List<ICard> possibleTargets,
             ActionOnSelection targetAction,
             ActionOnSelection remainderAction,
+            bool allowMultipleTimes = false,
             bool isQuickSelection = true
         )
         {
             ConditionalTargetQuery = conditionalTargetQuery;
             PossibleTargets = possibleTargets;
+            AllowMultipleTimes = allowMultipleTimes;
             IsQuickSelection = isQuickSelection;
             TargetAction = targetAction;
             RemainderAction = remainderAction;
@@ -203,6 +235,7 @@ namespace gamecore.game.interaction
 
         public List<ICard> PossibleTargets { get; }
         public IConditionalTargetQuery ConditionalTargetQuery { get; }
+        public bool AllowMultipleTimes { get; }
         public bool IsQuickSelection { get; }
         public ActionOnSelection TargetAction { get; }
         public ActionOnSelection RemainderAction { get; }
@@ -212,20 +245,31 @@ namespace gamecore.game.interaction
             var protoBufGameInteractionData = new ProtoBufGameInteractionData
             {
                 DataType = DataType.ToProtobuf(),
-                ConditionalTargetData = new ProtoBufConditionalTargetData
+                TargetData = new ProtoBufTargetData
                 {
+                    AllowMultipleTimes = AllowMultipleTimes,
                     ConditionalTargetQuery = ConditionalTargetQuery.ToSerializable(),
                     TargetAction = TargetAction.ToProtoBuf(),
                     RemainderAction = RemainderAction.ToProtoBuf(),
                 },
             };
-            protoBufGameInteractionData.ConditionalTargetData.PossibleTargets.Capacity =
-                PossibleTargets.Count;
+            protoBufGameInteractionData.TargetData.PossibleTargets.Capacity = PossibleTargets.Count;
             foreach (var card in PossibleTargets)
             {
-                protoBufGameInteractionData.ConditionalTargetData.PossibleTargets.Add(card.DeckId);
+                protoBufGameInteractionData.TargetData.PossibleTargets.Add(card.DeckId);
             }
             return protoBufGameInteractionData;
+        }
+
+        public List<ICard> GetCandidatesGivenPartialSelection(List<ICard> partialSelection)
+        {
+            if (AllowMultipleTimes)
+            {
+                return PossibleTargets.Where(candidateCard => ConditionalTargetQuery.CanBeAddedToPartialSelection(candidateCard, partialSelection)).ToList();
+            }
+            return PossibleTargets.Where(candidateCard => !partialSelection.Select(card => card.DeckId).Contains(candidateCard.DeckId))
+                .Where(candidateCard => ConditionalTargetQuery.CanBeAddedToPartialSelection(candidateCard, partialSelection))
+                .ToList();
         }
     }
 
@@ -312,10 +356,10 @@ namespace gamecore.game.interaction
         public List<ICard> SelectionSource { get; }
         public GameInteractionDataType DataType => GameInteractionDataType.SelectFromData;
 
-        public SelectFromData(SelectFrom selectFrom, List<ICard> selectionsource)
+        public SelectFromData(SelectFrom selectFrom, List<ICard> selectionSource)
         {
             SelectFrom = selectFrom;
-            SelectionSource = selectionsource;
+            SelectionSource = selectionSource;
         }
 
         public SelectFromData(SelectFrom selectFrom)
@@ -325,7 +369,7 @@ namespace gamecore.game.interaction
 
         public ProtoBufGameInteractionData ToSerializable()
         {
-            var protoBufGameInteractionData = new ProtoBufGameInteractionData
+            return new ProtoBufGameInteractionData
             {
                 DataType = DataType.ToProtobuf(),
                 SelectFromData = new ProtoBufSelectFromData
@@ -333,13 +377,6 @@ namespace gamecore.game.interaction
                     SelectFrom = SelectFrom.ToProtoBuf(),
                 },
             };
-            protoBufGameInteractionData.SelectFromData.SelectionSource.Capacity =
-                SelectionSource.Count;
-            foreach (var card in SelectionSource)
-            {
-                protoBufGameInteractionData.SelectFromData.SelectionSource.Add(card.DeckId);
-            }
-            return protoBufGameInteractionData;
         }
     }
 
