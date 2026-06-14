@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using gamecore.card;
 using gamecore.serialization;
 using Google.Protobuf;
@@ -15,12 +16,13 @@ namespace gamecore.game.interaction
         public Dictionary<GameInteractionDataType, IGameInteractionData> Data { get; } = new();
 
         public GameInteraction(
-            Action<List<ICard>> gameControllerMethodWithTargets,
+            Func<List<ICard>, Task> gameControllerMethodWithTargets,
             GameInteractionType type,
             List<IGameInteractionData> data
         )
         {
-            GameControllerMethodWithTargets = gameControllerMethodWithTargets;
+            GameControllerMethodWithTargets = targets =>
+                gameControllerMethodWithTargets(targets).GetAwaiter().GetResult();
             Type = type;
             foreach (var datum in data)
             {
@@ -29,12 +31,12 @@ namespace gamecore.game.interaction
         }
 
         public GameInteraction(
-            Action gameControllerMethod,
+            Func<Task> gameControllerMethod,
             GameInteractionType type,
             List<IGameInteractionData> data
         )
         {
-            GameControllerMethod = gameControllerMethod;
+            GameControllerMethod = () => gameControllerMethod().GetAwaiter().GetResult();
             Type = type;
             foreach (var datum in data)
             {
@@ -42,7 +44,7 @@ namespace gamecore.game.interaction
             }
         }
 
-        public GameInteraction(Action gameControllerMethod, GameInteractionType type)
+        public GameInteraction(Func<Task> gameControllerMethod, GameInteractionType type)
             : this(gameControllerMethod, type, new()) { }
 
         public ProtoBufGameInteraction ToSerializable()

@@ -36,7 +36,11 @@ namespace gamecore.game.state
             return new List<GameInteraction>()
             {
                 new(
-                    () => gameController.Confirm(),
+                    () =>
+                    {
+                        gameController.Confirm();
+                        return Task.CompletedTask;
+                    },
                     GameInteractionType.ConfirmMulligans,
                     new() { mulliganData }
                 ),

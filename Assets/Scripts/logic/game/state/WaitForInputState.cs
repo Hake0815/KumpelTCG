@@ -72,7 +72,11 @@ namespace gamecore.game.state
             return new()
             {
                 new GameInteraction(
-                    targets => _selectTask.SetResult(targets.Cast<ICardLogic>().ToList()),
+                    targets =>
+                    {
+                        _selectTask.SetResult(targets.Cast<ICardLogic>().ToList());
+                        return Task.CompletedTask;
+                    },
                     GameInteractionType.SelectCards,
                     new()
                     {
