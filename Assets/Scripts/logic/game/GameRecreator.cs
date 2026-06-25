@@ -79,17 +79,15 @@ namespace gamecore.game
                         )
             );
             int currentCardIndex = 0;
-            bool cardRemovedFromDeck = false;
             while (currentCardIndex < currentPlayer.Deck.CardCount)
             {
                 var card = currentPlayer.Deck.Cards[currentCardIndex];
-                SetupCard(
+                var cardRemovedFromDeck = SetupCard(
                     card,
                     gameState,
                     currentPlayer,
                     ref remainingHandCardsToSetup,
-                    ref remainingPrizesToSetup,
-                    ref cardRemovedFromDeck
+                    ref remainingPrizesToSetup
                 );
                 if (!cardRemovedFromDeck)
                 {
@@ -117,13 +115,12 @@ namespace gamecore.game
             }
         }
 
-        private static void SetupCard(
+        private static bool SetupCard(
             ICardLogic card,
             ProtoBufGameState gameState,
             IPlayerLogic currentPlayer,
             ref int remainingHandCardsToSetup,
-            ref int remainingPrizesToSetup,
-            ref bool cardRemovedFromDeck
+            ref int remainingPrizesToSetup
         )
         {
             var cardState = gameState.CardStates[card.DeckId];
@@ -147,9 +144,9 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.Cards.Remove(card);
-                cardRemovedFromDeck = true;
                 currentPlayer.Hand.AddCard(card);
                 remainingHandCardsToSetup--;
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(
@@ -159,9 +156,9 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.Cards.Remove(card);
-                cardRemovedFromDeck = true;
                 currentPlayer.Prizes.AddCard(card);
                 remainingPrizesToSetup--;
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(
@@ -170,6 +167,7 @@ namespace gamecore.game
             )
             {
                 AttachCard(currentPlayer, cardState, card);
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(
@@ -178,9 +176,9 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.Cards.Remove(card);
-                cardRemovedFromDeck = true;
                 currentPlayer.Bench.AddCard(card);
                 SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(
@@ -189,9 +187,9 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.Cards.Remove(card);
-                cardRemovedFromDeck = true;
                 currentPlayer.ActivePokemon = card as IPokemonCardLogic;
                 SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(
@@ -200,8 +198,8 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.Cards.Remove(card);
-                cardRemovedFromDeck = true;
                 currentPlayer.CurrentlyPlayedCard = card;
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(
@@ -210,8 +208,8 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.Cards.Remove(card);
-                cardRemovedFromDeck = true;
                 currentPlayer.FloatingCards.Add(card);
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(
@@ -220,14 +218,14 @@ namespace gamecore.game
             )
             {
                 currentPlayer.Deck.Cards.Remove(card);
-                cardRemovedFromDeck = true;
                 currentPlayer.DiscardPile.AddCard(card);
+                return true;
             }
             else if (
                 cardState.Position.PossiblePositions.Contains(ProtoBufCardPosition.CardPositionDeck)
             )
             {
-                cardRemovedFromDeck = false;
+                return false;
             }
             else
             {

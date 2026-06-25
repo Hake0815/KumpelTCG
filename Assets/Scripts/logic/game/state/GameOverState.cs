@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using gamecore.game.interaction;
 using gamecore.serialization;
 
@@ -25,14 +26,14 @@ namespace gamecore.game.state
             IPlayerLogic player
         )
         {
-            return new()
-            {
+            return
+            [
                 new GameInteraction(
-                    () => { },
+                    () => Task.CompletedTask,
                     GameInteractionType.GameOver,
-                    new() { new WinnerData(_winner, _message) }
+                    [new WinnerData(_winner, _message)]
                 ),
-            };
+            ];
         }
 
         public void OnAdvanced(Game game)

@@ -18,7 +18,14 @@ namespace gamecore.game.state
         {
             return new()
             {
-                new(() => gameController.Confirm(), GameInteractionType.SetupCompleted),
+                new(
+                    () =>
+                    {
+                        gameController.Confirm();
+                        return Task.CompletedTask;
+                    },
+                    GameInteractionType.SetupCompleted
+                ),
             };
         }
 
