@@ -44,7 +44,7 @@ namespace gameview
                 GlobalLogger.Instance.Info(
                     () => $"Recreating game from game state: {GameParameters.GameState}"
                 );
-                var gameState = JsonConvert.DeserializeObject<ProtoBufGameState>(
+                var gameState = JsonConvert.DeserializeObject<ProtoBufGameInitialization>(
                     GameParameters.GameState
                 );
                 _gameController.RecreateGameFromGameState(
@@ -129,7 +129,7 @@ namespace gameview
         {
             File.AppendAllText(
                 _gameStateLogFile,
-                _gameController.ExportGameStateAsJson("Player 1") + "\n"
+                _gameController.ExportGameInitializationAsJson("Player 1") + "\n"
             );
             await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));
         }
@@ -138,7 +138,7 @@ namespace gameview
         {
             File.AppendAllText(
                 _gameStateLogFile,
-                _gameController.ExportGameStateAsJson("Player 2") + "\n"
+                _gameController.ExportGameInitializationAsJson("Player 2") + "\n"
             );
             _gameController.ExportGameStateAsByteArray("Player 2");
             await UIQueue.INSTANCE.Queue(async () => await HandleInteraction(interactions));

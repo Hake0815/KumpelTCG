@@ -35,7 +35,7 @@ namespace gamecore.game
         );
         Task RecreateGameFromLog();
         void RecreateGameFromGameState(
-            ProtoBufGameState gameState,
+            ProtoBufGameInitialization initialization,
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
@@ -43,8 +43,11 @@ namespace gamecore.game
         );
         Task StartReplay();
         void StartGame();
+        ProtoBufGameInitialization ExportGameInitialization(string playerName);
         ProtoBufGameState ExportGameState(string playerName);
+        byte[] ExportGameInitializationAsByteArray(string playerName);
         byte[] ExportGameStateAsByteArray(string playerName);
+        string ExportGameInitializationAsJson(string playerName);
         string ExportGameStateAsJson(string playerName);
     }
 
@@ -57,6 +60,8 @@ namespace gamecore.game
         public event Action<List<GameInteraction>> NotifyGeneral;
         public event Action<List<ICard>> CardsRevealed;
         private readonly ActionSystem _actionSystem;
+        private readonly Dictionary<string, Dictionary<int, ProtoBufCardStatic>>
+            _cardStaticCaches = new();
 
         public IGame Game => _game;
 
@@ -219,6 +224,7 @@ namespace gamecore.game
 
         private Task<CreateGameGA> CreateGame(CreateGameGA action)
         {
+            _cardStaticCaches.Clear();
             _game = new GameBuilder()
                 .WithPlayer1(action.Player1Name)
                 .WithPlayer2(action.Player2Name)
@@ -249,12 +255,43 @@ namespace gamecore.game
             _game.AdvanceGameState();
         }
 
+        public ProtoBufGameInitialization ExportGameInitialization(string playerName)
+        {
+            var player = GetPlayerForExport(playerName);
+            var gameState = CreateGameState(player);
+            var currentStatics = CardStateCreator.CreateCardStatics(player, gameState.CardStates);
+            var cache = GetOrCreateStaticCache(playerName);
+            MergeStaticCache(cache, currentStatics, null);
+
+            return new ProtoBufGameInitialization
+            {
+                CardStatics = { cache.Values.OrderBy(card => card.DeckId).Select(card => card.Clone()) },
+                InitialState = gameState,
+            };
+        }
+
         public ProtoBufGameState ExportGameState(string playerName)
+        {
+            var player = GetPlayerForExport(playerName);
+            var gameState = CreateGameState(player);
+            var currentStatics = CardStateCreator.CreateCardStatics(player, gameState.CardStates);
+            MergeStaticCache(
+                GetOrCreateStaticCache(playerName),
+                currentStatics,
+                gameState.CardStaticUpserts
+            );
+            return gameState;
+        }
+
+        private IPlayer GetPlayerForExport(string playerName)
         {
             if (_game == null)
                 throw new InvalidOperationException("Game has not been created yet.");
+            return _game.GetPlayerByName(playerName);
+        }
 
-            var player = _game.GetPlayerByName(playerName);
+        private ProtoBufGameState CreateGameState(IPlayer player)
+        {
             ProtoBufPlayerState selfState;
             ProtoBufPlayerState opponentState;
             if (player == _game.Player1)
@@ -283,6 +320,62 @@ namespace gamecore.game
             };
         }
 
+        private Dictionary<int, ProtoBufCardStatic> GetOrCreateStaticCache(string playerName)
+        {
+            if (!_cardStaticCaches.TryGetValue(playerName, out var cache))
+            {
+                cache = new Dictionary<int, ProtoBufCardStatic>();
+                _cardStaticCaches[playerName] = cache;
+            }
+            return cache;
+        }
+
+        private static void MergeStaticCache(
+            Dictionary<int, ProtoBufCardStatic> cache,
+            IEnumerable<ProtoBufCardStatic> currentStatics,
+            Google.Protobuf.Collections.RepeatedField<ProtoBufCardStatic> upserts
+        )
+        {
+            foreach (var current in currentStatics)
+            {
+                if (!cache.TryGetValue(current.DeckId, out var cached))
+                {
+                    cache[current.DeckId] = current.Clone();
+                    upserts?.Add(current.Clone());
+                    continue;
+                }
+
+                if (IsUnknownCard(cached) && !IsUnknownCard(current))
+                {
+                    cache[current.DeckId] = current.Clone();
+                    upserts?.Add(current.Clone());
+                    continue;
+                }
+
+                if (!IsUnknownCard(cached) && IsUnknownCard(current))
+                {
+                    continue;
+                }
+
+                if (!cached.Equals(current))
+                {
+                    throw new IllegalStateException(
+                        $"Static data changed for card with deck id {current.DeckId}"
+                    );
+                }
+            }
+        }
+
+        private static bool IsUnknownCard(ProtoBufCardStatic card)
+        {
+            return card.CardType == ProtoBufCardType.CardTypeUnknown;
+        }
+
+        public byte[] ExportGameInitializationAsByteArray(string playerName)
+        {
+            return ExportGameInitialization(playerName).ToByteArray();
+        }
+
         public byte[] ExportGameStateAsByteArray(string playerName)
         {
             return ExportGameState(playerName).ToByteArray();
@@ -293,14 +386,21 @@ namespace gamecore.game
             return JsonConvert.SerializeObject(ExportGameState(playerName));
         }
 
+        public string ExportGameInitializationAsJson(string playerName)
+        {
+            return JsonConvert.SerializeObject(ExportGameInitialization(playerName));
+        }
+
         public void RecreateGameFromGameState(
-            ProtoBufGameState gameState,
+            ProtoBufGameInitialization initialization,
             Dictionary<string, int> deckList1,
             Dictionary<string, int> deckList2,
             string player1Name,
             string player2Name
         )
         {
+            _cardStaticCaches.Clear();
+            var gameState = initialization.InitialState;
             _game = new GameBuilder()
                 .WithPlayer1(player1Name)
                 .WithPlayer2(player2Name)
@@ -336,7 +436,21 @@ namespace gamecore.game
                 ),
                 _ => throw new NotImplementedException(),
             };
-            GameRecreator.RecreateGameFromGameState(gameState, _game);
+            var cardStatics = initialization.CardStatics.ToDictionary(card => card.DeckId);
+            foreach (var upsert in gameState.CardStaticUpserts)
+            {
+                cardStatics[upsert.DeckId] = upsert;
+            }
+            var player1CardState = gameState.CardStates.First(state => state.DeckId == 0);
+            var cacheOwnerName =
+                player1CardState.Position.Owner == ProtoBufOwner.OwnerSelf
+                    ? player1Name
+                    : player2Name;
+            _cardStaticCaches[cacheOwnerName] = cardStatics.ToDictionary(
+                entry => entry.Key,
+                entry => entry.Value.Clone()
+            );
+            GameRecreator.RecreateGameFromGameState(gameState, cardStatics, _game);
         }
     }
 }

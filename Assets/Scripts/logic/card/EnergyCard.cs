@@ -99,33 +99,20 @@ namespace gamecore.card
 
         public ActionOnSelection GetTargetAction() => ActionOnSelection.AttachTo;
 
-        public virtual ProtoBufCard ToSerializable()
+        public virtual ProtoBufCardStatic ToSerializableStatic()
         {
-            var protoBufCard = new ProtoBufCard
+            return new ProtoBufCardStatic
             {
                 Name = Name,
                 CardType = CardType.Energy.ToProtoBuf(),
                 CardSubtype = CardSubtype.ToProtoBuf(),
                 DeckId = DeckId,
             };
-            protoBufCard.ProvidedEnergy.Capacity = ProvidedEnergy.Count;
-            foreach (var energyType in ProvidedEnergy)
-            {
-                protoBufCard.ProvidedEnergy.Add(energyType.ToProtoBuf());
-            }
-            return protoBufCard;
         }
 
-        public virtual ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
+        public virtual ProtoBufCardDynamic ToSerializableDynamic()
         {
-            var protoBufCard = new ProtoBufCard
-            {
-                Name = Name,
-                CardType = CardType.Energy.ToProtoBuf(),
-                CardSubtype = CardSubtype.ToProtoBuf(),
-                DeckId = DeckId,
-                AttachedTo = pokemonCard.DeckId,
-            };
+            var protoBufCard = new ProtoBufCardDynamic();
             protoBufCard.ProvidedEnergy.Capacity = ProvidedEnergy.Count;
             foreach (var energyType in ProvidedEnergy)
             {

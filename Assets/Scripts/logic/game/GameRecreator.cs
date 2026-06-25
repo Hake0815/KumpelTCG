@@ -11,19 +11,27 @@ namespace gamecore.game
 {
     class GameRecreator
     {
-        public static void RecreateGameFromGameState(ProtoBufGameState gameState, Game game)
+        public static void RecreateGameFromGameState(
+            ProtoBufGameState gameState,
+            IReadOnlyDictionary<int, ProtoBufCardStatic> cardStatics,
+            Game game
+        )
         {
             game.Player1.Deck.Shuffle();
             game.Player2.Deck.Shuffle();
-            RecreatePlayers(gameState, game);
+            RecreatePlayers(gameState, cardStatics, game);
             game.TurnCounter = game.Player1.TurnCounter + game.Player2.TurnCounter;
         }
 
-        private static void RecreatePlayers(ProtoBufGameState gameState, Game game)
+        private static void RecreatePlayers(
+            ProtoBufGameState gameState,
+            IReadOnlyDictionary<int, ProtoBufCardStatic> cardStatics,
+            Game game
+        )
         {
             var isPlayer1Self =
                 gameState.CardStates.First().Position.Owner == ProtoBufOwner.OwnerSelf;
-            RecreatePlayersCards(gameState, game, isPlayer1Self);
+            RecreatePlayersCards(gameState, cardStatics, game, isPlayer1Self);
             var player1State = isPlayer1Self ? gameState.SelfState : gameState.OpponentState;
             var player2State = isPlayer1Self ? gameState.OpponentState : gameState.SelfState;
             RecreatePlayerAttributes(player1State, game.Player1);
@@ -50,16 +58,18 @@ namespace gamecore.game
 
         private static void RecreatePlayersCards(
             ProtoBufGameState gameState,
+            IReadOnlyDictionary<int, ProtoBufCardStatic> cardStatics,
             Game game,
             bool isPlayer1Self
         )
         {
-            RecreatePlayerCards(gameState, game.Player1, isPlayer1Self);
-            RecreatePlayerCards(gameState, game.Player2, !isPlayer1Self);
+            RecreatePlayerCards(gameState, cardStatics, game.Player1, isPlayer1Self);
+            RecreatePlayerCards(gameState, cardStatics, game.Player2, !isPlayer1Self);
         }
 
         private static void RecreatePlayerCards(
             ProtoBufGameState gameState,
+            IReadOnlyDictionary<int, ProtoBufCardStatic> cardStatics,
             IPlayerLogic currentPlayer,
             bool isPlayerSelf
         )
@@ -85,6 +95,7 @@ namespace gamecore.game
                 var cardRemovedFromDeck = SetupCard(
                     card,
                     gameState,
+                    cardStatics,
                     currentPlayer,
                     ref remainingHandCardsToSetup,
                     ref remainingPrizesToSetup
@@ -118,16 +129,26 @@ namespace gamecore.game
         private static bool SetupCard(
             ICardLogic card,
             ProtoBufGameState gameState,
+            IReadOnlyDictionary<int, ProtoBufCardStatic> cardStatics,
             IPlayerLogic currentPlayer,
             ref int remainingHandCardsToSetup,
             ref int remainingPrizesToSetup
         )
         {
             var cardState = gameState.CardStates[card.DeckId];
-            if (cardState.Card.DeckId != card.DeckId)
+            if (cardState.DeckId != card.DeckId)
             {
                 throw new IllegalStateException(
                     $"card states in game state are not ordered by deck id"
+                );
+            }
+            if (
+                !cardStatics.TryGetValue(card.DeckId, out var cardStatic)
+                || cardStatic.DeckId != card.DeckId
+            )
+            {
+                throw new IllegalStateException(
+                    $"Missing static data for card with deck id {card.DeckId}"
                 );
             }
 
@@ -138,6 +159,7 @@ namespace gamecore.game
                 cardState.Position.PossiblePositions
             );
             card.TopDeckPositionIndex = Math.Max(0, cardState.Position.TopDeckPositionIndex);
+            ApplyDynamicCardState(card, cardState);
             if (
                 cardState.Position.PossiblePositions.Contains(ProtoBufCardPosition.CardPositionHand)
                 && remainingHandCardsToSetup > 0
@@ -177,7 +199,11 @@ namespace gamecore.game
             {
                 currentPlayer.Deck.Cards.Remove(card);
                 currentPlayer.Bench.AddCard(card);
-                SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
+                SetPokemonInPlayState(
+                    card as IPokemonCardLogic,
+                    cardStatic,
+                    cardState.CardDynamic
+                );
                 return true;
             }
             else if (
@@ -188,7 +214,11 @@ namespace gamecore.game
             {
                 currentPlayer.Deck.Cards.Remove(card);
                 currentPlayer.ActivePokemon = card as IPokemonCardLogic;
-                SetPokemonInPlayState(card as IPokemonCardLogic, cardState);
+                SetPokemonInPlayState(
+                    card as IPokemonCardLogic,
+                    cardStatic,
+                    cardState.CardDynamic
+                );
                 return true;
             }
             else if (
@@ -235,19 +265,56 @@ namespace gamecore.game
             }
         }
 
+        private static void ApplyDynamicCardState(ICardLogic card, ProtoBufCardState cardState)
+        {
+            if (cardState.CardDynamic == null)
+            {
+                var isHidden =
+                    cardState.Position.Owner == ProtoBufOwner.OwnerOpponent
+                    && cardState.Position.PossiblePositions.Count == 3;
+                if (!isHidden && card is not ITrainerCardLogic)
+                {
+                    throw new IllegalStateException(
+                        $"Missing dynamic state for card with deck id {card.DeckId}"
+                    );
+                }
+                return;
+            }
+
+            if (card is IPokemonCardLogic pokemon)
+            {
+                pokemon.MaxHp = cardState.CardDynamic.MaxHp;
+                pokemon.Weakness = cardState.CardDynamic.Weakness.FromProtoBuf();
+                pokemon.Resistance = cardState.CardDynamic.Resistance.FromProtoBuf();
+                pokemon.RetreatCost = cardState.CardDynamic.RetreatCost;
+                pokemon.NumberOfPrizeCardsOnKnockout =
+                    cardState.CardDynamic.NumberOfPrizeCardsOnKnockout;
+                pokemon.PokemonTurnTraits.Clear();
+                pokemon.PokemonTurnTraits.AddRange(
+                    cardState.CardDynamic.PokemonTurnTraits.Select(trait => trait.FromProtoBuf())
+                );
+                pokemon.TakeDamage(cardState.CardDynamic.CurrentDamage);
+            }
+            else if (card is IEnergyCardLogic energy)
+            {
+                energy.ProvidedEnergy.Clear();
+                energy.ProvidedEnergy.AddRange(
+                    cardState.CardDynamic.ProvidedEnergy.Select(type => type.FromProtoBuf())
+                );
+            }
+        }
+
         private static void SetPokemonInPlayState(
             IPokemonCardLogic pokemon,
-            ProtoBufCardState cardState
+            ProtoBufCardStatic cardStatic,
+            ProtoBufCardDynamic cardDynamic
         )
         {
-            pokemon.PokemonType = cardState.Card.EnergyType.FromProtoBuf();
-            pokemon.Weakness = cardState.Card.Weakness.FromProtoBuf();
-            pokemon.Resistance = cardState.Card.Resistance.FromProtoBuf();
-            pokemon.NumberOfPrizeCardsOnKnockout = cardState.Card.NumberOfPrizeCardsOnKnockout;
+            pokemon.PokemonType = cardStatic.EnergyType.FromProtoBuf();
+            pokemon.PokemonTurnTraits.Clear();
             pokemon.PokemonTurnTraits.AddRange(
-                cardState.Card.PokemonTurnTraits.Select(trait => trait.FromProtoBuf())
+                cardDynamic.PokemonTurnTraits.Select(trait => trait.FromProtoBuf())
             );
-            pokemon.TakeDamage(cardState.Card.CurrentDamage);
         }
 
         private static void AttachCard(

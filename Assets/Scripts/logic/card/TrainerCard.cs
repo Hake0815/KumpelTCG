@@ -124,9 +124,9 @@ namespace gamecore.card
             throw new IllegalActionException("Trainer cards cannot be played with a target, yet.");
         }
 
-        public virtual ProtoBufCard ToSerializable()
+        public virtual ProtoBufCardStatic ToSerializableStatic()
         {
-            var protoBufCard = new ProtoBufCard
+            var protoBufCard = new ProtoBufCardStatic
             {
                 Name = Name,
                 CardType = CardType.Trainer.ToProtoBuf(),
@@ -146,9 +146,9 @@ namespace gamecore.card
             return protoBufCard;
         }
 
-        public virtual ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
+        public virtual ProtoBufCardDynamic ToSerializableDynamic()
         {
-            throw new IllegalActionException("Trainer cards cannot be attached to pokemon, yet.");
+            return null;
         }
     }
 }

@@ -45,6 +45,7 @@ namespace gamecore.card
 
         [JsonIgnore]
         Dictionary<Type, PokemonEffectAbstract> PokemonEffects { get; }
+        ProtoBufCardDynamic ToSerializableDynamic(IPokemonCard evolvedInto);
         event Action<List<IEnergyCard>> OnAttachedEnergyChanged;
         event Action DamageModified;
         event Action Evolved;
@@ -63,6 +64,12 @@ namespace gamecore.card
 
         [JsonIgnore]
         int NumberOfPrizeCardsOnKnockout { get; set; }
+
+        [JsonIgnore]
+        new int MaxHp { get; set; }
+
+        [JsonIgnore]
+        new int RetreatCost { get; set; }
         void AttachEnergyCards(List<IEnergyCardLogic> energyCards);
 
         [JsonIgnore]
@@ -109,8 +116,8 @@ namespace gamecore.card
         public EnergyType PokemonType { get; set; }
         public EnergyType Weakness { get; set; }
         public EnergyType Resistance { get; set; }
-        public int MaxHp { get; private set; }
-        public int RetreatCost { get; private set; }
+        public int MaxHp { get; set; }
+        public int RetreatCost { get; set; }
         public int NumberOfPrizeCardsOnKnockout { get; set; }
         public Dictionary<Type, PokemonEffectAbstract> PokemonEffects { get; } = new();
         private int _damage = 0;
@@ -396,35 +403,54 @@ namespace gamecore.card
             PokemonEffects.Remove(effect.GetType());
         }
 
-        public ProtoBufCard ToSerializable()
+        public ProtoBufCardStatic ToSerializableStatic()
         {
-            var protoBufCard = new ProtoBufCard
+            var protoBufCard = new ProtoBufCardStatic
             {
                 Name = Name,
                 CardType = CardType.Pokemon.ToProtoBuf(),
                 CardSubtype = CardSubtype.ToProtoBuf(),
                 EnergyType = PokemonType.ToProtoBuf(),
-                MaxHp = MaxHp,
                 EvolvesFrom = EvolvesFrom ?? "",
-                Weakness = Weakness.ToProtoBuf(),
-                Resistance = Resistance.ToProtoBuf(),
-                RetreatCost = RetreatCost,
-                NumberOfPrizeCardsOnKnockout = NumberOfPrizeCardsOnKnockout,
                 Ability = Ability?.ToSerializable(),
                 DeckId = DeckId,
-                CurrentDamage = Damage,
             };
 
             protoBufCard.Attacks.Capacity = Attacks.Count;
-            protoBufCard.PokemonEffects.Capacity = PokemonEffects.Count;
-            protoBufCard.AttachedEnergyCards.Capacity = AttachedEnergyCards.Count;
-            protoBufCard.PreEvolutionIds.Capacity = PreEvolutions.Count;
-            protoBufCard.PokemonTurnTraits.Capacity = PokemonTurnTraits.Count;
 
             foreach (var attack in Attacks)
             {
                 protoBufCard.Attacks.Add(attack.ToSerializable());
             }
+            return protoBufCard;
+        }
+
+        public ProtoBufCardDynamic ToSerializableDynamic()
+        {
+            return ToSerializableDynamic(null);
+        }
+
+        public ProtoBufCardDynamic ToSerializableDynamic(IPokemonCard evolvedInto)
+        {
+            var protoBufCard = new ProtoBufCardDynamic
+            {
+                MaxHp = MaxHp,
+                Weakness = Weakness.ToProtoBuf(),
+                Resistance = Resistance.ToProtoBuf(),
+                RetreatCost = RetreatCost,
+                NumberOfPrizeCardsOnKnockout = NumberOfPrizeCardsOnKnockout,
+                CurrentDamage = Damage,
+            };
+            if (evolvedInto != null)
+            {
+                protoBufCard.EvolvedInto = evolvedInto.DeckId;
+            }
+
+            protoBufCard.PokemonEffects.Capacity = PokemonEffects.Count;
+            protoBufCard.AttachedEnergyCards.Capacity = AttachedEnergyCards.Count;
+            protoBufCard.PreEvolutionIds.Capacity = PreEvolutions.Count;
+            protoBufCard.PokemonTurnTraits.Capacity = PokemonTurnTraits.Count;
+
             foreach (var pokemonEffect in PokemonEffects)
             {
                 protoBufCard.PokemonEffects.Add(pokemonEffect.Value.ToSerializable());
@@ -443,53 +469,6 @@ namespace gamecore.card
             foreach (var pokemonTurnTrait in PokemonTurnTraits)
             {
                 protoBufCard.PokemonTurnTraits.Add(pokemonTurnTrait.ToProtoBuf());
-            }
-            return protoBufCard;
-        }
-
-        public ProtoBufCard ToSerializable(IPokemonCard pokemonCard)
-        {
-            var protoBufCard = new ProtoBufCard
-            {
-                Name = Name,
-                CardType = CardType.Pokemon.ToProtoBuf(),
-                CardSubtype = CardSubtype.ToProtoBuf(),
-                EnergyType = PokemonType.ToProtoBuf(),
-                MaxHp = MaxHp,
-                EvolvesFrom = EvolvesFrom ?? "",
-                Weakness = Weakness.ToProtoBuf(),
-                Resistance = Resistance.ToProtoBuf(),
-                RetreatCost = RetreatCost,
-                NumberOfPrizeCardsOnKnockout = NumberOfPrizeCardsOnKnockout,
-                Ability = Ability?.ToSerializable(),
-                DeckId = DeckId,
-                CurrentDamage = Damage,
-                EvolvedInto = pokemonCard.DeckId,
-            };
-
-            protoBufCard.Attacks.Capacity = Attacks.Count;
-            protoBufCard.PokemonEffects.Capacity = PokemonEffects.Count;
-            protoBufCard.AttachedEnergyCards.Capacity = AttachedEnergyCards.Count;
-            protoBufCard.PreEvolutionIds.Capacity = PreEvolutions.Count;
-
-            foreach (var attack in Attacks)
-            {
-                protoBufCard.Attacks.Add(attack.ToSerializable());
-            }
-            foreach (var pokemonEffect in PokemonEffects)
-            {
-                protoBufCard.PokemonEffects.Add(pokemonEffect.Value.ToSerializable());
-            }
-            foreach (var attachedEnergyCard in AttachedEnergyCards)
-            {
-                protoBufCard.AttachedEnergyCards.Add(attachedEnergyCard.DeckId);
-                protoBufCard.AttachedEnergy.AddRange(
-                    attachedEnergyCard.ProvidedEnergy.Select(energy => energy.ToProtoBuf())
-                );
-            }
-            foreach (var preEvolution in PreEvolutions)
-            {
-                protoBufCard.PreEvolutionIds.Add(preEvolution.DeckId);
             }
             return protoBufCard;
         }

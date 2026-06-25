@@ -26,14 +26,14 @@ namespace gamecore.game.state
             IPlayerLogic player
         )
         {
-            return
-            [
-                new GameInteraction(
+            return new List<GameInteraction>
+            {
+                new(
                     () => Task.CompletedTask,
                     GameInteractionType.GameOver,
-                    [new WinnerData(_winner, _message)]
+                    new List<IGameInteractionData> { new WinnerData(_winner, _message) }
                 ),
-            ];
+            };
         }
 
         public void OnAdvanced(Game game)

@@ -89,225 +89,231 @@ namespace gamecore.serialization {
             "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmRmlsdGVySW5zdHJ1Y3Rpb25E",
             "YXRhSAASWQoScGxheWVyX3RhcmdldF9kYXRhGAcgASgLMjsuZ2FtZWNvcmUu",
             "c2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBsYXllclRhcmdldEluc3RydWN0aW9u",
-            "RGF0YUgAQgkKB3BheWxvYWQi8QoKDFByb3RvQnVmQ2FyZBIMCgRuYW1lGAEg",
-            "ASgJEjsKCWNhcmRfdHlwZRgCIAEoDjIoLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
-            "b24uUHJvdG9CdWZDYXJkVHlwZRJBCgxjYXJkX3N1YnR5cGUYAyABKA4yKy5n",
-            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQ2FyZFN1YnR5cGUSRAoL",
-            "ZW5lcmd5X3R5cGUYBCABKA4yKi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
-            "b3RvQnVmRW5lcmd5VHlwZUgAiAEBEhMKBm1heF9ocBgFIAEoBUgBiAEBEhkK",
-            "DGV2b2x2ZXNfZnJvbRgGIAEoCUgCiAEBEkEKCHdlYWtuZXNzGAcgASgOMiou",
-            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkVuZXJneVR5cGVIA4gB",
-            "ARJDCgpyZXNpc3RhbmNlGAggASgOMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlv",
-            "bi5Qcm90b0J1ZkVuZXJneVR5cGVIBIgBARIZCgxyZXRyZWF0X2Nvc3QYCSAB",
-            "KAVIBYgBARIuCiFudW1iZXJfb2ZfcHJpemVfY2FyZHNfb25fa25vY2tvdXQY",
-            "CiABKAVIBogBARI3CgdhdHRhY2tzGAsgAygLMiYuZ2FtZWNvcmUuc2VyaWFs",
-            "aXphdGlvbi5Qcm90b0J1ZkF0dGFjaxI9CgdhYmlsaXR5GAwgASgLMicuZ2Ft",
-            "ZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkFiaWxpdHlIB4gBARJKCg9w",
-            "b2tlbW9uX2VmZmVjdHMYDSADKA4yMS5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
-            "LlByb3RvQnVmUG9rZW1vbkVmZmVjdFR5cGUSTQoTcG9rZW1vbl90dXJuX3Ry",
-            "YWl0cxgOIAMoDjIwLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZQ",
-            "b2tlbW9uVHVyblRyYWl0EkEKDGluc3RydWN0aW9ucxgPIAMoCzIrLmdhbWVj",
-            "b3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZJbnN0cnVjdGlvbhI9Cgpjb25k",
-            "aXRpb25zGBAgAygLMikuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
-            "ZkNvbmRpdGlvbhJDCg9wcm92aWRlZF9lbmVyZ3kYESADKA4yKi5nYW1lY29y",
-            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmRW5lcmd5VHlwZRIYCgthdHRhY2hl",
-            "ZF90bxgSIAEoBUgIiAEBEhQKB2RlY2tfaWQYEyABKAVICYgBARIbCg5jdXJy",
-            "ZW50X2RhbWFnZRgUIAEoBUgKiAEBEkMKD2F0dGFjaGVkX2VuZXJneRgVIAMo",
-            "DjIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZFbmVyZ3lUeXBl",
-            "Eh0KFWF0dGFjaGVkX2VuZXJneV9jYXJkcxgWIAMoBRIZChFwcmVfZXZvbHV0",
-            "aW9uX2lkcxgXIAMoBRIZCgxldm9sdmVkX2ludG8YGCABKAVIC4gBAUIOCgxf",
-            "ZW5lcmd5X3R5cGVCCQoHX21heF9ocEIPCg1fZXZvbHZlc19mcm9tQgsKCV93",
-            "ZWFrbmVzc0INCgtfcmVzaXN0YW5jZUIPCg1fcmV0cmVhdF9jb3N0QiQKIl9u",
-            "dW1iZXJfb2ZfcHJpemVfY2FyZHNfb25fa25vY2tvdXRCCgoIX2FiaWxpdHlC",
-            "DgoMX2F0dGFjaGVkX3RvQgoKCF9kZWNrX2lkQhEKD19jdXJyZW50X2RhbWFn",
-            "ZUIPCg1fZXZvbHZlZF9pbnRvIoMBChFQcm90b0J1ZkNhcmRTdGF0ZRIyCgRj",
-            "YXJkGAEgASgLMiQuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNh",
-            "cmQSOgoIcG9zaXRpb24YAiABKAsyKC5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
-            "LlByb3RvQnVmUG9zaXRpb24i9AIKE1Byb3RvQnVmUGxheWVyU3RhdGUSEQoJ",
-            "aXNfYWN0aXZlGAEgASgIEhQKDGlzX2F0dGFja2luZxgCIAEoCBIYChBrbm93",
-            "c19oaXNfcHJpemVzGAMgASgIEhIKCmhhbmRfY291bnQYBCABKAUSEgoKZGVj",
-            "a19jb3VudBgFIAEoBRIUCgxwcml6ZXNfY291bnQYBiABKAUSEwoLYmVuY2hf",
-            "Y291bnQYByABKAUSGgoSZGlzY2FyZF9waWxlX2NvdW50GAggASgFEksKEnBs",
-            "YXllcl90dXJuX3RyYWl0cxgJIAMoDjIvLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
-            "b24uUHJvdG9CdWZQbGF5ZXJUdXJuVHJhaXQSFAoMdHVybl9jb3VudGVyGAog",
-            "ASgFEkgKDnBsYXllcl9lZmZlY3RzGAsgAygOMjAuZ2FtZWNvcmUuc2VyaWFs",
-            "aXphdGlvbi5Qcm90b0J1ZlBsYXllckVmZmVjdFR5cGUiwAIKEVByb3RvQnVm",
-            "R2FtZVN0YXRlEhMKC3JlY3JlYXRhYmxlGAEgASgIElAKFHRlY2huaWNhbF9n",
-            "YW1lX3N0YXRlGAIgASgOMjIuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90",
-            "b0J1ZlRlY2huaWNhbEdhbWVTdGF0ZRI/CgpzZWxmX3N0YXRlGAMgASgLMisu",
-            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBsYXllclN0YXRlEkMK",
-            "Dm9wcG9uZW50X3N0YXRlGAQgASgLMisuZ2FtZWNvcmUuc2VyaWFsaXphdGlv",
-            "bi5Qcm90b0J1ZlBsYXllclN0YXRlEj4KC2NhcmRfc3RhdGVzGAUgAygLMiku",
-            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNhcmRTdGF0ZSKkAwoe",
-            "UHJvdG9CdWZDb25kaXRpb25hbFRhcmdldFF1ZXJ5Ek4KDm5lc3RlZF9xdWVy",
-            "aWVzGAEgAygLMjYuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNv",
-            "bmRpdGlvbmFsVGFyZ2V0UXVlcnkSWQoWbG9naWNhbF9xdWVyeV9vcGVyYXRv",
-            "chgCIAEoDjI0LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZMb2dp",
-            "Y2FsUXVlcnlPcGVyYXRvckgAiAEBEkAKCWludF9yYW5nZRgDIAEoCzIoLmdh",
-            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZJbnRSYW5nZUgBiAEBElQK",
-            "E3NlbGVjdGlvbl9xdWFsaWZpZXIYBCABKA4yMi5nYW1lY29yZS5zZXJpYWxp",
-            "emF0aW9uLlByb3RvQnVmU2VsZWN0aW9uUXVhbGlmaWVySAKIAQFCGQoXX2xv",
-            "Z2ljYWxfcXVlcnlfb3BlcmF0b3JCDAoKX2ludF9yYW5nZUIWChRfc2VsZWN0",
-            "aW9uX3F1YWxpZmllciKQAQoUUHJvdG9CdWZNdWxsaWdhbkRhdGESOwoJbXVs",
-            "bGlnYW5zGAEgAygLMiguZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
-            "ZkNhcmRMaXN0EjsKBnBsYXllchgCIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6",
-            "YXRpb24uUHJvdG9CdWZQbGF5ZXJTdGF0ZSIhChBQcm90b0J1ZkNhcmRMaXN0",
-            "Eg0KBWNhcmRzGAEgAygFIiQKElByb3RvQnVmTnVtYmVyRGF0YRIOCgZudW1i",
-            "ZXIYASABKAUi8AIKElByb3RvQnVmVGFyZ2V0RGF0YRIYChBwb3NzaWJsZV90",
-            "YXJnZXRzGAEgAygFEkgKDXRhcmdldF9hY3Rpb24YAiABKA4yMS5nYW1lY29y",
-            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWN0aW9uT25TZWxlY3Rpb24SSwoQ",
-            "cmVtYWluZGVyX2FjdGlvbhgDIAEoDjIxLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
-            "b24uUHJvdG9CdWZBY3Rpb25PblNlbGVjdGlvbhIcChRhbGxvd19tdWx0aXBs",
-            "ZV90aW1lcxgEIAEoCBIbChFudW1iZXJfb2ZfdGFyZ2V0cxgFIAEoBUgAEloK",
-            "GGNvbmRpdGlvbmFsX3RhcmdldF9xdWVyeRgGIAEoCzI2LmdhbWVjb3JlLnNl",
-            "cmlhbGl6YXRpb24uUHJvdG9CdWZDb25kaXRpb25hbFRhcmdldFF1ZXJ5SABC",
-            "EgoQdGFyZ2V0X3RvX2Nob29zZSIrChtQcm90b0J1ZkludGVyYWN0aW9uQ2Fy",
-            "ZERhdGESDAoEY2FyZBgBIAEoBSJMChJQcm90b0J1ZkF0dGFja0RhdGESNgoG",
-            "YXR0YWNrGAEgASgLMiYuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
-            "ZkF0dGFjayJPChNQcm90b0J1ZkFiaWxpdHlEYXRhEjgKB2FiaWxpdHkYASAB",
-            "KAsyJy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWJpbGl0eSJi",
-            "ChJQcm90b0J1Zldpbm5lckRhdGESOwoGd2lubmVyGAEgASgLMisuZ2FtZWNv",
-            "cmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBsYXllclN0YXRlEg8KB21lc3Nh",
-            "Z2UYAiABKAkiWQoWUHJvdG9CdWZTZWxlY3RGcm9tRGF0YRI/CgtzZWxlY3Rf",
-            "ZnJvbRgBIAEoDjIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZT",
-            "ZWxlY3RGcm9tIq4FChtQcm90b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGESSgoJ",
-            "ZGF0YV90eXBlGAEgASgOMjcuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90",
-            "b0J1ZkdhbWVJbnRlcmFjdGlvbkRhdGFUeXBlEkUKDW11bGxpZ2FuX2RhdGEY",
-            "AiABKAsyLC5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmTXVsbGln",
-            "YW5EYXRhSAASQQoLbnVtYmVyX2RhdGEYAyABKAsyKi5nYW1lY29yZS5zZXJp",
-            "YWxpemF0aW9uLlByb3RvQnVmTnVtYmVyRGF0YUgAEkEKC3RhcmdldF9kYXRh",
-            "GAQgASgLMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlRhcmdl",
-            "dERhdGFIABJUChVpbnRlcmFjdGlvbl9jYXJkX2RhdGEYBSABKAsyMy5nYW1l",
-            "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmSW50ZXJhY3Rpb25DYXJkRGF0",
-            "YUgAEkEKC2F0dGFja19kYXRhGAYgASgLMiouZ2FtZWNvcmUuc2VyaWFsaXph",
-            "dGlvbi5Qcm90b0J1ZkF0dGFja0RhdGFIABJBCgt3aW5uZXJfZGF0YRgHIAEo",
-            "CzIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZXaW5uZXJEYXRh",
-            "SAASSgoQc2VsZWN0X2Zyb21fZGF0YRgIIAEoCzIuLmdhbWVjb3JlLnNlcmlh",
-            "bGl6YXRpb24uUHJvdG9CdWZTZWxlY3RGcm9tRGF0YUgAEkMKDGFiaWxpdHlf",
-            "ZGF0YRgJIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZB",
-            "YmlsaXR5RGF0YUgAQgkKB3BheWxvYWQinwEKF1Byb3RvQnVmR2FtZUludGVy",
-            "YWN0aW9uEkEKBHR5cGUYASABKA4yMy5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
-            "LlByb3RvQnVmR2FtZUludGVyYWN0aW9uVHlwZRJBCgRkYXRhGAIgAygLMjMu",
-            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkdhbWVJbnRlcmFjdGlv",
-            "bkRhdGEqbQoQUHJvdG9CdWZDYXJkVHlwZRIVChFDQVJEX1RZUEVfVU5LTk9X",
-            "ThAAEhUKEUNBUkRfVFlQRV9QT0tFTU9OEAESFQoRQ0FSRF9UWVBFX1RSQUlO",
-            "RVIQAhIUChBDQVJEX1RZUEVfRU5FUkdZEAMqtQIKE1Byb3RvQnVmQ2FyZFN1",
-            "YnR5cGUSGAoUQ0FSRF9TVUJUWVBFX1VOS05PV04QABIeChpDQVJEX1NVQlRZ",
-            "UEVfQkFTSUNfUE9LRU1PThABEh8KG0NBUkRfU1VCVFlQRV9TVEFHRTFfUE9L",
-            "RU1PThACEh8KG0NBUkRfU1VCVFlQRV9TVEFHRTJfUE9LRU1PThADEhoKFkNB",
-            "UkRfU1VCVFlQRV9TVVBQT1JURVIQBBIVChFDQVJEX1NVQlRZUEVfSVRFTRAF",
-            "EhUKEUNBUkRfU1VCVFlQRV9UT09MEAYSGAoUQ0FSRF9TVUJUWVBFX1NUQURJ",
-            "VU0QBxIdChlDQVJEX1NVQlRZUEVfQkFTSUNfRU5FUkdZEAgSHwobQ0FSRF9T",
-            "VUJUWVBFX1NQRUNJQUxfRU5FUkdZEAkqoAIKElByb3RvQnVmRW5lcmd5VHlw",
-            "ZRIUChBFTkVSR1lfVFlQRV9OT05FEAASFQoRRU5FUkdZX1RZUEVfR1JBU1MQ",
-            "ARIUChBFTkVSR1lfVFlQRV9GSVJFEAISFQoRRU5FUkdZX1RZUEVfV0FURVIQ",
-            "AxIZChVFTkVSR1lfVFlQRV9MSUdIVE5JTkcQBBIYChRFTkVSR1lfVFlQRV9G",
-            "SUdIVElORxAFEhcKE0VORVJHWV9UWVBFX1BTWUNISUMQBhIZChVFTkVSR1lf",
-            "VFlQRV9DT0xPUkxFU1MQBxIYChRFTkVSR1lfVFlQRV9EQVJLTkVTUxAIEhUK",
-            "EUVORVJHWV9UWVBFX01FVEFMEAkSFgoSRU5FUkdZX1RZUEVfRFJBR09OEAoq",
-            "6gIKFFByb3RvQnVmQ2FyZFBvc2l0aW9uEiIKHkNBUkRfUE9TSVRJT05fQVRU",
-            "QUNIRURfVE9fQ0FSRBAAEhcKE0NBUkRfUE9TSVRJT05fQkVOQ0gQARIiCh5D",
-            "QVJEX1BPU0lUSU9OX0NVUlJFTlRMWV9QTEFZRUQQAhIdChlDQVJEX1BPU0lU",
-            "SU9OX0FDVElWRV9TUE9UEAMSGgoWQ0FSRF9QT1NJVElPTl9GTE9BVElORxAE",
-            "Eh4KGkNBUkRfUE9TSVRJT05fRElTQ0FSRF9QSUxFEAUSGAoUQ0FSRF9QT1NJ",
-            "VElPTl9QUklaRVMQBhIWChJDQVJEX1BPU0lUSU9OX0RFQ0sQBxIWChJDQVJE",
-            "X1BPU0lUSU9OX0hBTkQQCBIqCiZDQVJEX1BPU0lUSU9OX1NFTEVDVEVEX0NB",
-            "UkRTX1JFTUFJTkRFUhAJEiAKHENBUkRfUE9TSVRJT05fU0VMRUNURURfQ0FS",
-            "RFMQCiozCg1Qcm90b0J1Zk93bmVyEg4KCk9XTkVSX1NFTEYQABISCg5PV05F",
-            "Ul9PUFBPTkVOVBABKqgCChdQcm90b0J1Zkluc3RydWN0aW9uVHlwZRIgChxJ",
-            "TlNUUlVDVElPTl9UWVBFX0RFQUxfREFNQUdFEAASIQodSU5TVFJVQ1RJT05f",
-            "VFlQRV9TRUxFQ1RfQ0FSRFMQARIcChhJTlNUUlVDVElPTl9UWVBFX0RJU0NB",
-            "UkQQAhIhCh1JTlNUUlVDVElPTl9UWVBFX1RBS0VfVE9fSEFORBADEiAKHElO",
-            "U1RSVUNUSU9OX1RZUEVfUFVUX0lOX0RFQ0sQBBIhCh1JTlNUUlVDVElPTl9U",
-            "WVBFX1JFVkVBTF9DQVJEUxAFEh8KG0lOU1RSVUNUSU9OX1RZUEVfU0hPV19D",
-            "QVJEUxAGEiEKHUlOU1RSVUNUSU9OX1RZUEVfU0hVRkZMRV9ERUNLEAcqWgoV",
-            "UHJvdG9CdWZDb25kaXRpb25UeXBlEiMKH0NPTkRJVElPTl9UWVBFX0FCSUxJ",
-            "VFlfTk9UX1VTRUQQABIcChhDT05ESVRJT05fVFlQRV9IQVNfQ0FSRFMQASqh",
-            "AgobUHJvdG9CdWZJbnN0cnVjdGlvbkRhdGFUeXBlEiUKIUlOU1RSVUNUSU9O",
-            "X0RBVEFfVFlQRV9BVFRBQ0tfREFUQRAAEiYKIklOU1RSVUNUSU9OX0RBVEFf",
-            "VFlQRV9ESVNDQVJEX0RBVEEQARIqCiZJTlNUUlVDVElPTl9EQVRBX1RZUEVf",
-            "Q0FSRF9BTU9VTlRfREFUQRACEjIKLklOU1RSVUNUSU9OX0RBVEFfVFlQRV9S",
-            "RVRVUk5fVE9fREVDS19UWVBFX0RBVEEQAxIlCiFJTlNUUlVDVElPTl9EQVRB",
-            "X1RZUEVfRklMVEVSX0RBVEEQBBIsCihJTlNUUlVDVElPTl9EQVRBX1RZUEVf",
-            "UExBWUVSX1RBUkdFVF9EQVRBEAUqOwoUUHJvdG9CdWZBdHRhY2tUYXJnZXQS",
-            "IwofQVRUQUNLX1RBUkdFVF9ERUZFTkRJTkdfUE9LRU1PThAAKkoKFFByb3Rv",
-            "QnVmUGxheWVyVGFyZ2V0EhYKElBMQVlFUl9UQVJHRVRfU0VMRhAAEhoKFlBM",
-            "QVlFUl9UQVJHRVRfT1BQT05FTlQQASpbChhQcm90b0J1ZlJldHVyblRvRGVj",
-            "a1R5cGUSHQoZUkVUVVJOX1RPX0RFQ0tfVFlQRV9VTkRFUhAAEiAKHFJFVFVS",
-            "Tl9UT19ERUNLX1RZUEVfU0hVRkZMRUQQASqCAQodUHJvdG9CdWZGaWx0ZXJM",
-            "b2dpY2FsT3BlcmF0b3ISIAocRklMVEVSX0xPR0lDQUxfT1BFUkFUT1JfTk9O",
-            "RRAAEh8KG0ZJTFRFUl9MT0dJQ0FMX09QRVJBVE9SX0FORBABEh4KGkZJTFRF",
-            "Ul9MT0dJQ0FMX09QRVJBVE9SX09SEAIqrQEKElByb3RvQnVmRmlsdGVyVHlw",
-            "ZRIUChBGSUxURVJfVFlQRV9OT05FEAASFAoQRklMVEVSX1RZUEVfVFJVRRAB",
-            "Eh4KGkZJTFRFUl9UWVBFX0VYQ0xVREVfU09VUkNFEAISGQoVRklMVEVSX1RZ",
-            "UEVfQ0FSRF9UWVBFEAMSHAoYRklMVEVSX1RZUEVfQ0FSRF9TVUJUWVBFEAQS",
-            "EgoORklMVEVSX1RZUEVfSFAQBSrHAQoXUHJvdG9CdWZGaWx0ZXJPcGVyYXRp",
-            "b24SGQoVRklMVEVSX09QRVJBVElPTl9OT05FEAASGwoXRklMVEVSX09QRVJB",
-            "VElPTl9FUVVBTFMQARIfChtGSUxURVJfT1BFUkFUSU9OX05PVF9FUVVBTFMQ",
-            "AhInCiNGSUxURVJfT1BFUkFUSU9OX0xFU1NfVEhBTl9PUl9FUVVBTBADEioK",
-            "JkZJTFRFUl9PUEVSQVRJT05fR1JFQVRFUl9USEFOX09SX0VRVUFMEAQqYwoU",
-            "UHJvdG9CdWZUYXJnZXRTb3VyY2USFgoSVEFSR0VUX1NPVVJDRV9IQU5EEAAS",
-            "FgoSVEFSR0VUX1NPVVJDRV9TRUxGEAESGwoXVEFSR0VUX1NPVVJDRV9TRUxF",
-            "Q1RJT04QAio3ChhQcm90b0J1ZlBsYXllckVmZmVjdFR5cGUSGwoXUExBWUVS",
-            "X0VGRkVDVF9UWVBFX05PTkUQACo5ChlQcm90b0J1ZlBva2Vtb25FZmZlY3RU",
-            "eXBlEhwKGFBPS0VNT05fRUZGRUNUX1RZUEVfTk9ORRAAKncKGFByb3RvQnVm",
-            "UG9rZW1vblR1cm5UcmFpdBIsCihQT0tFTU9OX1RVUk5fVFJBSVRfUFVUX0lO",
-            "X1BMQVlfVEhJU19UVVJOEAASLQopUE9LRU1PTl9UVVJOX1RSQUlUX0FCSUxJ",
-            "VFlfVVNFRF9USElTX1RVUk4QASrGAQoXUHJvdG9CdWZQbGF5ZXJUdXJuVHJh",
-            "aXQSKAokUExBWUVSX1RVUk5fVFJBSVRfRklSU1RfVFVSTl9PRl9HQU1FEAAS",
-            "LgoqUExBWUVSX1RVUk5fVFJBSVRfQVRUQUNIRURfRU5FUkdZX0ZPUl9UVVJO",
-            "EAESMAosUExBWUVSX1RVUk5fVFJBSVRfUExBWUVEX1NVUFBPUlRFUl9USElT",
-            "X1RVUk4QAhIfChtQTEFZRVJfVFVSTl9UUkFJVF9SRVRSRUFURUQQAyqOBQob",
-            "UHJvdG9CdWZHYW1lSW50ZXJhY3Rpb25UeXBlEi8KK0dBTUVfSU5URVJBQ1RJ",
-            "T05fVFlQRV9TRUxFQ1RfQUNUSVZFX1BPS0VNT04QABIjCh9HQU1FX0lOVEVS",
-            "QUNUSU9OX1RZUEVfUExBWV9DQVJEEAESIgoeR0FNRV9JTlRFUkFDVElPTl9U",
-            "WVBFX0VORF9UVVJOEAISKwonR0FNRV9JTlRFUkFDVElPTl9UWVBFX0NPTkZJ",
-            "Uk1fTVVMTElHQU5TEAMSKgomR0FNRV9JTlRFUkFDVElPTl9UWVBFX1NFTEVD",
-            "VF9NVUxMSUdBTlMQBBIhCh1HQU1FX0lOVEVSQUNUSU9OX1RZUEVfQ09ORklS",
-            "TRAFEikKJUdBTUVfSU5URVJBQ1RJT05fVFlQRV9TRVRVUF9DT01QTEVURUQQ",
-            "BhIwCixHQU1FX0lOVEVSQUNUSU9OX1RZUEVfUExBWV9DQVJEX1dJVEhfVEFS",
-            "R0VUUxAHEigKJEdBTUVfSU5URVJBQ1RJT05fVFlQRV9QRVJGT1JNX0FUVEFD",
-            "SxAIEiMKH0dBTUVfSU5URVJBQ1RJT05fVFlQRV9HQU1FX09WRVIQCRImCiJH",
-            "QU1FX0lOVEVSQUNUSU9OX1RZUEVfU0VMRUNUX0NBUkRTEAoSIQodR0FNRV9J",
-            "TlRFUkFDVElPTl9UWVBFX1JFVFJFQVQQCxIpCiVHQU1FX0lOVEVSQUNUSU9O",
-            "X1RZUEVfUEVSRk9STV9BQklMSVRZEAwSKQolR0FNRV9JTlRFUkFDVElPTl9U",
-            "WVBFX1NFVF9QUklaRV9DQVJEUxANEiwKKEdBTUVfSU5URVJBQ1RJT05fVFlQ",
-            "RV9SRVBMQVlfTkVYVF9BQ1RJT04QDiqTAwofUHJvdG9CdWZHYW1lSW50ZXJh",
-            "Y3Rpb25EYXRhVHlwZRIsCihHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9N",
-            "VUxMSUdBTl9EQVRBEAASKgomR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVf",
-            "TlVNQkVSX0RBVEEQARIqCiZHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9U",
-            "QVJHRVRfREFUQRACEjQKMEdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX0lO",
-            "VEVSQUNUSU9OX0NBUkRfREFUQRADEioKJkdBTUVfSU5URVJBQ1RJT05fREFU",
-            "QV9UWVBFX0FUVEFDS19EQVRBEAQSKgomR0FNRV9JTlRFUkFDVElPTl9EQVRB",
-            "X1RZUEVfV0lOTkVSX0RBVEEQBRIvCitHQU1FX0lOVEVSQUNUSU9OX0RBVEFf",
-            "VFlQRV9TRUxFQ1RfRlJPTV9EQVRBEAYSKwonR0FNRV9JTlRFUkFDVElPTl9E",
-            "QVRBX1RZUEVfQUJJTElUWV9EQVRBEAcqjwIKGVByb3RvQnVmQWN0aW9uT25T",
-            "ZWxlY3Rpb24SHwobQUNUSU9OX09OX1NFTEVDVElPTl9ESVNDQVJEEAASJAog",
-            "QUNUSU9OX09OX1NFTEVDVElPTl9UQUtFX1RPX0hBTkQQARIeChpBQ1RJT05f",
-            "T05fU0VMRUNUSU9OX0VWT0xWRRACEiEKHUFDVElPTl9PTl9TRUxFQ1RJT05f",
-            "QVRUQUNIX1RPEAMSHwobQUNUSU9OX09OX1NFTEVDVElPTl9QUk9NT1RFEAQS",
-            "HwobQUNUSU9OX09OX1NFTEVDVElPTl9OT1RISU5HEAUSJgoiQUNUSU9OX09O",
-            "X1NFTEVDVElPTl9QVVRfVU5ERVJfREVDSxAGKnsKElByb3RvQnVmU2VsZWN0",
-            "RnJvbRIXChNTRUxFQ1RfRlJPTV9JTl9QTEFZEAASGAoUU0VMRUNUX0ZST01f",
-            "RkxPQVRJTkcQARIUChBTRUxFQ1RfRlJPTV9ERUNLEAISHAoYU0VMRUNUX0ZS",
-            "T01fRElTQ0FSRF9QSUxFEAMqfQocUHJvdG9CdWZMb2dpY2FsUXVlcnlPcGVy",
-            "YXRvchIeChpMT0dJQ0FMX1FVRVJZX09QRVJBVE9SX0FORBAAEh0KGUxPR0lD",
-            "QUxfUVVFUllfT1BFUkFUT1JfT1IQARIeChpMT0dJQ0FMX1FVRVJZX09QRVJB",
-            "VE9SX1hPUhACKm4KGlByb3RvQnVmU2VsZWN0aW9uUXVhbGlmaWVyEicKI1NF",
-            "TEVDVElPTl9RVUFMSUZJRVJfTlVNQkVSX09GX0NBUkRTEAASJwojU0VMRUNU",
-            "SU9OX1FVQUxJRklFUl9QUk9WSURFRF9FTkVSR1kQASr4AgoaUHJvdG9CdWZU",
-            "ZWNobmljYWxHYW1lU3RhdGUSGAoUR0FNRV9TVEFURV9HQU1FX09WRVIQABIf",
-            "ChtHQU1FX1NUQVRFX0lETEVfUExBWUVSX1RVUk4QARIjCh9HQU1FX1NUQVRF",
-            "X1NFTEVDVF9CRU5DSF9QT0tFTU9OEAISJwojR0FNRV9TVEFURV9TRUxFQ1RJ",
-            "TkdfTVVMTElHQU5fQ0FSRFMQAxIlCiFHQU1FX1NUQVRFX1NFVFRJTkdfQUNU",
-            "SVZFX1BPS0VNT04QBBIiCh5HQU1FX1NUQVRFX1NFVFRJTkdfUFJJWkVfQ0FS",
-            "RFMQBRIeChpHQU1FX1NUQVRFX1NFVFVQX0NPTVBMRVRFRBAGEiIKHkdBTUVf",
-            "U1RBVEVfU0hPV19GSVJTVF9NVUxMSUdBThAHEiMKH0dBTUVfU1RBVEVfU0hP",
-            "V19TRUNPTkRfTVVMTElHQU4QCBIdChlHQU1FX1NUQVRFX1dBSVRfRk9SX0lO",
-            "UFVUEAkqfAoZUHJvdG9CdWZQb3NpdGlvbktub3dsZWRnZRIeChpQT1NJVElP",
-            "Tl9LTk9XTEVER0VfVU5LTk9XThAAEiEKHVBPU0lUSU9OX0tOT1dMRURHRV9O",
-            "T1RfUFJJWkVEEAESHAoYUE9TSVRJT05fS05PV0xFREdFX0tOT1dOEAJCGaoC",
-            "FmdhbWVjb3JlLnNlcmlhbGl6YXRpb25iBnByb3RvMw=="));
+            "RGF0YUgAQgkKB3BheWxvYWQizAQKElByb3RvQnVmQ2FyZFN0YXRpYxIMCgRu",
+            "YW1lGAEgASgJEjsKCWNhcmRfdHlwZRgCIAEoDjIoLmdhbWVjb3JlLnNlcmlh",
+            "bGl6YXRpb24uUHJvdG9CdWZDYXJkVHlwZRJBCgxjYXJkX3N1YnR5cGUYAyAB",
+            "KA4yKy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQ2FyZFN1YnR5",
+            "cGUSRAoLZW5lcmd5X3R5cGUYBCABKA4yKi5nYW1lY29yZS5zZXJpYWxpemF0",
+            "aW9uLlByb3RvQnVmRW5lcmd5VHlwZUgAiAEBEhkKDGV2b2x2ZXNfZnJvbRgG",
+            "IAEoCUgBiAEBEjcKB2F0dGFja3MYCyADKAsyJi5nYW1lY29yZS5zZXJpYWxp",
+            "emF0aW9uLlByb3RvQnVmQXR0YWNrEj0KB2FiaWxpdHkYDCABKAsyJy5nYW1l",
+            "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWJpbGl0eUgCiAEBEkEKDGlu",
+            "c3RydWN0aW9ucxgPIAMoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJv",
+            "dG9CdWZJbnN0cnVjdGlvbhI9Cgpjb25kaXRpb25zGBAgAygLMikuZ2FtZWNv",
+            "cmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNvbmRpdGlvbhIUCgdkZWNrX2lk",
+            "GBMgASgFSAOIAQFCDgoMX2VuZXJneV90eXBlQg8KDV9ldm9sdmVzX2Zyb21C",
+            "CgoIX2FiaWxpdHlCCgoIX2RlY2tfaWQilgYKE1Byb3RvQnVmQ2FyZER5bmFt",
+            "aWMSEwoGbWF4X2hwGAUgASgFSACIAQESQQoId2Vha25lc3MYByABKA4yKi5n",
+            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmRW5lcmd5VHlwZUgBiAEB",
+            "EkMKCnJlc2lzdGFuY2UYCCABKA4yKi5nYW1lY29yZS5zZXJpYWxpemF0aW9u",
+            "LlByb3RvQnVmRW5lcmd5VHlwZUgCiAEBEhkKDHJldHJlYXRfY29zdBgJIAEo",
+            "BUgDiAEBEi4KIW51bWJlcl9vZl9wcml6ZV9jYXJkc19vbl9rbm9ja291dBgK",
+            "IAEoBUgEiAEBEkoKD3Bva2Vtb25fZWZmZWN0cxgNIAMoDjIxLmdhbWVjb3Jl",
+            "LnNlcmlhbGl6YXRpb24uUHJvdG9CdWZQb2tlbW9uRWZmZWN0VHlwZRJNChNw",
+            "b2tlbW9uX3R1cm5fdHJhaXRzGA4gAygOMjAuZ2FtZWNvcmUuc2VyaWFsaXph",
+            "dGlvbi5Qcm90b0J1ZlBva2Vtb25UdXJuVHJhaXQSQwoPcHJvdmlkZWRfZW5l",
+            "cmd5GBEgAygOMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkVu",
+            "ZXJneVR5cGUSGwoOY3VycmVudF9kYW1hZ2UYFCABKAVIBYgBARJDCg9hdHRh",
+            "Y2hlZF9lbmVyZ3kYFSADKA4yKi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
+            "b3RvQnVmRW5lcmd5VHlwZRIdChVhdHRhY2hlZF9lbmVyZ3lfY2FyZHMYFiAD",
+            "KAUSGQoRcHJlX2V2b2x1dGlvbl9pZHMYFyADKAUSGQoMZXZvbHZlZF9pbnRv",
+            "GBggASgFSAaIAQFCCQoHX21heF9ocEILCglfd2Vha25lc3NCDQoLX3Jlc2lz",
+            "dGFuY2VCDwoNX3JldHJlYXRfY29zdEIkCiJfbnVtYmVyX29mX3ByaXplX2Nh",
+            "cmRzX29uX2tub2Nrb3V0QhEKD19jdXJyZW50X2RhbWFnZUIPCg1fZXZvbHZl",
+            "ZF9pbnRvIqMBChFQcm90b0J1ZkNhcmRTdGF0ZRIPCgdkZWNrX2lkGAEgASgF",
+            "EkEKDGNhcmRfZHluYW1pYxgCIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
+            "b24uUHJvdG9CdWZDYXJkRHluYW1pYxI6Cghwb3NpdGlvbhgDIAEoCzIoLmdh",
+            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZQb3NpdGlvbiL0AgoTUHJv",
+            "dG9CdWZQbGF5ZXJTdGF0ZRIRCglpc19hY3RpdmUYASABKAgSFAoMaXNfYXR0",
+            "YWNraW5nGAIgASgIEhgKEGtub3dzX2hpc19wcml6ZXMYAyABKAgSEgoKaGFu",
+            "ZF9jb3VudBgEIAEoBRISCgpkZWNrX2NvdW50GAUgASgFEhQKDHByaXplc19j",
+            "b3VudBgGIAEoBRITCgtiZW5jaF9jb3VudBgHIAEoBRIaChJkaXNjYXJkX3Bp",
+            "bGVfY291bnQYCCABKAUSSwoScGxheWVyX3R1cm5fdHJhaXRzGAkgAygOMi8u",
+            "Z2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZlBsYXllclR1cm5UcmFp",
+            "dBIUCgx0dXJuX2NvdW50ZXIYCiABKAUSSAoOcGxheWVyX2VmZmVjdHMYCyAD",
+            "KA4yMC5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmUGxheWVyRWZm",
+            "ZWN0VHlwZSKJAwoRUHJvdG9CdWZHYW1lU3RhdGUSEwoLcmVjcmVhdGFibGUY",
+            "ASABKAgSUAoUdGVjaG5pY2FsX2dhbWVfc3RhdGUYAiABKA4yMi5nYW1lY29y",
+            "ZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmVGVjaG5pY2FsR2FtZVN0YXRlEj8K",
+            "CnNlbGZfc3RhdGUYAyABKAsyKy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
+            "b3RvQnVmUGxheWVyU3RhdGUSQwoOb3Bwb25lbnRfc3RhdGUYBCABKAsyKy5n",
+            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmUGxheWVyU3RhdGUSPgoL",
+            "Y2FyZF9zdGF0ZXMYBSADKAsyKS5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
+            "b3RvQnVmQ2FyZFN0YXRlEkcKE2NhcmRfc3RhdGljX3Vwc2VydHMYBiADKAsy",
+            "Ki5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQ2FyZFN0YXRpYyKg",
+            "AQoaUHJvdG9CdWZHYW1lSW5pdGlhbGl6YXRpb24SQAoMY2FyZF9zdGF0aWNz",
+            "GAEgAygLMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkNhcmRT",
+            "dGF0aWMSQAoNaW5pdGlhbF9zdGF0ZRgCIAEoCzIpLmdhbWVjb3JlLnNlcmlh",
+            "bGl6YXRpb24uUHJvdG9CdWZHYW1lU3RhdGUipAMKHlByb3RvQnVmQ29uZGl0",
+            "aW9uYWxUYXJnZXRRdWVyeRJOCg5uZXN0ZWRfcXVlcmllcxgBIAMoCzI2Lmdh",
+            "bWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZDb25kaXRpb25hbFRhcmdl",
+            "dFF1ZXJ5ElkKFmxvZ2ljYWxfcXVlcnlfb3BlcmF0b3IYAiABKA4yNC5nYW1l",
+            "Y29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmTG9naWNhbFF1ZXJ5T3BlcmF0",
+            "b3JIAIgBARJACglpbnRfcmFuZ2UYAyABKAsyKC5nYW1lY29yZS5zZXJpYWxp",
+            "emF0aW9uLlByb3RvQnVmSW50UmFuZ2VIAYgBARJUChNzZWxlY3Rpb25fcXVh",
+            "bGlmaWVyGAQgASgOMjIuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1",
+            "ZlNlbGVjdGlvblF1YWxpZmllckgCiAEBQhkKF19sb2dpY2FsX3F1ZXJ5X29w",
+            "ZXJhdG9yQgwKCl9pbnRfcmFuZ2VCFgoUX3NlbGVjdGlvbl9xdWFsaWZpZXIi",
+            "kAEKFFByb3RvQnVmTXVsbGlnYW5EYXRhEjsKCW11bGxpZ2FucxgBIAMoCzIo",
+            "LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZDYXJkTGlzdBI7CgZw",
+            "bGF5ZXIYAiABKAsyKy5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVm",
+            "UGxheWVyU3RhdGUiIQoQUHJvdG9CdWZDYXJkTGlzdBINCgVjYXJkcxgBIAMo",
+            "BSIkChJQcm90b0J1Zk51bWJlckRhdGESDgoGbnVtYmVyGAEgASgFIvACChJQ",
+            "cm90b0J1ZlRhcmdldERhdGESGAoQcG9zc2libGVfdGFyZ2V0cxgBIAMoBRJI",
+            "Cg10YXJnZXRfYWN0aW9uGAIgASgOMjEuZ2FtZWNvcmUuc2VyaWFsaXphdGlv",
+            "bi5Qcm90b0J1ZkFjdGlvbk9uU2VsZWN0aW9uEksKEHJlbWFpbmRlcl9hY3Rp",
+            "b24YAyABKA4yMS5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWN0",
+            "aW9uT25TZWxlY3Rpb24SHAoUYWxsb3dfbXVsdGlwbGVfdGltZXMYBCABKAgS",
+            "GwoRbnVtYmVyX29mX3RhcmdldHMYBSABKAVIABJaChhjb25kaXRpb25hbF90",
+            "YXJnZXRfcXVlcnkYBiABKAsyNi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlBy",
+            "b3RvQnVmQ29uZGl0aW9uYWxUYXJnZXRRdWVyeUgAQhIKEHRhcmdldF90b19j",
+            "aG9vc2UiKwobUHJvdG9CdWZJbnRlcmFjdGlvbkNhcmREYXRhEgwKBGNhcmQY",
+            "ASABKAUiTAoSUHJvdG9CdWZBdHRhY2tEYXRhEjYKBmF0dGFjaxgBIAEoCzIm",
+            "LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZBdHRhY2siTwoTUHJv",
+            "dG9CdWZBYmlsaXR5RGF0YRI4CgdhYmlsaXR5GAEgASgLMicuZ2FtZWNvcmUu",
+            "c2VyaWFsaXphdGlvbi5Qcm90b0J1ZkFiaWxpdHkiYgoSUHJvdG9CdWZXaW5u",
+            "ZXJEYXRhEjsKBndpbm5lchgBIAEoCzIrLmdhbWVjb3JlLnNlcmlhbGl6YXRp",
+            "b24uUHJvdG9CdWZQbGF5ZXJTdGF0ZRIPCgdtZXNzYWdlGAIgASgJIlkKFlBy",
+            "b3RvQnVmU2VsZWN0RnJvbURhdGESPwoLc2VsZWN0X2Zyb20YASABKA4yKi5n",
+            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmU2VsZWN0RnJvbSKuBQob",
+            "UHJvdG9CdWZHYW1lSW50ZXJhY3Rpb25EYXRhEkoKCWRhdGFfdHlwZRgBIAEo",
+            "DjI3LmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZHYW1lSW50ZXJh",
+            "Y3Rpb25EYXRhVHlwZRJFCg1tdWxsaWdhbl9kYXRhGAIgASgLMiwuZ2FtZWNv",
+            "cmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1Zk11bGxpZ2FuRGF0YUgAEkEKC251",
+            "bWJlcl9kYXRhGAMgASgLMiouZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90",
+            "b0J1Zk51bWJlckRhdGFIABJBCgt0YXJnZXRfZGF0YRgEIAEoCzIqLmdhbWVj",
+            "b3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZUYXJnZXREYXRhSAASVAoVaW50",
+            "ZXJhY3Rpb25fY2FyZF9kYXRhGAUgASgLMjMuZ2FtZWNvcmUuc2VyaWFsaXph",
+            "dGlvbi5Qcm90b0J1ZkludGVyYWN0aW9uQ2FyZERhdGFIABJBCgthdHRhY2tf",
+            "ZGF0YRgGIAEoCzIqLmdhbWVjb3JlLnNlcmlhbGl6YXRpb24uUHJvdG9CdWZB",
+            "dHRhY2tEYXRhSAASQQoLd2lubmVyX2RhdGEYByABKAsyKi5nYW1lY29yZS5z",
+            "ZXJpYWxpemF0aW9uLlByb3RvQnVmV2lubmVyRGF0YUgAEkoKEHNlbGVjdF9m",
+            "cm9tX2RhdGEYCCABKAsyLi5nYW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3Rv",
+            "QnVmU2VsZWN0RnJvbURhdGFIABJDCgxhYmlsaXR5X2RhdGEYCSABKAsyKy5n",
+            "YW1lY29yZS5zZXJpYWxpemF0aW9uLlByb3RvQnVmQWJpbGl0eURhdGFIAEIJ",
+            "CgdwYXlsb2FkIp8BChdQcm90b0J1ZkdhbWVJbnRlcmFjdGlvbhJBCgR0eXBl",
+            "GAEgASgOMjMuZ2FtZWNvcmUuc2VyaWFsaXphdGlvbi5Qcm90b0J1ZkdhbWVJ",
+            "bnRlcmFjdGlvblR5cGUSQQoEZGF0YRgCIAMoCzIzLmdhbWVjb3JlLnNlcmlh",
+            "bGl6YXRpb24uUHJvdG9CdWZHYW1lSW50ZXJhY3Rpb25EYXRhKm0KEFByb3Rv",
+            "QnVmQ2FyZFR5cGUSFQoRQ0FSRF9UWVBFX1VOS05PV04QABIVChFDQVJEX1RZ",
+            "UEVfUE9LRU1PThABEhUKEUNBUkRfVFlQRV9UUkFJTkVSEAISFAoQQ0FSRF9U",
+            "WVBFX0VORVJHWRADKrUCChNQcm90b0J1ZkNhcmRTdWJ0eXBlEhgKFENBUkRf",
+            "U1VCVFlQRV9VTktOT1dOEAASHgoaQ0FSRF9TVUJUWVBFX0JBU0lDX1BPS0VN",
+            "T04QARIfChtDQVJEX1NVQlRZUEVfU1RBR0UxX1BPS0VNT04QAhIfChtDQVJE",
+            "X1NVQlRZUEVfU1RBR0UyX1BPS0VNT04QAxIaChZDQVJEX1NVQlRZUEVfU1VQ",
+            "UE9SVEVSEAQSFQoRQ0FSRF9TVUJUWVBFX0lURU0QBRIVChFDQVJEX1NVQlRZ",
+            "UEVfVE9PTBAGEhgKFENBUkRfU1VCVFlQRV9TVEFESVVNEAcSHQoZQ0FSRF9T",
+            "VUJUWVBFX0JBU0lDX0VORVJHWRAIEh8KG0NBUkRfU1VCVFlQRV9TUEVDSUFM",
+            "X0VORVJHWRAJKqACChJQcm90b0J1ZkVuZXJneVR5cGUSFAoQRU5FUkdZX1RZ",
+            "UEVfTk9ORRAAEhUKEUVORVJHWV9UWVBFX0dSQVNTEAESFAoQRU5FUkdZX1RZ",
+            "UEVfRklSRRACEhUKEUVORVJHWV9UWVBFX1dBVEVSEAMSGQoVRU5FUkdZX1RZ",
+            "UEVfTElHSFROSU5HEAQSGAoURU5FUkdZX1RZUEVfRklHSFRJTkcQBRIXChNF",
+            "TkVSR1lfVFlQRV9QU1lDSElDEAYSGQoVRU5FUkdZX1RZUEVfQ09MT1JMRVNT",
+            "EAcSGAoURU5FUkdZX1RZUEVfREFSS05FU1MQCBIVChFFTkVSR1lfVFlQRV9N",
+            "RVRBTBAJEhYKEkVORVJHWV9UWVBFX0RSQUdPThAKKuoCChRQcm90b0J1ZkNh",
+            "cmRQb3NpdGlvbhIiCh5DQVJEX1BPU0lUSU9OX0FUVEFDSEVEX1RPX0NBUkQQ",
+            "ABIXChNDQVJEX1BPU0lUSU9OX0JFTkNIEAESIgoeQ0FSRF9QT1NJVElPTl9D",
+            "VVJSRU5UTFlfUExBWUVEEAISHQoZQ0FSRF9QT1NJVElPTl9BQ1RJVkVfU1BP",
+            "VBADEhoKFkNBUkRfUE9TSVRJT05fRkxPQVRJTkcQBBIeChpDQVJEX1BPU0lU",
+            "SU9OX0RJU0NBUkRfUElMRRAFEhgKFENBUkRfUE9TSVRJT05fUFJJWkVTEAYS",
+            "FgoSQ0FSRF9QT1NJVElPTl9ERUNLEAcSFgoSQ0FSRF9QT1NJVElPTl9IQU5E",
+            "EAgSKgomQ0FSRF9QT1NJVElPTl9TRUxFQ1RFRF9DQVJEU19SRU1BSU5ERVIQ",
+            "CRIgChxDQVJEX1BPU0lUSU9OX1NFTEVDVEVEX0NBUkRTEAoqMwoNUHJvdG9C",
+            "dWZPd25lchIOCgpPV05FUl9TRUxGEAASEgoOT1dORVJfT1BQT05FTlQQASqo",
+            "AgoXUHJvdG9CdWZJbnN0cnVjdGlvblR5cGUSIAocSU5TVFJVQ1RJT05fVFlQ",
+            "RV9ERUFMX0RBTUFHRRAAEiEKHUlOU1RSVUNUSU9OX1RZUEVfU0VMRUNUX0NB",
+            "UkRTEAESHAoYSU5TVFJVQ1RJT05fVFlQRV9ESVNDQVJEEAISIQodSU5TVFJV",
+            "Q1RJT05fVFlQRV9UQUtFX1RPX0hBTkQQAxIgChxJTlNUUlVDVElPTl9UWVBF",
+            "X1BVVF9JTl9ERUNLEAQSIQodSU5TVFJVQ1RJT05fVFlQRV9SRVZFQUxfQ0FS",
+            "RFMQBRIfChtJTlNUUlVDVElPTl9UWVBFX1NIT1dfQ0FSRFMQBhIhCh1JTlNU",
+            "UlVDVElPTl9UWVBFX1NIVUZGTEVfREVDSxAHKloKFVByb3RvQnVmQ29uZGl0",
+            "aW9uVHlwZRIjCh9DT05ESVRJT05fVFlQRV9BQklMSVRZX05PVF9VU0VEEAAS",
+            "HAoYQ09ORElUSU9OX1RZUEVfSEFTX0NBUkRTEAEqoQIKG1Byb3RvQnVmSW5z",
+            "dHJ1Y3Rpb25EYXRhVHlwZRIlCiFJTlNUUlVDVElPTl9EQVRBX1RZUEVfQVRU",
+            "QUNLX0RBVEEQABImCiJJTlNUUlVDVElPTl9EQVRBX1RZUEVfRElTQ0FSRF9E",
+            "QVRBEAESKgomSU5TVFJVQ1RJT05fREFUQV9UWVBFX0NBUkRfQU1PVU5UX0RB",
+            "VEEQAhIyCi5JTlNUUlVDVElPTl9EQVRBX1RZUEVfUkVUVVJOX1RPX0RFQ0tf",
+            "VFlQRV9EQVRBEAMSJQohSU5TVFJVQ1RJT05fREFUQV9UWVBFX0ZJTFRFUl9E",
+            "QVRBEAQSLAooSU5TVFJVQ1RJT05fREFUQV9UWVBFX1BMQVlFUl9UQVJHRVRf",
+            "REFUQRAFKjsKFFByb3RvQnVmQXR0YWNrVGFyZ2V0EiMKH0FUVEFDS19UQVJH",
+            "RVRfREVGRU5ESU5HX1BPS0VNT04QACpKChRQcm90b0J1ZlBsYXllclRhcmdl",
+            "dBIWChJQTEFZRVJfVEFSR0VUX1NFTEYQABIaChZQTEFZRVJfVEFSR0VUX09Q",
+            "UE9ORU5UEAEqWwoYUHJvdG9CdWZSZXR1cm5Ub0RlY2tUeXBlEh0KGVJFVFVS",
+            "Tl9UT19ERUNLX1RZUEVfVU5ERVIQABIgChxSRVRVUk5fVE9fREVDS19UWVBF",
+            "X1NIVUZGTEVEEAEqggEKHVByb3RvQnVmRmlsdGVyTG9naWNhbE9wZXJhdG9y",
+            "EiAKHEZJTFRFUl9MT0dJQ0FMX09QRVJBVE9SX05PTkUQABIfChtGSUxURVJf",
+            "TE9HSUNBTF9PUEVSQVRPUl9BTkQQARIeChpGSUxURVJfTE9HSUNBTF9PUEVS",
+            "QVRPUl9PUhACKq0BChJQcm90b0J1ZkZpbHRlclR5cGUSFAoQRklMVEVSX1RZ",
+            "UEVfTk9ORRAAEhQKEEZJTFRFUl9UWVBFX1RSVUUQARIeChpGSUxURVJfVFlQ",
+            "RV9FWENMVURFX1NPVVJDRRACEhkKFUZJTFRFUl9UWVBFX0NBUkRfVFlQRRAD",
+            "EhwKGEZJTFRFUl9UWVBFX0NBUkRfU1VCVFlQRRAEEhIKDkZJTFRFUl9UWVBF",
+            "X0hQEAUqxwEKF1Byb3RvQnVmRmlsdGVyT3BlcmF0aW9uEhkKFUZJTFRFUl9P",
+            "UEVSQVRJT05fTk9ORRAAEhsKF0ZJTFRFUl9PUEVSQVRJT05fRVFVQUxTEAES",
+            "HwobRklMVEVSX09QRVJBVElPTl9OT1RfRVFVQUxTEAISJwojRklMVEVSX09Q",
+            "RVJBVElPTl9MRVNTX1RIQU5fT1JfRVFVQUwQAxIqCiZGSUxURVJfT1BFUkFU",
+            "SU9OX0dSRUFURVJfVEhBTl9PUl9FUVVBTBAEKmMKFFByb3RvQnVmVGFyZ2V0",
+            "U291cmNlEhYKElRBUkdFVF9TT1VSQ0VfSEFORBAAEhYKElRBUkdFVF9TT1VS",
+            "Q0VfU0VMRhABEhsKF1RBUkdFVF9TT1VSQ0VfU0VMRUNUSU9OEAIqNwoYUHJv",
+            "dG9CdWZQbGF5ZXJFZmZlY3RUeXBlEhsKF1BMQVlFUl9FRkZFQ1RfVFlQRV9O",
+            "T05FEAAqOQoZUHJvdG9CdWZQb2tlbW9uRWZmZWN0VHlwZRIcChhQT0tFTU9O",
+            "X0VGRkVDVF9UWVBFX05PTkUQACp3ChhQcm90b0J1ZlBva2Vtb25UdXJuVHJh",
+            "aXQSLAooUE9LRU1PTl9UVVJOX1RSQUlUX1BVVF9JTl9QTEFZX1RISVNfVFVS",
+            "ThAAEi0KKVBPS0VNT05fVFVSTl9UUkFJVF9BQklMSVRZX1VTRURfVEhJU19U",
+            "VVJOEAEqxgEKF1Byb3RvQnVmUGxheWVyVHVyblRyYWl0EigKJFBMQVlFUl9U",
+            "VVJOX1RSQUlUX0ZJUlNUX1RVUk5fT0ZfR0FNRRAAEi4KKlBMQVlFUl9UVVJO",
+            "X1RSQUlUX0FUVEFDSEVEX0VORVJHWV9GT1JfVFVSThABEjAKLFBMQVlFUl9U",
+            "VVJOX1RSQUlUX1BMQVlFRF9TVVBQT1JURVJfVEhJU19UVVJOEAISHwobUExB",
+            "WUVSX1RVUk5fVFJBSVRfUkVUUkVBVEVEEAMqjgUKG1Byb3RvQnVmR2FtZUlu",
+            "dGVyYWN0aW9uVHlwZRIvCitHQU1FX0lOVEVSQUNUSU9OX1RZUEVfU0VMRUNU",
+            "X0FDVElWRV9QT0tFTU9OEAASIwofR0FNRV9JTlRFUkFDVElPTl9UWVBFX1BM",
+            "QVlfQ0FSRBABEiIKHkdBTUVfSU5URVJBQ1RJT05fVFlQRV9FTkRfVFVSThAC",
+            "EisKJ0dBTUVfSU5URVJBQ1RJT05fVFlQRV9DT05GSVJNX01VTExJR0FOUxAD",
+            "EioKJkdBTUVfSU5URVJBQ1RJT05fVFlQRV9TRUxFQ1RfTVVMTElHQU5TEAQS",
+            "IQodR0FNRV9JTlRFUkFDVElPTl9UWVBFX0NPTkZJUk0QBRIpCiVHQU1FX0lO",
+            "VEVSQUNUSU9OX1RZUEVfU0VUVVBfQ09NUExFVEVEEAYSMAosR0FNRV9JTlRF",
+            "UkFDVElPTl9UWVBFX1BMQVlfQ0FSRF9XSVRIX1RBUkdFVFMQBxIoCiRHQU1F",
+            "X0lOVEVSQUNUSU9OX1RZUEVfUEVSRk9STV9BVFRBQ0sQCBIjCh9HQU1FX0lO",
+            "VEVSQUNUSU9OX1RZUEVfR0FNRV9PVkVSEAkSJgoiR0FNRV9JTlRFUkFDVElP",
+            "Tl9UWVBFX1NFTEVDVF9DQVJEUxAKEiEKHUdBTUVfSU5URVJBQ1RJT05fVFlQ",
+            "RV9SRVRSRUFUEAsSKQolR0FNRV9JTlRFUkFDVElPTl9UWVBFX1BFUkZPUk1f",
+            "QUJJTElUWRAMEikKJUdBTUVfSU5URVJBQ1RJT05fVFlQRV9TRVRfUFJJWkVf",
+            "Q0FSRFMQDRIsCihHQU1FX0lOVEVSQUNUSU9OX1RZUEVfUkVQTEFZX05FWFRf",
+            "QUNUSU9OEA4qkwMKH1Byb3RvQnVmR2FtZUludGVyYWN0aW9uRGF0YVR5cGUS",
+            "LAooR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfTVVMTElHQU5fREFUQRAA",
+            "EioKJkdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX05VTUJFUl9EQVRBEAES",
+            "KgomR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfVEFSR0VUX0RBVEEQAhI0",
+            "CjBHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9JTlRFUkFDVElPTl9DQVJE",
+            "X0RBVEEQAxIqCiZHQU1FX0lOVEVSQUNUSU9OX0RBVEFfVFlQRV9BVFRBQ0tf",
+            "REFUQRAEEioKJkdBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX1dJTk5FUl9E",
+            "QVRBEAUSLworR0FNRV9JTlRFUkFDVElPTl9EQVRBX1RZUEVfU0VMRUNUX0ZS",
+            "T01fREFUQRAGEisKJ0dBTUVfSU5URVJBQ1RJT05fREFUQV9UWVBFX0FCSUxJ",
+            "VFlfREFUQRAHKo8CChlQcm90b0J1ZkFjdGlvbk9uU2VsZWN0aW9uEh8KG0FD",
+            "VElPTl9PTl9TRUxFQ1RJT05fRElTQ0FSRBAAEiQKIEFDVElPTl9PTl9TRUxF",
+            "Q1RJT05fVEFLRV9UT19IQU5EEAESHgoaQUNUSU9OX09OX1NFTEVDVElPTl9F",
+            "Vk9MVkUQAhIhCh1BQ1RJT05fT05fU0VMRUNUSU9OX0FUVEFDSF9UTxADEh8K",
+            "G0FDVElPTl9PTl9TRUxFQ1RJT05fUFJPTU9URRAEEh8KG0FDVElPTl9PTl9T",
+            "RUxFQ1RJT05fTk9USElORxAFEiYKIkFDVElPTl9PTl9TRUxFQ1RJT05fUFVU",
+            "X1VOREVSX0RFQ0sQBip7ChJQcm90b0J1ZlNlbGVjdEZyb20SFwoTU0VMRUNU",
+            "X0ZST01fSU5fUExBWRAAEhgKFFNFTEVDVF9GUk9NX0ZMT0FUSU5HEAESFAoQ",
+            "U0VMRUNUX0ZST01fREVDSxACEhwKGFNFTEVDVF9GUk9NX0RJU0NBUkRfUElM",
+            "RRADKn0KHFByb3RvQnVmTG9naWNhbFF1ZXJ5T3BlcmF0b3ISHgoaTE9HSUNB",
+            "TF9RVUVSWV9PUEVSQVRPUl9BTkQQABIdChlMT0dJQ0FMX1FVRVJZX09QRVJB",
+            "VE9SX09SEAESHgoaTE9HSUNBTF9RVUVSWV9PUEVSQVRPUl9YT1IQAipuChpQ",
+            "cm90b0J1ZlNlbGVjdGlvblF1YWxpZmllchInCiNTRUxFQ1RJT05fUVVBTElG",
+            "SUVSX05VTUJFUl9PRl9DQVJEUxAAEicKI1NFTEVDVElPTl9RVUFMSUZJRVJf",
+            "UFJPVklERURfRU5FUkdZEAEq+AIKGlByb3RvQnVmVGVjaG5pY2FsR2FtZVN0",
+            "YXRlEhgKFEdBTUVfU1RBVEVfR0FNRV9PVkVSEAASHwobR0FNRV9TVEFURV9J",
+            "RExFX1BMQVlFUl9UVVJOEAESIwofR0FNRV9TVEFURV9TRUxFQ1RfQkVOQ0hf",
+            "UE9LRU1PThACEicKI0dBTUVfU1RBVEVfU0VMRUNUSU5HX01VTExJR0FOX0NB",
+            "UkRTEAMSJQohR0FNRV9TVEFURV9TRVRUSU5HX0FDVElWRV9QT0tFTU9OEAQS",
+            "IgoeR0FNRV9TVEFURV9TRVRUSU5HX1BSSVpFX0NBUkRTEAUSHgoaR0FNRV9T",
+            "VEFURV9TRVRVUF9DT01QTEVURUQQBhIiCh5HQU1FX1NUQVRFX1NIT1dfRklS",
+            "U1RfTVVMTElHQU4QBxIjCh9HQU1FX1NUQVRFX1NIT1dfU0VDT05EX01VTExJ",
+            "R0FOEAgSHQoZR0FNRV9TVEFURV9XQUlUX0ZPUl9JTlBVVBAJKnwKGVByb3Rv",
+            "QnVmUG9zaXRpb25Lbm93bGVkZ2USHgoaUE9TSVRJT05fS05PV0xFREdFX1VO",
+            "S05PV04QABIhCh1QT1NJVElPTl9LTk9XTEVER0VfTk9UX1BSSVpFRBABEhwK",
+            "GFBPU0lUSU9OX0tOT1dMRURHRV9LTk9XThACQhmqAhZnYW1lY29yZS5zZXJp",
+            "YWxpemF0aW9uYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::gamecore.serialization.ProtoBufCardType), typeof(global::gamecore.serialization.ProtoBufCardSubtype), typeof(global::gamecore.serialization.ProtoBufEnergyType), typeof(global::gamecore.serialization.ProtoBufCardPosition), typeof(global::gamecore.serialization.ProtoBufOwner), typeof(global::gamecore.serialization.ProtoBufInstructionType), typeof(global::gamecore.serialization.ProtoBufConditionType), typeof(global::gamecore.serialization.ProtoBufInstructionDataType), typeof(global::gamecore.serialization.ProtoBufAttackTarget), typeof(global::gamecore.serialization.ProtoBufPlayerTarget), typeof(global::gamecore.serialization.ProtoBufReturnToDeckType), typeof(global::gamecore.serialization.ProtoBufFilterLogicalOperator), typeof(global::gamecore.serialization.ProtoBufFilterType), typeof(global::gamecore.serialization.ProtoBufFilterOperation), typeof(global::gamecore.serialization.ProtoBufTargetSource), typeof(global::gamecore.serialization.ProtoBufPlayerEffectType), typeof(global::gamecore.serialization.ProtoBufPokemonEffectType), typeof(global::gamecore.serialization.ProtoBufPokemonTurnTrait), typeof(global::gamecore.serialization.ProtoBufPlayerTurnTrait), typeof(global::gamecore.serialization.ProtoBufGameInteractionType), typeof(global::gamecore.serialization.ProtoBufGameInteractionDataType), typeof(global::gamecore.serialization.ProtoBufActionOnSelection), typeof(global::gamecore.serialization.ProtoBufSelectFrom), typeof(global::gamecore.serialization.ProtoBufLogicalQueryOperator), typeof(global::gamecore.serialization.ProtoBufSelectionQualifier), typeof(global::gamecore.serialization.ProtoBufTechnicalGameState), typeof(global::gamecore.serialization.ProtoBufPositionKnowledge), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -326,10 +332,12 @@ namespace gamecore.serialization {
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufFilterInstructionData), global::gamecore.serialization.ProtoBufFilterInstructionData.Parser, new[]{ "Filter" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufPlayerTargetInstructionData), global::gamecore.serialization.ProtoBufPlayerTargetInstructionData.Parser, new[]{ "PlayerTarget" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufInstructionData), global::gamecore.serialization.ProtoBufInstructionData.Parser, new[]{ "InstructionDataType", "AttackData", "DiscardData", "CardAmountData", "ReturnToDeckTypeData", "FilterData", "PlayerTargetData" }, new[]{ "Payload" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCard), global::gamecore.serialization.ProtoBufCard.Parser, new[]{ "Name", "CardType", "CardSubtype", "EnergyType", "MaxHp", "EvolvesFrom", "Weakness", "Resistance", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "Attacks", "Ability", "PokemonEffects", "PokemonTurnTraits", "Instructions", "Conditions", "ProvidedEnergy", "AttachedTo", "DeckId", "CurrentDamage", "AttachedEnergy", "AttachedEnergyCards", "PreEvolutionIds", "EvolvedInto" }, new[]{ "EnergyType", "MaxHp", "EvolvesFrom", "Weakness", "Resistance", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "Ability", "AttachedTo", "DeckId", "CurrentDamage", "EvolvedInto" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCardState), global::gamecore.serialization.ProtoBufCardState.Parser, new[]{ "Card", "Position" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCardStatic), global::gamecore.serialization.ProtoBufCardStatic.Parser, new[]{ "Name", "CardType", "CardSubtype", "EnergyType", "EvolvesFrom", "Attacks", "Ability", "Instructions", "Conditions", "DeckId" }, new[]{ "EnergyType", "EvolvesFrom", "Ability", "DeckId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCardDynamic), global::gamecore.serialization.ProtoBufCardDynamic.Parser, new[]{ "MaxHp", "Weakness", "Resistance", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "PokemonEffects", "PokemonTurnTraits", "ProvidedEnergy", "CurrentDamage", "AttachedEnergy", "AttachedEnergyCards", "PreEvolutionIds", "EvolvedInto" }, new[]{ "MaxHp", "Weakness", "Resistance", "RetreatCost", "NumberOfPrizeCardsOnKnockout", "CurrentDamage", "EvolvedInto" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCardState), global::gamecore.serialization.ProtoBufCardState.Parser, new[]{ "DeckId", "CardDynamic", "Position" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufPlayerState), global::gamecore.serialization.ProtoBufPlayerState.Parser, new[]{ "IsActive", "IsAttacking", "KnowsHisPrizes", "HandCount", "DeckCount", "PrizesCount", "BenchCount", "DiscardPileCount", "PlayerTurnTraits", "TurnCounter", "PlayerEffects" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufGameState), global::gamecore.serialization.ProtoBufGameState.Parser, new[]{ "Recreatable", "TechnicalGameState", "SelfState", "OpponentState", "CardStates" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufGameState), global::gamecore.serialization.ProtoBufGameState.Parser, new[]{ "Recreatable", "TechnicalGameState", "SelfState", "OpponentState", "CardStates", "CardStaticUpserts" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufGameInitialization), global::gamecore.serialization.ProtoBufGameInitialization.Parser, new[]{ "CardStatics", "InitialState" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufConditionalTargetQuery), global::gamecore.serialization.ProtoBufConditionalTargetQuery.Parser, new[]{ "NestedQueries", "LogicalQueryOperator", "IntRange", "SelectionQualifier" }, new[]{ "LogicalQueryOperator", "IntRange", "SelectionQualifier" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufMulliganData), global::gamecore.serialization.ProtoBufMulliganData.Parser, new[]{ "Mulligans", "Player" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::gamecore.serialization.ProtoBufCardList), global::gamecore.serialization.ProtoBufCardList.Parser, new[]{ "Cards" }, null, null, null, null),
@@ -4590,17 +4598,17 @@ namespace gamecore.serialization {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class ProtoBufCard : pb::IMessage<ProtoBufCard>
+  public sealed partial class ProtoBufCardStatic : pb::IMessage<ProtoBufCardStatic>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<ProtoBufCard> _parser = new pb::MessageParser<ProtoBufCard>(() => new ProtoBufCard());
+    private static readonly pb::MessageParser<ProtoBufCardStatic> _parser = new pb::MessageParser<ProtoBufCardStatic>(() => new ProtoBufCardStatic());
     private pb::UnknownFieldSet _unknownFields;
     private int _hasBits0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ProtoBufCard> Parser { get { return _parser; } }
+    public static pb::MessageParser<ProtoBufCardStatic> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -4616,7 +4624,7 @@ namespace gamecore.serialization {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProtoBufCard() {
+    public ProtoBufCardStatic() {
       OnConstruction();
     }
 
@@ -4624,39 +4632,25 @@ namespace gamecore.serialization {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProtoBufCard(ProtoBufCard other) : this() {
+    public ProtoBufCardStatic(ProtoBufCardStatic other) : this() {
       _hasBits0 = other._hasBits0;
       name_ = other.name_;
       cardType_ = other.cardType_;
       cardSubtype_ = other.cardSubtype_;
       energyType_ = other.energyType_;
-      maxHp_ = other.maxHp_;
       evolvesFrom_ = other.evolvesFrom_;
-      weakness_ = other.weakness_;
-      resistance_ = other.resistance_;
-      retreatCost_ = other.retreatCost_;
-      numberOfPrizeCardsOnKnockout_ = other.numberOfPrizeCardsOnKnockout_;
       attacks_ = other.attacks_.Clone();
       ability_ = other.ability_ != null ? other.ability_.Clone() : null;
-      pokemonEffects_ = other.pokemonEffects_.Clone();
-      pokemonTurnTraits_ = other.pokemonTurnTraits_.Clone();
       instructions_ = other.instructions_.Clone();
       conditions_ = other.conditions_.Clone();
-      providedEnergy_ = other.providedEnergy_.Clone();
-      attachedTo_ = other.attachedTo_;
       deckId_ = other.deckId_;
-      currentDamage_ = other.currentDamage_;
-      attachedEnergy_ = other.attachedEnergy_.Clone();
-      attachedEnergyCards_ = other.attachedEnergyCards_.Clone();
-      preEvolutionIds_ = other.preEvolutionIds_.Clone();
-      evolvedInto_ = other.evolvedInto_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProtoBufCard Clone() {
-      return new ProtoBufCard(this);
+    public ProtoBufCardStatic Clone() {
+      return new ProtoBufCardStatic(this);
     }
 
     /// <summary>Field number for the "name" field.</summary>
@@ -4725,41 +4719,14 @@ namespace gamecore.serialization {
       _hasBits0 &= ~1;
     }
 
-    /// <summary>Field number for the "max_hp" field.</summary>
-    public const int MaxHpFieldNumber = 5;
-    private readonly static int MaxHpDefaultValue = 0;
-
-    private int maxHp_;
-    /// <summary>
-    /// Pokemon-specific static properties
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int MaxHp {
-      get { if ((_hasBits0 & 2) != 0) { return maxHp_; } else { return MaxHpDefaultValue; } }
-      set {
-        _hasBits0 |= 2;
-        maxHp_ = value;
-      }
-    }
-    /// <summary>Gets whether the "max_hp" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasMaxHp {
-      get { return (_hasBits0 & 2) != 0; }
-    }
-    /// <summary>Clears the value of the "max_hp" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearMaxHp() {
-      _hasBits0 &= ~2;
-    }
-
     /// <summary>Field number for the "evolves_from" field.</summary>
     public const int EvolvesFromFieldNumber = 6;
     private readonly static string EvolvesFromDefaultValue = "";
 
     private string evolvesFrom_;
+    /// <summary>
+    /// Pokemon-specific static properties
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string EvolvesFrom {
@@ -4779,114 +4746,6 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearEvolvesFrom() {
       evolvesFrom_ = null;
-    }
-
-    /// <summary>Field number for the "weakness" field.</summary>
-    public const int WeaknessFieldNumber = 7;
-    private readonly static global::gamecore.serialization.ProtoBufEnergyType WeaknessDefaultValue = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
-
-    private global::gamecore.serialization.ProtoBufEnergyType weakness_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::gamecore.serialization.ProtoBufEnergyType Weakness {
-      get { if ((_hasBits0 & 4) != 0) { return weakness_; } else { return WeaknessDefaultValue; } }
-      set {
-        _hasBits0 |= 4;
-        weakness_ = value;
-      }
-    }
-    /// <summary>Gets whether the "weakness" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasWeakness {
-      get { return (_hasBits0 & 4) != 0; }
-    }
-    /// <summary>Clears the value of the "weakness" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearWeakness() {
-      _hasBits0 &= ~4;
-    }
-
-    /// <summary>Field number for the "resistance" field.</summary>
-    public const int ResistanceFieldNumber = 8;
-    private readonly static global::gamecore.serialization.ProtoBufEnergyType ResistanceDefaultValue = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
-
-    private global::gamecore.serialization.ProtoBufEnergyType resistance_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::gamecore.serialization.ProtoBufEnergyType Resistance {
-      get { if ((_hasBits0 & 8) != 0) { return resistance_; } else { return ResistanceDefaultValue; } }
-      set {
-        _hasBits0 |= 8;
-        resistance_ = value;
-      }
-    }
-    /// <summary>Gets whether the "resistance" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasResistance {
-      get { return (_hasBits0 & 8) != 0; }
-    }
-    /// <summary>Clears the value of the "resistance" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearResistance() {
-      _hasBits0 &= ~8;
-    }
-
-    /// <summary>Field number for the "retreat_cost" field.</summary>
-    public const int RetreatCostFieldNumber = 9;
-    private readonly static int RetreatCostDefaultValue = 0;
-
-    private int retreatCost_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int RetreatCost {
-      get { if ((_hasBits0 & 16) != 0) { return retreatCost_; } else { return RetreatCostDefaultValue; } }
-      set {
-        _hasBits0 |= 16;
-        retreatCost_ = value;
-      }
-    }
-    /// <summary>Gets whether the "retreat_cost" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasRetreatCost {
-      get { return (_hasBits0 & 16) != 0; }
-    }
-    /// <summary>Clears the value of the "retreat_cost" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearRetreatCost() {
-      _hasBits0 &= ~16;
-    }
-
-    /// <summary>Field number for the "number_of_prize_cards_on_knockout" field.</summary>
-    public const int NumberOfPrizeCardsOnKnockoutFieldNumber = 10;
-    private readonly static int NumberOfPrizeCardsOnKnockoutDefaultValue = 0;
-
-    private int numberOfPrizeCardsOnKnockout_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int NumberOfPrizeCardsOnKnockout {
-      get { if ((_hasBits0 & 32) != 0) { return numberOfPrizeCardsOnKnockout_; } else { return NumberOfPrizeCardsOnKnockoutDefaultValue; } }
-      set {
-        _hasBits0 |= 32;
-        numberOfPrizeCardsOnKnockout_ = value;
-      }
-    }
-    /// <summary>Gets whether the "number_of_prize_cards_on_knockout" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasNumberOfPrizeCardsOnKnockout {
-      get { return (_hasBits0 & 32) != 0; }
-    }
-    /// <summary>Clears the value of the "number_of_prize_cards_on_knockout" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearNumberOfPrizeCardsOnKnockout() {
-      _hasBits0 &= ~32;
     }
 
     /// <summary>Field number for the "attacks" field.</summary>
@@ -4910,28 +4769,6 @@ namespace gamecore.serialization {
       set {
         ability_ = value;
       }
-    }
-
-    /// <summary>Field number for the "pokemon_effects" field.</summary>
-    public const int PokemonEffectsFieldNumber = 13;
-    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufPokemonEffectType> _repeated_pokemonEffects_codec
-        = pb::FieldCodec.ForEnum(106, x => (int) x, x => (global::gamecore.serialization.ProtoBufPokemonEffectType) x);
-    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonEffectType> pokemonEffects_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonEffectType>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonEffectType> PokemonEffects {
-      get { return pokemonEffects_; }
-    }
-
-    /// <summary>Field number for the "pokemon_turn_traits" field.</summary>
-    public const int PokemonTurnTraitsFieldNumber = 14;
-    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufPokemonTurnTrait> _repeated_pokemonTurnTraits_codec
-        = pb::FieldCodec.ForEnum(114, x => (int) x, x => (global::gamecore.serialization.ProtoBufPokemonTurnTrait) x);
-    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonTurnTrait> pokemonTurnTraits_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonTurnTrait>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonTurnTrait> PokemonTurnTraits {
-      get { return pokemonTurnTraits_; }
     }
 
     /// <summary>Field number for the "instructions" field.</summary>
@@ -4959,61 +4796,20 @@ namespace gamecore.serialization {
       get { return conditions_; }
     }
 
-    /// <summary>Field number for the "provided_energy" field.</summary>
-    public const int ProvidedEnergyFieldNumber = 17;
-    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufEnergyType> _repeated_providedEnergy_codec
-        = pb::FieldCodec.ForEnum(138, x => (int) x, x => (global::gamecore.serialization.ProtoBufEnergyType) x);
-    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufEnergyType> providedEnergy_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufEnergyType>();
-    /// <summary>
-    /// Energy-specific static properties
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufEnergyType> ProvidedEnergy {
-      get { return providedEnergy_; }
-    }
-
-    /// <summary>Field number for the "attached_to" field.</summary>
-    public const int AttachedToFieldNumber = 18;
-    private readonly static int AttachedToDefaultValue = 0;
-
-    private int attachedTo_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int AttachedTo {
-      get { if ((_hasBits0 & 64) != 0) { return attachedTo_; } else { return AttachedToDefaultValue; } }
-      set {
-        _hasBits0 |= 64;
-        attachedTo_ = value;
-      }
-    }
-    /// <summary>Gets whether the "attached_to" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasAttachedTo {
-      get { return (_hasBits0 & 64) != 0; }
-    }
-    /// <summary>Clears the value of the "attached_to" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearAttachedTo() {
-      _hasBits0 &= ~64;
-    }
-
     /// <summary>Field number for the "deck_id" field.</summary>
     public const int DeckIdFieldNumber = 19;
     private readonly static int DeckIdDefaultValue = 0;
 
     private int deckId_;
     /// <summary>
-    /// Current state properties
+    /// Static state properties
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int DeckId {
-      get { if ((_hasBits0 & 128) != 0) { return deckId_; } else { return DeckIdDefaultValue; } }
+      get { if ((_hasBits0 & 2) != 0) { return deckId_; } else { return DeckIdDefaultValue; } }
       set {
-        _hasBits0 |= 128;
+        _hasBits0 |= 2;
         deckId_ = value;
       }
     }
@@ -5021,13 +4817,582 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasDeckId {
-      get { return (_hasBits0 & 128) != 0; }
+      get { return (_hasBits0 & 2) != 0; }
     }
     /// <summary>Clears the value of the "deck_id" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearDeckId() {
-      _hasBits0 &= ~128;
+      _hasBits0 &= ~2;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ProtoBufCardStatic);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ProtoBufCardStatic other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Name != other.Name) return false;
+      if (CardType != other.CardType) return false;
+      if (CardSubtype != other.CardSubtype) return false;
+      if (EnergyType != other.EnergyType) return false;
+      if (EvolvesFrom != other.EvolvesFrom) return false;
+      if(!attacks_.Equals(other.attacks_)) return false;
+      if (!object.Equals(Ability, other.Ability)) return false;
+      if(!instructions_.Equals(other.instructions_)) return false;
+      if(!conditions_.Equals(other.conditions_)) return false;
+      if (DeckId != other.DeckId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) hash ^= CardType.GetHashCode();
+      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) hash ^= CardSubtype.GetHashCode();
+      if (HasEnergyType) hash ^= EnergyType.GetHashCode();
+      if (HasEvolvesFrom) hash ^= EvolvesFrom.GetHashCode();
+      hash ^= attacks_.GetHashCode();
+      if (ability_ != null) hash ^= Ability.GetHashCode();
+      hash ^= instructions_.GetHashCode();
+      hash ^= conditions_.GetHashCode();
+      if (HasDeckId) hash ^= DeckId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Name.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Name);
+      }
+      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) CardType);
+      }
+      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) CardSubtype);
+      }
+      if (HasEnergyType) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) EnergyType);
+      }
+      if (HasEvolvesFrom) {
+        output.WriteRawTag(50);
+        output.WriteString(EvolvesFrom);
+      }
+      attacks_.WriteTo(output, _repeated_attacks_codec);
+      if (ability_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(Ability);
+      }
+      instructions_.WriteTo(output, _repeated_instructions_codec);
+      conditions_.WriteTo(output, _repeated_conditions_codec);
+      if (HasDeckId) {
+        output.WriteRawTag(152, 1);
+        output.WriteInt32(DeckId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Name.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Name);
+      }
+      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) CardType);
+      }
+      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) CardSubtype);
+      }
+      if (HasEnergyType) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) EnergyType);
+      }
+      if (HasEvolvesFrom) {
+        output.WriteRawTag(50);
+        output.WriteString(EvolvesFrom);
+      }
+      attacks_.WriteTo(ref output, _repeated_attacks_codec);
+      if (ability_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(Ability);
+      }
+      instructions_.WriteTo(ref output, _repeated_instructions_codec);
+      conditions_.WriteTo(ref output, _repeated_conditions_codec);
+      if (HasDeckId) {
+        output.WriteRawTag(152, 1);
+        output.WriteInt32(DeckId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) CardType);
+      }
+      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) CardSubtype);
+      }
+      if (HasEnergyType) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EnergyType);
+      }
+      if (HasEvolvesFrom) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(EvolvesFrom);
+      }
+      size += attacks_.CalculateSize(_repeated_attacks_codec);
+      if (ability_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Ability);
+      }
+      size += instructions_.CalculateSize(_repeated_instructions_codec);
+      size += conditions_.CalculateSize(_repeated_conditions_codec);
+      if (HasDeckId) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(DeckId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ProtoBufCardStatic other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
+        CardType = other.CardType;
+      }
+      if (other.CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
+        CardSubtype = other.CardSubtype;
+      }
+      if (other.HasEnergyType) {
+        EnergyType = other.EnergyType;
+      }
+      if (other.HasEvolvesFrom) {
+        EvolvesFrom = other.EvolvesFrom;
+      }
+      attacks_.Add(other.attacks_);
+      if (other.ability_ != null) {
+        if (ability_ == null) {
+          Ability = new global::gamecore.serialization.ProtoBufAbility();
+        }
+        Ability.MergeFrom(other.Ability);
+      }
+      instructions_.Add(other.instructions_);
+      conditions_.Add(other.conditions_);
+      if (other.HasDeckId) {
+        DeckId = other.DeckId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Name = input.ReadString();
+            break;
+          }
+          case 16: {
+            CardType = (global::gamecore.serialization.ProtoBufCardType) input.ReadEnum();
+            break;
+          }
+          case 24: {
+            CardSubtype = (global::gamecore.serialization.ProtoBufCardSubtype) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            EnergyType = (global::gamecore.serialization.ProtoBufEnergyType) input.ReadEnum();
+            break;
+          }
+          case 50: {
+            EvolvesFrom = input.ReadString();
+            break;
+          }
+          case 90: {
+            attacks_.AddEntriesFrom(input, _repeated_attacks_codec);
+            break;
+          }
+          case 98: {
+            if (ability_ == null) {
+              Ability = new global::gamecore.serialization.ProtoBufAbility();
+            }
+            input.ReadMessage(Ability);
+            break;
+          }
+          case 122: {
+            instructions_.AddEntriesFrom(input, _repeated_instructions_codec);
+            break;
+          }
+          case 130: {
+            conditions_.AddEntriesFrom(input, _repeated_conditions_codec);
+            break;
+          }
+          case 152: {
+            DeckId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Name = input.ReadString();
+            break;
+          }
+          case 16: {
+            CardType = (global::gamecore.serialization.ProtoBufCardType) input.ReadEnum();
+            break;
+          }
+          case 24: {
+            CardSubtype = (global::gamecore.serialization.ProtoBufCardSubtype) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            EnergyType = (global::gamecore.serialization.ProtoBufEnergyType) input.ReadEnum();
+            break;
+          }
+          case 50: {
+            EvolvesFrom = input.ReadString();
+            break;
+          }
+          case 90: {
+            attacks_.AddEntriesFrom(ref input, _repeated_attacks_codec);
+            break;
+          }
+          case 98: {
+            if (ability_ == null) {
+              Ability = new global::gamecore.serialization.ProtoBufAbility();
+            }
+            input.ReadMessage(Ability);
+            break;
+          }
+          case 122: {
+            instructions_.AddEntriesFrom(ref input, _repeated_instructions_codec);
+            break;
+          }
+          case 130: {
+            conditions_.AddEntriesFrom(ref input, _repeated_conditions_codec);
+            break;
+          }
+          case 152: {
+            DeckId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ProtoBufCardDynamic : pb::IMessage<ProtoBufCardDynamic>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ProtoBufCardDynamic> _parser = new pb::MessageParser<ProtoBufCardDynamic>(() => new ProtoBufCardDynamic());
+    private pb::UnknownFieldSet _unknownFields;
+    private int _hasBits0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ProtoBufCardDynamic> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufCardDynamic() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufCardDynamic(ProtoBufCardDynamic other) : this() {
+      _hasBits0 = other._hasBits0;
+      maxHp_ = other.maxHp_;
+      weakness_ = other.weakness_;
+      resistance_ = other.resistance_;
+      retreatCost_ = other.retreatCost_;
+      numberOfPrizeCardsOnKnockout_ = other.numberOfPrizeCardsOnKnockout_;
+      pokemonEffects_ = other.pokemonEffects_.Clone();
+      pokemonTurnTraits_ = other.pokemonTurnTraits_.Clone();
+      providedEnergy_ = other.providedEnergy_.Clone();
+      currentDamage_ = other.currentDamage_;
+      attachedEnergy_ = other.attachedEnergy_.Clone();
+      attachedEnergyCards_ = other.attachedEnergyCards_.Clone();
+      preEvolutionIds_ = other.preEvolutionIds_.Clone();
+      evolvedInto_ = other.evolvedInto_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufCardDynamic Clone() {
+      return new ProtoBufCardDynamic(this);
+    }
+
+    /// <summary>Field number for the "max_hp" field.</summary>
+    public const int MaxHpFieldNumber = 5;
+    private readonly static int MaxHpDefaultValue = 0;
+
+    private int maxHp_;
+    /// <summary>
+    /// Pokemon-specific mutable properties
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int MaxHp {
+      get { if ((_hasBits0 & 1) != 0) { return maxHp_; } else { return MaxHpDefaultValue; } }
+      set {
+        _hasBits0 |= 1;
+        maxHp_ = value;
+      }
+    }
+    /// <summary>Gets whether the "max_hp" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasMaxHp {
+      get { return (_hasBits0 & 1) != 0; }
+    }
+    /// <summary>Clears the value of the "max_hp" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearMaxHp() {
+      _hasBits0 &= ~1;
+    }
+
+    /// <summary>Field number for the "weakness" field.</summary>
+    public const int WeaknessFieldNumber = 7;
+    private readonly static global::gamecore.serialization.ProtoBufEnergyType WeaknessDefaultValue = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+
+    private global::gamecore.serialization.ProtoBufEnergyType weakness_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::gamecore.serialization.ProtoBufEnergyType Weakness {
+      get { if ((_hasBits0 & 2) != 0) { return weakness_; } else { return WeaknessDefaultValue; } }
+      set {
+        _hasBits0 |= 2;
+        weakness_ = value;
+      }
+    }
+    /// <summary>Gets whether the "weakness" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasWeakness {
+      get { return (_hasBits0 & 2) != 0; }
+    }
+    /// <summary>Clears the value of the "weakness" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearWeakness() {
+      _hasBits0 &= ~2;
+    }
+
+    /// <summary>Field number for the "resistance" field.</summary>
+    public const int ResistanceFieldNumber = 8;
+    private readonly static global::gamecore.serialization.ProtoBufEnergyType ResistanceDefaultValue = global::gamecore.serialization.ProtoBufEnergyType.EnergyTypeNone;
+
+    private global::gamecore.serialization.ProtoBufEnergyType resistance_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::gamecore.serialization.ProtoBufEnergyType Resistance {
+      get { if ((_hasBits0 & 4) != 0) { return resistance_; } else { return ResistanceDefaultValue; } }
+      set {
+        _hasBits0 |= 4;
+        resistance_ = value;
+      }
+    }
+    /// <summary>Gets whether the "resistance" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasResistance {
+      get { return (_hasBits0 & 4) != 0; }
+    }
+    /// <summary>Clears the value of the "resistance" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearResistance() {
+      _hasBits0 &= ~4;
+    }
+
+    /// <summary>Field number for the "retreat_cost" field.</summary>
+    public const int RetreatCostFieldNumber = 9;
+    private readonly static int RetreatCostDefaultValue = 0;
+
+    private int retreatCost_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RetreatCost {
+      get { if ((_hasBits0 & 8) != 0) { return retreatCost_; } else { return RetreatCostDefaultValue; } }
+      set {
+        _hasBits0 |= 8;
+        retreatCost_ = value;
+      }
+    }
+    /// <summary>Gets whether the "retreat_cost" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasRetreatCost {
+      get { return (_hasBits0 & 8) != 0; }
+    }
+    /// <summary>Clears the value of the "retreat_cost" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearRetreatCost() {
+      _hasBits0 &= ~8;
+    }
+
+    /// <summary>Field number for the "number_of_prize_cards_on_knockout" field.</summary>
+    public const int NumberOfPrizeCardsOnKnockoutFieldNumber = 10;
+    private readonly static int NumberOfPrizeCardsOnKnockoutDefaultValue = 0;
+
+    private int numberOfPrizeCardsOnKnockout_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int NumberOfPrizeCardsOnKnockout {
+      get { if ((_hasBits0 & 16) != 0) { return numberOfPrizeCardsOnKnockout_; } else { return NumberOfPrizeCardsOnKnockoutDefaultValue; } }
+      set {
+        _hasBits0 |= 16;
+        numberOfPrizeCardsOnKnockout_ = value;
+      }
+    }
+    /// <summary>Gets whether the "number_of_prize_cards_on_knockout" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasNumberOfPrizeCardsOnKnockout {
+      get { return (_hasBits0 & 16) != 0; }
+    }
+    /// <summary>Clears the value of the "number_of_prize_cards_on_knockout" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearNumberOfPrizeCardsOnKnockout() {
+      _hasBits0 &= ~16;
+    }
+
+    /// <summary>Field number for the "pokemon_effects" field.</summary>
+    public const int PokemonEffectsFieldNumber = 13;
+    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufPokemonEffectType> _repeated_pokemonEffects_codec
+        = pb::FieldCodec.ForEnum(106, x => (int) x, x => (global::gamecore.serialization.ProtoBufPokemonEffectType) x);
+    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonEffectType> pokemonEffects_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonEffectType>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonEffectType> PokemonEffects {
+      get { return pokemonEffects_; }
+    }
+
+    /// <summary>Field number for the "pokemon_turn_traits" field.</summary>
+    public const int PokemonTurnTraitsFieldNumber = 14;
+    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufPokemonTurnTrait> _repeated_pokemonTurnTraits_codec
+        = pb::FieldCodec.ForEnum(114, x => (int) x, x => (global::gamecore.serialization.ProtoBufPokemonTurnTrait) x);
+    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonTurnTrait> pokemonTurnTraits_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonTurnTrait>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufPokemonTurnTrait> PokemonTurnTraits {
+      get { return pokemonTurnTraits_; }
+    }
+
+    /// <summary>Field number for the "provided_energy" field.</summary>
+    public const int ProvidedEnergyFieldNumber = 17;
+    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufEnergyType> _repeated_providedEnergy_codec
+        = pb::FieldCodec.ForEnum(138, x => (int) x, x => (global::gamecore.serialization.ProtoBufEnergyType) x);
+    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufEnergyType> providedEnergy_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufEnergyType>();
+    /// <summary>
+    /// Energy-specific mutable properties
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufEnergyType> ProvidedEnergy {
+      get { return providedEnergy_; }
     }
 
     /// <summary>Field number for the "current_damage" field.</summary>
@@ -5041,9 +5406,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CurrentDamage {
-      get { if ((_hasBits0 & 256) != 0) { return currentDamage_; } else { return CurrentDamageDefaultValue; } }
+      get { if ((_hasBits0 & 32) != 0) { return currentDamage_; } else { return CurrentDamageDefaultValue; } }
       set {
-        _hasBits0 |= 256;
+        _hasBits0 |= 32;
         currentDamage_ = value;
       }
     }
@@ -5051,13 +5416,13 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasCurrentDamage {
-      get { return (_hasBits0 & 256) != 0; }
+      get { return (_hasBits0 & 32) != 0; }
     }
     /// <summary>Clears the value of the "current_damage" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearCurrentDamage() {
-      _hasBits0 &= ~256;
+      _hasBits0 &= ~32;
     }
 
     /// <summary>Field number for the "attached_energy" field.</summary>
@@ -5101,9 +5466,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int EvolvedInto {
-      get { if ((_hasBits0 & 512) != 0) { return evolvedInto_; } else { return EvolvedIntoDefaultValue; } }
+      get { if ((_hasBits0 & 64) != 0) { return evolvedInto_; } else { return EvolvedIntoDefaultValue; } }
       set {
-        _hasBits0 |= 512;
+        _hasBits0 |= 64;
         evolvedInto_ = value;
       }
     }
@@ -5111,49 +5476,38 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasEvolvedInto {
-      get { return (_hasBits0 & 512) != 0; }
+      get { return (_hasBits0 & 64) != 0; }
     }
     /// <summary>Clears the value of the "evolved_into" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearEvolvedInto() {
-      _hasBits0 &= ~512;
+      _hasBits0 &= ~64;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as ProtoBufCard);
+      return Equals(other as ProtoBufCardDynamic);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ProtoBufCard other) {
+    public bool Equals(ProtoBufCardDynamic other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Name != other.Name) return false;
-      if (CardType != other.CardType) return false;
-      if (CardSubtype != other.CardSubtype) return false;
-      if (EnergyType != other.EnergyType) return false;
       if (MaxHp != other.MaxHp) return false;
-      if (EvolvesFrom != other.EvolvesFrom) return false;
       if (Weakness != other.Weakness) return false;
       if (Resistance != other.Resistance) return false;
       if (RetreatCost != other.RetreatCost) return false;
       if (NumberOfPrizeCardsOnKnockout != other.NumberOfPrizeCardsOnKnockout) return false;
-      if(!attacks_.Equals(other.attacks_)) return false;
-      if (!object.Equals(Ability, other.Ability)) return false;
       if(!pokemonEffects_.Equals(other.pokemonEffects_)) return false;
       if(!pokemonTurnTraits_.Equals(other.pokemonTurnTraits_)) return false;
-      if(!instructions_.Equals(other.instructions_)) return false;
-      if(!conditions_.Equals(other.conditions_)) return false;
       if(!providedEnergy_.Equals(other.providedEnergy_)) return false;
-      if (AttachedTo != other.AttachedTo) return false;
-      if (DeckId != other.DeckId) return false;
       if (CurrentDamage != other.CurrentDamage) return false;
       if(!attachedEnergy_.Equals(other.attachedEnergy_)) return false;
       if(!attachedEnergyCards_.Equals(other.attachedEnergyCards_)) return false;
@@ -5166,25 +5520,14 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
-      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) hash ^= CardType.GetHashCode();
-      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) hash ^= CardSubtype.GetHashCode();
-      if (HasEnergyType) hash ^= EnergyType.GetHashCode();
       if (HasMaxHp) hash ^= MaxHp.GetHashCode();
-      if (HasEvolvesFrom) hash ^= EvolvesFrom.GetHashCode();
       if (HasWeakness) hash ^= Weakness.GetHashCode();
       if (HasResistance) hash ^= Resistance.GetHashCode();
       if (HasRetreatCost) hash ^= RetreatCost.GetHashCode();
       if (HasNumberOfPrizeCardsOnKnockout) hash ^= NumberOfPrizeCardsOnKnockout.GetHashCode();
-      hash ^= attacks_.GetHashCode();
-      if (ability_ != null) hash ^= Ability.GetHashCode();
       hash ^= pokemonEffects_.GetHashCode();
       hash ^= pokemonTurnTraits_.GetHashCode();
-      hash ^= instructions_.GetHashCode();
-      hash ^= conditions_.GetHashCode();
       hash ^= providedEnergy_.GetHashCode();
-      if (HasAttachedTo) hash ^= AttachedTo.GetHashCode();
-      if (HasDeckId) hash ^= DeckId.GetHashCode();
       if (HasCurrentDamage) hash ^= CurrentDamage.GetHashCode();
       hash ^= attachedEnergy_.GetHashCode();
       hash ^= attachedEnergyCards_.GetHashCode();
@@ -5208,29 +5551,9 @@ namespace gamecore.serialization {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Name.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Name);
-      }
-      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) CardType);
-      }
-      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) CardSubtype);
-      }
-      if (HasEnergyType) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) EnergyType);
-      }
       if (HasMaxHp) {
         output.WriteRawTag(40);
         output.WriteInt32(MaxHp);
-      }
-      if (HasEvolvesFrom) {
-        output.WriteRawTag(50);
-        output.WriteString(EvolvesFrom);
       }
       if (HasWeakness) {
         output.WriteRawTag(56);
@@ -5248,24 +5571,9 @@ namespace gamecore.serialization {
         output.WriteRawTag(80);
         output.WriteInt32(NumberOfPrizeCardsOnKnockout);
       }
-      attacks_.WriteTo(output, _repeated_attacks_codec);
-      if (ability_ != null) {
-        output.WriteRawTag(98);
-        output.WriteMessage(Ability);
-      }
       pokemonEffects_.WriteTo(output, _repeated_pokemonEffects_codec);
       pokemonTurnTraits_.WriteTo(output, _repeated_pokemonTurnTraits_codec);
-      instructions_.WriteTo(output, _repeated_instructions_codec);
-      conditions_.WriteTo(output, _repeated_conditions_codec);
       providedEnergy_.WriteTo(output, _repeated_providedEnergy_codec);
-      if (HasAttachedTo) {
-        output.WriteRawTag(144, 1);
-        output.WriteInt32(AttachedTo);
-      }
-      if (HasDeckId) {
-        output.WriteRawTag(152, 1);
-        output.WriteInt32(DeckId);
-      }
       if (HasCurrentDamage) {
         output.WriteRawTag(160, 1);
         output.WriteInt32(CurrentDamage);
@@ -5287,29 +5595,9 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Name.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Name);
-      }
-      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) CardType);
-      }
-      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) CardSubtype);
-      }
-      if (HasEnergyType) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) EnergyType);
-      }
       if (HasMaxHp) {
         output.WriteRawTag(40);
         output.WriteInt32(MaxHp);
-      }
-      if (HasEvolvesFrom) {
-        output.WriteRawTag(50);
-        output.WriteString(EvolvesFrom);
       }
       if (HasWeakness) {
         output.WriteRawTag(56);
@@ -5327,24 +5615,9 @@ namespace gamecore.serialization {
         output.WriteRawTag(80);
         output.WriteInt32(NumberOfPrizeCardsOnKnockout);
       }
-      attacks_.WriteTo(ref output, _repeated_attacks_codec);
-      if (ability_ != null) {
-        output.WriteRawTag(98);
-        output.WriteMessage(Ability);
-      }
       pokemonEffects_.WriteTo(ref output, _repeated_pokemonEffects_codec);
       pokemonTurnTraits_.WriteTo(ref output, _repeated_pokemonTurnTraits_codec);
-      instructions_.WriteTo(ref output, _repeated_instructions_codec);
-      conditions_.WriteTo(ref output, _repeated_conditions_codec);
       providedEnergy_.WriteTo(ref output, _repeated_providedEnergy_codec);
-      if (HasAttachedTo) {
-        output.WriteRawTag(144, 1);
-        output.WriteInt32(AttachedTo);
-      }
-      if (HasDeckId) {
-        output.WriteRawTag(152, 1);
-        output.WriteInt32(DeckId);
-      }
       if (HasCurrentDamage) {
         output.WriteRawTag(160, 1);
         output.WriteInt32(CurrentDamage);
@@ -5366,23 +5639,8 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
-      }
-      if (CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) CardType);
-      }
-      if (CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) CardSubtype);
-      }
-      if (HasEnergyType) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EnergyType);
-      }
       if (HasMaxHp) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxHp);
-      }
-      if (HasEvolvesFrom) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(EvolvesFrom);
       }
       if (HasWeakness) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Weakness);
@@ -5396,21 +5654,9 @@ namespace gamecore.serialization {
       if (HasNumberOfPrizeCardsOnKnockout) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(NumberOfPrizeCardsOnKnockout);
       }
-      size += attacks_.CalculateSize(_repeated_attacks_codec);
-      if (ability_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Ability);
-      }
       size += pokemonEffects_.CalculateSize(_repeated_pokemonEffects_codec);
       size += pokemonTurnTraits_.CalculateSize(_repeated_pokemonTurnTraits_codec);
-      size += instructions_.CalculateSize(_repeated_instructions_codec);
-      size += conditions_.CalculateSize(_repeated_conditions_codec);
       size += providedEnergy_.CalculateSize(_repeated_providedEnergy_codec);
-      if (HasAttachedTo) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(AttachedTo);
-      }
-      if (HasDeckId) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(DeckId);
-      }
       if (HasCurrentDamage) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(CurrentDamage);
       }
@@ -5428,27 +5674,12 @@ namespace gamecore.serialization {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ProtoBufCard other) {
+    public void MergeFrom(ProtoBufCardDynamic other) {
       if (other == null) {
         return;
       }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
-      }
-      if (other.CardType != global::gamecore.serialization.ProtoBufCardType.CardTypeUnknown) {
-        CardType = other.CardType;
-      }
-      if (other.CardSubtype != global::gamecore.serialization.ProtoBufCardSubtype.CardSubtypeUnknown) {
-        CardSubtype = other.CardSubtype;
-      }
-      if (other.HasEnergyType) {
-        EnergyType = other.EnergyType;
-      }
       if (other.HasMaxHp) {
         MaxHp = other.MaxHp;
-      }
-      if (other.HasEvolvesFrom) {
-        EvolvesFrom = other.EvolvesFrom;
       }
       if (other.HasWeakness) {
         Weakness = other.Weakness;
@@ -5462,24 +5693,9 @@ namespace gamecore.serialization {
       if (other.HasNumberOfPrizeCardsOnKnockout) {
         NumberOfPrizeCardsOnKnockout = other.NumberOfPrizeCardsOnKnockout;
       }
-      attacks_.Add(other.attacks_);
-      if (other.ability_ != null) {
-        if (ability_ == null) {
-          Ability = new global::gamecore.serialization.ProtoBufAbility();
-        }
-        Ability.MergeFrom(other.Ability);
-      }
       pokemonEffects_.Add(other.pokemonEffects_);
       pokemonTurnTraits_.Add(other.pokemonTurnTraits_);
-      instructions_.Add(other.instructions_);
-      conditions_.Add(other.conditions_);
       providedEnergy_.Add(other.providedEnergy_);
-      if (other.HasAttachedTo) {
-        AttachedTo = other.AttachedTo;
-      }
-      if (other.HasDeckId) {
-        DeckId = other.DeckId;
-      }
       if (other.HasCurrentDamage) {
         CurrentDamage = other.CurrentDamage;
       }
@@ -5508,28 +5724,8 @@ namespace gamecore.serialization {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Name = input.ReadString();
-            break;
-          }
-          case 16: {
-            CardType = (global::gamecore.serialization.ProtoBufCardType) input.ReadEnum();
-            break;
-          }
-          case 24: {
-            CardSubtype = (global::gamecore.serialization.ProtoBufCardSubtype) input.ReadEnum();
-            break;
-          }
-          case 32: {
-            EnergyType = (global::gamecore.serialization.ProtoBufEnergyType) input.ReadEnum();
-            break;
-          }
           case 40: {
             MaxHp = input.ReadInt32();
-            break;
-          }
-          case 50: {
-            EvolvesFrom = input.ReadString();
             break;
           }
           case 56: {
@@ -5548,17 +5744,6 @@ namespace gamecore.serialization {
             NumberOfPrizeCardsOnKnockout = input.ReadInt32();
             break;
           }
-          case 90: {
-            attacks_.AddEntriesFrom(input, _repeated_attacks_codec);
-            break;
-          }
-          case 98: {
-            if (ability_ == null) {
-              Ability = new global::gamecore.serialization.ProtoBufAbility();
-            }
-            input.ReadMessage(Ability);
-            break;
-          }
           case 106:
           case 104: {
             pokemonEffects_.AddEntriesFrom(input, _repeated_pokemonEffects_codec);
@@ -5569,25 +5754,9 @@ namespace gamecore.serialization {
             pokemonTurnTraits_.AddEntriesFrom(input, _repeated_pokemonTurnTraits_codec);
             break;
           }
-          case 122: {
-            instructions_.AddEntriesFrom(input, _repeated_instructions_codec);
-            break;
-          }
-          case 130: {
-            conditions_.AddEntriesFrom(input, _repeated_conditions_codec);
-            break;
-          }
           case 138:
           case 136: {
             providedEnergy_.AddEntriesFrom(input, _repeated_providedEnergy_codec);
-            break;
-          }
-          case 144: {
-            AttachedTo = input.ReadInt32();
-            break;
-          }
-          case 152: {
-            DeckId = input.ReadInt32();
             break;
           }
           case 160: {
@@ -5632,28 +5801,8 @@ namespace gamecore.serialization {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            Name = input.ReadString();
-            break;
-          }
-          case 16: {
-            CardType = (global::gamecore.serialization.ProtoBufCardType) input.ReadEnum();
-            break;
-          }
-          case 24: {
-            CardSubtype = (global::gamecore.serialization.ProtoBufCardSubtype) input.ReadEnum();
-            break;
-          }
-          case 32: {
-            EnergyType = (global::gamecore.serialization.ProtoBufEnergyType) input.ReadEnum();
-            break;
-          }
           case 40: {
             MaxHp = input.ReadInt32();
-            break;
-          }
-          case 50: {
-            EvolvesFrom = input.ReadString();
             break;
           }
           case 56: {
@@ -5672,17 +5821,6 @@ namespace gamecore.serialization {
             NumberOfPrizeCardsOnKnockout = input.ReadInt32();
             break;
           }
-          case 90: {
-            attacks_.AddEntriesFrom(ref input, _repeated_attacks_codec);
-            break;
-          }
-          case 98: {
-            if (ability_ == null) {
-              Ability = new global::gamecore.serialization.ProtoBufAbility();
-            }
-            input.ReadMessage(Ability);
-            break;
-          }
           case 106:
           case 104: {
             pokemonEffects_.AddEntriesFrom(ref input, _repeated_pokemonEffects_codec);
@@ -5693,25 +5831,9 @@ namespace gamecore.serialization {
             pokemonTurnTraits_.AddEntriesFrom(ref input, _repeated_pokemonTurnTraits_codec);
             break;
           }
-          case 122: {
-            instructions_.AddEntriesFrom(ref input, _repeated_instructions_codec);
-            break;
-          }
-          case 130: {
-            conditions_.AddEntriesFrom(ref input, _repeated_conditions_codec);
-            break;
-          }
           case 138:
           case 136: {
             providedEnergy_.AddEntriesFrom(ref input, _repeated_providedEnergy_codec);
-            break;
-          }
-          case 144: {
-            AttachedTo = input.ReadInt32();
-            break;
-          }
-          case 152: {
-            DeckId = input.ReadInt32();
             break;
           }
           case 160: {
@@ -5759,7 +5881,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[16]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5779,7 +5901,8 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ProtoBufCardState(ProtoBufCardState other) : this() {
-      card_ = other.card_ != null ? other.card_.Clone() : null;
+      deckId_ = other.deckId_;
+      cardDynamic_ = other.cardDynamic_ != null ? other.cardDynamic_.Clone() : null;
       position_ = other.position_ != null ? other.position_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -5790,20 +5913,32 @@ namespace gamecore.serialization {
       return new ProtoBufCardState(this);
     }
 
-    /// <summary>Field number for the "card" field.</summary>
-    public const int CardFieldNumber = 1;
-    private global::gamecore.serialization.ProtoBufCard card_;
+    /// <summary>Field number for the "deck_id" field.</summary>
+    public const int DeckIdFieldNumber = 1;
+    private int deckId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::gamecore.serialization.ProtoBufCard Card {
-      get { return card_; }
+    public int DeckId {
+      get { return deckId_; }
       set {
-        card_ = value;
+        deckId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "card_dynamic" field.</summary>
+    public const int CardDynamicFieldNumber = 2;
+    private global::gamecore.serialization.ProtoBufCardDynamic cardDynamic_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::gamecore.serialization.ProtoBufCardDynamic CardDynamic {
+      get { return cardDynamic_; }
+      set {
+        cardDynamic_ = value;
       }
     }
 
     /// <summary>Field number for the "position" field.</summary>
-    public const int PositionFieldNumber = 2;
+    public const int PositionFieldNumber = 3;
     private global::gamecore.serialization.ProtoBufPosition position_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5829,7 +5964,8 @@ namespace gamecore.serialization {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(Card, other.Card)) return false;
+      if (DeckId != other.DeckId) return false;
+      if (!object.Equals(CardDynamic, other.CardDynamic)) return false;
       if (!object.Equals(Position, other.Position)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -5838,7 +5974,8 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (card_ != null) hash ^= Card.GetHashCode();
+      if (DeckId != 0) hash ^= DeckId.GetHashCode();
+      if (cardDynamic_ != null) hash ^= CardDynamic.GetHashCode();
       if (position_ != null) hash ^= Position.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -5858,12 +5995,16 @@ namespace gamecore.serialization {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (card_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Card);
+      if (DeckId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(DeckId);
+      }
+      if (cardDynamic_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(CardDynamic);
       }
       if (position_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(Position);
       }
       if (_unknownFields != null) {
@@ -5876,12 +6017,16 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (card_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Card);
+      if (DeckId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(DeckId);
+      }
+      if (cardDynamic_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(CardDynamic);
       }
       if (position_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(Position);
       }
       if (_unknownFields != null) {
@@ -5894,8 +6039,11 @@ namespace gamecore.serialization {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (card_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Card);
+      if (DeckId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DeckId);
+      }
+      if (cardDynamic_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CardDynamic);
       }
       if (position_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Position);
@@ -5912,11 +6060,14 @@ namespace gamecore.serialization {
       if (other == null) {
         return;
       }
-      if (other.card_ != null) {
-        if (card_ == null) {
-          Card = new global::gamecore.serialization.ProtoBufCard();
+      if (other.DeckId != 0) {
+        DeckId = other.DeckId;
+      }
+      if (other.cardDynamic_ != null) {
+        if (cardDynamic_ == null) {
+          CardDynamic = new global::gamecore.serialization.ProtoBufCardDynamic();
         }
-        Card.MergeFrom(other.Card);
+        CardDynamic.MergeFrom(other.CardDynamic);
       }
       if (other.position_ != null) {
         if (position_ == null) {
@@ -5943,14 +6094,18 @@ namespace gamecore.serialization {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            if (card_ == null) {
-              Card = new global::gamecore.serialization.ProtoBufCard();
-            }
-            input.ReadMessage(Card);
+          case 8: {
+            DeckId = input.ReadInt32();
             break;
           }
           case 18: {
+            if (cardDynamic_ == null) {
+              CardDynamic = new global::gamecore.serialization.ProtoBufCardDynamic();
+            }
+            input.ReadMessage(CardDynamic);
+            break;
+          }
+          case 26: {
             if (position_ == null) {
               Position = new global::gamecore.serialization.ProtoBufPosition();
             }
@@ -5976,14 +6131,18 @@ namespace gamecore.serialization {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            if (card_ == null) {
-              Card = new global::gamecore.serialization.ProtoBufCard();
-            }
-            input.ReadMessage(Card);
+          case 8: {
+            DeckId = input.ReadInt32();
             break;
           }
           case 18: {
+            if (cardDynamic_ == null) {
+              CardDynamic = new global::gamecore.serialization.ProtoBufCardDynamic();
+            }
+            input.ReadMessage(CardDynamic);
+            break;
+          }
+          case 26: {
             if (position_ == null) {
               Position = new global::gamecore.serialization.ProtoBufPosition();
             }
@@ -6012,7 +6171,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[17]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6562,7 +6721,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[18]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6587,6 +6746,7 @@ namespace gamecore.serialization {
       selfState_ = other.selfState_ != null ? other.selfState_.Clone() : null;
       opponentState_ = other.opponentState_ != null ? other.opponentState_.Clone() : null;
       cardStates_ = other.cardStates_.Clone();
+      cardStaticUpserts_ = other.cardStaticUpserts_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -6655,6 +6815,17 @@ namespace gamecore.serialization {
       get { return cardStates_; }
     }
 
+    /// <summary>Field number for the "card_static_upserts" field.</summary>
+    public const int CardStaticUpsertsFieldNumber = 6;
+    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufCardStatic> _repeated_cardStaticUpserts_codec
+        = pb::FieldCodec.ForMessage(50, global::gamecore.serialization.ProtoBufCardStatic.Parser);
+    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufCardStatic> cardStaticUpserts_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufCardStatic>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufCardStatic> CardStaticUpserts {
+      get { return cardStaticUpserts_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -6675,6 +6846,7 @@ namespace gamecore.serialization {
       if (!object.Equals(SelfState, other.SelfState)) return false;
       if (!object.Equals(OpponentState, other.OpponentState)) return false;
       if(!cardStates_.Equals(other.cardStates_)) return false;
+      if(!cardStaticUpserts_.Equals(other.cardStaticUpserts_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -6687,6 +6859,7 @@ namespace gamecore.serialization {
       if (selfState_ != null) hash ^= SelfState.GetHashCode();
       if (opponentState_ != null) hash ^= OpponentState.GetHashCode();
       hash ^= cardStates_.GetHashCode();
+      hash ^= cardStaticUpserts_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -6722,6 +6895,7 @@ namespace gamecore.serialization {
         output.WriteMessage(OpponentState);
       }
       cardStates_.WriteTo(output, _repeated_cardStates_codec);
+      cardStaticUpserts_.WriteTo(output, _repeated_cardStaticUpserts_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -6749,6 +6923,7 @@ namespace gamecore.serialization {
         output.WriteMessage(OpponentState);
       }
       cardStates_.WriteTo(ref output, _repeated_cardStates_codec);
+      cardStaticUpserts_.WriteTo(ref output, _repeated_cardStaticUpserts_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -6772,6 +6947,7 @@ namespace gamecore.serialization {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(OpponentState);
       }
       size += cardStates_.CalculateSize(_repeated_cardStates_codec);
+      size += cardStaticUpserts_.CalculateSize(_repeated_cardStaticUpserts_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -6803,6 +6979,7 @@ namespace gamecore.serialization {
         OpponentState.MergeFrom(other.OpponentState);
       }
       cardStates_.Add(other.cardStates_);
+      cardStaticUpserts_.Add(other.cardStaticUpserts_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -6846,6 +7023,10 @@ namespace gamecore.serialization {
           }
           case 42: {
             cardStates_.AddEntriesFrom(input, _repeated_cardStates_codec);
+            break;
+          }
+          case 50: {
+            cardStaticUpserts_.AddEntriesFrom(input, _repeated_cardStaticUpserts_codec);
             break;
           }
         }
@@ -6893,6 +7074,243 @@ namespace gamecore.serialization {
             cardStates_.AddEntriesFrom(ref input, _repeated_cardStates_codec);
             break;
           }
+          case 50: {
+            cardStaticUpserts_.AddEntriesFrom(ref input, _repeated_cardStaticUpserts_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ProtoBufGameInitialization : pb::IMessage<ProtoBufGameInitialization>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ProtoBufGameInitialization> _parser = new pb::MessageParser<ProtoBufGameInitialization>(() => new ProtoBufGameInitialization());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ProtoBufGameInitialization> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[20]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufGameInitialization() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufGameInitialization(ProtoBufGameInitialization other) : this() {
+      cardStatics_ = other.cardStatics_.Clone();
+      initialState_ = other.initialState_ != null ? other.initialState_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProtoBufGameInitialization Clone() {
+      return new ProtoBufGameInitialization(this);
+    }
+
+    /// <summary>Field number for the "card_statics" field.</summary>
+    public const int CardStaticsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::gamecore.serialization.ProtoBufCardStatic> _repeated_cardStatics_codec
+        = pb::FieldCodec.ForMessage(10, global::gamecore.serialization.ProtoBufCardStatic.Parser);
+    private readonly pbc::RepeatedField<global::gamecore.serialization.ProtoBufCardStatic> cardStatics_ = new pbc::RepeatedField<global::gamecore.serialization.ProtoBufCardStatic>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::gamecore.serialization.ProtoBufCardStatic> CardStatics {
+      get { return cardStatics_; }
+    }
+
+    /// <summary>Field number for the "initial_state" field.</summary>
+    public const int InitialStateFieldNumber = 2;
+    private global::gamecore.serialization.ProtoBufGameState initialState_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::gamecore.serialization.ProtoBufGameState InitialState {
+      get { return initialState_; }
+      set {
+        initialState_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ProtoBufGameInitialization);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ProtoBufGameInitialization other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!cardStatics_.Equals(other.cardStatics_)) return false;
+      if (!object.Equals(InitialState, other.InitialState)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= cardStatics_.GetHashCode();
+      if (initialState_ != null) hash ^= InitialState.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      cardStatics_.WriteTo(output, _repeated_cardStatics_codec);
+      if (initialState_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(InitialState);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      cardStatics_.WriteTo(ref output, _repeated_cardStatics_codec);
+      if (initialState_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(InitialState);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      size += cardStatics_.CalculateSize(_repeated_cardStatics_codec);
+      if (initialState_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitialState);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ProtoBufGameInitialization other) {
+      if (other == null) {
+        return;
+      }
+      cardStatics_.Add(other.cardStatics_);
+      if (other.initialState_ != null) {
+        if (initialState_ == null) {
+          InitialState = new global::gamecore.serialization.ProtoBufGameState();
+        }
+        InitialState.MergeFrom(other.InitialState);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            cardStatics_.AddEntriesFrom(input, _repeated_cardStatics_codec);
+            break;
+          }
+          case 18: {
+            if (initialState_ == null) {
+              InitialState = new global::gamecore.serialization.ProtoBufGameState();
+            }
+            input.ReadMessage(InitialState);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            cardStatics_.AddEntriesFrom(ref input, _repeated_cardStatics_codec);
+            break;
+          }
+          case 18: {
+            if (initialState_ == null) {
+              InitialState = new global::gamecore.serialization.ProtoBufGameState();
+            }
+            input.ReadMessage(InitialState);
+            break;
+          }
         }
       }
     }
@@ -6916,7 +7334,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[19]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[21]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7254,7 +7672,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[20]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[22]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7487,7 +7905,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[21]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[23]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7676,7 +8094,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[22]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[24]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7874,7 +8292,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[23]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[25]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8308,7 +8726,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[24]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[26]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8506,7 +8924,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[25]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[27]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8713,7 +9131,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[26]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[28]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8920,7 +9338,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[27]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[29]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9164,7 +9582,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[28]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[30]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9362,7 +9780,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[29]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[31]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10011,7 +10429,7 @@ namespace gamecore.serialization {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[30]; }
+      get { return global::gamecore.serialization.GamecoreSerializationReflection.Descriptor.MessageTypes[32]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

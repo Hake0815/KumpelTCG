@@ -50,7 +50,7 @@ namespace gameview
         {
             var paths = StandaloneFileBrowser.OpenFilePanel("Open game state file", "", "", false);
             var recreatableGameState = File.ReadLines(paths[0])
-                .Where(line => line.StartsWith("{\"Recreatable\":true"))
+                .Where(line => line.Contains("\"Recreatable\":true"))
                 .Last();
             GameParameters.GameState = recreatableGameState;
             GameParameters.LoadModus = LoadModus.RecreateState;

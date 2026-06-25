@@ -2,9 +2,9 @@ namespace gamecore.serialization
 {
     public class ProtoBufUtil
     {
-        public static ProtoBufCard CreateUnknownCard(int deckId)
+        public static ProtoBufCardStatic CreateUnknownCard(int deckId)
         {
-            return new ProtoBufCard
+            return new ProtoBufCardStatic
             {
                 Name = "Unknown",
                 CardType = ProtoBufCardType.CardTypeUnknown,

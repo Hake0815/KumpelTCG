@@ -10,6 +10,31 @@ namespace gamecore.serialization
 {
     static class CardStateCreator
     {
+        public static List<ProtoBufCardStatic> CreateCardStatics(
+            IPlayer player,
+            IReadOnlyCollection<ProtoBufCardState> cardStates
+        )
+        {
+            var cardsByDeckId = ((IPlayerLogic)player)
+                .DeckList.Cards.Concat(((IPlayerLogic)player.Opponent).DeckList.Cards)
+                .ToDictionary(card => card.DeckId);
+            var cardStatics = new List<ProtoBufCardStatic>(cardStates.Count);
+
+            foreach (var cardState in cardStates.OrderBy(state => state.DeckId))
+            {
+                var isHiddenOpponentCard =
+                    cardState.Position.Owner == ProtoBufOwner.OwnerOpponent
+                    && cardState.Position.PossiblePositions.Count == 3;
+                cardStatics.Add(
+                    isHiddenOpponentCard
+                        ? ProtoBufUtil.CreateUnknownCard(cardState.DeckId)
+                        : cardsByDeckId[cardState.DeckId].ToSerializableStatic()
+                );
+            }
+
+            return cardStatics;
+        }
+
         public static List<ProtoBufCardState> CreateCardStates(IPlayer player)
         {
             var cardStates = new List<ProtoBufCardState>(120);
@@ -46,7 +71,7 @@ namespace gamecore.serialization
             AddPrizesAsOpponent(player.Opponent.Prizes, cardStates);
             AddHandAsOpponent(player.Opponent.Hand, cardStates);
             AddDeckAsOpponent(player.Opponent.Deck, cardStates);
-            cardStates.Sort((a, b) => a.Card.DeckId.CompareTo(b.Card.DeckId));
+            cardStates.Sort((a, b) => a.DeckId.CompareTo(b.DeckId));
             if (cardStates.Count == 120)
             {
                 GlobalLogger.Instance.Debug(
@@ -74,7 +99,8 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(),
+                        DeckId = card.DeckId,
+                        CardDynamic = card.ToSerializableDynamic(),
                         Position = new ProtoBufPosition
                         {
                             Owner = ProtoBufOwner.OwnerSelf,
@@ -96,7 +122,8 @@ namespace gamecore.serialization
             cardStates.Add(
                 new ProtoBufCardState
                 {
-                    Card = activePokemon.ToSerializable(),
+                    DeckId = activePokemon.DeckId,
+                    CardDynamic = activePokemon.ToSerializableDynamic(),
                     Position = new ProtoBufPosition
                     {
                         Owner = owner,
@@ -119,7 +146,8 @@ namespace gamecore.serialization
             cardStates.Add(
                 new ProtoBufCardState
                 {
-                    Card = currentlyPlayedCard.ToSerializable(),
+                    DeckId = currentlyPlayedCard.DeckId,
+                    CardDynamic = currentlyPlayedCard.ToSerializableDynamic(),
                     Position = new ProtoBufPosition
                     {
                         Owner = owner,
@@ -143,7 +171,8 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(),
+                        DeckId = card.DeckId,
+                        CardDynamic = card.ToSerializableDynamic(),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,
@@ -168,7 +197,8 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(pokemonCard),
+                        DeckId = card.DeckId,
+                        CardDynamic = card.ToSerializableDynamic(),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,
@@ -185,7 +215,8 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(pokemonCard),
+                        DeckId = card.DeckId,
+                        CardDynamic = card.ToSerializableDynamic(pokemonCard),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,
@@ -210,7 +241,8 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(),
+                        DeckId = card.DeckId,
+                        CardDynamic = card.ToSerializableDynamic(),
                         Position = new ProtoBufPosition
                         {
                             Owner = owner,
@@ -232,7 +264,8 @@ namespace gamecore.serialization
                     cardStates.Add(
                         new ProtoBufCardState
                         {
-                            Card = card.ToSerializable(),
+                            DeckId = card.DeckId,
+                            CardDynamic = card.ToSerializableDynamic(),
                             Position = new ProtoBufPosition
                             {
                                 Owner = ProtoBufOwner.OwnerSelf,
@@ -253,7 +286,8 @@ namespace gamecore.serialization
                     cardStates.Add(
                         new ProtoBufCardState
                         {
-                            Card = card.ToSerializable(),
+                            DeckId = card.DeckId,
+                            CardDynamic = card.ToSerializableDynamic(),
                             Position = new ProtoBufPosition
                             {
                                 Owner = ProtoBufOwner.OwnerSelf,
@@ -277,7 +311,7 @@ namespace gamecore.serialization
                     cardStates.Add(
                         new ProtoBufCardState
                         {
-                            Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                            DeckId = card.DeckId,
                             Position = new ProtoBufPosition
                             {
                                 Owner = ProtoBufOwner.OwnerOpponent,
@@ -299,7 +333,8 @@ namespace gamecore.serialization
                     cardStates.Add(
                         new ProtoBufCardState
                         {
-                            Card = card.ToSerializable(),
+                            DeckId = card.DeckId,
+                            CardDynamic = card.ToSerializableDynamic(),
                             Position = new ProtoBufPosition
                             {
                                 Owner = ProtoBufOwner.OwnerOpponent,
@@ -321,7 +356,8 @@ namespace gamecore.serialization
                 cardStates.Add(
                     new ProtoBufCardState
                     {
-                        Card = card.ToSerializable(),
+                        DeckId = card.DeckId,
+                        CardDynamic = card.ToSerializableDynamic(),
                         Position = new ProtoBufPosition
                         {
                             Owner = ProtoBufOwner.OwnerSelf,
@@ -344,7 +380,8 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = card.ToSerializable(),
+                                DeckId = card.DeckId,
+                                CardDynamic = card.ToSerializableDynamic(),
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -360,7 +397,8 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = card.ToSerializable(),
+                                DeckId = card.DeckId,
+                                CardDynamic = card.ToSerializableDynamic(),
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -380,7 +418,7 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                                DeckId = card.DeckId,
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -410,7 +448,8 @@ namespace gamecore.serialization
                     cardStates.Add(
                         new ProtoBufCardState
                         {
-                            Card = card.ToSerializable(),
+                            DeckId = card.DeckId,
+                            CardDynamic = card.ToSerializableDynamic(),
                             Position = new ProtoBufPosition
                             {
                                 Owner = ProtoBufOwner.OwnerSelf,
@@ -427,7 +466,8 @@ namespace gamecore.serialization
                     cardStates.Add(
                         new ProtoBufCardState
                         {
-                            Card = card.ToSerializable(),
+                            DeckId = card.DeckId,
+                            CardDynamic = card.ToSerializableDynamic(),
                             Position = new ProtoBufPosition
                             {
                                 Owner = ProtoBufOwner.OwnerSelf,
@@ -456,7 +496,8 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = card.ToSerializable(),
+                                DeckId = card.DeckId,
+                                CardDynamic = card.ToSerializableDynamic(),
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -472,7 +513,8 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = card.ToSerializable(),
+                                DeckId = card.DeckId,
+                                CardDynamic = card.ToSerializableDynamic(),
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -492,7 +534,7 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                                DeckId = card.DeckId,
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -526,7 +568,8 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = card.ToSerializable(),
+                                DeckId = card.DeckId,
+                                CardDynamic = card.ToSerializableDynamic(),
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -545,7 +588,8 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = card.ToSerializable(),
+                                DeckId = card.DeckId,
+                                CardDynamic = card.ToSerializableDynamic(),
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
@@ -565,7 +609,7 @@ namespace gamecore.serialization
                         cardStates.Add(
                             new ProtoBufCardState
                             {
-                                Card = ProtoBufUtil.CreateUnknownCard(card.DeckId),
+                                DeckId = card.DeckId,
                                 Position = new ProtoBufPosition
                                 {
                                     Owner = ProtoBufOwner.OwnerOpponent,
